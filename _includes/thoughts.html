@@ -1,0 +1,21 @@
+<div class="d-sm-flex flex-wrap gutter-condensed mb-4">
+  {% for post in paginator.posts %}
+    <div class="col-sm-6 col-md-12 col-lg-6 col-xl-4 mb-3">
+      {% include post-card.html %}
+    </div>
+  {% endfor %}  
+</div>
+
+<div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path | relative_url }}" class="previous">Previous</a>
+    {% endif %}
+
+    <span class="page_number">
+      Page: {{ paginator.page }} of {{ paginator.total_pages }}
+    </span>
+
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path | relative_url }}" class="next">Next</a>
+    {% endif %}
+</div>
