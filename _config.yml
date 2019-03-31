@@ -1,0 +1,48 @@
+layout: stacked
+style: light
+
+plugins:
+  - jekyll-octicons
+  - jekyll-paginate-v2
+  - jemoji
+
+permalink: /:year/:month/:day/:title/
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "posts"
+    values:
+      layout: "post"
+  -
+    scope:
+      path: ""
+      type: "anime"
+    values:
+      layout: "anime"
+
+social_media:
+  # behance: your_username
+  # dribbble: your_username
+  # facebook: your_username
+  # linkedin: your_username
+  # medium: @your_username
+  # stackoverflow: your_user_id
+  # telegram: your_username
+  twitter: jameshi16
+  # youtube: your_username
+  # vk: your_username
+
+pagination:
+  enabled: true
+  collection: 'posts'
+  per_page: 9
+  permalink: '/page/:num/'
+  sort_field: 'date'
+  sort_reverse: true
+
+collections:
+  anime:
+    output: true
+    permalink: "/anime/:path/"
