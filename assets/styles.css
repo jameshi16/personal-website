@@ -337,7 +337,6 @@ a + em {
 ol, ul {
   margin-left: 30px;
   display: block;
-  list-style-type: decimal;
   margin-block-start: 1em;
   margin-block-end: 1em;
   margin-inline-start: 0px;
