@@ -27,7 +27,7 @@ Why?
 
 Because GitHub Pages (via Jekyll) supports Markdown. Markdown is a god-send to any programmer, because its not only easy to style specific parts of a blog post, but also super fast to produce. Part of the reason why I blogged so little was because it was a pain to type anything on WordPress, insert code, insert images, worrying about space constraints, when to publish it, etc.
 
-With GitHub pages, I just type, `insert code`, insert images, insert emojis :coffee:, and all I need to do is to maintain a repository (of endless size) for my blog. I can even make my entire blog [open-source](https://github.com/jameshi16/jameshi16.github.io), so that my readers can choose to fix my mistakes as they read my blog.
+With GitHub pages, I just type, `insert code`, insert images, insert emojis :coffee:, and all I need to do is to maintain a repository (of endless size) for my blog. I can even make my entire blog [open-source](https://github.com/jameshi16/personal-website), so that my readers can choose to fix my mistakes as they read my blog.
 
 Since Github pages is hosted via Jekyll, I can customize almost every aspect of it. If that's not cool, I don't know what is. In fact, go over to [Github Personal Website Generator](https://github.dev/) right now and create your own GitHub personal page. It's free, so what're ya waiting for?
 
