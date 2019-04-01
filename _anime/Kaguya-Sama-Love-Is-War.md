@@ -1,7 +1,7 @@
 ---
 title: "Kaguya-Sama: Love Is War"
 japTitle: "かぐや様は告らせたい～天才たちの恋愛頭脳戦～"
-date: 02-04-2019
+date: 01-04-2019
 image: https://cdn.myanimelist.net/images/anime/1291/97023.jpg
 rating: 7
 ---
