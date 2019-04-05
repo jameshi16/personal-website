@@ -134,3 +134,19 @@ ul.list-style-none {
 .UnderlineNav-item.selected {
     border-bottom-color: #000000;
 }
+
+//tables
+table {
+	margin: 5px auto;
+	padding: 2px;
+	border: 2px solid lightgrey;
+	width: 100%;
+}
+
+th,td {
+	border: 2px solid grey;
+}
+
+tr:nth-child(even) {
+	background-color: lightgrey;
+}

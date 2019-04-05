@@ -2,6 +2,7 @@
 layout: post
 title: "A Horrible Programmer -> CodingIndex"
 date: 2019-03-24 15:00 +08:00
+categories: [fluff]
 published: true
 ---
 

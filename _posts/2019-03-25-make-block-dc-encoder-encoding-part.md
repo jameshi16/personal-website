@@ -2,6 +2,8 @@
 layout: post
 title: MakeBlock DC Encoder Motors - The Encoding Part
 date: 2019-03-25 09:30
+categories: [hardware]
+tags: [makeblock, dc, motor]
 published: true
 ---
 

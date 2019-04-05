@@ -2,6 +2,8 @@
 layout: post
 title: "AWS API Gateway Websockets with AWS Lambda"
 date: 2019-03-31 20:00 +08:00
+tags: [fix, aws, lambda, connection, websockets, gateway, python]
+categories: [aws, python]
 published: true
 ---
 
