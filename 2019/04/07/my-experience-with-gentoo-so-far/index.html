@@ -1,0 +1,116 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="I installed Gentoo the other day, and would like to share my thoughts on Gentoo, mainly, how it caught my attention.Gentoo Logo | Source: Gentoo's Official WebsiteBeing a privacy evangelist, and a FOSS freak, I was intrigued by Gentoo. There were several reasons for this:  Gentoo’s Package Manage..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">My Experience with Gentoo (so far)</h1>
+      <p class="text-gray mb-5">Published Apr 07, 2019 04:00</p>
+      
+  
+    
+
+    
+
+    
+
+    
+      <div class="col-sm-4 col-lg-3 d-flex flex-wrap flex-items-center d-sm-block float-sm-right border rounded-2 bg-white p-3 mb-5 ml-md-5">
+        <h3 class="text-gray-dark mr-3 mr-sm-0">Share</h3>
+        <ul class="d-flex d-sm-block list-style-none">
+          
+            <li class="mt-sm-3">
+              <a href="https://twitter.com/share?url=%2F2019%2F04%2F07%2Fmy-experience-with-gentoo-so-far%2F" title="Share on Twitter" class="d-flex flex-items-center">
+                <div style="width:32px"><svg height="20" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 273.5 222.3"><path d="M273.5 26.3a109.77 109.77 0 0 1-32.2 8.8 56.07 56.07 0 0 0 24.7-31 113.39 113.39 0 0 1-35.7 13.6 56.1 56.1 0 0 0-97 38.4 54 54 0 0 0 1.5 12.8A159.68 159.68 0 0 1 19.1 10.3a56.12 56.12 0 0 0 17.4 74.9 56.06 56.06 0 0 1-25.4-7v.7a56.11 56.11 0 0 0 45 55 55.65 55.65 0 0 1-14.8 2 62.39 62.39 0 0 1-10.6-1 56.24 56.24 0 0 0 52.4 39 112.87 112.87 0 0 1-69.7 24 119 119 0 0 1-13.4-.8 158.83 158.83 0 0 0 86 25.2c103.2 0 159.6-85.5 159.6-159.6 0-2.4-.1-4.9-.2-7.3a114.25 114.25 0 0 0 28.1-29.1" fill="#959da5"></path></svg></div>
+<span class="d-none d-sm-inline-block text-gray-light">Twitter</span>
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  
+  <div class="article">
+    <p>I installed Gentoo the other day, and would like to share my thoughts on Gentoo, mainly, how it caught my attention.</p>
+
+<p><img src="https://assets.gentoo.org/tyrian/site-logo.svg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Gentoo Logo"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Gentoo Logo | Source: <a href="https://www.gentoo.org/">Gentoo's Official Website</a></p>
+
+<p>Being a privacy evangelist, and a FOSS freak, I was intrigued by Gentoo. There were several reasons for this:</p>
+<ol>
+  <li>Gentoo’s Package Manager, Portage;</li>
+  <li>Gentoo’s promise of being highly configurable;</li>
+  <li>Gentoo’s standing in the community.</li>
+</ol>
+
+<h1 id="gentoos-package-manager-portage">Gentoo’s Package Manager, Portage</h1>
+<p>According to <a href="https://wiki.gentoo.org/wiki/Portage">Gentoo’s Wiki regarding Portage</a>, Portage is the official package manager and distribution system for Gentoo. This not only means Portage is used to obtain packages that I need for regular use, but also to update Gentoo itself.</p>
+
+<p>The most interesting thing about Portage is its build system - it compiles packages (that has a FOSS license) from scratch. Using a combination of system and user flags, you can even optimize how Portage compiles these packages, and make full use of whatever resources your system has to compile these packages. It is always mesmerizing to see <code class="highlighter-rouge">configure</code> and <code class="highlighter-rouge">Makefile</code> scripts running over and over as Portage compiles the packages and its dependencies; it puts your system in your complete control, and you can feel the <em>power</em>.</p>
+
+<h1 id="gentoos-promise-of-being-highly-configurable">Gentoo’s Promise of being highly configurable</h1>
+<p>Gentoo is so ridiculously configurable, you can feel its configurability all the way from installation. When installing Gentoo, you’re literally copying the contents of a <code class="highlighter-rouge">tar.gz</code> archive to your system; from this step alone, you can already start configuring your installation, if you know what you are doing. Then, during installation, you have to configure and compile your kernel, manually mount the EFI, install GRUB, etc.</p>
+
+<p>After installation, if you selected the minimal profile during base system installation outlined in <a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base">this part of the handbook</a>, you get to choose and install a desktop environment / window manager, configure that, choose between <a href="https://wiki.gentoo.org/wiki/Nouveau">nouveau</a> or the <a href="https://wiki.gentoo.org/wiki/NVIDIA/nvidia-drivers">NVIDIA Proprietary graphics drivers</a> (although, note that this particular package is closed-source. Only the wrappers are compiled against the source). Then, you choose a composer, a network manager (if you wish), choose between <a href="https://wiki.gentoo.org/wiki/AppArmor">AppArmor</a> or <a href="https://wiki.gentoo.org/wiki/SELinux">SELinux</a>, your <a href="https://wiki.gentoo.org/wiki/Category:Image_viewer">image viewer</a>, <a href="https://wiki.gentoo.org/wiki/ALSA">ALSA</a> only or ALSA + <a href="https://wiki.gentoo.org/wiki/PulseAudio">PulseAudio</a>; everything is under your control. Every. Thing.</p>
+
+<h1 id="gentoos-standing-in-the-community">Gentoo’s standing in the community</h1>
+<p>There is a thread on <a href="https://www.reddit.com/r/linuxmasterrace/comments/6sjjq3/how_i_feel_about_arch_vs_gentoo/">Reddit</a> that made an apt comparison between Gentoo and Arch Linux:</p>
+
+<p><img src="https://i.redd.it/1q4q7ojpjnez.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Good comparison between Gentoo and Arch Linux"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Comparison between Arch and Gentoo | Source: <a href="https://www.reddit.com/r/linuxmasterrace/comments/6sjjq3/how_i_feel_about_arch_vs_gentoo/">Reddit</a></p>
+
+<p>Jokes aside, I don’t have concrete evidence that can definitively prove Gentoo’s good reputation online, although I personally think so. For it’s flexibility and configurability, I would imagine that other privacy and security enthusiasts would also enjoy Gentoo as a daily driving operating system.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+<p>I have installed Gentoo for over a week now, and am enjoying every second with it. If you like to dabble with operating systems, especially Linux, and don’t mind sinking hours upon hours of time tweaking every aspect of your operating system, then I suggest you try out Gentoo, maybe you’d like it!</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2019</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
