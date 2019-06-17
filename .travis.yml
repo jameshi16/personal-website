@@ -1,6 +1,9 @@
 language: ruby
 cache: bundler
 
+git:
+  depth: 1
+
 script:
   - bundle exec jekyll build
 
