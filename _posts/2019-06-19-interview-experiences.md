@@ -126,3 +126,5 @@ Until then:
 Happy Coding,
 
 CodingIndex 
+
+P.S. [Part 2](/2019/06/19/interview-experiences-part-2/)
