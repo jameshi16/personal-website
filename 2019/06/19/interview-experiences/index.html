@@ -1,0 +1,177 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.I was a little excited to do that at first, but I was not prepared to get spoonfed the answer as soon as I took too lon..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Interview Experience</h1>
+      <p class="text-gray mb-5">Published Jun 19, 2019 01:00</p>
+      
+  
+  <div class="article">
+    <p>Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.</p>
+
+<p>I was a little excited to do that at first, but I was not prepared to get spoonfed the answer as soon as I took too long to think. For context, my problem statement was this: “Find the next number, greater than the current number, for any number on a Binary Search Tree.”</p>
+
+<p>Looking at the problem, I decided that I could solve it with a simple traversal-based algorithm, which caused my interviewer to raise his eyebrow, questioning my programming experience I have developed over the years. Turns out, that was not the solution he had in mind; he thought of a solution which involved <em>both</em> Binary Search Tree and Binary Search (a wonder why they share similar names, huh?).</p>
+
+<p>Back then, I didn’t really push to let my solution through, because he was the interviewer, and he dictated the interview room. Hence, when I took too long to solve the problem, he started to guide me by asking me to traverse the tree, insert the elements into a list, then use binary search, then add one to the pointer. Once I understood what he was doing, he asked me to only implement a simple binary search algorithm. However, when I returned home, I quickly wrote down his solution and compiled it; then, I wrote down what I would have wrote on the whiteboard if he didn’t stop me, and it turns out, my solution would work as well. In fact, mine will have better time <strong>and</strong> space complexity, because his solution involves two algorithms: Binary Search Tree traversal, and Binary Search, while mine only does Binary Search Tree traversal. His solution requires an extra list, while mine doesn’t, hence the claim for a better space complexity. However, in terms of the Big-O notation, we would (annoyingly) have the same complexity for both time and space. The full code for the interviewer and myself can be found <a href="https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1">here</a>.</p>
+
+<blockquote>
+  <p>Problem statement: Find the next number, greater than the current number, for any number on a Binary Search Tree</p>
+</blockquote>
+
+<p>For the purposs of this blog post, I will trim away all the excess code. Have a look at the following snippet:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sorted</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">sorted_it</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">traverse</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">parent_node</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="n">traverse</span><span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+
+	<span class="o">*</span><span class="p">(</span><span class="n">sorted</span> <span class="o">+</span> <span class="n">sorted_it</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="n">traverse</span><span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">binarySearchNext</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">list_size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">element</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="o">*</span><span class="n">start</span> <span class="o">=</span> <span class="n">list</span><span class="p">,</span> <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="n">list</span> <span class="o">+</span> <span class="n">list_size</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> 
+	<span class="kt">int</span><span class="o">*</span> <span class="n">it</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">end</span> <span class="o">==</span> <span class="n">element</span><span class="p">)</span> <span class="c1">//next element cannot exist</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+
+	<span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">it</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">//get middle everytime</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="n">element</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">it</span><span class="o">++</span><span class="p">;</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>	
+
+		<span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">&lt;</span> <span class="n">element</span><span class="p">)</span>
+			<span class="n">start</span> <span class="o">=</span> <span class="n">it</span><span class="p">;</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">&gt;</span> <span class="n">element</span><span class="p">)</span>
+			<span class="n">end</span> <span class="o">=</span> <span class="n">it</span><span class="p">;</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">start</span><span class="p">)</span>
+			<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//can't even find the element</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="o">*</span><span class="n">it</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>This was the interviewer’s answer to the problem statement. To use this snippet, you will need to call <code class="highlighter-rouge">traverse(parent_node)</code>, and then <code class="highlighter-rouge">binarySearchNext(sorted, 8, element)</code>. We are using in-order traversal, and you can see that during the traversal, values get added into an array, making a sorted array. A binary search is then performed on the array, and when the element is found, we add one to the iterator, returning us the next number. As a reminder, a traversal in a Binary Search Tree has the time complexity of <code class="highlighter-rouge">O(n)</code>, and Binary Search has the time complexity of <code class="highlighter-rouge">O( log(n) )</code>. In terms of space complexity, the whole algorithm takes up <code class="highlighter-rouge">O(n)</code>.</p>
+
+<p>With that, let’s have a look at my possible answer:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">element_found</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="n">Node</span><span class="o">*</span> <span class="n">nextElementNode</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="p">;</span> <span class="c1">//answer will be here </span>
+
+<span class="kt">void</span> <span class="nf">traverse</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">parent_node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="n">traverse</span><span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">element_found</span><span class="p">)</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">nextElementNode</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span>
+			<span class="n">nextElementNode</span> <span class="o">=</span> <span class="n">parent_node</span><span class="p">;</span>
+		<span class="k">else</span> <span class="k">return</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">)</span>
+		<span class="n">element_found</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+	
+	<span class="k">if</span> <span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="n">traverse</span><span class="p">(</span><span class="n">parent_node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">findNextElement</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">parent_node</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">traverse</span><span class="p">(</span><span class="n">parent_node</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">element_found</span> <span class="o">&amp;&amp;</span> <span class="n">nextElementNode</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+	
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">element_found</span> <span class="o">&amp;&amp;</span> <span class="n">nextElementNode</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="n">nextElementNode</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To use this snippet, you need to call <code class="highlighter-rouge">findNextElement(parent_node, element)</code>. If you look closely, <code class="highlighter-rouge">findNextElement</code> is simply a wrapper function around <code class="highlighter-rouge">traverse</code>, and tries to understand the output of the algorithm by inspecting <code class="highlighter-rouge">element_found</code> and <code class="highlighter-rouge">nextElementNode</code>. Hence, the bulk of the work is done on the <code class="highlighter-rouge">traverse</code> function. The difference between the <code class="highlighter-rouge">traverse</code> function in my snippet, versus the snippet representing the interviewer’s answer, is that my traverse has a few extra lines of code, namely:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">if</span> <span class="p">(</span><span class="n">element_found</span><span class="p">)</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">nextElementNode</span> <span class="o">==</span> <span class="nb">nullptr</span><span class="p">)</span>
+			<span class="n">nextElementNode</span> <span class="o">=</span> <span class="n">parent_node</span><span class="p">;</span>
+		<span class="k">else</span> <span class="k">return</span><span class="p">;</span>
+</code></pre></div></div>
+<p>This small block of code will assign the node to itself whenever <code class="highlighter-rouge">element_found</code> is true, but <code class="highlighter-rouge">nextElementNode</code> is <code class="highlighter-rouge">nullptr</code>. This is strategically placed <em>after</em> traversing the left side of the node and <em>before</em> checking the current node with the supplied value, so that if <code class="highlighter-rouge">num</code> is the last traversed element in the left side of the tree, then the recursive function will return all the way up to the parent node, making the parent node the next number to <code class="highlighter-rouge">num</code>.</p>
+
+<p>As you can see, this method only involves traversing, which hence makes the time complexity of the algorithm <code class="highlighter-rouge">O(n)</code> only. In terms of space complexity, my solution is also <code class="highlighter-rouge">O(n)</code>.</p>
+
+<p>Some of the sharper ones among you realized something: <code class="highlighter-rouge">O(n)</code>? Wait, doesn’t that make linear search on the constructing list the same space-time complexity as both of these overly complicated algorithms?</p>
+
+<p>Yes.</p>
+
+<p>Yes it does.</p>
+
+<p>We don’t do that here.</p>
+
+<p>Although, you are right. A simple linear search, looking for the minimum of all the greater elements than the element we are searching for would have sufficed, and be as equally efficient.</p>
+
+<p>Once again, the snippet is at this link: <a href="https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1">https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1</a>.</p>
+
+<p>Do try and correct me if I’m wrong on any part of this blog post, because, I have no idea what I’m actually doing. All I know is that my algorithm is a strong contender to the algorithm he suggested.</p>
+
+<p>I have another interview coming up soon, so you can probably expect a blog post from that too <img class="emoji" title=":new_moon_with_face:" alt=":new_moon_with_face:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f31a.png" height="20" width="20">.</p>
+
+<p>Until then:</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2019</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
