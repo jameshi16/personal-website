@@ -1,0 +1,273 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="You read the title, let’s get started. For this tutorial, we will be using the Arduino IDE. This should be possible with ESP-IDF, too, because ESP-MQTT is included as part of the ESP-IDF.Tested onThis tutorial was created on Ubuntu 18.04.Pre-requisitesBefore the tutorial begins, please download t..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Tutorial: ESP32 to AWS IoT to AWS DynamoDB (Part I)</h1>
+      <p class="text-gray mb-5">Published Jun 22, 2019 12:00</p>
+      
+  
+  <div class="article">
+    <p>You read the title, let’s get started. For this tutorial, we will be using the <a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a>. This should be possible with <a href="https://github.com/espressif/esp-idf">ESP-IDF</a>, too, because <a href="https://github.com/espressif/esp-mqtt">ESP-MQTT</a> is included as part of the ESP-IDF.</p>
+
+<h1 id="tested-on">Tested on</h1>
+<p>This tutorial was created on Ubuntu 18.04.</p>
+
+<h1 id="pre-requisites">Pre-requisites</h1>
+<p>Before the tutorial begins, please download the following pre-requisites (the version numbers are the versions used to create this tutorial):</p>
+<ul>
+  <li>
+<a href="https://www.arduino.cc/">Arduino IDE</a> - 1.8.9</li>
+  <li>
+<a href="https://www.python.org/downloads/">Python</a> - 3.6.8</li>
+</ul>
+
+<h1 id="setting-up-prerequisites">Setting up prerequisites</h1>
+<h2 id="arduino-ide">Arduino IDE</h2>
+
+<ol>
+  <li>Download the <a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a> if you don’t already have it.</li>
+  <li>Start Arduino, then select <strong>File</strong> &gt; <strong>Preferences</strong>.
+ <img src="/images/20190622_21.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="File &gt; Preferences">
+    <p class="text-center text-gray lh-condensed-ultra f6">File &gt; Preferences | Source: Me</p>
+  </li>
+  <li>Under ‘Additional Board Manager URLs’, add this URL: <code class="highlighter-rouge">https://dl.espressif.com/dl/package_esp32_index.json</code>.
+ <img src="/images/20190622_22.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Add a board manager url">
+    <p class="text-center text-gray lh-condensed-ultra f6">Adding a board manager url | Source: Me</p>
+  </li>
+  <li>Goto <strong>Tools</strong> &gt; <strong>Board</strong> &gt; <strong>Boards Manager</strong> and type in <code class="highlighter-rouge">esp32</code> on the search bar. You should find the esp32 package. Install version <code class="highlighter-rouge">1.0.2</code>.
+ <img src="/images/20190622_23.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Tools &gt; Board &gt; Boards Manager">
+    <p class="text-center text-gray lh-condensed-ultra f6">Board Manager | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_24.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Board Manager ESP32 Package"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">ESP32 Package | Source: Me</p>
+  </li>
+  <li>Goto <strong>Tools</strong> &gt; <strong>Manage Libraries</strong>. Then, search for <code class="highlighter-rouge">PubSubClient</code>, and install version <code class="highlighter-rouge">2.7.0</code>.
+ <img src="/images/20190622_25.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Tools &gt; Manage Libraries">
+    <p class="text-center text-gray lh-condensed-ultra f6">Manage Libraries | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_26.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Install PubSubClient"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Install PubSubClient library | Source: Me</p>
+  </li>
+  <li>Select <strong>Tools</strong> &gt; <strong>Board</strong> &gt; <em>ESP32 Dev Module</em>. Leave all new options to their default settings.
+ <img src="/images/20190622_27.jpg" style="max-width: 500px; width: 100%; margin: 0 auto; display: block;" alt="Tools &gt; Board &gt; ESP32 Dev Module">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on it to change the board | Source: Me</p>
+  </li>
+</ol>
+
+<h2 id="python">Python</h2>
+
+<p>Run through all the installation steps for Python. If you are on Ubuntu, run <code class="highlighter-rouge">sudo apt install python python-serial</code>.</p>
+
+<hr>
+
+<h1 id="linking-up-esp32-to-aws-iot">Linking up ESP32 to AWS IoT</h1>
+<h2 id="step-uno">Step Uno</h2>
+
+<ol>
+  <li>Login to the AWS Management Console.</li>
+  <li>Click on <strong>Services</strong> &gt; <strong>IoT Core</strong> (found under the section “Internet of Things”)
+ <img src="/images/20190622_1.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Services button on AWS Console">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on Services | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_2.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="IoT Core"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">IoT Core | Source: Me</p>
+  </li>
+  <li>On the sidebar, goto <strong>Secure</strong> &gt; <strong>Policies</strong>, and click on “Create a Policy” or “Create”, depending on which one is present.
+ <img src="/images/20190622_3.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="IoT Policy">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create IoT Policy | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_4.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Alternate IoT Policy"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">If you already have policies, use this button instead | Source: Me</p>
+  </li>
+  <li>A wizard should appear. Name your policy through the <em>Name</em> field, key in <code class="highlighter-rouge">iot:*</code> into the <em>Action</em> field, key in <code class="highlighter-rouge">*</code> under the <em>Resource ARN</em> field, and finally, check the ‘Allow’ box under <em>Effect</em>. Should you wish to restrict your policy more for higher security, or prevent other <em>authorized</em> (yes, <em>authorized</em>) users from using your topic, please refer to <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html">this AWS Documentation</a> to construct your own policy. After checking your fields, press <strong>Create</strong>.
+ <img src="/images/20190622_5.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Wizard options">
+    <p class="text-center text-gray lh-condensed-ultra f6">Values for the wizard | Source: Me</p>
+  </li>
+  <li>On the sidebar, goto <strong>Manage</strong> &gt; <strong>Things</strong>, and click on “Register a thing” or “Create” depending on which one is present.
+ <img src="/images/20190622_6.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Create button">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on Create | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_7.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Register a thing"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Or click on Register a Thing | Source: Me</p>
+  </li>
+  <li>Click on “Create a single thing”.
+ <img src="/images/20190622_8.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create a single thing">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create a single thing | Source: Me</p>
+  </li>
+  <li>Name your thing whatever you want, and click <strong>Next</strong> at the bottom of the page.
+ <img src="/images/20190622_9.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Name and Create">
+    <p class="text-center text-gray lh-condensed-ultra f6">Name your thing, and press create | Source: Me</p>
+  </li>
+  <li>Click on <strong>One-click certificate creation (recommended)</strong>.
+ <img src="/images/20190622_10.jpg" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="One click certificate creation">
+    <p class="text-center text-gray lh-condensed-ultra f6">Certificate Creation | Source: Me</p>
+  </li>
+  <li>After a while, the wizard should generate a certificate. Download the certificate, and the private key. Also, get the root CA, here is a <a href="https://www.amazontrust.com/repository/AmazonRootCA1.pem">direct link</a> to it. Make sure to activate the certificate before clicking <strong>Attach a policy</strong>.
+ <img src="/images/20190622_11.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Download certificate, private key, CA">
+    <p class="text-center text-gray lh-condensed-ultra f6">Download the cert, private key, CA cert, and activate before continuing. | Source: Me</p>
+  </li>
+  <li>Find your policy in the search box, and select it. Then, click <strong>Register Thing</strong>.
+<img src="/images/20190622_12.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Select then register thing">
+    <p class="text-center text-gray lh-condensed-ultra f6">Register thing | Source: Me</p>
+  </li>
+  <li>Click into the thing you have created.
+<img src="/images/20190622_14.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click into thing">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click into the thing you created | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Interact</strong>.
+<img src="/images/20190622_15.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Click on interact">
+    <p class="text-center text-gray lh-condensed-ultra f6">Caption</p>
+  </li>
+  <li>Note down the HTTP Endpoint (both MQTT and HTTP share the same endpoint).
+<img src="/images/20190622_16.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Note this down">
+    <p class="text-center text-gray lh-condensed-ultra f6">Note down the endpoint | Source: Me</p>
+  </li>
+  <li>Click the grey back arrow in the page and click on <strong>Test</strong> in the sidebar. You should see the MQTT Client as shown below. Keep this window open, and proceed to Step Dos.
+<img src="/images/20190622_13.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="MQTT Client">
+    <p class="text-center text-gray lh-condensed-ultra f6">MQTT Client on AWS IoT Console | Source: Me</p>
+  </li>
+</ol>
+
+<h2 id="step-dos">Step Dos</h2>
+
+<ol>
+  <li>Open the Arduino IDE / Switch to the Arduino IDE.</li>
+  <li>Completely replace all the code in the IDE with code <a href="https://gist.github.com/jameshi16/7f277bb8dfecf38a30aea0093f30477a">from this gist</a>.</li>
+  <li>Fill in the configuration options by editing the content within the double quotes ("):
+    <ul>
+      <li>
+<code class="highlighter-rouge">SSID</code>: The SSID of the access point to connect to.</li>
+      <li>
+<code class="highlighter-rouge">Password</code>: The password of the access point to connect to.</li>
+      <li>
+<code class="highlighter-rouge">aws_iot_hostname</code>: The hostname you noted down during Step Uno.</li>
+      <li>
+<code class="highlighter-rouge">aws_iot_sub_topic</code>: The topic this device should subscribe to. For this tutorial, we’ll use <code class="highlighter-rouge">topic/hello</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
+      <li>
+<code class="highlighter-rouge">aws_iot_pub_topic</code>: The topic this device should publish to. For this tutorial, it’ll be <code class="highlighter-rouge">another/topic/echo</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
+      <li>
+<code class="highlighter-rouge">ca_certificate</code>: Copy the contents of the CA certificate you downloaded (file should be <code class="highlighter-rouge">AmazonRootCA1.pem</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+      <li>
+<code class="highlighter-rouge">iot_certificate</code>: Copy the contents of the certificate you downloaded (file should be <code class="highlighter-rouge">*-certificate.pem.crt</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+      <li>
+<code class="highlighter-rouge">iot_privatekey</code>: Copy the contents of the private key you downloaded (file should be <code class="highlighter-rouge">*-private.pem.key</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+    </ul>
+    <form action="javascript:void(0)" onsubmit="magicTextTransformer()" style="margin: 0 auto; max-width: 800px; width: 50%">
+     <textarea id="transformee" style="width: 100%; height: 100px"></textarea><br>
+      <input type="submit" value="Make into C++ String" style="float: right;">
+ </form>
+
+    <script type="application/javascript">
+     function magicTextTransformer() {
+         text = document.getElementById('transformee').value;
+         document.getElementById('transformee').value = text.replace(/\n/g, '\\n');
+     }
+ </script>
+  </li>
+  <li>Plug in your ESP32 now.</li>
+  <li>Select the port by going into <strong>Tools</strong> &gt; <strong>Port</strong> &gt; COMX or /dev/ttyUSBX, where X is the port to your ESP32.</li>
+  <li>Click on Upload.</li>
+  <li>[Optional] Launch the serial console to see debugging infomration.</li>
+</ol>
+
+<h2 id="step-tres">Step Tres</h2>
+
+<ol>
+  <li>Go back to the window highlighted in the last step of Step Uno.</li>
+  <li>For this tutorial, fill in <code class="highlighter-rouge">another/topic/echo</code> in the <em>Subscription topic</em> textbox, and click on <code class="highlighter-rouge">Subscribe to topic</code>.
+ <img src="/images/20190622_17.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Subscribe topic">
+    <p class="text-center text-gray lh-condensed-ultra f6">Subscribe to the topic | Source: Me</p>
+  </li>
+  <li>For this tutorial, fill in <code class="highlighter-rouge">topic/hello</code> in the <em>Publish</em> textbox, and click on <code class="highlighter-rouge">Publish to topic</code>.
+ <img src="/images/20190622_18.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Publish to topic">
+    <p class="text-center text-gray lh-condensed-ultra f6">Publish to the topic | Source: Me</p>
+  </li>
+  <li>If you have done everything correctly so far, you should see a new message popup below the publish block, which is echoed from the device. If you have have your serial console up, you can also see that the message has reached your ESP32.
+ <img src="/images/20190622_19.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Recieved message from ESP32 echo">
+    <p class="text-center text-gray lh-condensed-ultra f6">An echo from the ESP32 on AWS IoT | Source: Me</p>
+    <p><br>
+ <img src="/images/20190622_20.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="What the ESP32 recieves"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Serial Console | Source: Me</p>
+  </li>
+  <li>Clear the text field that contains the JSON, and try publishing either 1 or 0, and observe the ESP32 closely per published message.</li>
+</ol>
+
+<hr>
+
+<h1 id="code-explanation">Code explanation</h1>
+
+<p>The code contains the absolute (mostly) minimal code required to perform MQTT Pub/Sub with AWS IoT MQTT endpoints. Other than the MQTT client verifying the server’s identity, AWS also requires that all clients be authenticated with client certificates. Hence, the following lines:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">client</span><span class="p">.</span><span class="n">setCACert</span><span class="p">(</span><span class="n">ca_certificate</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">setCertificate</span><span class="p">(</span><span class="n">iot_certificate</span><span class="p">);</span>
+<span class="n">client</span><span class="p">.</span><span class="n">setPrivateKey</span><span class="p">(</span><span class="n">iot_privatekey</span><span class="p">);</span>
+</code></pre></div></div>
+<p>are responsible for setting the required certificates for communication.</p>
+
+<p>Publishing is done like so:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mqtt</span><span class="p">.</span><span class="n">publish</span><span class="p">(</span><span class="n">aws_iot_pub_topic</span><span class="p">,</span> <span class="n">aws_iot_pub_message</span><span class="p">);</span>
+</code></pre></div></div>
+<p>And subscribing is done like so:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mqtt</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">aws_iot_sub_topic</span><span class="p">);</span> <span class="c1">//subscribe to the topic</span>
+</code></pre></div></div>
+<p>Do note that for subscribing, you must provide a callback function with the signature of <code class="highlighter-rouge">void callback(const char* topic, byte* payload, unsigned int length)</code>. This callback will be called by the <code class="highlighter-rouge">PubSubClient</code> library whenever there is a new message from the subscribed topics.</p>
+
+<p>MQTT typically uses port <code class="highlighter-rouge">1883</code> and <code class="highlighter-rouge">8883</code>. AWS IoT only uses port <code class="highlighter-rouge">8883</code>, because it uses MQTT over SSL (MQTTS), hence the line:</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mqtt</span><span class="p">.</span><span class="n">setServer</span><span class="p">(</span><span class="n">aws_iot_hostname</span><span class="p">,</span> <span class="mi">8883</span><span class="p">);</span>
+</code></pre></div></div>
+
+<hr>
+
+<p>Hope you enjoyed the tutorial. In part two of this two-parter tutorial, we will be adding a policy that will pipe whatever our ESP32 publishes to AWS IoT into DynamoDB. Until then,</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2019</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
