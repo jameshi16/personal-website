@@ -68,7 +68,7 @@ Run through all the installation steps for Python. If you are on Ubuntu, run `su
     <img src="/images/20190622_5.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Wizard options"/>
     <p class="text-center text-gray lh-condensed-ultra f6">Values for the wizard | Source: Me</p>
 5. On the sidebar, goto **Manage** > **Things**, and click on "Register a thing" or "Create" depending on which one is present.
-    <img src="/images/20190622_6.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create button"/>
+    <img src="/images/20190622_6.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Create button"/>
     <p class="text-center text-gray lh-condensed-ultra f6">Click on Create | Source: Me</p>
     <br/>
     <img src="/images/20190622_7.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Register a thing"/>
