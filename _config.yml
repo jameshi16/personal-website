@@ -42,7 +42,10 @@ pagination:
   sort_field: 'date'
   sort_reverse: true
 
-collections:
+collections: 
   anime:
     output: true
     permalink: "/anime/:path/"
+
+  people:
+    output: false

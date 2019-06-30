@@ -1,0 +1,13 @@
+<div class="border border-gray-dark rounded-2 mb-2" style="max-width: 250px; margin-left: 2px; margin-right: 2px">
+	<div class="m-2">
+		<img src="{{ person.picture }}" style="border-radius: 100%; max-width: 200px; max-height: 200px;"/> 
+		<p>{{ person.name }} {{ person.salutation }}</p>
+		{% if person.linkedin %}
+		<a href="{{ person.linkedin }}">
+			<img src="https://www.linkedin.com/favicon.ico" style="max-width: 20px; max-height: 20px"/>
+		</a>
+		{% endif %}				
+		<p>{{ person.job }}</p>
+		<span class="text-small text-gray">{{ person.content }}</span>
+	</div>
+</div>
