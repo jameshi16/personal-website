@@ -1,0 +1,239 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Finally, the long-awaited (2 months) part II is here!Pre-requisitesYou must have completed Part I to continue with this tutorial, as this tutorial builds on the previous tutorial.Linking up AWS IoT to DynamoDBIn the previous part, the ESP32 was linked to DynamoDB via MQTT, and it was possible to ..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Tutorial: ESP32 to AWS IoT to AWS DynamoDB (Part II)</h1>
+      <p class="text-gray mb-5">Published Sep 05, 2019 12:30</p>
+      
+  
+  <div class="article">
+    <p>Finally, the long-awaited (2 months) part II is here!</p>
+
+<h2 id="pre-requisites">Pre-requisites</h2>
+
+<p>You must have completed <a href="/2019/06/22/mqtt-aws-iot-dynamodb-part-1/">Part I</a> to continue with this tutorial, as this tutorial builds on the previous tutorial.</p>
+
+<h2 id="linking-up-aws-iot-to-dynamodb">Linking up AWS IoT to DynamoDB</h2>
+
+<p>In the previous part, the ESP32 was linked to DynamoDB via MQTT, and it was possible to control the LED of the ESP32 by publishing a message via the AWS IoT testing console to the subscribed IoT topic. However, IoT is much more than just controlling devices from the cloud. There are some devices, known as “IoT Sensors”, which are able to report sensor data to the internet. Combined with the ability to control devices and with the massive power of Cloud Computing, this allows more powerful machines to make decisions based on the data collected from the sensors, then returning those results as commands to control devices based on inferences made from aforementioned data.</p>
+
+<p>We can then integrate advanced computing techniques like Big Data and Machine Learning with IoT to better improve lives based around IoT products in a household. This vaguely composites into what is known as “Smart Home”; using a cluster of IoT sensors and actuators to: (i) cut utility bills, (ii) make living more convenient, and (iii) make living more entertaining (<a href="https://www.androidauthority.com/what-is-a-smart-home-806483/">AndroidAuthority</a>, 2019). Scale that to the size of a city, and the term becomes “Smart City”, making payments, transport, security, et. cetera more convenient.</p>
+
+<p>Therefore, in this section, you will be modifying your handiwork in Part I to make it such that the ESP32 would publish a JSON object indicating that a button on the ESP32 has been pressed. This JSON object will then be mapped as columns on a DynamoDB table.</p>
+
+<p>Looking at the ESP32 schematics:
+<img src="/images/20190905_1.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Schematics for the 'BOOT' button"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">The schematics for the 'BOOT' button | <a href="https://dl.espressif.com/dl/schematics/ESP32-Core-Board-V2_sch.pdf">Source</a></p>
+
+<p>It appears that the ‘BOOT’ active-low button can be used as a typical button, which is perfect for the current use case.</p>
+
+<h3 id="step-ichi">Step Ichi</h3>
+
+<ol>
+  <li>Login to the AWS Management Console.</li>
+  <li>Click on <strong>Services</strong> &gt; <strong>DynamoDB</strong> (found under the section “Database”)
+ <img src="/images/20190905_2.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="DynamoDB is under the Database Section">
+    <p class="text-center text-gray lh-condensed-ultra f6">DynamoDB | Source: Me</p>
+  </li>
+  <li>If you’ve created a DynamoDB table before, you may see a different resultant screen. Click on <strong>Create table</strong>.
+ <img src="/images/20190905_3.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="New user DynamoDB">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click this if you don't already have a table | Source: Me</p>
+    <p><img src="/images/20190905_4.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Existing user DynamoDB"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Click this instead if you already have tables | Source: Me</p>
+  </li>
+  <li>Fill in <em>Table name</em> with whatever name you wish. For the purposes of this tutorial, it will be called “iot-table”. Call the partition key “uid”, as we will be generating a random UID per record. Then, click <strong>Create</strong>.
+ <img src="/images/20190905_5.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Table Creation Wizard">
+    <p class="text-center text-gray lh-condensed-ultra f6">Table Creation Wizard | Source: Me</p>
+  </li>
+  <li>Click on <strong>Services</strong> &gt; <strong>IAM</strong> (found under the section “Security, Identity &amp; Compliance)
+ <img src="/images/20190905_15.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="AWS IAM">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on IAM | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Roles</strong>
+ <img src="/images/20190905_16.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Roles">
+    <p class="text-center text-gray lh-condensed-ultra f6">Roles | Source: Me</p>
+  </li>
+  <li>Click on <strong>Create role</strong>.
+ <img src="/images/20190905_17.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create role">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create a role | Source: Me</p>
+  </li>
+  <li>Click on <strong>IoT</strong> under the <strong>Choose the service that will use this role</strong>. Then, click on <strong>IoT</strong> under the <strong>Select your use case</strong>. Finally, click on <strong>Next: Permissions</strong>.
+ <img src="/images/20190905_18.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Choosing the service to use the role">
+    <p class="text-center text-gray lh-condensed-ultra f6">Choosing the service to use the role | Source: Me</p>
+  </li>
+  <li>Click on <strong>Next: Tags</strong>.
+ <img src="/images/20190905_19.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Next: Tags">
+    <p class="text-center text-gray lh-condensed-ultra f6">Next: Tags | Source: Me</p>
+  </li>
+  <li>Click on <strong>Next: Review</strong>
+<img src="/images/20190905_20.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Next: Review">
+    <p class="text-center text-gray lh-condensed-ultra f6">Next: Review | Source: Me</p>
+  </li>
+  <li>Name the role whatever you wish (Field: <em>Role name</em>). For the purposes of this tutorial, it will be named “iot-role”. Then, click on <strong>Create role</strong>.
+<img src="/images/20190905_21.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create the role with a name">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create the role with a name | Source: Me</p>
+  </li>
+  <li>Click on the role you have just created.
+<img src="/images/20190905_22.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click on the role you have just created">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click the role you have just created | Source: Me</p>
+  </li>
+  <li>Click on <strong>Attach policies</strong>.
+<img src="/images/20190905_23.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Click on Attach policies">
+    <p class="text-center text-gray lh-condensed-ultra f6">Attach Policies | Source: Me</p>
+  </li>
+  <li>On the search bar, type “DynamoDB”, and select the <strong>AmazonDynamoDBFullAccess</strong> policy. Then, click <strong>Attach policy</strong>.
+<img src="/images/20190905_24.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Search and select the policy">
+    <p class="text-center text-gray lh-condensed-ultra f6">Search and select <b>AmazonDynamoDBFullAccess</b> | Source: Me</p>
+  </li>
+  <li>Click on <strong>Services</strong> &gt; <strong>IoT Core</strong> (found under the section “Internet of Things”)
+<img src="/images/20190622_1.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Services button on AWS Console">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on IoT Core | Source: Me</p>
+    <p><br>
+<img src="/images/20190622_2.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="IoT Core"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">IoT Core | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Act</strong>
+<img src="/images/20190905_7.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Act button on IoT Core">
+    <p class="text-center text-gray lh-condensed-ultra f6">Act | Source: Me</p>
+  </li>
+  <li>If you have not created a AWS IoT Rule before, click on “Create a rule”. Otherwise click “Create”.
+<img src="/images/20190905_8.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create a rule (new user)">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create a rule (new user) | Source: Me</p>
+    <p><img src="/images/20190905_9.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Create a rule (existing user)"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Create a rule (existing user) | Source: Me</p>
+  </li>
+  <li>Name the rule (the <em>Name</em> field). For the purposes of this tutorial, it will be named “dynamodb_rule”.
+<img src="/images/20190905_10.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Rule Name">
+    <p class="text-center text-gray lh-condensed-ultra f6">Name the rule whatever you want | Source: Me</p>
+  </li>
+  <li>In the <em>Rule query statement</em>, use this SQL statement:
+    <div class="language-sql highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">newuuid</span><span class="p">()</span> <span class="k">AS</span> <span class="n">uid</span><span class="p">,</span> <span class="nb">timestamp</span><span class="p">()</span> <span class="k">AS</span> <span class="nb">timestamp</span><span class="p">,</span> <span class="o">*</span> <span class="k">FROM</span> <span class="s1">'another/topic/hello'</span>
+</code></pre></div>    </div>
+    <p><img src="/images/20190905_11.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="SQL Query"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Put the SQL statement into the <i>Rule query statement</i> field | Source: Me</p>
+  </li>
+  <li>Click on <strong>Add action</strong> under the <strong>Set one or more actions</strong> section.
+<img src="/images/20190905_12.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="SQL Actions">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on the Add Action button | Source: Me</p>
+  </li>
+  <li>Check the <strong>Split message into multiple columns of a DynamoDB table (DynamoDBv2)</strong> option, and scroll down to click <strong>Configure action</strong> button.
+<img src="/images/20190905_13.jpg" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Option + Configure action button">
+    <p class="text-center text-gray lh-condensed-ultra f6">Configure the action | Source: Me</p>
+  </li>
+  <li>Select the corresponding <em>Table name</em> created in step 4. Select the corresponding role created in step 11, by first clicking on <strong>Select</strong>, then selecting the role with the subsequent <strong>Select</strong> button. Finally, click <strong>Add action</strong>.
+<img src="/images/20190905_14.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Select the correct table name and IAM role">
+    <p class="text-center text-gray lh-condensed-ultra f6">Table name, and IAM role | Source: Me</p>
+  </li>
+  <li>Back on the rule creation wizard, click on <strong>Create rule</strong>.
+<img src="/images/20190905_25.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create the rule">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create the rule | Source: Me</p>
+  </li>
+</ol>
+
+<h3 id="step-ni">Step Ni</h3>
+
+<p>Now that the AWS services are setup properly, it is time to update the Arduino code. Replace (or selectively replace, if you know what you’re doing) the old code with new code from <a href="https://gist.github.com/jameshi16/5846acdec40279028319c680fe8314b5">this gist</a>. Here is the summary of the changes made since the previous Arduino program:</p>
+
+<ul>
+  <li>Recieving a message from the subscription topic no longer echos to the publishing topic;</li>
+  <li>Button is programmed to send a message (a JSON object containing the state of the LED) to the publishing topic.</li>
+</ul>
+
+<p>Ensure that the <code class="highlighter-rouge">ssid</code>, <code class="highlighter-rouge">password</code>, <code class="highlighter-rouge">aws_iot_hostname</code>, <code class="highlighter-rouge">aws_iot_sub_topic</code>, <code class="highlighter-rouge">aws_iot_pub_topic</code>, <code class="highlighter-rouge">ca_certificate</code>, <code class="highlighter-rouge">iot_certificate</code> and <code class="highlighter-rouge">iot_privatekey</code> are filled in correctly, as described in the <a href="/2019/06/22/mqtt-aws-iot-dynamodb-part-1/">previous tutorial</a>’s Step Dos.</p>
+
+<p>Plug in the ESP32, select the port, and upload. Open the serial console to see debugging information, if desired.</p>
+
+<h3 id="step-san">Step San</h3>
+
+<ol>
+  <li>Go back to the AWS Console, and revisit <strong>Services</strong> &gt; <strong>DynamoDB</strong>.
+ <img src="/images/20190905_2.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="DynamoDB is under the Database Section">
+    <p class="text-center text-gray lh-condensed-ultra f6">DynamoDB | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Tables</strong>
+ <img src="/images/20190905_26.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Click on tables">
+    <p class="text-center text-gray lh-condensed-ultra f6">DynamoDB sidebar | Source: Me</p>
+  </li>
+  <li>Click on the table you created, and then click on the <strong>Items</strong> tab.
+ <img src="/images/20190905_27.jpg" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="View items in the table">
+    <p class="text-center text-gray lh-condensed-ultra f6">View items in the table | Source: Me</p>
+  </li>
+  <li>On the physical ESP32 device, press and release the ‘BOOT’ button once.
+ <img src="/images/20190905_28.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="The boot button">
+    <p class="text-center text-gray lh-condensed-ultra f6">Press this button once | Source: Me</p>
+  </li>
+  <li>Click on the refresh icon, located on the top right of the DynamoDB items table. You should see a new entry. Try pressing the ‘BOOT’ button on the ESP32 device a couple more times to see new records coming in.
+ <img src="/images/20190905_29.jpg" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="The refresh button">
+    <p class="text-center text-gray lh-condensed-ultra f6">The refresh button | Source: Me</p>
+  </li>
+  <li>Ensure that previous functionality of turning on / off the LED through the subscription topic still works.</li>
+</ol>
+
+<h1 id="what-did-i-just-do">What did I just do?</h1>
+
+<p>Now, you have a means to control a device, <strong>and</strong> a means to get device information from the ESP32. If all you need is to store the state of IoT things, including the state history, AWS IoT provides a feature to do just that - it is known as “Shadow Document”, which allows an IoT device to be stateless while reporting information to AWS IoT, which can keep track of state. You can learn more about that <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-document.html">here</a>.</p>
+
+<p>However, for our application, we want to process data as it comes in; computing something from the device information so that we can control the said device. Hence, we don’t have a need for the Shadow Document; instead, we opted to use a database like DynamoDB. You can learn more about DynamoDB <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html">here</a>.</p>
+
+<p>Hence, we still have a missing step; the part where we process the data. (Part III? <em>wink wink</em>)</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>IoT is an important topic, and should be accessible to everyone. Studying IoT not only includes learning how to actually implement it, but includes other important aspects, such as security (our solution is not very secure, to make it easier to achieve certain steps), connectivity, and scaling.</p>
+
+<p>Do look out for Part III!</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2019</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
