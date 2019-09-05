@@ -1,6 +1,6 @@
 ---
 title: "Tutorial: ESP32 to AWS IoT to AWS DynamoDB (Part II)"
-date: 2019-09-05 12:00:00 +08:00
+date: 2019-09-05 20:30:00 +08:00
 published: yes
 tags: [aws, iot, mqtt]
 categories: [aws]
