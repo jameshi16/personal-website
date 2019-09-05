@@ -1,0 +1,178 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="In theory, this tutorial is out of scope if we’re talking about the title; however, this tutorial is crucial, because it completes the entire IoT stack. In this tutorial, you will be building on whatever you have done in Part I and Part II, to build application logic that makes decisions and comm..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Tutorial: ESP32 to AWS IoT to AWS DynamoDB (Part III)</h1>
+      <p class="text-gray mb-5">Published Sep 05, 2019 19:30</p>
+      
+  
+  <div class="article">
+    <p>In theory, this tutorial is out of scope if we’re talking about the title; however, this tutorial is crucial, because it completes the entire IoT stack. In this tutorial, you will be building on whatever you have done in <a href="/2019/06/22/mqtt-aws-iot-dynamodb-part-1/">Part I</a> and <a href="/2019/09/05/mqtt-aws-iot-dynamodb-part-2/">Part II</a>, to build application logic that makes decisions and commands the IoT actuators based on information obtained via sensors.</p>
+
+<h1 id="pre-requisites">Pre-requisites</h1>
+
+<p>The previous tutorials, <a href="/2019/06/22/mqtt-aws-iot-dynamodb-part-1/">Part I</a> and <a href="/2019/09/05/mqtt-aws-iot-dynamodb-part-2/">Part II</a>, must be done.</p>
+
+<h1 id="step-one">Step One</h1>
+
+<ol>
+  <li>Login to the AWS Mangement Console.</li>
+  <li>Click on <strong>Services</strong> &gt; <strong>IAM</strong> (found under the section “Security, Identity &amp; Compliance).
+ <img src="/images/20190905_15.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="AWS IAM">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on IAM | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Roles</strong>.
+ <img src="/images/20190905_16.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Roles">
+    <p class="text-center text-gray lh-condensed-ultra f6">Roles | Source: Me</p>
+  </li>
+  <li>Click on <strong>Create role</strong>.
+ <img src="/images/20190905_17.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create role">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create a role | Source: Me</p>
+  </li>
+  <li>Click on <strong>Lambda</strong> under the <strong>Choose the service that will use this role</strong>. Then, click on <strong>Next: Permissions</strong>.
+ <img src="/images/20190906_1.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Choosing the service to use the role">
+    <p class="text-center text-gray lh-condensed-ultra f6">Choosing the service to use the role | Source: Me</p>
+  </li>
+  <li>Search and select the policies: “AWSLambdaBasicExecutionRole”, “AmazonDynamoDBFullAccess”, and “AWSIoTDataAccess” from the policy search bar. Then, click <strong>Next: Tags</strong>.
+ <img src="/images/20190906_2.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="AWSLambdaBasicExecutionRole">
+    <p class="text-center text-gray lh-condensed-ultra f6">AWSLambdaBasicexecutionRole | Source: Me</p>
+    <p><br>
+ <img src="/images/20190906_3.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="AmazonDynamoDBFullAccess"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">AmazonDynamoDBFullAccess | Source: Me</p>
+    <p><br>
+ <img src="/images/20190906_4.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="AWSIoTDataAccess"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">AWSIoTDataAccess | Source: Me</p>
+  </li>
+  <li>Click on <strong>Next: Review</strong>.
+ <img src="/images/20190905_20.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Next: Review">
+    <p class="text-center text-gray lh-condensed-ultra f6">Next: Review | Source: Me</p>
+  </li>
+  <li>Name the role whatever you wish (Field: <em>Role name</em>). For the purposes of this tutorial, it will be named “lambda-role”. Then, click on <strong>Create role</strong>.
+ <img src="/images/20190906_5.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create the role with a name">
+    <p class="text-center text-gray lh-condensed-ultra f6">Create the role with a name | Source: Me</p>
+  </li>
+  <li>Click on <strong>Services</strong> &gt; <strong>Lambda</strong> (found under the section “Compute”)
+ <img src="/images/20190906_6.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Lambda">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on Lambda | Source: Me</p>
+  </li>
+  <li>Click on <strong>Create a function</strong> if you are a new user, or <strong>Create function</strong> if you already have some lambda functions on your account.
+<img src="/images/20190906_7.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Create a function (new users)">
+    <p class="text-center text-gray lh-condensed-ultra f6">Creating a function for new users | Source: Me</p>
+    <p><br>
+<img src="/images/20190906_8.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create a function (existing users)"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">Creating a function for existing users | Source: Me</p>
+  </li>
+  <li>Name the function whatever you wish (Field: <em>Function name</em>). For the purposes of this tutorial, it will be named “iot-lambda”. Then, select the role created earlier in step 9, under the <strong>Existing role</strong> dropbox. You may have to click a dropdown link (<strong>Choose or create an execution role</strong>) to reach this setting. Finally, click on <strong>Create function</strong>.
+<img src="/images/20190906_9.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Fill in the fields, and create the function">
+    <p class="text-center text-gray lh-condensed-ultra f6">Fill in the fields, and create the function | Source: Me</p>
+  </li>
+  <li>Fill the code editor with code from <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d">this gist</a>.
+<img src="/images/20190906_10.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Fill in the code for the lambda function">
+    <p class="text-center text-gray lh-condensed-ultra f6">Fill in the code for the lambda function | Source: Me</p>
+  </li>
+  <li>Set the environment variables, <code class="highlighter-rouge">TABLE_NAME</code>, <code class="highlighter-rouge">IOT_ENDPOINT</code>, and <code class="highlighter-rouge">IOT_PUBLISH_TOPIC</code> based on the DynamoDB table name, your IoT endpoint, and the topic subscribed by the ESP32.
+<img src="/images/20190906_11.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Environment Variables">
+    <p class="text-center text-gray lh-condensed-ultra f6">Set environment variables | Source: Me</p>
+  </li>
+  <li>Click on <strong>Save</strong>, at the top right of the screen.
+<img src="/images/20190906_12.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Click on Save">
+    <p class="text-center text-gray lh-condensed-ultra f6">Save the lambda function | Source: Me</p>
+  </li>
+  <li>Click on <strong>Services</strong> &gt; <strong>IoT Core</strong> (found under the section “Internet of Things”)
+<img src="/images/20190622_1.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Services button on AWS Console">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on IoT Core | Source: Me</p>
+    <p><br>
+<img src="/images/20190622_2.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="IoT Core"></p>
+    <p class="text-center text-gray lh-condensed-ultra f6">IoT Core | Source: Me</p>
+  </li>
+  <li>On the sidebar, click on <strong>Act</strong>
+<img src="/images/20190905_7.jpg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Act button on IoT Core">
+    <p class="text-center text-gray lh-condensed-ultra f6">Act | Source: Me</p>
+  </li>
+  <li>Click on the IoT rule you have created in Part II. If you have not done part II, please do <a href="/2019/09/05/mqtt-aws-iot-dynamodb-part-2/">it now</a>.
+<img src="/images/20190906_13.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click on the IoT rule created previously">
+    <p class="text-center text-gray lh-condensed-ultra f6">Click on IoT rule created previously</p>
+  </li>
+  <li>Click on <strong>Add Action</strong>, under the <strong>Actions</strong> section.
+<img src="/images/20190906_14.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Add another action">
+    <p class="text-center text-gray lh-condensed-ultra f6">Add another action | Source: Me</p>
+  </li>
+  <li>Select <strong>Send a message to a Lambda function</strong>, and click on <strong>Configure Action</strong> at the bottom of the page.
+<img src="/images/20190906_15.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Add a lambda action">
+    <p class="text-center text-gray lh-condensed-ultra f6">Adding a lambda action | Source: Me</p>
+  </li>
+  <li>Under the <em>Function name</em> field, click on <strong>Select</strong>, then find the function created earlier in step 11, and click <strong>Select</strong> on the corresponding entry. Finally, click on <strong>Add Action</strong>.
+<img src="/images/20190906_16.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Select the correct lambda">
+    <p class="text-center text-gray lh-condensed-ultra f6">Select the correct lambda function | Source: Me</p>
+  </li>
+</ol>
+
+<h1 id="step-two">Step Two</h1>
+
+<p>Similar to how it was done in <a href="/2019/09/05/mqtt-aws-iot-dynamodb-part-2/">Part II</a>, go to the DynamoDB table and refresh the contents. Count the number of records currently on the table, and press the ‘BOOT’ button on the ESP32 until that count reaches a multiple of 10. The led of the ESP32 should light up only when there is a multiple of 10, otherwise, it will be turned off.</p>
+
+<p>The <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d">lambda script</a> you pasted earlier is in charge of causing this to happen; firstly, it will obtain device data. Then, it will make a decision based on the device data; in this case, “is the number of records a multiple of 10? If so, turn on the led, else, turn it off”.</p>
+
+<p>Try connecting multiple ESP32s to the same topics, and see what happens when one of the devices are used to make the number of records reach a multiple of 10!</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Congratulations! You have made a full IoT application, starting from Part I: Controlling stuff, to Part II: Collecting data and finally, to Part III: Making decisions. Experiment with this a little bit more, and build the next big thing; you now have the basic skills required to do that on AWS!</p>
+
+<p>If you found this trilogy useful, please do share it with your friends.</p>
+
+<p>Until next time!</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2019</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
