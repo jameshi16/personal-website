@@ -110,7 +110,7 @@ Run through all the installation steps for Python. If you are on Ubuntu, run `su
     - `Password`: The password of the access point to connect to.
     - `aws_iot_hostname`: The hostname you noted down during Step Uno.
     - `aws_iot_sub_topic`: The topic this device should subscribe to. For this tutorial, we'll use `topic/hello`, however, when following the tutorial with your friends, please have _unique_ topics.
-    - `aws_iot_pub_topic`: The topic this device should publish to. For this tutorial, it'll be `another/topic/echo`, however, when following the tutorial with your friends, please have _unique_ topics.
+    - `aws_iot_pub_topic`: The topic this device should publish to. For this tutorial, it'll be `another/topic/hello`, however, when following the tutorial with your friends, please have _unique_ topics.
     - `ca_certificate`: Copy the contents of the CA certificate you downloaded (file should be `AmazonRootCA1.pem`) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on `Make into C++ String`, and copy the contents of the textbox into the configuration option.
     - `iot_certificate`: Copy the contents of the certificate you downloaded (file should be `*-certificate.pem.crt`) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on `Make into C++ String`, and copy the contents of the textbox into the configuration option.
     - `iot_privatekey`: Copy the contents of the private key you downloaded (file should be `*-private.pem.key`) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on `Make into C++ String`, and copy the contents of the textbox into the configuration option.
