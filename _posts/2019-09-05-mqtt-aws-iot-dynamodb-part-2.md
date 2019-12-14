@@ -37,7 +37,7 @@ It appears that the 'BOOT' active-low button can be used as a typical button, wh
     <p class="text-center text-gray lh-condensed-ultra f6">Click this if you don't already have a table | Source: Me</p>
     <img src="/images/20190905_4.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Existing user DynamoDB"/>
     <p class="text-center text-gray lh-condensed-ultra f6">Click this instead if you already have tables | Source: Me</p>
-4. Fill in _Table name_ with whatever name you wish. For the purposes of this tutorial, it will be called "iot-table". Call the partition key "uid", as we will be generating a random UID per record. Then, click **Create**.
+4. Fill in _Table name_ with whatever name you wish. For the purposes of this tutorial, it will be called "iot-table". Call the partition key "uid", as we will be generating a random UID per record. Then, click **Create**. (NOTE: If your account is limited and you are not allowed to create auto-scaling tables, please uncheck *Use default settings* and clear all options related to _Auto scaling_)
     <img src="/images/20190905_5.jpg" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Table Creation Wizard"/>
     <p class="text-center text-gray lh-condensed-ultra f6">Table Creation Wizard | Source: Me</p>
 5. Click on **Services** > **IAM** (found under the section "Security, Identity & Compliance)
