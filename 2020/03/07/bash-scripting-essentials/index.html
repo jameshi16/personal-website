@@ -1,0 +1,280 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="By no means am I a professional at bash scripting. That being said, I’ve done some pretty cool projects with just pure bash scripting, like ContainerTop, a container-based desktop environment launcher, and ungoogled-chromium-builder to let my private server build ungoogled chromium for my laptops..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Bash Scripting Essentials</h1>
+      <p class="text-gray mb-5">Published Mar 07, 2020 15:00</p>
+      
+  
+  <div class="article">
+    <p>By no means am I a professional at bash scripting. That being said, I’ve done some pretty cool projects with just pure bash scripting, like <a href="https://github.com/jameshi16/ContainerTop">ContainerTop</a>, a container-based desktop environment launcher, and <a href="https://github.com/jameshi16/ungoogled-chromium-builder">ungoogled-chromium-builder</a> to let my private server build ungoogled chromium for my laptops.</p>
+
+<p>At work, I also write a bunch of utility aliases and functions to aid my work - these are my “commonly utilized” techniques and commands condensed into a blog post. This article is written as a “cheatsheet”, hopefully to serve as a quick reference for myself; though, if you find it useful, you can bookmark this page!</p>
+
+<p>NOTE: When writing bash scripts, make sure to run <code class="highlighter-rouge">chmod +x ./relative/path/to/script</code> at least once to flag the script as an executable.</p>
+
+<h1 id="table-of-contents">Table of Contents</h1>
+
+<ol>
+  <li><a href="#shebang">Shebang</a></li>
+  <li><a href="#redirects">Redirects</a></li>
+  <li><a href="#background">Background</a></li>
+  <li><a href="#subshells">Subshells</a></li>
+  <li><a href="#variables">Variables</a></li>
+  <li><a href="#exit-on-error">Exit on error</a></li>
+  <li><a href="#return-code">Return code</a></li>
+  <li><a href="#ending-a-block">Ending a block</a></li>
+  <li><a href="#arrays">Arrays</a></li>
+  <li><a href="#finding-files">Finding files</a></li>
+  <li><a href="#replacing-strings">Replacing strings</a></li>
+  <li><a href="#removing-columns">Removing columns</a></li>
+  <li><a href="#newlines-are-not-preserved">Newlines are not preserved</a></li>
+</ol>
+
+<h1 id="shebang">Shebang</h1>
+
+<p>Any executable file containing the “shebang” in its first line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+</code></pre></div></div>
+
+<p>Will cause the script to be executed by the specified executable, which also means the script needs to be in a language understood by those executables. Some common shebangs I’ve write are: <code class="highlighter-rouge">/usr/bin/ruby</code> and <code class="highlighter-rouge">/usr/bin/python3</code>, which uses the Ruby and Python interpretor for the script respectively. Most people publishing scripts for usage online use <code class="highlighter-rouge">/usr/bin/env ruby</code> and <code class="highlighter-rouge">/usr/bin/env python3</code> instead, allowing users with non-standard or different interpretor locations to use the scripts.</p>
+
+<h1 id="redirects">Redirects</h1>
+
+<p>Redirects use the operators <code class="highlighter-rouge">&lt;</code> and <code class="highlighter-rouge">&gt;</code>. By default, inputs come from <code class="highlighter-rouge">STDIN</code> and outputs go to <code class="highlighter-rouge">STDOUT</code>, which are typically your terminal input and output respectively. This behaviour can be changed with <code class="highlighter-rouge">&lt;</code> and <code class="highlighter-rouge">&gt;</code>.</p>
+
+<p>For example,</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"hello"</span> <span class="o">&gt;</span> file
+</code></pre></div></div>
+<p>Will write the word “hello” out to <code class="highlighter-rouge">file</code>, which is a normal file.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> &lt; file
+</code></pre></div></div>
+<p>Will read the word “hello” from <code class="highlighter-rouge">file</code>, which is the same file the “echo” has written “hello” to.</p>
+
+<h2 id="common-use-case-log-files">Common use case: Log files</h2>
+
+<p>Redirects can let you log the outputs of commands:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> /var/log/syslog 2&gt;&amp;1 <span class="o">&gt;</span> log
+</code></pre></div></div>
+<p>Whatever expression in front of <code class="highlighter-rouge">&gt;</code> will produce outputs that go into the log file. <code class="highlighter-rouge">2&gt;&amp;1</code> instructs bash to redirect <code class="highlighter-rouge">STDERR</code>(2) to <code class="highlighter-rouge">STDOUT</code>(1). This is quite helpful for commands that don’t typically output to log files.</p>
+
+<h1 id="background">Background</h1>
+
+<p>The ampersand symbol at the back of a command will cause it to run in the background:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sleep </span>999 &amp;
+</code></pre></div></div>
+<p>When a background command is executed within an interactive shell, you can switch back to it with <code class="highlighter-rouge">fg</code> and switch away from it with <code class="highlighter-rouge">CTRL+Z</code>. Use <code class="highlighter-rouge">ps</code> to view the processes currently running in the terminal session. For a terminal session with no background processes, you should see two items: <code class="highlighter-rouge">bash</code> itself, and <code class="highlighter-rouge">ps</code>.</p>
+
+<h1 id="subshells">Subshells</h1>
+
+<p>Subshells are created with the following syntax:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="si">$(</span><span class="nb">echo</span> <span class="s2">"hi"</span><span class="si">)</span>
+</code></pre></div></div>
+<p>The results are assignable to a variable, but without protection, it can run arbitrary commands. Try this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="si">$(</span><span class="nb">echo</span> <span class="s2">"echo oh no"</span><span class="si">)</span>
+</code></pre></div></div>
+<p>This will print <code class="highlighter-rouge">oh no</code> instead of <code class="highlighter-rouge">echo oh no</code>. Such arbitrary commands can be avoided by enclosing the subshell with quotes (“). This works because <code class="highlighter-rouge">$</code> is an escape cue for bash when interpreting strings.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">VARIABLE</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">echo</span> <span class="s1">'echo oh no'</span><span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<h1 id="variables">Variables</h1>
+
+<p>Variables can be defined like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">VARIABLE</span><span class="o">=</span><span class="s2">"hello"</span>
+</code></pre></div></div>
+
+<p>It can be used with “$VARIABLE”:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nv">$VARIABLE</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span>
+</code></pre></div></div>
+<p>Both variants should print <code class="highlighter-rouge">hello</code>.</p>
+
+<p>To inhibit printing, use single quotes (‘):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'$VARIABLE'</span>
+</code></pre></div></div>
+<p>The line should print <code class="highlighter-rouge">$VARIABLE</code>.</p>
+
+<h1 id="exit-on-error">Exit on error</h1>
+
+<p>There are two ways to achieve this: (i) <code class="highlighter-rouge">set -e</code> and (ii) <code class="highlighter-rouge">|| exit 1</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">set</span> <span class="nt">-e</span>
+<span class="nb">test</span> <span class="nt">-x</span> thisfiledoesnotexist <span class="o">||</span> <span class="nb">exit </span>1
+</code></pre></div></div>
+
+<p>It is highly recommended to use the latter, as the behaviour is more well-structured and well-defined. <code class="highlighter-rouge">set -e</code> causes the shell to exit on error if <em>any</em> subcommands return with an error (defined as non-zero return status), while <code class="highlighter-rouge">|| exit</code> only exits on that particular line.</p>
+
+<h1 id="return-code">Return Code</h1>
+
+<p>To know the last return code of a command, use <code class="highlighter-rouge">$?</code>.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"this should succeed"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> <span class="c"># prints 0</span>
+</code></pre></div></div>
+
+<p>Remember that <code class="highlighter-rouge">0</code> is success.</p>
+
+<h1 id="ending-a-block">Ending a block</h1>
+
+<p>Different control statements have different ending statements. Below show some examples.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[[</span> <span class="nt">-e</span> <span class="s2">"/var/log/syslog"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+	</span><span class="nb">echo</span> <span class="s2">"congratulations, you have a system log"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span> <span class="k">in
+	</span>7<span class="p">)</span>
+		<span class="nb">echo</span> <span class="s2">"lucky seven"</span>
+	<span class="p">;;</span>
+	10|16<span class="p">)</span>
+		<span class="nb">echo</span> <span class="s2">"my favourite number"</span>
+	<span class="p">;;</span>
+	42<span class="p">)</span>
+		<span class="nb">echo</span> <span class="s2">"universe number"</span>
+	<span class="p">;;</span>
+	<span class="k">*</span><span class="p">)</span>
+		<span class="nb">echo</span> <span class="s2">"nothing special"</span>
+	<span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>NUMBERS <span class="k">in </span>1 2 3 4 5 
+<span class="k">do
+	</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NUMBERS</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<h1 id="arrays">Arrays</h1>
+
+<p>Arrays can be defined like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">ARRAY</span><span class="o">=(</span>1 2 3 4 5 6<span class="o">)</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARRAY</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span> <span class="c"># prints 1 2 3 4 5 6</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARRAY</span><span class="k">}</span><span class="s2">"</span> <span class="c"># prints 1</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARRAY</span><span class="p">[0]</span><span class="k">}</span><span class="s2">"</span> <span class="c"># prints 1</span>
+</code></pre></div></div>
+
+<p>Turning a string of space-delimited strings into an array can be done with the following command (thanks to <a href="https://stackoverflow.com/questions/10586153/split-string-into-an-array-in-bash/13196466">this link</a>):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">IFS</span><span class="o">=</span><span class="s2">" "</span> <span class="nb">read</span> <span class="nt">-r</span> <span class="nt">-a</span> ARRAY <span class="o">&lt;&lt;&lt;</span> <span class="s2">"1 2 3 4 5"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">ARRAY</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span> <span class="c"># prints 1 2 3 4 5</span>
+</code></pre></div></div>
+
+<p>Use arrays in for loops like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>NUMBERS <span class="k">in</span> <span class="k">${</span><span class="nv">ARRAY</span><span class="p">[@]</span><span class="k">}</span>
+<span class="k">do
+	</span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NUMBERS</span><span class="s2">"</span>
+end
+</code></pre></div></div>
+
+<h1 id="finding-files">Finding files</h1>
+
+<p>Files can be recursively found using the <code class="highlighter-rouge">find</code> command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find <span class="nb">.</span> <span class="nt">-name</span> <span class="s2">"*.js"</span>
+</code></pre></div></div>
+
+<p>change <code class="highlighter-rouge">.</code> to a directory of your choice. The pattern defined by <code class="highlighter-rouge">-name</code> supports the metacharacters: <code class="highlighter-rouge">*</code>, <code class="highlighter-rouge">?</code> and <code class="highlighter-rouge">[]</code>, but only works for <em>filenames</em>, so a pattern of <code class="highlighter-rouge">a/b</code> cannot be used. Instead, use the <code class="highlighter-rouge">-prune</code> option to remove directories that should not be included in the search. (Thanks to <a href="https://stackoverflow.com/questions/4210042/how-to-exclude-a-directory-in-find-command">this</a>)</p>
+
+<p>Use the <code class="highlighter-rouge">-prune</code> command to remove directories you are not interested in, like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find <span class="nb">.</span> <span class="nt">-path</span> <span class="s2">"Documents"</span> <span class="nt">-prune</span> <span class="nt">-o</span> <span class="nt">-name</span> <span class="s2">"*.zip"</span> <span class="nt">-print</span>
+find <span class="nb">.</span> <span class="nt">-type</span> d <span class="se">\(</span> .path dir1 <span class="nt">-o</span> <span class="nt">-path</span> dir2 <span class="nt">-o</span> path dir3 <span class="se">\)</span> <span class="nt">-prune</span> <span class="nt">-o</span> <span class="nt">-print</span>
+</code></pre></div></div>
+
+<h1 id="replacing-strings">Replacing strings</h1>
+
+<p>Strings can be replaced with the <code class="highlighter-rouge">sed</code> command (among other utilities):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"i think apples are great"</span> | <span class="nb">sed</span> <span class="s1">'s/apples/oranges/g'</span>
+</code></pre></div></div>
+<p>It might sometimes be necessary to use the <code class="highlighter-rouge">-E</code> flag for <code class="highlighter-rouge">sed</code> when a more complicated regex is used. I typically use <a href="https://regexr.com/">regexr</a> to build my Regex. The ‘s/’ is a <code class="highlighter-rouge">sed</code> command that means “substitute”, with the ‘/g’ at the back representing “replace everything”. The one page GNU <code class="highlighter-rouge">sed</code> manual can be found <a href="https://www.gnu.org/software/sed/manual/sed.html">here</a>, or obtained via the <code class="highlighter-rouge">man sed</code> command.</p>
+
+<p>The escape character for <code class="highlighter-rouge">sed</code> is <code class="highlighter-rouge">\</code> (backslash).</p>
+
+<h1 id="removing-columns">Removing columns</h1>
+
+<p>If you have text like this (you can get something like this with <code class="highlighter-rouge">git branch</code>):</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; git branch
+* master
+  develop
+  bug-fixes
+</code></pre></div></div>
+
+<p>You can make the output processable by removing the first two columns (which contain the asterisk) with:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch | colrm 1 2
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>master
+develop
+bug-fixes
+</code></pre></div></div>
+
+<h1 id="newlines-are-not-preserved">Newlines are not preserved</h1>
+
+<p>Say you have a string with newlines, like this: <code class="highlighter-rouge">"hello\nworld"</code>. If you assign it to a variable after processing like this:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">VARIABLE</span><span class="o">=</span><span class="s2">"</span><span class="si">$(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s2">"hello</span><span class="se">\n</span><span class="s2">world"</span><span class="si">)</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="nv">$VARIABLE</span>
+</code></pre></div></div>
+<p>Your output would be <code class="highlighter-rouge">"hello world"</code>. Be aware of this issue when writing scripts; this can probably be mitigated by using <code class="highlighter-rouge">tr</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="nv">$VARIABLE</span> | <span class="nb">tr</span> <span class="s1">' '</span> <span class="s1">'\n'</span> | <span class="nb">cat</span>
+</code></pre></div></div>
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hello
+world
+</code></pre></div></div>
+
+<hr>
+
+<p>That should be all for now. I may occasionally pop by to update this page, but the permalink should still stay the same. Keep a bookmark <img class="emoji" title=":bookmark:" alt=":bookmark:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f516.png" height="20" width="20"> if you found it useful!</p>
+
+<p>Happy coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2020</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
