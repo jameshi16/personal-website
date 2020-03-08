@@ -63,6 +63,8 @@
   <li><a href="#arrays">Arrays</a></li>
   <li><a href="#finding-files">Finding files</a></li>
   <li><a href="#replacing-strings">Replacing strings</a></li>
+  <li><a href="#finding-strings">Finding strings</a></li>
+  <li><a href="#xargs">xargs</a></li>
   <li><a href="#removing-columns">Removing columns</a></li>
   <li><a href="#newlines-are-not-preserved">Newlines are not preserved</a></li>
 </ol>
@@ -223,6 +225,35 @@ find <span class="nb">.</span> <span class="nt">-type</span> d <span class="se">
 <p>It might sometimes be necessary to use the <code class="highlighter-rouge">-E</code> flag for <code class="highlighter-rouge">sed</code> when a more complicated regex is used. I typically use <a href="https://regexr.com/">regexr</a> to build my Regex. The ‘s/’ is a <code class="highlighter-rouge">sed</code> command that means “substitute”, with the ‘/g’ at the back representing “replace everything”. The one page GNU <code class="highlighter-rouge">sed</code> manual can be found <a href="https://www.gnu.org/software/sed/manual/sed.html">here</a>, or obtained via the <code class="highlighter-rouge">man sed</code> command.</p>
 
 <p>The escape character for <code class="highlighter-rouge">sed</code> is <code class="highlighter-rouge">\</code> (backslash).</p>
+
+<h2 id="files">Files</h2>
+
+<p>To replace a string in a file, simply provide an input file instead of piping the input:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">touch </span>aFile
+<span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh"> &gt; aFile
+i
+like
+oranges
+</span><span class="no">EOF
+</span><span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/oranges/pears/g'</span> aFile
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">-i</code> flag means “edit file in-place”.</p>
+
+<h1 id="finding-strings">Finding strings</h1>
+
+<p>Strings can be recursively found in directories using <code class="highlighter-rouge">grep</code> (among other utilities):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">grep</span> <span class="s2">"important string"</span> <span class="nt">-R</span> <span class="nb">.</span> <span class="c"># searches all files recursively for important string</span>
+<span class="nb">grep</span> <span class="nt">-E</span> <span class="s2">"[aeiou]+"</span> <span class="nt">-R</span> <span class="nb">.</span> <span class="c"># searches all files for strings with one or more vowels</span>
+<span class="nb">grep</span> <span class="nt">-E</span> <span class="s2">"[aeiou]+"</span> <span class="k">*</span>.js <span class="c"># searches all .js files for strings wiht one or more vowels</span>
+</code></pre></div></div>
+
+<h1 id="xargs">xargs</h1>
+
+<p>To pass the left-hand-side of a pipe as an argument to the right-hand-side for commands that don’t support reading from pipes, use <code class="highlighter-rouge">xargs</code>.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"newBranch"</span> | xargs git checkout <span class="nt">-b</span>
+</code></pre></div></div>
 
 <h1 id="removing-columns">Removing columns</h1>
 
