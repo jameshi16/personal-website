@@ -25,8 +25,10 @@ NOTE: When writing bash scripts, make sure to run `chmod +x ./relative/path/to/s
 9. [Arrays](#arrays)
 10. [Finding files](#finding-files)
 11. [Replacing strings](#replacing-strings)
-12. [Removing columns](#removing-columns)
-13. [Newlines are not preserved](#newlines-are-not-preserved)
+12. [Finding strings](#finding-strings)
+13. [xargs](#xargs)
+14. [Removing columns](#removing-columns)
+15. [Newlines are not preserved](#newlines-are-not-preserved)
 
 # Shebang
 
@@ -206,6 +208,38 @@ echo "i think apples are great" | sed 's/apples/oranges/g'
 It might sometimes be necessary to use the `-E` flag for `sed` when a more complicated regex is used. I typically use [regexr](https://regexr.com/) to build my Regex. The 's/' is a `sed` command that means "substitute", with the '/g' at the back representing "replace everything". The one page GNU `sed` manual can be found [here](https://www.gnu.org/software/sed/manual/sed.html), or obtained via the `man sed` command.
 
 The escape character for `sed` is `\` (backslash).
+
+## Files
+
+To replace a string in a file, simply provide an input file instead of piping the input:
+
+```bash
+touch aFile
+cat << EOF > aFile
+i
+like
+oranges
+EOF
+sed -i 's/oranges/pears/g' aFile
+```
+
+The `-i` flag means "edit file in-place".
+
+# Finding strings
+
+Strings can be recursively found in directories using `grep` (among other utilities):
+```bash
+grep "important string" -R . # searches all files recursively for important string
+grep -E "[aeiou]+" -R . # searches all files for strings with one or more vowels
+grep -E "[aeiou]+" *.js # searches all .js files for strings wiht one or more vowels
+```
+
+# xargs
+
+To pass the left-hand-side of a pipe as an argument to the right-hand-side for commands that don't support reading from pipes, use `xargs`.
+```bash
+echo "newBranch" | xargs git checkout -b
+```
 
 # Removing columns
 
