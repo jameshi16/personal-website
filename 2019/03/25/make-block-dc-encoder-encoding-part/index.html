@@ -37,7 +37,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">MakeBlock DC Encoder Motors - The Encoding Part</h1>
       <p class="text-gray mb-5">Published Mar 25, 2019 09:30</p>
       
@@ -90,7 +90,7 @@
 
 <h1 id="what-the-code-does">What the code does</h1>
 <p>It reads an analog value via interrupt from pin A (the interrupt pin) and pin B (the NE1 pin). This produces the following output after 10 revolutions:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
 -1436
 -3177
 -4917
@@ -117,7 +117,7 @@ Here is what I know:</p>
   <li>The weird numbers are related to another constant.</li>
 </ol>
 
-<p>With that, I performed a few calculations, to find that the number was between 7.5 to 8.5. Testing with 7 and 8, I figured out that 8 was the correct answer. In other words, the formula for calculating the <strong>number of revolutions</strong> from the <strong>werid number thing</strong> produced by the encoder motor is: <code class="highlighter-rouge">(weird number thing / gear ratio) / 8</code>. After discussing with my friend a little, I realized that the ‘8’ can represent the number of ticks within the motor; in his words: “(there) could be the 8 points about that revolution”. Afterwards, I found this <a href="https://forum.makeblock.com/t/information-about-25mm-dc-encoder-motor/10791/3">fourm post</a>, which had the Original Poster (OP) sharing the same frustration (lack of documentation) as me, but more importantly, contained the information that the “ticks per rev is 8”. Alongside the Gear Ratio, this makes the formula the correct method of calculating the revolutions per minute.</p>
+<p>With that, I performed a few calculations, to find that the number was between 7.5 to 8.5. Testing with 7 and 8, I figured out that 8 was the correct answer. In other words, the formula for calculating the <strong>number of revolutions</strong> from the <strong>werid number thing</strong> produced by the encoder motor is: <code class="language-plaintext highlighter-rouge">(weird number thing / gear ratio) / 8</code>. After discussing with my friend a little, I realized that the ‘8’ can represent the number of ticks within the motor; in his words: “(there) could be the 8 points about that revolution”. Afterwards, I found this <a href="https://forum.makeblock.com/t/information-about-25mm-dc-encoder-motor/10791/3">fourm post</a>, which had the Original Poster (OP) sharing the same frustration (lack of documentation) as me, but more importantly, contained the information that the “ticks per rev is 8”. Alongside the Gear Ratio, this makes the formula the correct method of calculating the revolutions per minute.</p>
 
 <p>Here’s the working Arduino sketch:</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "MeMegaPi.h"

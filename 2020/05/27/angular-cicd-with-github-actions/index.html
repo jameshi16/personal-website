@@ -37,7 +37,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">Angular CI/CD with GitHub Actions</h1>
       <p class="text-gray mb-5">Published May 27, 2020 09:00</p>
       
@@ -78,13 +78,13 @@
 
 <p>Installing the GitHub Actions runner can be easily done by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners">this GitHub help page</a>. A unit service can then be created by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service">this other GitHub help page</a>, although I wrote mine manually just for giggles.</p>
 
-<p>If you’re using Docker container actions, ensure that the environment has Docker installed, and is accessible by the user running the GitHub action runner. If you’re using Javascript actions, you <em>should</em> install <a href="https://github.com/actions/toolkit"><code class="highlighter-rouge">actions/toolkit</code></a>.</p>
+<p>If you’re using Docker container actions, ensure that the environment has Docker installed, and is accessible by the user running the GitHub action runner. If you’re using Javascript actions, you <em>should</em> install <a href="https://github.com/actions/toolkit"><code class="language-plaintext highlighter-rouge">actions/toolkit</code></a>.</p>
 
 <p>After following the steps properly, I observe that the runner pops up in my settings page:
 <img src="/images/20200527_2.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Self-hosted GitHub Runner"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Self-hosted GitHub Runner | Source: Me</p>
 
-<p>I also added the <code class="highlighter-rouge">vps</code> tag, but it’s not really useful when I only have one self-hosted runner. Tagging can help GitHub workflows to differentiate between machines; for example, only distributing the GPU-intensive workflow to GPU-capable machines.</p>
+<p>I also added the <code class="language-plaintext highlighter-rouge">vps</code> tag, but it’s not really useful when I only have one self-hosted runner. Tagging can help GitHub workflows to differentiate between machines; for example, only distributing the GPU-intensive workflow to GPU-capable machines.</p>
 
 <h1 id="step-2-continuous-integration">Step 2: Continuous Integration</h1>
 
@@ -104,20 +104,20 @@
 <p>Angular has a few straightforward CLI commands that can test for code quality, namely:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">ng build</code></li>
-  <li><code class="highlighter-rouge">ng lint</code></li>
-  <li><code class="highlighter-rouge">ng test &amp;&amp; ng e2e</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ng build</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ng lint</code></li>
+  <li><code class="language-plaintext highlighter-rouge">ng test &amp;&amp; ng e2e</code></li>
 </ul>
 
 <p>Hence, all I need to do now is to translate our CLI commands into a GitHub action. Luckily, <a href="https://github.com/colbyhill21/angular-full-ci">colbyhill21 has already made a full CI action for Angular</a>, which is easy to integrate into your own GitHub workflow.</p>
 
-<p>However, I decided to reinvent the wheel, because I’m bored and have nothing better to do. Furthermore, understanding how the black box works speeds up debugging issues pertaining to <code class="highlighter-rouge">ng test</code> and <code class="highlighter-rouge">ng e2e</code>, which I experienced while writing this blog post.</p>
+<p>However, I decided to reinvent the wheel, because I’m bored and have nothing better to do. Furthermore, understanding how the black box works speeds up debugging issues pertaining to <code class="language-plaintext highlighter-rouge">ng test</code> and <code class="language-plaintext highlighter-rouge">ng e2e</code>, which I experienced while writing this blog post.</p>
 
 <p>Let’s create the directories required for our local Github action.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir</span> <span class="nt">-p</span> .github/actions/angular-ci
 </code></pre></div></div>
 
-<p>I install <code class="highlighter-rouge">nodejs</code>, <code class="highlighter-rouge">puppeteer</code> (for unit testing &amp; end-to-end testing) and <code class="highlighter-rouge">@angular/cli</code> in <code class="highlighter-rouge">.github/actions/angular-ci/Dockerfile</code>:</p>
+<p>I install <code class="language-plaintext highlighter-rouge">nodejs</code>, <code class="language-plaintext highlighter-rouge">puppeteer</code> (for unit testing &amp; end-to-end testing) and <code class="language-plaintext highlighter-rouge">@angular/cli</code> in <code class="language-plaintext highlighter-rouge">.github/actions/angular-ci/Dockerfile</code>:</p>
 <div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:12-slim</span>
 
 <span class="c"># https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker</span>
@@ -139,7 +139,7 @@
 <span class="k">ENTRYPOINT</span><span class="s"> ["/entrypoint.sh"]</span>
 
 </code></pre></div></div>
-<p>This tells docker to build an image that has the environment to run Angular CLI commands for testing. Next, I create a GitHub action, and tell it to run the Docker image. In <code class="highlighter-rouge">.github/actions/angular-ci/action.yml</code>:</p>
+<p>This tells docker to build an image that has the environment to run Angular CLI commands for testing. Next, I create a GitHub action, and tell it to run the Docker image. In <code class="language-plaintext highlighter-rouge">.github/actions/angular-ci/action.yml</code>:</p>
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Angular</span><span class="nv"> </span><span class="s">CI'</span>
 <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Runs</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">full</span><span class="nv"> </span><span class="s">suite</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">angular</span><span class="nv"> </span><span class="s">commands'</span>
 <span class="na">runs</span><span class="pi">:</span>
@@ -147,21 +147,21 @@
   <span class="na">image</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Dockerfile'</span>
 </code></pre></div></div>
 
-<p>Running Angular tests implies some level of interaction with the browser - since I don’t have GUI access to the browser when a GitHub action is running, I configured the tests to run on a headless browser. Firstly there’s <code class="highlighter-rouge">karma.conf.js</code>, the configuration file for Angular’s unit testing framework:</p>
+<p>Running Angular tests implies some level of interaction with the browser - since I don’t have GUI access to the browser when a GitHub action is running, I configured the tests to run on a headless browser. Firstly there’s <code class="language-plaintext highlighter-rouge">karma.conf.js</code>, the configuration file for Angular’s unit testing framework:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
     <span class="nl">browsers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ChromeHeadless</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">ChromeHeadlessCI</span><span class="dl">'</span><span class="p">],</span>
     <span class="p">...,</span>
     <span class="nx">customLaunchers</span><span class="p">:</span> <span class="p">{</span>
         <span class="nl">ChromeHeadlessCI</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nl">base</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ChromeHeadless</span><span class="dl">'</span><span class="p">,</span>
-            <span class="nx">flags</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">--no-sandbox</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--disable-translate</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--disable-extensions</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--remote-debugging-port=9223</span><span class="dl">'</span><span class="p">]</span>
+            <span class="na">base</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ChromeHeadless</span><span class="dl">'</span><span class="p">,</span>
+            <span class="na">flags</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">--no-sandbox</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--disable-translate</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--disable-extensions</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">--remote-debugging-port=9223</span><span class="dl">'</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Then, I re-configured <code class="highlighter-rouge">./e2e/protractor.conf.js</code>, the end-to-end testing framework:</p>
+<p>Then, I re-configured <code class="language-plaintext highlighter-rouge">./e2e/protractor.conf.js</code>, the end-to-end testing framework:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">...,</span>
@@ -180,7 +180,7 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir</span> <span class="nt">-p</span> .github/workflows
 </code></pre></div></div>
 
-<p>Then I populate <code class="highlighter-rouge">.github/workflows/main.yml</code>:</p>
+<p>Then I populate <code class="language-plaintext highlighter-rouge">.github/workflows/main.yml</code>:</p>
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">CI</span>
 
 <span class="na">on</span><span class="pi">:</span>
@@ -199,15 +199,15 @@
         <span class="na">uses</span><span class="pi">:</span> <span class="s">./.github/actions/angular-ci</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">runs-on: [self-hosted, linux]</code> line is necessary for me to select the right GitHub actions runner. You can replace that line with <code class="highlighter-rouge">runs-on: ubuntu-latest</code> if you’re using GitHub’s runners at the cost of your plan’s GitHub action minutes.</p>
+<p>The <code class="language-plaintext highlighter-rouge">runs-on: [self-hosted, linux]</code> line is necessary for me to select the right GitHub actions runner. You can replace that line with <code class="language-plaintext highlighter-rouge">runs-on: ubuntu-latest</code> if you’re using GitHub’s runners at the cost of your plan’s GitHub action minutes.</p>
 
 <h1 id="step-3-continuous-deployment">Step 3: Continuous Deployment</h1>
 
-<p>Continuous Deployment is slightly easier; all I needed to do is to build, copy and paste everything in <code class="highlighter-rouge">dist/project_name</code> (replace <code class="highlighter-rouge">project_name</code> with your Angular project name) into a folder on my web server.</p>
+<p>Continuous Deployment is slightly easier; all I needed to do is to build, copy and paste everything in <code class="language-plaintext highlighter-rouge">dist/project_name</code> (replace <code class="language-plaintext highlighter-rouge">project_name</code> with your Angular project name) into a folder on my web server.</p>
 
-<p>Let’s reuse the <code class="highlighter-rouge">angular-ci</code> action by copying <code class="highlighter-rouge">.github/actions/angular-ci</code>, to <code class="highlighter-rouge">.github/actions/angular-cd</code>.</p>
+<p>Let’s reuse the <code class="language-plaintext highlighter-rouge">angular-ci</code> action by copying <code class="language-plaintext highlighter-rouge">.github/actions/angular-ci</code>, to <code class="language-plaintext highlighter-rouge">.github/actions/angular-cd</code>.</p>
 
-<p>Then, edit <code class="highlighter-rouge">.github/actions/angular-cd/action.yml</code>:</p>
+<p>Then, edit <code class="language-plaintext highlighter-rouge">.github/actions/angular-cd/action.yml</code>:</p>
 
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Angular</span><span class="nv"> </span><span class="s">CD'</span>
 <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Deploy</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">production'</span>
@@ -241,13 +241,13 @@
   <li>Specifying the web server’s host keys to ensure its identity.</li>
 </ol>
 
-<p>Hence, I introduced <code class="highlighter-rouge">inputs</code> into the <code class="highlighter-rouge">action.yml</code> file, allowing the workflow to specify the SSH key and Host keys. <code class="highlighter-rouge">inputs</code> is a method to specify parameters that can be used throughout the execution of the action; they will appear as environment variables prefixed with <code class="highlighter-rouge">INPUT_</code>. For example, <code class="highlighter-rouge">sshkey</code> will be exposed as <code class="highlighter-rouge">$INPUT_SSHKEY</code> during the execution of the action.</p>
+<p>Hence, I introduced <code class="language-plaintext highlighter-rouge">inputs</code> into the <code class="language-plaintext highlighter-rouge">action.yml</code> file, allowing the workflow to specify the SSH key and Host keys. <code class="language-plaintext highlighter-rouge">inputs</code> is a method to specify parameters that can be used throughout the execution of the action; they will appear as environment variables prefixed with <code class="language-plaintext highlighter-rouge">INPUT_</code>. For example, <code class="language-plaintext highlighter-rouge">sshkey</code> will be exposed as <code class="language-plaintext highlighter-rouge">$INPUT_SSHKEY</code> during the execution of the action.</p>
 
 <p>To ensure no Man-In-The-Middle attacks happen, I decided to specify host keys too. Essentially, we identify the production machine on our location machine first:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh-keyscan <span class="nt">-H</span> &lt;your <span class="nb">hostname </span>here&gt;
 </code></pre></div></div>
 
-<p>Then, we store the result into a GitHub secret (found under <code class="highlighter-rouge">Settings &gt; Secrets &gt; Add secret</code>):
+<p>Then, we store the result into a GitHub secret (found under <code class="language-plaintext highlighter-rouge">Settings &gt; Secrets &gt; Add secret</code>):
 <img src="/images/20200527_3.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Host key secret"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Add the host key secret | Source: Me</p>
 
@@ -287,9 +287,9 @@ The key<span class="se">\'</span>s randomart image is:
 <img src="/images/20200527_5.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Secrets..."></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Two secrets | Source: Me</p>
 
-<p>Now, I configure the <code class="highlighter-rouge">Dockerfile</code> and <code class="highlighter-rouge">entrypoint.sh</code> files under the new action.</p>
+<p>Now, I configure the <code class="language-plaintext highlighter-rouge">Dockerfile</code> and <code class="language-plaintext highlighter-rouge">entrypoint.sh</code> files under the new action.</p>
 
-<p><code class="highlighter-rouge">.github/actions/angular-cd/Dockerfile</code>:</p>
+<p><code class="language-plaintext highlighter-rouge">.github/actions/angular-cd/Dockerfile</code>:</p>
 <div class="language-dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">FROM</span><span class="s"> node:12-slim</span>
 
 <span class="c"># Install SSH and SCP</span>
@@ -304,7 +304,7 @@ The key<span class="se">\'</span>s randomart image is:
 <span class="k">ENTRYPOINT</span><span class="s"> ["/entrypoint.sh"]</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">.github/actions/angular-cd/entrypoint.sh</code>:</p>
+<p><code class="language-plaintext highlighter-rouge">.github/actions/angular-cd/entrypoint.sh</code>:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
 <span class="nb">echo</span> <span class="s2">"======[ Dependencies ]======"</span>
@@ -326,11 +326,11 @@ ssh-agent <span class="nt">-k</span>
 <span class="nb">rm</span> <span class="nt">-rf</span> dist/
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">Dockerfile</code> installs the required pre-requisites, and the <code class="highlighter-rouge">entrypoint.sh</code> file builds the project and copies the contents of <code class="highlighter-rouge">dist/project_name/*</code> into the deployment folder.</p>
+<p>The <code class="language-plaintext highlighter-rouge">Dockerfile</code> installs the required pre-requisites, and the <code class="language-plaintext highlighter-rouge">entrypoint.sh</code> file builds the project and copies the contents of <code class="language-plaintext highlighter-rouge">dist/project_name/*</code> into the deployment folder.</p>
 
 <p>Finally, I create a workflow to utilize our action:</p>
 
-<p><code class="highlighter-rouge">.github/workflows/deploy.yml</code>:</p>
+<p><code class="language-plaintext highlighter-rouge">.github/workflows/deploy.yml</code>:</p>
 
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Deploy</span>
 
@@ -353,7 +353,7 @@ ssh-agent <span class="nt">-k</span>
           <span class="na">knownhosts</span><span class="pi">:</span> <span class="s">${{ secrets.KNOWN_HOSTS }}</span>
 </code></pre></div></div>
 
-<p>Since the <code class="highlighter-rouge">angular-cd</code> action requires some inputs, I specified it in this workflow. <code class="highlighter-rouge">secrets</code> accesses the encrypted secrets configured earlier, which is then passed to the GitHub action runner to complete its job.</p>
+<p>Since the <code class="language-plaintext highlighter-rouge">angular-cd</code> action requires some inputs, I specified it in this workflow. <code class="language-plaintext highlighter-rouge">secrets</code> accesses the encrypted secrets configured earlier, which is then passed to the GitHub action runner to complete its job.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 

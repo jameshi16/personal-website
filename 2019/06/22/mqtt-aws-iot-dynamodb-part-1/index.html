@@ -37,7 +37,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 8 16" version="1.1" width="8" role="img"><path fill-rule="evenodd" d="M5.5 3L7 4.5 3.25 8 7 11.5 5.5 13l-5-5 5-5z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">Tutorial: ESP32 to AWS IoT to AWS DynamoDB (Part I)</h1>
       <p class="text-gray mb-5">Published Jun 22, 2019 12:00</p>
       
@@ -66,18 +66,18 @@
  <img src="/images/20190622_21.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="File &gt; Preferences">
     <p class="text-center text-gray lh-condensed-ultra f6">File &gt; Preferences | Source: Me</p>
   </li>
-  <li>Under ‘Additional Board Manager URLs’, add this URL: <code class="highlighter-rouge">https://dl.espressif.com/dl/package_esp32_index.json</code>.
+  <li>Under ‘Additional Board Manager URLs’, add this URL: <code class="language-plaintext highlighter-rouge">https://dl.espressif.com/dl/package_esp32_index.json</code>.
  <img src="/images/20190622_22.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Add a board manager url">
     <p class="text-center text-gray lh-condensed-ultra f6">Adding a board manager url | Source: Me</p>
   </li>
-  <li>Goto <strong>Tools</strong> &gt; <strong>Board</strong> &gt; <strong>Boards Manager</strong> and type in <code class="highlighter-rouge">esp32</code> on the search bar. You should find the esp32 package. Install version <code class="highlighter-rouge">1.0.2</code>.
+  <li>Goto <strong>Tools</strong> &gt; <strong>Board</strong> &gt; <strong>Boards Manager</strong> and type in <code class="language-plaintext highlighter-rouge">esp32</code> on the search bar. You should find the esp32 package. Install version <code class="language-plaintext highlighter-rouge">1.0.2</code>.
  <img src="/images/20190622_23.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Tools &gt; Board &gt; Boards Manager">
     <p class="text-center text-gray lh-condensed-ultra f6">Board Manager | Source: Me</p>
     <p><br>
  <img src="/images/20190622_24.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Board Manager ESP32 Package"></p>
     <p class="text-center text-gray lh-condensed-ultra f6">ESP32 Package | Source: Me</p>
   </li>
-  <li>Goto <strong>Tools</strong> &gt; <strong>Manage Libraries</strong>. Then, search for <code class="highlighter-rouge">PubSubClient</code>, and install version <code class="highlighter-rouge">2.7.0</code>.
+  <li>Goto <strong>Tools</strong> &gt; <strong>Manage Libraries</strong>. Then, search for <code class="language-plaintext highlighter-rouge">PubSubClient</code>, and install version <code class="language-plaintext highlighter-rouge">2.7.0</code>.
  <img src="/images/20190622_25.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Tools &gt; Manage Libraries">
     <p class="text-center text-gray lh-condensed-ultra f6">Manage Libraries | Source: Me</p>
     <p><br>
@@ -92,7 +92,7 @@
 
 <h2 id="python">Python</h2>
 
-<p>Run through all the installation steps for Python. If you are on Ubuntu, run <code class="highlighter-rouge">sudo apt install python python-serial</code>.</p>
+<p>Run through all the installation steps for Python. If you are on Ubuntu, run <code class="language-plaintext highlighter-rouge">sudo apt install python python-serial</code>.</p>
 
 <hr>
 
@@ -115,7 +115,7 @@
  <img src="/images/20190622_4.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Alternate IoT Policy"></p>
     <p class="text-center text-gray lh-condensed-ultra f6">If you already have policies, use this button instead | Source: Me</p>
   </li>
-  <li>A wizard should appear. Name your policy through the <em>Name</em> field, key in <code class="highlighter-rouge">iot:*</code> into the <em>Action</em> field, key in <code class="highlighter-rouge">*</code> under the <em>Resource ARN</em> field, and finally, check the ‘Allow’ box under <em>Effect</em>. Should you wish to restrict your policy more for higher security, or prevent other <em>authorized</em> (yes, <em>authorized</em>) users from using your topic, please refer to <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html">this AWS Documentation</a> to construct your own policy. After checking your fields, press <strong>Create</strong>.
+  <li>A wizard should appear. Name your policy through the <em>Name</em> field, key in <code class="language-plaintext highlighter-rouge">iot:*</code> into the <em>Action</em> field, key in <code class="language-plaintext highlighter-rouge">*</code> under the <em>Resource ARN</em> field, and finally, check the ‘Allow’ box under <em>Effect</em>. Should you wish to restrict your policy more for higher security, or prevent other <em>authorized</em> (yes, <em>authorized</em>) users from using your topic, please refer to <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html">this AWS Documentation</a> to construct your own policy. After checking your fields, press <strong>Create</strong>.
  <img src="/images/20190622_5.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Wizard options">
     <p class="text-center text-gray lh-condensed-ultra f6">Values for the wizard | Source: Me</p>
   </li>
@@ -172,21 +172,21 @@
   <li>Fill in the configuration options by editing the content within the double quotes ("):
     <ul>
       <li>
-<code class="highlighter-rouge">SSID</code>: The SSID of the access point to connect to.</li>
+<code class="language-plaintext highlighter-rouge">SSID</code>: The SSID of the access point to connect to.</li>
       <li>
-<code class="highlighter-rouge">Password</code>: The password of the access point to connect to.</li>
+<code class="language-plaintext highlighter-rouge">Password</code>: The password of the access point to connect to.</li>
       <li>
-<code class="highlighter-rouge">aws_iot_hostname</code>: The hostname you noted down during Step Uno.</li>
+<code class="language-plaintext highlighter-rouge">aws_iot_hostname</code>: The hostname you noted down during Step Uno.</li>
       <li>
-<code class="highlighter-rouge">aws_iot_sub_topic</code>: The topic this device should subscribe to. For this tutorial, we’ll use <code class="highlighter-rouge">topic/hello</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
+<code class="language-plaintext highlighter-rouge">aws_iot_sub_topic</code>: The topic this device should subscribe to. For this tutorial, we’ll use <code class="language-plaintext highlighter-rouge">topic/hello</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
       <li>
-<code class="highlighter-rouge">aws_iot_pub_topic</code>: The topic this device should publish to. For this tutorial, it’ll be <code class="highlighter-rouge">another/topic/hello</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
+<code class="language-plaintext highlighter-rouge">aws_iot_pub_topic</code>: The topic this device should publish to. For this tutorial, it’ll be <code class="language-plaintext highlighter-rouge">another/topic/hello</code>, however, when following the tutorial with your friends, please have <em>unique</em> topics.</li>
       <li>
-<code class="highlighter-rouge">ca_certificate</code>: Copy the contents of the CA certificate you downloaded (file should be <code class="highlighter-rouge">AmazonRootCA1.pem</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+<code class="language-plaintext highlighter-rouge">ca_certificate</code>: Copy the contents of the CA certificate you downloaded (file should be <code class="language-plaintext highlighter-rouge">AmazonRootCA1.pem</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="language-plaintext highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
       <li>
-<code class="highlighter-rouge">iot_certificate</code>: Copy the contents of the certificate you downloaded (file should be <code class="highlighter-rouge">*-certificate.pem.crt</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+<code class="language-plaintext highlighter-rouge">iot_certificate</code>: Copy the contents of the certificate you downloaded (file should be <code class="language-plaintext highlighter-rouge">*-certificate.pem.crt</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="language-plaintext highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
       <li>
-<code class="highlighter-rouge">iot_privatekey</code>: Copy the contents of the private key you downloaded (file should be <code class="highlighter-rouge">*-private.pem.key</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
+<code class="language-plaintext highlighter-rouge">iot_privatekey</code>: Copy the contents of the private key you downloaded (file should be <code class="language-plaintext highlighter-rouge">*-private.pem.key</code>) using any text editor like Notepad or Vim, and paste it into the textbox located below this list. Click on <code class="language-plaintext highlighter-rouge">Make into C++ String</code>, and copy the contents of the textbox into the configuration option.</li>
     </ul>
     <form action="javascript:void(0)" onsubmit="magicTextTransformer()" style="margin: 0 auto; max-width: 800px; width: 50%">
      <textarea id="transformee" style="width: 100%; height: 100px"></textarea><br>
@@ -210,11 +210,11 @@
 
 <ol>
   <li>Go back to the window highlighted in the last step of Step Uno.</li>
-  <li>For this tutorial, fill in <code class="highlighter-rouge">another/topic/echo</code> in the <em>Subscription topic</em> textbox, and click on <code class="highlighter-rouge">Subscribe to topic</code>.
+  <li>For this tutorial, fill in <code class="language-plaintext highlighter-rouge">another/topic/echo</code> in the <em>Subscription topic</em> textbox, and click on <code class="language-plaintext highlighter-rouge">Subscribe to topic</code>.
  <img src="/images/20190622_17.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Subscribe topic">
     <p class="text-center text-gray lh-condensed-ultra f6">Subscribe to the topic | Source: Me</p>
   </li>
-  <li>For this tutorial, fill in <code class="highlighter-rouge">topic/hello</code> in the <em>Publish</em> textbox, and click on <code class="highlighter-rouge">Publish to topic</code>.
+  <li>For this tutorial, fill in <code class="language-plaintext highlighter-rouge">topic/hello</code> in the <em>Publish</em> textbox, and click on <code class="language-plaintext highlighter-rouge">Publish to topic</code>.
  <img src="/images/20190622_18.jpg" style="max-width: 1000px; width: 100%; margin: 0 auto; display: block;" alt="Publish to topic">
     <p class="text-center text-gray lh-condensed-ultra f6">Publish to the topic | Source: Me</p>
   </li>
@@ -245,9 +245,9 @@
 <p>And subscribing is done like so:</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mqtt</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">aws_iot_sub_topic</span><span class="p">);</span> <span class="c1">//subscribe to the topic</span>
 </code></pre></div></div>
-<p>Do note that for subscribing, you must provide a callback function with the signature of <code class="highlighter-rouge">void callback(const char* topic, byte* payload, unsigned int length)</code>. This callback will be called by the <code class="highlighter-rouge">PubSubClient</code> library whenever there is a new message from the subscribed topics.</p>
+<p>Do note that for subscribing, you must provide a callback function with the signature of <code class="language-plaintext highlighter-rouge">void callback(const char* topic, byte* payload, unsigned int length)</code>. This callback will be called by the <code class="language-plaintext highlighter-rouge">PubSubClient</code> library whenever there is a new message from the subscribed topics.</p>
 
-<p>MQTT typically uses port <code class="highlighter-rouge">1883</code> and <code class="highlighter-rouge">8883</code>. AWS IoT only uses port <code class="highlighter-rouge">8883</code>, because it uses MQTT over SSL (MQTTS), hence the line:</p>
+<p>MQTT typically uses port <code class="language-plaintext highlighter-rouge">1883</code> and <code class="language-plaintext highlighter-rouge">8883</code>. AWS IoT only uses port <code class="language-plaintext highlighter-rouge">8883</code>, because it uses MQTT over SSL (MQTTS), hence the line:</p>
 <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mqtt</span><span class="p">.</span><span class="n">setServer</span><span class="p">(</span><span class="n">aws_iot_hostname</span><span class="p">,</span> <span class="mi">8883</span><span class="p">);</span>
 </code></pre></div></div>
 
