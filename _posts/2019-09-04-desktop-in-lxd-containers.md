@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Desktop in LXD Containters"
 date: 2019-09-04 23:00 +08:00
 categories: [lxd, containers, desktop, linux]

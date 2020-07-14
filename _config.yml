@@ -11,32 +11,18 @@ permalink: /:year/:month/:day/:title/
 defaults:
   -
     scope:
-      path: "" # an empty string here means all files in the project
+      path: "_posts"
       type: "posts"
     values:
       layout: "post"
   -
     scope:
-      path: ""
-      type: "anime"
+      path: "_anime"
     values:
       layout: "anime"
 
-social_media:
-  # behance: your_username
-  # dribbble: your_username
-  # facebook: your_username
-  # linkedin: your_username
-  # medium: @your_username
-  # stackoverflow: your_user_id
-  # telegram: your_username
-  # twitter: jameshi16
-  # youtube: your_username
-  # vk: your_username
-
 pagination:
   enabled: true
-  collection: 'posts'
   per_page: 9
   permalink: '/page/:num/'
   sort_field: 'date'
