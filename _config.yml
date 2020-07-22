@@ -1,9 +1,11 @@
+# Jekyll Configuration
 layout: stacked
 style: light
 
 plugins:
   - jekyll-octicons
   - jekyll-paginate-v2
+  - jekyll-feed
   - jemoji
 
 permalink: /:year/:month/:day/:title/
@@ -35,3 +37,13 @@ collections:
 
   people:
     output: false
+
+feed:
+  collections:
+    - anime
+
+# Site Metadata
+title: "CodingIndex's Random Shenanigans"
+description: A (human) index that likes to code. Also drinks way too much coffee.
+url: "https://codingindex.xyz"
+author: James
