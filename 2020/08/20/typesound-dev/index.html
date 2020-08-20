@@ -1,0 +1,243 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="This is the development commentary blog post for TypeSound, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the previous blog post.Unexpectedly, I had to make quite a number of decisions..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important; width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">TypeSound (Developer)</h1>
+      <p class="text-gray mb-5">Published Aug 20, 2020 04:00</p>
+      
+  <div class="article">
+    <p>This is the development commentary blog post for <a href="https://github.com/jameshi16/TypeSound">TypeSound</a>, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the <a href="/2020/08/20/typesound">previous blog post</a>.</p>
+
+<p>Unexpectedly, I had to make quite a number of decisions during this project, something I wanted to avoid doing when making a <em>meme</em> tool like TypeSound. The main issues are:</p>
+<ol>
+  <li>Choosing the right sound library;</li>
+  <li>Acquiring keyboard input;</li>
+  <li>Figuring out how to adjust playback rate on the fly;</li>
+  <li>Making the tool support future extensions; and</li>
+  <li>Writing meaningful unit tests.</li>
+</ol>
+
+<hr>
+
+<h1 id="choosing-the-right-sound-library">Choosing the right sound library</h1>
+
+<p>The whole point of <em>writing</em> a meme tool is to take close to zero development time, but deliver functional results. Hence, Python and JavaScript were good candidates; although I decided to go with Python given how traumatized I was with JavaScript at work. Hence, I snooped around <a href="https://pypi.org">PyPi</a>, I saw that there exists audio packages that fulfill the not-so-well-thought-out criteria of:</p>
+<ul>
+  <li>It played music.</li>
+</ul>
+
+<p><img src="/images/20200820_1.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Barack Obama Applause GIF"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Criteria fulfilled, we win. | Source: <a href="https://giphy.com/gifs/obama-barack-obama-president-l4q8cJzGdR9J8w3hS">Giphy</a></p>
+
+<p>When I actually got around to doing the project, I realized that I had more urgent criteria to consider:</p>
+<ul>
+  <li>It still needs to play music;</li>
+  <li>The library should be cross-platform as much as possible (i.e. not reliant on only 1 method of playback);</li>
+  <li>But also be able to adjust playback rate <em>on the fly</em>.</li>
+</ul>
+
+<p>Believe it or not, tuning the velocity at which music is projected to the ears of the listener is a much harder task than I initially thought. After all, the meme around Python was to just import the packages you need:</p>
+
+<p><img src="/images/20200820_6.jpg" style="max-width: 300px; width: 100%; margin: 0 auto; display: block;" alt="Meme about importing all functionality in Python"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">import TypeSound | Source: <a href="https://www.reddit.com/r/ProgrammerHumor/comments/6a59fw/import_essay/">Reddit / somethingofthatilk.com</a></p>
+
+<p>I searched high and low for a package that can do this natively, including:</p>
+<ul>
+  <li><a href="https://simpleaudio.readthedocs.io/en/latest/">simpleaudio</a></li>
+  <li><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/">pyaudio</a></li>
+  <li><a href="https://pypi.org/project/playsound/">playsound</a></li>
+  <li><a href="https://python-sounddevice.readthedocs.io/en/0.4.0/">sounddevice</a></li>
+  <li><a href="https://pypi.org/project/miniaudio/">miniaudio</a></li>
+</ul>
+
+<p>This essentially means that I had to do the on-the-fly playback adjustment manually, either through a callback, or through inheriting a class and providing a stream manually. Hence, the competition was essentially between <code class="language-plaintext highlighter-rouge">sounddevice</code> and <code class="language-plaintext highlighter-rouge">miniaudio</code>, as they supported callbacks.</p>
+
+<p>Alas, I, a container maniac, was developing TypeSound from a container. I realized that <code class="language-plaintext highlighter-rouge">sounddevice</code> uses the <code class="language-plaintext highlighter-rouge">PortAudio</code> library, which directly uses ALSA, which means it required access to <code class="language-plaintext highlighter-rouge">/dev/snd</code> files on my container. While I was happy to provide it, it failed the “cross-platform” requirement; I needed a library that can both use ALSA, and PulseAudio. This is a personal necessity because I still want to support the network connectivity that PulseAudio offers for another project called <a href="/2019/09/04/desktop-in-lxd-containers">ContainerTop</a>.</p>
+
+<blockquote>
+  <h2 id="alsa-vs-pulseaudio">ALSA vs PulseAudio</h2>
+
+  <p>The Advanced Linux Sound Architecture (ALSA) is essentially a layer on top of our sound devices, which is why playing music through ALSA would require that <code class="language-plaintext highlighter-rouge">/dev/snd</code> exist in my container filesystem. With the <code class="language-plaintext highlighter-rouge">dmix</code> extension (<a href="https://superuser.com/a/144649">information source</a>), ALSA can mix sound from various applications and play it through a playback device, while it traditionally can only play sound from one application at a time.</p>
+
+  <p>PulseAudio is a layer on top of ALSA, which mixes and provides network connectivity. The network connectivity part of PulseAudio allows me to create things like <a href="/2019/09/04/desktop-in-lxd-containers">ContainerTop</a> with absolutely no user mapping (a big deal for privacy &amp; security).</p>
+
+  <p>Which is better? The answer is I don’t want to start a war, but I would like to support both.</p>
+</blockquote>
+
+<p>Hence, only <code class="language-plaintext highlighter-rouge">miniaudio</code> remains. In C/C++, <a href="https://github.com/dr-soft/miniaudio"><code class="language-plaintext highlighter-rouge">miniaudio</code></a> is an absolute beast of a single-header library, boasting the following impressive list of backends:</p>
+<ul>
+  <li>WASAPI</li>
+  <li>DirectSound</li>
+  <li>WinMM</li>
+  <li>Core Audio (Apple)</li>
+  <li>ALSA</li>
+  <li>PulseAudio</li>
+  <li>JACK</li>
+  <li>sndio</li>
+  <li>audio</li>
+  <li>OSS</li>
+  <li>AAudio</li>
+  <li>OpenSL|ES</li>
+  <li>Web Audio</li>
+</ul>
+
+<h2 id="sox">sox</h2>
+
+<p>I know most music players out there have equalizers; they’re what behind concert-hall effects and bass-boosted audio effects you can enable in your music player. Hence, I looked for an audio manipulation library, and the best one I found was <a href="http://sox.sourceforge.net/"><code class="language-plaintext highlighter-rouge">sox</code></a>.</p>
+
+<p>Initially, I wanted to use <code class="language-plaintext highlighter-rouge">sox</code> to also speed up the audio on-the-fly, but <code class="language-plaintext highlighter-rouge">sox</code> did not provide that functionality; I could only speed up the whole audio track before playback, which is not so ideal. Thereafter, I left <code class="language-plaintext highlighter-rouge">sox</code> in TypeSound for a possible future feature involving an equalizer for music playback, if I get around to doing that.</p>
+
+<p>It should also be noted that <code class="language-plaintext highlighter-rouge">miniaudio</code>’s full set of features includes filters, which can change audio in most ways a normal equalizer can - unfortunately, at the time of writing, the <a href="https://pypi.org/project/miniaudio/">python package</a> of miniaudio did not support filters.</p>
+
+<hr>
+
+<h1 id="acquiring-keyboard-input">Acquiring keyboard input</h1>
+
+<p>Short of being a keylogger by a simple logging routine, TypeSound needs to know when a user has activated buttons on their keyboard to calculate the key presses per second, or KPS for short.</p>
+
+<p>Sounds simple, right?</p>
+
+<p>It is simple, and PyPi once again pulls through with another package: the <a href="https://pypi.org/project/keyboard/"><code class="language-plaintext highlighter-rouge">keyboard</code> package</a>. Want to know the unfortunate thing?</p>
+
+<p>On Linux, it requires access to <code class="language-plaintext highlighter-rouge">/dev/input/input*</code>, which contains the raw device files - much like how I needed to forward <code class="language-plaintext highlighter-rouge">/dev/snd</code> to my container for ALSA to work, I now need to forward <code class="language-plaintext highlighter-rouge">/dev/input/input*</code> to my container for the <code class="language-plaintext highlighter-rouge">keyboard</code> package to work.</p>
+
+<p>Want to know another special thing that only affects me because I’m a nerd that obsessively uses containers?</p>
+
+<p>You need <code class="language-plaintext highlighter-rouge">sudo</code> for the <code class="language-plaintext highlighter-rouge">keyboard</code> package to work, <em>and</em> I’m using a container. Container’s UID 0 and host’s UID 0 ain’t actually the same UID, and I ain’t about to make the container privileged just so my container can have access to my <code class="language-plaintext highlighter-rouge">/dev/input/input*</code>.</p>
+
+<p>Another thing, imagine a <em>meme</em> tool requiring you to run <code class="language-plaintext highlighter-rouge">sudo ./main.py</code>, which hence requires users to install packages to <code class="language-plaintext highlighter-rouge">site-packages</code> so that root’s <code class="language-plaintext highlighter-rouge">python</code> instance can find it - it’s absolutely bonkers!</p>
+
+<p>On Windows and Mac OSX, according to what I can see from the <a href="https://pypi.org/project/keyboard/#description">project description</a>, it doesn’t seem to require <code class="language-plaintext highlighter-rouge">sudo</code>. Hence, I decided to apply abstraction to the keyboard-related dealings for this Python script, and implement both <code class="language-plaintext highlighter-rouge">keyboard</code> for Windows and Mac OSX computers and an X11 method using <a href="https://github.com/python-xlib/python-xlib"><code class="language-plaintext highlighter-rouge">python-xlib</code></a> for Linux users.</p>
+
+<hr>
+
+<h1 id="figuring-out-how-to-adjust-playback-rate-on-the-fly">Figuring out how to adjust playback rate on the fly</h1>
+
+<p>The implementation of on-the-fly adjustment of the playback rate fell on me, as I had to do so in the callback function every second.</p>
+
+<p>Traditionally, to increase the speed of an audio track, you would do so by re-sampling the audio, and then playing back the audio at the audio’s original sample rate. For instance, if my audio’s original sample rate is 44100, and I would like to see it played back twice as fast, I would re-sample the audio to 22050, and playback the resultant audio at 44100.</p>
+
+<p>Refer to the following images. The y-axis represent the audio, while the x-axis can represent the time, both in arbitrary units. The graph as a whole represents a explanatory audio waveform. The distance between each point represent the playback sample rate, and the distance between each bar under the graph represents the audio file’s sample rate.</p>
+
+<p><img src="/images/20200820_2.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="A sine waveform representing audio"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Before re-sampling | Source: Me</p>
+
+<p><img src="/images/20200820_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="The previous sine waveform representing audio, but shrinked"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">After re-sampling | Source: Me</p>
+
+<p>From the images:</p>
+
+<ul>
+  <li>The distance between each point remains the same =&gt; playback sample rate is the same</li>
+  <li>The distance between each bar under the graph decreases by half =&gt; audio file sample rate is reduced by half</li>
+</ul>
+
+<p>Since the playback speed is the same, and the graph is compressed horizontally, hence, the user will hear the audio played back at twice the original speed.</p>
+
+<p>However, we cannot simply change any of the two available sample rates on the fly during playback. We either need to adjust the playback sample rate before restarting the playback device, or we can be true-blood engineers and find a “good enough” alternative.</p>
+
+<h2 id="pulse-code-modulation-pcm-data">Pulse-code modulation (PCM) data</h2>
+
+<p>During a callback, <code class="language-plaintext highlighter-rouge">miniaudio</code> requests a fixed number of frames (basically an array of 16-bit PCM data in our case) based on the playback sample rate. From the number of channels (i.e. width), we can obtain the total amount of PCM data to return, which is <code class="language-plaintext highlighter-rouge">playback rate * number of channels</code>.</p>
+
+<p>For the most part, when we talk about PCM in this context, we are actually talking about Linear PCM (LPCM), which means that all the points encoded in an audio waveform is linearly related to their analog equivalents.</p>
+
+<p>This is good, because this means that we can do linear piece-wise (i.e. line between every two points in an array) interpolation to obtain a representation of the audio waveform every callback, and then re-sample from that segment of the waveform to speed up / slow down the audio on demand.</p>
+
+<h2 id="interpolation">Interpolation</h2>
+
+<p>In a nutshell, linear piece-wise interpolation is just plotting all the points you have, and the connecting every two points with a straight line.</p>
+
+<p><img src="/images/20200820_4.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Interpolated sine-wave"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Interpolated sine-wave | Source: Me</p>
+
+<p>To increase playback rate by 2, we need to re-sample the audio such that there is half as many points as there are in our original graph. The blue dots in the graph below represents the newly sampled points from our interpolated graph.</p>
+
+<p><img src="/images/20200820_5.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Extracting points from the interpolated sine-wave"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Extracting points from interpolated sine-wave | Source: Me</p>
+
+<p>Practically speaking, we would also need to obtain twice as much data from the audio as per normal, as we need to return the exact number of required frames to <code class="language-plaintext highlighter-rouge">miniaudio</code>. In the above graphs, there are 17 red points but only 9 blue points; hence, we need another 8 blue points, which can be acquired by taking the subsequent same-sized chunk of the audio and sampling another 8 blue points from there.</p>
+
+<p>In conclusion, we draw <code class="language-plaintext highlighter-rouge">sample rate * playback rate</code> of data from the array of original audio data, perform interpolation, then extract <code class="language-plaintext highlighter-rouge">sample rate</code> amount of data - this would effectively control the playback rate of our audio.</p>
+
+<hr>
+
+<h1 id="making-the-tool-support-future-extensions">Making the tool support future extensions</h1>
+
+<p>If you poke around the codebase, you would see that I’ve made most of the functionality required for TypeSound accessible via interfaces. This is a plan towards making the tool extensible in the future, so that I can swap out any of the underlying packages anytime I need to; i.e. instead of using <code class="language-plaintext highlighter-rouge">miniaudio</code>, I can choose to use another package, or select specific implementations for certain operating systems, or change the configuration schema without breaking the previous versions of config files.</p>
+
+<p>The main challenge is generalizing before I have the underlying possible implementations done - it’s easy to miss out certain required functions in abstractions if all I’m doing is designing the interface first. Fortunately, this is a small enough project where such mistakes don’t cost a lot of effort to rectify; however, I imagine this to be an issue in a large team.</p>
+
+<p>It’s also relatively challenging to see the benefits of abstraction this early on in the project; hopefully I won’t have to redo major parts of the project just to benefit some from abstraction.</p>
+
+<hr>
+
+<h1 id="writing-meaningful-unit-tests">Writing meaningful unit tests</h1>
+
+<p>How exactly does one go about writing unit tests for scripts with functionality so close to its inputs (keyboard) and outputs (music playback rate)? For now, I’ve placed unit tests wherever I can, except for the <code class="language-plaintext highlighter-rouge">config.py</code> and <code class="language-plaintext highlighter-rouge">main.py</code> scripts. I would imagine testing those would qualify as functional tests since they’re using the components I’ve built as a system; moreover, the environments in GitHub runners where the tests run neither have X Servers nor sound devices to perform meaningful or conclusive tests.</p>
+
+<p>So, good enough? <img class="emoji" title=":man_shrugging:" alt=":man_shrugging:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f937-2642.png" height="20" width="20"></p>
+
+<hr>
+
+<p>That ends the developer commentary for TypeSound. Honestly, I did not expect this project to take more than a weekend to complete, but I would imagine that the information I’ve learnt off the project was a good enough trade-off.</p>
+
+<p>If you’ve got an Ubuntu system, do give TypeSound a try; otherwise, wait a while while I add support for Windows and Mac OSX!</p>
+
+<p>Until then!</p>
+
+<p>Happy coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2020</p>
+			</div>
+		</footer>
+  </body>
+</html>
+

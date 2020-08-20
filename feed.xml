@@ -1,4 +1,276 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-07-26T10:47:15+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Angular CI/CD with GitHub Actions</title><link href="https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions/" rel="alternate" type="text/html" title="Angular CI/CD with GitHub Actions" /><published>2020-05-27T09:00:00+00:00</published><updated>2020-05-27T09:00:00+00:00</updated><id>https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions</id><content type="html" xml:base="https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions/">&lt;p&gt;Recently, I needed to setup a functional CI/CD pipeline for an Angular Project. Given how hard GitHub has been pushing their “GitHub Actions” feature, I decided to give it a try. Here is how to setup CI/CD for an fresh Angular project on GitHub.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-08-20T04:11:47+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">TypeSound (Developer)</title><link href="https://codingindex.xyz/2020/08/20/typesound-dev/" rel="alternate" type="text/html" title="TypeSound (Developer)" /><published>2020-08-20T04:00:00+00:00</published><updated>2020-08-20T04:00:00+00:00</updated><id>https://codingindex.xyz/2020/08/20/typesound-dev</id><content type="html" xml:base="https://codingindex.xyz/2020/08/20/typesound-dev/">&lt;p&gt;This is the development commentary blog post for &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt;, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the &lt;a href=&quot;/2020/08/20/typesound&quot;&gt;previous blog post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Unexpectedly, I had to make quite a number of decisions during this project, something I wanted to avoid doing when making a &lt;em&gt;meme&lt;/em&gt; tool like TypeSound. The main issues are:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Choosing the right sound library;&lt;/li&gt;
+  &lt;li&gt;Acquiring keyboard input;&lt;/li&gt;
+  &lt;li&gt;Figuring out how to adjust playback rate on the fly;&lt;/li&gt;
+  &lt;li&gt;Making the tool support future extensions; and&lt;/li&gt;
+  &lt;li&gt;Writing meaningful unit tests.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;choosing-the-right-sound-library&quot;&gt;Choosing the right sound library&lt;/h1&gt;
+
+&lt;p&gt;The whole point of &lt;em&gt;writing&lt;/em&gt; a meme tool is to take close to zero development time, but deliver functional results. Hence, Python and JavaScript were good candidates; although I decided to go with Python given how traumatized I was with JavaScript at work. Hence, I snooped around &lt;a href=&quot;https://pypi.org&quot;&gt;PyPi&lt;/a&gt;, I saw that there exists audio packages that fulfill the not-so-well-thought-out criteria of:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;It played music.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_1.gif&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Barack Obama Applause GIF&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Criteria fulfilled, we win. | Source: &lt;a href=&quot;https://giphy.com/gifs/obama-barack-obama-president-l4q8cJzGdR9J8w3hS&quot;&gt;Giphy&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;When I actually got around to doing the project, I realized that I had more urgent criteria to consider:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;It still needs to play music;&lt;/li&gt;
+  &lt;li&gt;The library should be cross-platform as much as possible (i.e. not reliant on only 1 method of playback);&lt;/li&gt;
+  &lt;li&gt;But also be able to adjust playback rate &lt;em&gt;on the fly&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Believe it or not, tuning the velocity at which music is projected to the ears of the listener is a much harder task than I initially thought. After all, the meme around Python was to just import the packages you need:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_6.jpg&quot; style=&quot;max-width: 300px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Meme about importing all functionality in Python&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;import TypeSound | Source: &lt;a href=&quot;https://www.reddit.com/r/ProgrammerHumor/comments/6a59fw/import_essay/&quot;&gt;Reddit / somethingofthatilk.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I searched high and low for a package that can do this natively, including:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://simpleaudio.readthedocs.io/en/latest/&quot;&gt;simpleaudio&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://people.csail.mit.edu/hubert/pyaudio/docs/&quot;&gt;pyaudio&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://pypi.org/project/playsound/&quot;&gt;playsound&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://python-sounddevice.readthedocs.io/en/0.4.0/&quot;&gt;sounddevice&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://pypi.org/project/miniaudio/&quot;&gt;miniaudio&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This essentially means that I had to do the on-the-fly playback adjustment manually, either through a callback, or through inheriting a class and providing a stream manually. Hence, the competition was essentially between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sounddevice&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;, as they supported callbacks.&lt;/p&gt;
+
+&lt;p&gt;Alas, I, a container maniac, was developing TypeSound from a container. I realized that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sounddevice&lt;/code&gt; uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PortAudio&lt;/code&gt; library, which directly uses ALSA, which means it required access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; files on my container. While I was happy to provide it, it failed the “cross-platform” requirement; I needed a library that can both use ALSA, and PulseAudio. This is a personal necessity because I still want to support the network connectivity that PulseAudio offers for another project called &lt;a href=&quot;/2019/09/04/desktop-in-lxd-containers&quot;&gt;ContainerTop&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;h2 id=&quot;alsa-vs-pulseaudio&quot;&gt;ALSA vs PulseAudio&lt;/h2&gt;
+
+  &lt;p&gt;The Advanced Linux Sound Architecture (ALSA) is essentially a layer on top of our sound devices, which is why playing music through ALSA would require that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; exist in my container filesystem. With the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmix&lt;/code&gt; extension (&lt;a href=&quot;https://superuser.com/a/144649&quot;&gt;information source&lt;/a&gt;), ALSA can mix sound from various applications and play it through a playback device, while it traditionally can only play sound from one application at a time.&lt;/p&gt;
+
+  &lt;p&gt;PulseAudio is a layer on top of ALSA, which mixes and provides network connectivity. The network connectivity part of PulseAudio allows me to create things like &lt;a href=&quot;/2019/09/04/desktop-in-lxd-containers&quot;&gt;ContainerTop&lt;/a&gt; with absolutely no user mapping (a big deal for privacy &amp;amp; security).&lt;/p&gt;
+
+  &lt;p&gt;Which is better? The answer is I don’t want to start a war, but I would like to support both.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Hence, only &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt; remains. In C/C++, &lt;a href=&quot;https://github.com/dr-soft/miniaudio&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;&lt;/a&gt; is an absolute beast of a single-header library, boasting the following impressive list of backends:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;WASAPI&lt;/li&gt;
+  &lt;li&gt;DirectSound&lt;/li&gt;
+  &lt;li&gt;WinMM&lt;/li&gt;
+  &lt;li&gt;Core Audio (Apple)&lt;/li&gt;
+  &lt;li&gt;ALSA&lt;/li&gt;
+  &lt;li&gt;PulseAudio&lt;/li&gt;
+  &lt;li&gt;JACK&lt;/li&gt;
+  &lt;li&gt;sndio&lt;/li&gt;
+  &lt;li&gt;audio&lt;/li&gt;
+  &lt;li&gt;OSS&lt;/li&gt;
+  &lt;li&gt;AAudio&lt;/li&gt;
+  &lt;li&gt;OpenSL|ES&lt;/li&gt;
+  &lt;li&gt;Web Audio&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;sox&quot;&gt;sox&lt;/h2&gt;
+
+&lt;p&gt;I know most music players out there have equalizers; they’re what behind concert-hall effects and bass-boosted audio effects you can enable in your music player. Hence, I looked for an audio manipulation library, and the best one I found was &lt;a href=&quot;http://sox.sourceforge.net/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Initially, I wanted to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; to also speed up the audio on-the-fly, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; did not provide that functionality; I could only speed up the whole audio track before playback, which is not so ideal. Thereafter, I left &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; in TypeSound for a possible future feature involving an equalizer for music playback, if I get around to doing that.&lt;/p&gt;
+
+&lt;p&gt;It should also be noted that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;’s full set of features includes filters, which can change audio in most ways a normal equalizer can - unfortunately, at the time of writing, the &lt;a href=&quot;https://pypi.org/project/miniaudio/&quot;&gt;python package&lt;/a&gt; of miniaudio did not support filters.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;acquiring-keyboard-input&quot;&gt;Acquiring keyboard input&lt;/h1&gt;
+
+&lt;p&gt;Short of being a keylogger by a simple logging routine, TypeSound needs to know when a user has activated buttons on their keyboard to calculate the key presses per second, or KPS for short.&lt;/p&gt;
+
+&lt;p&gt;Sounds simple, right?&lt;/p&gt;
+
+&lt;p&gt;It is simple, and PyPi once again pulls through with another package: the &lt;a href=&quot;https://pypi.org/project/keyboard/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package&lt;/a&gt;. Want to know the unfortunate thing?&lt;/p&gt;
+
+&lt;p&gt;On Linux, it requires access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt;, which contains the raw device files - much like how I needed to forward &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; to my container for ALSA to work, I now need to forward &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt; to my container for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package to work.&lt;/p&gt;
+
+&lt;p&gt;Want to know another special thing that only affects me because I’m a nerd that obsessively uses containers?&lt;/p&gt;
+
+&lt;p&gt;You need &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package to work, &lt;em&gt;and&lt;/em&gt; I’m using a container. Container’s UID 0 and host’s UID 0 ain’t actually the same UID, and I ain’t about to make the container privileged just so my container can have access to my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Another thing, imagine a &lt;em&gt;meme&lt;/em&gt; tool requiring you to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo ./main.py&lt;/code&gt;, which hence requires users to install packages to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; so that root’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python&lt;/code&gt; instance can find it - it’s absolutely bonkers!&lt;/p&gt;
+
+&lt;p&gt;On Windows and Mac OSX, according to what I can see from the &lt;a href=&quot;https://pypi.org/project/keyboard/#description&quot;&gt;project description&lt;/a&gt;, it doesn’t seem to require &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt;. Hence, I decided to apply abstraction to the keyboard-related dealings for this Python script, and implement both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; for Windows and Mac OSX computers and an X11 method using &lt;a href=&quot;https://github.com/python-xlib/python-xlib&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python-xlib&lt;/code&gt;&lt;/a&gt; for Linux users.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;figuring-out-how-to-adjust-playback-rate-on-the-fly&quot;&gt;Figuring out how to adjust playback rate on the fly&lt;/h1&gt;
+
+&lt;p&gt;The implementation of on-the-fly adjustment of the playback rate fell on me, as I had to do so in the callback function every second.&lt;/p&gt;
+
+&lt;p&gt;Traditionally, to increase the speed of an audio track, you would do so by re-sampling the audio, and then playing back the audio at the audio’s original sample rate. For instance, if my audio’s original sample rate is 44100, and I would like to see it played back twice as fast, I would re-sample the audio to 22050, and playback the resultant audio at 44100.&lt;/p&gt;
+
+&lt;p&gt;Refer to the following images. The y-axis represent the audio, while the x-axis can represent the time, both in arbitrary units. The graph as a whole represents a explanatory audio waveform. The distance between each point represent the playback sample rate, and the distance between each bar under the graph represents the audio file’s sample rate.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_2.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;A sine waveform representing audio&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Before re-sampling | Source: Me&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_3.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;The previous sine waveform representing audio, but shrinked&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;After re-sampling | Source: Me&lt;/p&gt;
+
+&lt;p&gt;From the images:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The distance between each point remains the same =&amp;gt; playback sample rate is the same&lt;/li&gt;
+  &lt;li&gt;The distance between each bar under the graph decreases by half =&amp;gt; audio file sample rate is reduced by half&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the playback speed is the same, and the graph is compressed horizontally, hence, the user will hear the audio played back at twice the original speed.&lt;/p&gt;
+
+&lt;p&gt;However, we cannot simply change any of the two available sample rates on the fly during playback. We either need to adjust the playback sample rate before restarting the playback device, or we can be true-blood engineers and find a “good enough” alternative.&lt;/p&gt;
+
+&lt;h2 id=&quot;pulse-code-modulation-pcm-data&quot;&gt;Pulse-code modulation (PCM) data&lt;/h2&gt;
+
+&lt;p&gt;During a callback, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt; requests a fixed number of frames (basically an array of 16-bit PCM data in our case) based on the playback sample rate. From the number of channels (i.e. width), we can obtain the total amount of PCM data to return, which is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;playback rate * number of channels&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the most part, when we talk about PCM in this context, we are actually talking about Linear PCM (LPCM), which means that all the points encoded in an audio waveform is linearly related to their analog equivalents.&lt;/p&gt;
+
+&lt;p&gt;This is good, because this means that we can do linear piece-wise (i.e. line between every two points in an array) interpolation to obtain a representation of the audio waveform every callback, and then re-sample from that segment of the waveform to speed up / slow down the audio on demand.&lt;/p&gt;
+
+&lt;h2 id=&quot;interpolation&quot;&gt;Interpolation&lt;/h2&gt;
+
+&lt;p&gt;In a nutshell, linear piece-wise interpolation is just plotting all the points you have, and the connecting every two points with a straight line.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_4.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Interpolated sine-wave&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Interpolated sine-wave | Source: Me&lt;/p&gt;
+
+&lt;p&gt;To increase playback rate by 2, we need to re-sample the audio such that there is half as many points as there are in our original graph. The blue dots in the graph below represents the newly sampled points from our interpolated graph.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20200820_5.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Extracting points from the interpolated sine-wave&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Extracting points from interpolated sine-wave | Source: Me&lt;/p&gt;
+
+&lt;p&gt;Practically speaking, we would also need to obtain twice as much data from the audio as per normal, as we need to return the exact number of required frames to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;. In the above graphs, there are 17 red points but only 9 blue points; hence, we need another 8 blue points, which can be acquired by taking the subsequent same-sized chunk of the audio and sampling another 8 blue points from there.&lt;/p&gt;
+
+&lt;p&gt;In conclusion, we draw &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sample rate * playback rate&lt;/code&gt; of data from the array of original audio data, perform interpolation, then extract &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sample rate&lt;/code&gt; amount of data - this would effectively control the playback rate of our audio.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;making-the-tool-support-future-extensions&quot;&gt;Making the tool support future extensions&lt;/h1&gt;
+
+&lt;p&gt;If you poke around the codebase, you would see that I’ve made most of the functionality required for TypeSound accessible via interfaces. This is a plan towards making the tool extensible in the future, so that I can swap out any of the underlying packages anytime I need to; i.e. instead of using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;, I can choose to use another package, or select specific implementations for certain operating systems, or change the configuration schema without breaking the previous versions of config files.&lt;/p&gt;
+
+&lt;p&gt;The main challenge is generalizing before I have the underlying possible implementations done - it’s easy to miss out certain required functions in abstractions if all I’m doing is designing the interface first. Fortunately, this is a small enough project where such mistakes don’t cost a lot of effort to rectify; however, I imagine this to be an issue in a large team.&lt;/p&gt;
+
+&lt;p&gt;It’s also relatively challenging to see the benefits of abstraction this early on in the project; hopefully I won’t have to redo major parts of the project just to benefit some from abstraction.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;writing-meaningful-unit-tests&quot;&gt;Writing meaningful unit tests&lt;/h1&gt;
+
+&lt;p&gt;How exactly does one go about writing unit tests for scripts with functionality so close to its inputs (keyboard) and outputs (music playback rate)? For now, I’ve placed unit tests wherever I can, except for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;config.py&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main.py&lt;/code&gt; scripts. I would imagine testing those would qualify as functional tests since they’re using the components I’ve built as a system; moreover, the environments in GitHub runners where the tests run neither have X Servers nor sound devices to perform meaningful or conclusive tests.&lt;/p&gt;
+
+&lt;p&gt;So, good enough? :man_shrugging:&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;That ends the developer commentary for TypeSound. Honestly, I did not expect this project to take more than a weekend to complete, but I would imagine that the information I’ve learnt off the project was a good enough trade-off.&lt;/p&gt;
+
+&lt;p&gt;If you’ve got an Ubuntu system, do give TypeSound a try; otherwise, wait a while while I add support for Windows and Mac OSX!&lt;/p&gt;
+
+&lt;p&gt;Until then!&lt;/p&gt;
+
+&lt;p&gt;Happy coding&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="developer" /><category term="developer" /><category term="python" /><category term="typesound" /><summary type="html">This is the development commentary blog post for TypeSound, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the previous blog post.</summary></entry><entry><title type="html">TypeSound (Release)</title><link href="https://codingindex.xyz/2020/08/20/typesound/" rel="alternate" type="text/html" title="TypeSound (Release)" /><published>2020-08-20T03:00:00+00:00</published><updated>2020-08-20T03:00:00+00:00</updated><id>https://codingindex.xyz/2020/08/20/typesound</id><content type="html" xml:base="https://codingindex.xyz/2020/08/20/typesound/">&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: Most of this post is satire, although &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt; actually does exist, and does correspond your typing speed with playback rate. Refer to &lt;a href=&quot;#typesound&quot;&gt;this section&lt;/a&gt; for setup instructions.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;typing&quot;&gt;Typing&lt;/h1&gt;
+
+&lt;p&gt;Typing on its own is relatively inconsequential - after all, it is all but a means to put down your thoughts and contributions, which can hopefully be accumulated with efforts from others towards impacting the world in any form.&lt;/p&gt;
+
+&lt;p&gt;The virtue of typing has assimilated into our DNA so much, that it has become a norm - typing is no longer a meaningful and special activity. The feeling of pure ecstasy as you tap your fingers on the pleasingly noisy keys of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Typewriter&quot;&gt;typewriter&lt;/a&gt;, the first &lt;a href=&quot;https://en.wikipedia.org/wiki/IBM_PC_keyboard&quot;&gt;IBM keyboard&lt;/a&gt;, and your first ever mechanical keyboard wears out after a few weeks.&lt;/p&gt;
+
+&lt;p&gt;The activity of typing once again becomes a chore to put down your thoughts and contributions towards advancing (or regressing) humanity. This is a normal process, and the conventional status quo between you and your latest keyboard would have remained if only this nosy fellow called CodingIndex did not intervene.&lt;/p&gt;
+
+&lt;h1 id=&quot;music&quot;&gt;Music&lt;/h1&gt;
+
+&lt;p&gt;Music has evolved over the decades it has existed; in some ways, each golden era of a genre represents the lifeblood of a generation. After all, music is a universal language capable of invoking emotions, conveying deep messages and inspiring people of diverse backgrounds and cultures to keep on creating.&lt;/p&gt;
+
+&lt;p&gt;The point is: music never gets boring. Not only is it a platform for artists to share their talents, but also a form of communication we rely on to change perceptions - hence, it grows with us (happy birthday), and dies with us (parlor music, or if you’re a hardcore meme king/queen, &lt;a href=&quot;https://www.youtube.com/watch?v=iLBBRuVDOo4&quot;&gt;this&lt;/a&gt;). People comment “play this at my funeral” on their favourite sad songs, write short stories for inspirational music, and use dramatic soundtrack to signify - well, drama, in a video clip.&lt;/p&gt;
+
+&lt;h1 id=&quot;idea-keyboard--musical_note&quot;&gt;Idea :keyboard: + :musical_note:&lt;/h1&gt;
+
+&lt;p&gt;What if, we renewed the excitement of pressing keys on a keyboard, by intrinsically combining that with music?&lt;/p&gt;
+
+&lt;p&gt;What if, the combination involved the &lt;em&gt;playback rate&lt;/em&gt; of music?&lt;/p&gt;
+
+&lt;p&gt;Introducing :drum:… TypeSound!&lt;/p&gt;
+
+&lt;h1 id=&quot;typesound&quot;&gt;TypeSound&lt;/h1&gt;
+
+&lt;p&gt;TypeSound is a bunch of python scripts working together to involve your music into your typing experience by linking your typing speed to the playback rate of your favourite songs. By being in direct control of how you hear your music, not only is it a source of entertainment whenever you get bored on your desk, but also an incentive for typing - bringing a direct purpose to your typing session.&lt;/p&gt;
+
+&lt;p&gt;Just listen to this satisfied user:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I haven’t tried TypeSound, nor am I a real person, but I love it!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What are you waiting for? Try &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt; today!&lt;/p&gt;
+
+&lt;h2 id=&quot;setting-up&quot;&gt;Setting up&lt;/h2&gt;
+
+&lt;p&gt;The masterpiece known as TypeSound has the following requirements:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://sox.sourceforge.net/&quot;&gt;sox&lt;/a&gt; with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;libsox-fmt-mp3&lt;/code&gt; extension. Seems to come with the Windows and MacOS installer.
+    &lt;ul&gt;
+      &lt;li&gt;For Ubuntu systems, run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo apt install -y sox libsox-fmt-mp3&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.python.org/&quot;&gt;Python 3.6 or above&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Access to any typing speed test website like &lt;a href=&quot;https://10fastfingers.com/typing-test/english&quot;&gt;10fastfingers&lt;/a&gt; or &lt;a href=&quot;https://play.typeracer.com/&quot;&gt;TypeRacer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;NOTE: Widnows and Mac OSX are not supported yet, because detecting keypresses on your keyboard is done in a Linux-only way (relies on X11). Support should be coming soon, and this notice will be removed accordingly.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(Optional) If you want, create a virtual environment for TypeSound. On Ubuntu, this is achieved with:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;virtualenv &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; python3 ~/.environments/typesound
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.environments/typesound/bin/activate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Install the required pip packages by running the following command in terminal (Linux/Mac OS) or PowerShell (Windows):&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pip &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, run the configuration script. It’ll prompt some instructions to you, and you just need to follow them to complete your first configuration:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./config.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Subsequently, when you run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./config.py&lt;/code&gt; again, it will modify the existing configuration.&lt;/p&gt;
+
+&lt;p&gt;When you are satisfied with your configuration, run:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./main.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then start typing away! You should hear the music increase/decrease its playback rate based on your typing speed.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;I hope you enjoyed this blog post; most of the content is satire, except for the “Setting up” section. In reality, I wrote the scripts for my own entertainment and learning, testing features on GitHub, listening to the keyboard, and performing audio processing to increase/decrease playback rate.&lt;/p&gt;
+
+&lt;p&gt;There is one more blog post that talks about how I developed TypeSound, the problems I faced and how I overcame them. Do check it out &lt;a href=&quot;/2020/08/20/typesound-dev&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Happy coding&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="release" /><category term="release" /><category term="python" /><category term="typesound" /><summary type="html">NOTE: Most of this post is satire, although TypeSound actually does exist, and does correspond your typing speed with playback rate. Refer to this section for setup instructions.</summary></entry><entry><title type="html">Angular CI/CD with GitHub Actions</title><link href="https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions/" rel="alternate" type="text/html" title="Angular CI/CD with GitHub Actions" /><published>2020-05-27T09:00:00+00:00</published><updated>2020-05-27T09:00:00+00:00</updated><id>https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions</id><content type="html" xml:base="https://codingindex.xyz/2020/05/27/angular-cicd-with-github-actions/">&lt;p&gt;Recently, I needed to setup a functional CI/CD pipeline for an Angular Project. Given how hard GitHub has been pushing their “GitHub Actions” feature, I decided to give it a try. Here is how to setup CI/CD for an fresh Angular project on GitHub.&lt;/p&gt;
 
 &lt;h1 id=&quot;step-0-concepts&quot;&gt;Step 0: Concepts&lt;/h1&gt;
 
@@ -1332,64 +1604,4 @@ the greeter executable - screen is 0,0, drawing 0,0 login screen
 
 &lt;p&gt;CodingIndex&lt;/p&gt;
 
-&lt;p&gt;P.S. &lt;a href=&quot;/2019/06/19/interview-experiences-part-2/&quot;&gt;Part 2&lt;/a&gt;&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="code" /><summary type="html">Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.</summary></entry><entry><title type="html">:book: Encrypted Page</title><link href="https://codingindex.xyz/2019/06/14/encrypted-page/" rel="alternate" type="text/html" title=":book: Encrypted Page" /><published>2019-06-14T14:00:00+00:00</published><updated>2019-06-14T14:00:00+00:00</updated><id>https://codingindex.xyz/2019/06/14/encrypted-page</id><content type="html" xml:base="https://codingindex.xyz/2019/06/14/encrypted-page/">&lt;p&gt;:coffee: Hey! I made a &lt;a href=&quot;https://github.com/jameshi16/EncryptedPage&quot;&gt;thing&lt;/a&gt;, do check it out! The project’s called EncryptedPage, and you can kinda guess what it does. Let me walk you through why I made it.&lt;/p&gt;
-
-&lt;h1 id=&quot;what-is-it&quot;&gt;What is it?&lt;/h1&gt;
-
-&lt;p&gt;A three-hour project that I created to see if it is possible to perform client-side decryption on encrypted content. This can not only be useful for paywalls (I’m sorry), but also for private blog posts, for none other than my blog! It is also a crucial component for the major project I am working on, which I still have to keep a secret because it is still being worked on.&lt;/p&gt;
-
-&lt;h1 id=&quot;what-why-password-blog-posts&quot;&gt;What??? Why password blog posts?&lt;/h1&gt;
-
-&lt;p&gt;Hey, hey. Hear me out now. Sometimes, you just need to have blog posts private to the general public; very sensitive information, such as progress on secret projects, personal life updates, and other things that I would prefer to keep to myself or my employers. If you know me well, I don’t really have social media, other than &lt;a href=&quot;https://twitter.com/jameshi16&quot;&gt;Twitter&lt;/a&gt;, which means I need to have a method to “set posts to private”, while still maintaining public posts. As I do not trust third parties with my private posts, the simplest method is to create my own means to do so.&lt;/p&gt;
-
-&lt;h1 id=&quot;can-it-do-images&quot;&gt;Can it do images?&lt;/h1&gt;
-
-&lt;p&gt;Encryted Pages, being made in 3 hours, had a clear focus of encrypting HTML pages. Images that can be converted to base 64 can be inserted into the HTML, and then encrypted. The same goes for JavaScript and CSS code. Unfortunately, there are no current plans to make this easier, mainly because by creating Encrypted Pages, I have already achieved what I need to do. I may change my mind and add the functionality to encrypt other resources and reference them from many HTML pages, but for now, nope.&lt;/p&gt;
-
-&lt;h1 id=&quot;tell-us-more-about-the-secret-project-already&quot;&gt;Tell us more about the secret project already!&lt;/h1&gt;
-
-&lt;p&gt;:wink:&lt;/p&gt;
-
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;I hope you find this project at least semi-interesting. Maybe instead of me, you could be the one who extends the functionality! If you are interested, go over to &lt;a href=&quot;https://github.com/jameshi16/EncryptedPage&quot;&gt;the repository&lt;/a&gt;, and contribute!&lt;/p&gt;
-
-&lt;p&gt;Happy Coding,&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="projects" /><category term="project" /><category term="js" /><category term="golang" /><summary type="html">:coffee: Hey! I made a thing, do check it out! The project’s called EncryptedPage, and you can kinda guess what it does. Let me walk you through why I made it.</summary></entry><entry><title type="html">It’s been a while. What am I up to?</title><link href="https://codingindex.xyz/2019/05/31/its-been-a-while-what-am-i-doing/" rel="alternate" type="text/html" title="It’s been a while. What am I up to?" /><published>2019-05-31T15:59:59+00:00</published><updated>2019-05-31T15:59:59+00:00</updated><id>https://codingindex.xyz/2019/05/31/its-been-a-while-what-am-i-doing</id><content type="html" xml:base="https://codingindex.xyz/2019/05/31/its-been-a-while-what-am-i-doing/">&lt;p&gt;I am most definitely not rushing this blog post knowing that my last post was 1 month ago, and the month of June is about to hit. That is most definitely not the case.&lt;/p&gt;
-
-&lt;p&gt;I also most definitely did not forget to save my blog post, and carelessly unplugged my battery which caused me to lose my work. That most definitely did not happen.&lt;/p&gt;
-
-&lt;p&gt;Well then, it has been a month, so I am relatively compelled to post a status update before the end of the month to &lt;del&gt;get my money’s worth for the domain name I bought specifically for this blog&lt;/del&gt;. Let’s go through what I’ve learnt, what projects I plan to do, and future blog posts planned for June.&lt;/p&gt;
-
-&lt;h1 id=&quot;what-ive-learnt&quot;&gt;What I’ve Learnt&lt;/h1&gt;
-
-&lt;p&gt;This month was packed full of information for me to absorb, albiet some of them are irrelevant to the current era of computing. Here is a list of (useful) things I have learned this month:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Linear Regression&lt;/li&gt;
-  &lt;li&gt;Logistic Regression&lt;/li&gt;
-  &lt;li&gt;k-means &amp;amp; k-nn&lt;/li&gt;
-  &lt;li&gt;Intel 8088 Assembly&lt;/li&gt;
-  &lt;li&gt;PC Architecture&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;And many more which I find too difficult to stimulate my lazy brain to recall. Hence, I’ll leave this list in its inexhaustive state to never see again.&lt;/p&gt;
-
-&lt;h1 id=&quot;projects-i-plan-to-do&quot;&gt;Projects I Plan To Do&lt;/h1&gt;
-
-&lt;p&gt;I’m in the midst of planning for a major project that I cannot reveal until completed. This is something that I’m excited about, so you should be baselessly excited too.&lt;/p&gt;
-
-&lt;p&gt;Other than that, there are many, many projects upcoming that I have to plan and prototype for academic purposes, which I will open-source when I complete them. Here’s to hoping that I’ll come up with meaningful projects :beer:.&lt;/p&gt;
-
-&lt;h1 id=&quot;future-blog-posts&quot;&gt;Future Blog Posts&lt;/h1&gt;
-
-&lt;p&gt;I’ve watched many, many anime as a coping mechanism to my bottomless depression, so I’ll be making a review for all of them. Other upcoming blog posts include connecting an ESP32 to AWS, and Ethereum Smart Contracts, so you can look forward to that if weaboo land is not your thing.&lt;/p&gt;
-
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;I’ve typed this entire blog post in 5 minutes, with no proofreading, while watching anime reviews by &lt;a href=&quot;https://www.youtube.com/channel/UC7dF9qfBMXrSlaaFFDvV_Yg&quot;&gt;Gigguk&lt;/a&gt;, so you can imagine the mental gymnastics I’m trying to perform to get this done, so I’m not liable for any grammatical mistakes above! Even though this is my blog!&lt;/p&gt;
-
-&lt;p&gt;Happy Coding,&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><summary type="html">I am most definitely not rushing this blog post knowing that my last post was 1 month ago, and the month of June is about to hit. That is most definitely not the case.</summary></entry></feed>
+&lt;p&gt;P.S. &lt;a href=&quot;/2019/06/19/interview-experiences-part-2/&quot;&gt;Part 2&lt;/a&gt;&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="code" /><summary type="html">Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.</summary></entry></feed>
