@@ -201,7 +201,7 @@ code, pre { font-family: 'Roboto Mono', monospace; font-size: 16px; }
 
 pre { background: #f8f8f8; border: 1px solid #ddd; padding: 1em; margin-bottom: 10px; overflow-x: auto; vertical-align: text-bottom; }
 
-code { background: #f8f8f8; border: 1px solid #ddd; padding: .2em .4em; font-size: 80%; }
+code { background: #f8f8f8; border: 1px solid #ddd; padding: .2em .4em; font-size: 80%; word-break: break-word; }
 
 pre code { background: transparent; border: 0; padding: 0; font-size: 80%; }
 
