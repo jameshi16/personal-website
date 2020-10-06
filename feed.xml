@@ -1,4 +1,268 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-10-06T04:10:26+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">TypeSound (Developer)</title><link href="https://codingindex.xyz/2020/08/20/typesound-dev/" rel="alternate" type="text/html" title="TypeSound (Developer)" /><published>2020-08-20T04:00:00+00:00</published><updated>2020-08-20T04:00:00+00:00</updated><id>https://codingindex.xyz/2020/08/20/typesound-dev</id><content type="html" xml:base="https://codingindex.xyz/2020/08/20/typesound-dev/">&lt;p&gt;This is the development commentary blog post for &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt;, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the &lt;a href=&quot;/2020/08/20/typesound&quot;&gt;previous blog post&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-10-06T16:34:01+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">I tried to make a game…</title><link href="https://codingindex.xyz/2020/10/06/failed-game/" rel="alternate" type="text/html" title="I tried to make a game…" /><published>2020-10-06T15:30:00+00:00</published><updated>2020-10-06T15:30:00+00:00</updated><id>https://codingindex.xyz/2020/10/06/failed-game</id><content type="html" xml:base="https://codingindex.xyz/2020/10/06/failed-game/">&lt;p&gt;Yo! It’s been a while.&lt;/p&gt;
+
+&lt;p&gt;I’ve been falling into the &lt;a href=&quot;https://www.youtube.com/channel/UCJFZiqLMntJufDCHc6bQixg&quot;&gt;Hololive&lt;/a&gt; rabbit hole for a while now, going as far as to create one of my more “interesting” creations called &lt;a href=&quot;https://github.com/jameshi16/cursed_moonrunes&quot;&gt;匚ㄩ尺丂乇ᗪ 爪ㄖㄖ几尺ㄩ几乇丂&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Luckily for you, my readers, this shall not be the main point of discussion for this blog post. Instead, let’s talk about &lt;a href=&quot;https://github.com/jameshi16/failedgame&quot;&gt;FailedGame&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;failedgame&quot;&gt;FailedGame&lt;/h1&gt;
+
+&lt;p&gt;For about a month, I worked on &lt;a href=&quot;https://github.com/jameshi16/failedgame&quot;&gt;FailedGame&lt;/a&gt;, which I planned to finish before a certain day in September.&lt;/p&gt;
+
+&lt;p&gt;You see, it was going to be my friend’s, &lt;a href=&quot;https://modelconverge.xyz&quot;&gt;ModelConverge&lt;/a&gt;’s, birthday. Typically, you would buy the birthday person a material gift, like a card, or a letter, or something. However, I wanted my gift to be special - something made from my skills. Weeks ago, my friend created a faithful MIDI soundtrack of a song he liked, and excitedly got me to listen to it. That was when I got the idea to incorporate it into some sort of a birthday gift, where I eventually settled to make a game.&lt;/p&gt;
+
+&lt;p&gt;Turns out, making a game was a lot harder than I thought. I made a few mistakes at the start of development that snowballed into huge issues that forced me to give up development of the project, and deliver nothing to my friend. Another possible cause could be my attempt at multi-tasking between watching Hololive streams while programming; I’m the type that must have silence to focus and get anything done.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-plan&quot;&gt;The plan&lt;/h2&gt;
+
+&lt;p&gt;The game would be a 2D RPG, much like those you can create using tools like &lt;a href=&quot;https://www.rpgmakerweb.com/&quot;&gt;RPG Maker&lt;/a&gt;. I wanted the movement to emulate the old classic RPG movement, i.e. the character will always move in integral unit of tiles, i.e. I don’t want “precise movement”.&lt;/p&gt;
+
+&lt;div class=&quot;d-flex flex-md-row flex-column flex-justify-center&quot;&gt;
+&lt;div style=&quot;margin: 0 4px&quot;&gt;
+&lt;img src=&quot;/images/20201006_1.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 4px auto; display: block&quot; alt=&quot;Precise movement&quot; /&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Precise Movement | Source: Me&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div style=&quot;margin: 0 4px&quot;&gt;
+&lt;img src=&quot;/images/20201006_2.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 4px auto; display: block&quot; alt=&quot;Classic RPG movement&quot; /&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Classic RPG Movement | Source: Me&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Furthermore, I wanted the combat system to be as interactive as possible; meaning, no turn-based battle system. Something like this (low quality GIF warning):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_3.gif&quot; style=&quot;max-width: 600px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Cutting arrows then cutting skeletons&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Killing skeletons on the fly | Source: Me&lt;/p&gt;
+
+&lt;p&gt;In terms of story, it was supposed to go like this:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Main character is returning home from work;&lt;/li&gt;
+  &lt;li&gt;Main character enters the house, which is dark at first, then the lights are toggled, and surprise! Birthday cake on the table;&lt;/li&gt;
+  &lt;li&gt;After some time, a ninja will appear and steal the cake;&lt;/li&gt;
+  &lt;li&gt;Main character then chases the ninja to a forest, fighting hordes of Skeletons and Zombies through a maze;&lt;/li&gt;
+  &lt;li&gt;Main character then fights the ninja, who reveals that he is an alter-ego of the main character’s personality;&lt;/li&gt;
+  &lt;li&gt;Song made by friend plays, and an epic boss battle ensues.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Well, supposed to. The lack of a GIF here should imply that I didn’t get nearly as far.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;so-what-went-wrong&quot;&gt;So, what went wrong?&lt;/h2&gt;
+
+&lt;p&gt;As mentioned before, most of the things that went wrong happened right at the start - I chose the wrong game framework to work with.&lt;/p&gt;
+
+&lt;p&gt;To develop this game, I used the &lt;a href=&quot;https://phaser.io/&quot;&gt;Phaser 3&lt;/a&gt; game framework. Phaser 3 is an extremely powerful framework with an amazing physics engine, collision detection, resource management, texture management, and so on. It even has a fallback mechanism for rendering and hence works on almost any platform that supports a browser and JavaScript. Furthermore, it’s open-source and has an extensive API documentation, alongside a large community.&lt;/p&gt;
+
+&lt;p&gt;“So…” I hear you ask. “What’s wrong with an extremely powerful game framework?”&lt;/p&gt;
+
+&lt;p&gt;At the start, I had no doubt in my mind that Phaser would be sufficient for my needs, as it could practically do everything imaginable - however, problems came when I tried to &lt;em&gt;limit&lt;/em&gt; the vast capabilities of the Phaser framework. In other words, the issue does not lie in the game framework itself - the issue lies in what I was &lt;em&gt;trying&lt;/em&gt; to do.&lt;/p&gt;
+
+&lt;p&gt;You see, in Phaser 3, you can create sprites and let them interact with the world via physics in a short amount of time: if you go through &lt;a href=&quot;https://phaser.io/tutorials/making-your-first-phaser-3-game&quot;&gt;their tutorial&lt;/a&gt;, you’d create a 2D platformer complete with ball physics, collision detection with the world, and a scoring system. From the surface, Phaser was a perfect fit, as I wanted my sprite to collide with certain tiles in the world, the world boundary and have particle physics when I cast spells; much like what is accomplished in the tutorial.&lt;/p&gt;
+
+&lt;p&gt;Hence, I chose to use the physics engine that came with Phaser, and decided to make an Arcade (Phaser lingo for stuff-affected-by-physics) type game. And ho boy, did that create a plethora of problems for me.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-1-setting-up-the-project&quot;&gt;Problem 1: Setting up the project&lt;/h3&gt;
+
+&lt;p&gt;I &lt;em&gt;know&lt;/em&gt; that there is a &lt;a href=&quot;https://github.com/photonstorm/phaser3-project-template&quot;&gt;Phaser 3 Project Template&lt;/a&gt; for webpack setup. But, FailedGame was an educational project, so I decided to set it up mostly from scratch. This meant installing and configuring webpack, babel, and the relevant loaders required for the project. If you have looked at the source, you would realize that there is no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.html&lt;/code&gt; file - that’s the work of the &lt;a href=&quot;https://webpack.js.org/plugins/html-webpack-plugin/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HtmlWebpackPlugin&lt;/code&gt;&lt;/a&gt;, which automatically generates one based on the contents of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;index.js&lt;/code&gt;. &lt;em&gt;I did that&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Learning how to configure webpack and babel from scratch taught me to appreciate tools like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;npx create-react-app&lt;/code&gt;; in the modern ecosystem of JavaScript frameworks, boilerplate configuration is time-consuming and aggravating. This &lt;a href=&quot;https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f&quot;&gt;post&lt;/a&gt; describes what needs to be in a typical JavaScript developer’s toolchain, how volatile knowledge is in the JavaScript world, and how annoying it feels to do something simple in JavaScript.&lt;/p&gt;
+
+&lt;p&gt;If FailedGame wasn’t an educational project, the best option would have been to use the CDN version of Phaser 3, followed by using the Project Template, followed by doing… whatever I’ve done here.&lt;/p&gt;
+
+&lt;p&gt;You can see the configurations I’ve created in the &lt;a href=&quot;https://github.com/jameshi16/failedgame&quot;&gt;repository&lt;/a&gt; - I’m sure there are many mistakes in the configuration, but I’ve tried separating the dev environment configuration and the production environment configuration, albiet by the difference of an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;inline-source-map&lt;/code&gt; versus a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;source-map&lt;/code&gt;. To understand why it is viable to include a source map in production, read &lt;a href=&quot;https://css-tricks.com/should-i-use-source-maps-in-production/&quot;&gt;this article&lt;/a&gt;; it boils down to “it’s easier to debug &amp;amp; find out where a problem is in production”.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-2-sizes-mismatch&quot;&gt;Problem 2: Sizes mismatch&lt;/h3&gt;
+
+&lt;p&gt;If you know me in real life, I failed art in Secondary School. I have an artistic score lower than absolute zero, which should be impossible but ¯\_(ツ)_/¯. This essentially means that I can’t make tilesheets, draw sprites, make projectiles, or even make music (I know nuts about music). Hence, I needed to find online resources, like &lt;a href=&quot;https://opengameart.org/&quot;&gt;OpenGameArt&lt;/a&gt;; you can find the exact tilesheets I used in the &lt;a href=&quot;https://github.com/jameshi16/failedgame&quot;&gt;Github repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;An issue with crowd-sourcing is that sometimes, you get tilesheets that seem to practice individualism - they have different tile sizes, spacing, margin, etc. The disparity between these tilesheets should be rectified somehow, making the task seem like the data cleaning stage before feeding image inputs into a machine learning model. Furthermore, I obtained my sprites from a &lt;a href=&quot;http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/&quot;&gt;generator&lt;/a&gt; that spits out 64x64 sprites, a stark contrast from the typical tilesheet sizes of 16x16 per tile.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_4.png&quot; style=&quot;max-width: 200px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;My player character&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;My player character | Source: Me&lt;/p&gt;
+
+&lt;p&gt;So, I wrote a &lt;a href=&quot;https://github.com/jameshi16/failedgame/blob/master/src/assets/imgs/16px_by_16px_1px_spacing.py&quot;&gt;Python script&lt;/a&gt; to standardize the format of all the tilesheets (luckily I only had two variants of tilesheets). To standardize the scaling between the sprites and the tilesheets, I had a few options:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Scale the 64x64 sprite down to 32x32 pixels;&lt;/li&gt;
+  &lt;li&gt;Scale 16x16 tilesheets up to 32x32 pixels;&lt;/li&gt;
+  &lt;li&gt;Scale by transforming in the game.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; The reason why I wanted the sprite size (intended: 32x32) to be larger than the tilesize (intended: 16x16) is because the sprite looks tiny compared to its environment if I scaled it down to 16x16 pixels.
+&lt;img src=&quot;/images/20201006_5.png&quot; style=&quot;max-width: 200px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Tiny player&quot; /&gt;&lt;/p&gt;
+  &lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Tiny player | Source: Me&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I chose option 3 to avoid the effects of scaling artifacts, and make the game play nice with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Scene&lt;/code&gt;’s zooming functionality. In the end, sprites were effectively 32x32 pixels, tiles were effectively 16x16 pixels, with the camera zoomed in by 2.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-3-resourcemanager&quot;&gt;Problem 3: ResourceManager&lt;/h3&gt;
+
+&lt;p&gt;If you looked at the Git commit history, I tried making a resource maanger at one point, because I was concerned about memory usage. But after spending approximately 24 manhours on it, I gave up and decided to let Phaser take the wheel.&lt;/p&gt;
+
+&lt;p&gt;The factors for consideration to drop &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ResourceManager&lt;/code&gt; were:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;My game was going to be small; all the resources loaded in memory together would definitely be less than 100MB;&lt;/li&gt;
+  &lt;li&gt;I have no need to handle large levels, or many levels at once. Moreover, by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Scene&lt;/code&gt; correctly, scenes that are destroyed &lt;em&gt;probably&lt;/em&gt; also destroys any unused resources;&lt;/li&gt;
+  &lt;li&gt;It was eating up a lot of time that I could have spent elsewhere.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In a nutshell, bad decisions led to crazy amount of work with no visible benefits!&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-4-sprite-spawns-in-the-middle-of-two-tiles&quot;&gt;Problem 4: Sprite spawns in the middle of two tiles&lt;/h3&gt;
+
+&lt;p&gt;If you recall from “Problem 2”, my sprites have a size of 32x32, while the tiles are 16x16. Hence, the sprite spawns like this on the tilemap by default:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_8.png&quot; style=&quot;max-width: 200px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Sprite in the middle of tiles&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Middle of two tiles | Source: Me&lt;/p&gt;
+
+&lt;p&gt;To fix this problem, I shifted the origin point of the sprite in the code. Apparently, the origin point is defined as the fraction of the full width/height of one frame in the sprite. In other words:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_9.png&quot; style=&quot;max-width: 200px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;0.25 from x, and 0.125 from y&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Origin points | Source: Me&lt;/p&gt;
+
+&lt;p&gt;Believe it or not, this took me a while to figure out, because I was trying to determine the origin points by visualizing it in my head. In hindsight, drawing a simple diagram like the above would have saved me lots of trouble.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-5-discrete-movement&quot;&gt;Problem 5: Discrete movement&lt;/h3&gt;
+
+&lt;p&gt;As one may recall, I wanted my sprite to have the “Classic RPG movement” feel.&lt;/p&gt;
+
+&lt;p&gt;However, by default, you are expected to use the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.setVelocity&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.setAcceleration&lt;/code&gt; functions for anything related to movement. Our character hence moves in a continuous manner, and can stop at any arbitrary position. In other words, we see the following behaviour for movement:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_1.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 4px auto; display: block&quot; alt=&quot;Precise movement&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Character stops anywhere | Source: Me&lt;/p&gt;
+
+&lt;p&gt;To implement the behaviour that I wanted, I had to snap the sprite to the correct tile &lt;em&gt;during&lt;/em&gt; &lt;strong&gt;and&lt;/strong&gt; &lt;em&gt;after&lt;/em&gt; movement. One method I tried was to set the velocity of the sprite to a multiple of a tile’s length, and as soon as the input key is released, stop the sprite at the nearest multiple. This meant that I could define velocity in terms of tiles.&lt;/p&gt;
+
+&lt;p&gt;When I implemented the solution, it seemed to have worked - however, as time progresses, the sprite drifts by a tiny bit:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_6.gif&quot; style=&quot;max-width: 800px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Sprite drifting&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Sprite drifting | Source: Me&lt;/p&gt;
+
+&lt;p&gt;The subsequent no-brainer fix is to try and “snap” the sprite to the tile at the end of every movement, but this occurs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_7.gif&quot; style=&quot;max-width: 800px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;???&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Sprite rubber-banding + extraneous movement | Source: Me&lt;/p&gt;
+
+&lt;p&gt;The sprite sometimes experiences rubber-banding, and may walk an extra tile!&lt;/p&gt;
+
+&lt;p&gt;Hence, I was forced to remove my reliance on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.setVelocity&lt;/code&gt;, and instead used my own method to move the player. Here is how it works:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;When a direction input is received, a movement function is added to a map (the map key being a representation of the sprite);&lt;/li&gt;
+  &lt;li&gt;Every call to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update()&lt;/code&gt; calls the relevant movement functions with the time delta (for me, this is every 16 milliseconds) since the last call to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update()&lt;/code&gt;;&lt;/li&gt;
+  &lt;li&gt;In the movement function, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.setPosition&lt;/code&gt; will be used to move the player forward, based on the time step, desired velocity, and whether the change in position will go beyond the boundry of two tiles. If it does, the player is moved to the tile instead of beyond the tile;&lt;/li&gt;
+  &lt;li&gt;In the absence of a direction input, the movement function removes itself from the map, stopping all movement.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You can find the implementation in &lt;a href=&quot;https://github.com/jameshi16/failedgame/blob/master/src/scripts/BaseScene.js#L222&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;src/scripts/BaseScene.js&lt;/code&gt;&lt;/a&gt;, which results in “smoother” tile-discrete movement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_2.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 4px auto; display: block&quot; alt=&quot;Classic RPG movement&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Classic RPG Movement | Source: Me&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-6-collision-detection&quot;&gt;Problem 6: Collision detection&lt;/h3&gt;
+
+&lt;p&gt;Phaser is great at collision detection. One can define groups, which can collide with other physics objects or groups, and provides a nice functional interface to handle events emitted by the collision to, say, reduce the player’s HP. Typically, if I wasn’t trying to achieve “Classic RPG movement”, I could have just used Phaser’s collision detection.&lt;/p&gt;
+
+&lt;p&gt;Why can’t I just use the built-in collision detection? Well, see for youself:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_10.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Oh no, we're no longer discrete!&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;No longer discrete | Source: Me&lt;/p&gt;
+
+&lt;p&gt;The sprite collides with the blocking tile, and moves &lt;em&gt;ever so slightly&lt;/em&gt; into the tile. This, plus my custom solution to detect movement, renders Phaser’s collision detection unusable. To fix this problem, I can either:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Increase/decrease the size of the hitbox using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.setSize&lt;/code&gt; (or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phaser.Physics.Arcade.Sprite.input.hitArea.setSize&lt;/code&gt;, but I didn’t do this);&lt;/li&gt;
+  &lt;li&gt;Write my own collision routine.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;While setting the size of the hitbox did mitigate the issue somewhat, I didn’t want the hitbox to be at the position I set it to be (i.e. at the bottom), because I still wanted the sprite to receive arrow damage when skeletons headshot the sprite. Hence, I decided to write my own collision routine.&lt;/p&gt;
+
+&lt;p&gt;I figured that in a game where all movement is discrete, it’ll be waste of resources to calculate hitbox intersections - instead, I decided to just check the tile before the sprite, in whichever direction the sprite is facing. So:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;If a sprite is facing left, check if (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.x - TILESIZE&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.y&lt;/code&gt;) has a blocking tile;&lt;/li&gt;
+  &lt;li&gt;If a sprite is facing right, check if (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.x + TILESIZE&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.y&lt;/code&gt;) has a blocking tile;&lt;/li&gt;
+  &lt;li&gt;If a sprite is facing up, check if (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.x&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.y - TILESIZE&lt;/code&gt;) has a blocking tile;&lt;/li&gt;
+  &lt;li&gt;If a sprite is facing down, check if (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.x&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sprite.y + TILESIZE&lt;/code&gt;) has a blocking tile.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;A sub-problem I faced as I implemented my own collision detection was how co-ordinates are calculated by Phaser - which is wherever the origin point is. As you recall, the origin point is at the top-left of the sprite, meaning that I had to translate the co-ordinates to the bottom of the sprite before I could perform collision detection.&lt;/p&gt;
+
+&lt;p&gt;After accounting for some annoying 1px-off errors, the result is proper collision detection:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_11.gif&quot; style=&quot;max-width: 300px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Good moves!&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Good moves! | Source: Me&lt;/p&gt;
+
+&lt;p&gt;With my own collision detection method with tiles, I could then use Phaser’s accurate collision detection with projectiles and other sprites by reducing the sprite hitbox to 16px by 32px. All clear :thumbsup:.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-7-a-search-algorithm&quot;&gt;Problem 7: A* Search Algorithm&lt;/h3&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://www.geeksforgeeks.org/a-search-algorithm/&quot;&gt;A* Search Algorithm&lt;/a&gt; is a graph-traversal algorithm that finds the optimal (based on heuristics) path to a destination point from a source point.&lt;/p&gt;
+
+&lt;p&gt;When I first read about the A* Search Algorithm, I thought it had to be some kind of alien magical algorithm that could somehow find a path that avoids obstacles using complex mathematical equations that was way out of my league. Well, that was until I paused my Hololive stream and actually read what it was about, and how the algorithm worked.&lt;/p&gt;
+
+&lt;p&gt;Turns out, it was way simpler than I thought; I implemented a version in Python relatively quickly. Essentially, the A* Search Algorithm calculates a score based on heuristics (which is just a distance function you choose based on your application) and distance from the source point for the eight squares around the point in question, starting from the source point. The algorithm then moves on the next point with the least score from the source point, and repeats the score calculation. It’s a little hard to describe with words, so here is a GIF:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_12.gif&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;A* Search Algorithm&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;A&amp;#42; Search Algorithm | Source: &lt;a href=&quot;https://stackoverflow.com/a/21908165&quot;&gt;Greg Jennings &amp;amp; qiao&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Two list-like data structures are involved in the A* Search Algorithm, the open list (to be searched), and the closed list (already seached / blocked). These lists benefit the most from a heap with the score determining its position in the tree, where the lowest score is on top of the heap (i.e. min-heap). A heap can be implemented with a binary tree.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, there is a need to quickly obtain the existence of points within the two lists during the execution of the A* Search Algorithm; in a heap, searching for keys would have a time complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;, which is not great. To mitigate this problem, we introduce a companion hash table, which has a search time complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;. Hence, if I decided to use a heap + hash table, insertion would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log n)&lt;/code&gt;, search would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;, deletion would be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log n)&lt;/code&gt;, and cancer would be cured.&lt;/p&gt;
+
+&lt;p&gt;For some reason, I decided to go with a heap + binary search tree. Don’t ask me why, but that’s how I did it; I probably thought something along the lines of: they’re both binary trees, so why not :man_shrugging:. This meant that insertion is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log n)&lt;/code&gt;, search is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log n)&lt;/code&gt; and deletion is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(log n)&lt;/code&gt; at best - I reap what I sow!&lt;/p&gt;
+
+&lt;p&gt;One last thing about the A* Search Algorithm and its applications: in typical games made by studios, map sizes are huge. Hence, it might not be wise to run the entire algorithm for every path-taking object in the game; instead, splicing the path after the first path search is a good idea. &lt;a href=&quot;http://theory.stanford.edu/~amitp/GameProgramming/MovingObstacles.html&quot;&gt;Here&lt;/a&gt; is an article that explains how to deal with moving obstacles effectively while consuming not-so-much CPU cycles every call to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update()&lt;/code&gt; with any graph search algorithm. As my game is small (and I need to get this done quickly), I decided to ignore optimizing the algorithm for larger maps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_13.gif&quot; style=&quot;max-width: 700px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Pathfinding ingame&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Pathfinding in-game | Source: Me&lt;/p&gt;
+
+&lt;p&gt;The path-finding you see in the GIF also included logic for the skeleton to stand still after having line of sight with the player.&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-8-rendering-issues&quot;&gt;Problem 8: Rendering issues&lt;/h3&gt;
+
+&lt;p&gt;Thinking that I’ve resolved most of the problems, I decided to make a new map that will actually be included in the game. After having a jolly-good time of mapping, I loaded it up in the game and saw this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_14.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Game glitch?&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;The tiles are glitching? | Source: Me&lt;/p&gt;
+
+&lt;p&gt;In hindsight, the problem was very simple - but troubleshooting the problem as it occurred was a pain in the neck. I initially thought it was a tilesheet problem, so I examined the tilesheet on an image editor and didn’t find anything. Then, I changed the renderer to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CANVAS&lt;/code&gt; rending instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AUTO&lt;/code&gt; (which defaults to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WEBGL&lt;/code&gt;). Then, I changed tilesheets, changed zoom settings, and rescaled things. None of these solutions worked.&lt;/p&gt;
+
+&lt;p&gt;Giving up, I searched DuckDuckGo for “Tile glitch Phaser 3” and “Black gaps tile Phaser 3”, but found no solutions that worked. After several days of frustruation, I searched my problem on &lt;em&gt;Google&lt;/em&gt; instead, and no thanks to DuckDuckGo, I finally found leads. Of all the possible solutions, &lt;a href=&quot;https://www.html5gamedevs.com/topic/38035-zooming-with-tilemaps/&quot;&gt;this thread&lt;/a&gt; eventually led me to a solution that worked.&lt;/p&gt;
+
+&lt;p&gt;The problem was known as tile-bleeding, and could be fixed by extruding the tiles on the tilesheet by 1 pixel. I would then read the tiles off the tilesheets as 16px by 16px tiles with 1px spacing and margin. The tool that was included in the forum thread didn’t install right for me (probably a missing package or something, I was running out of time to check), so I decided to write my own using the &lt;a href=&quot;https://pillow.readthedocs.io/en/stable/&quot;&gt;Pillow&lt;/a&gt; library. The &lt;a href=&quot;https://github.com/jameshi16/failedgame/blob/master/src/assets/imgs/16px_by_16px_tile_bleed.py&quot;&gt;code&lt;/a&gt; is available in the &lt;a href=&quot;https://github.com/jameshi16/failedgame&quot;&gt;FailedGame repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;After importing the image, and updating the configuration on Tiled, the map editor, the result is a game with no rendering artifacts.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201006_15.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Yay, it's fixed&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Fixed | Source: Me&lt;/p&gt;
+
+&lt;h3 id=&quot;problem-9-times-up&quot;&gt;Problem 9: Time’s up&lt;/h3&gt;
+
+&lt;p&gt;And with that, I ran out of time to deliver the project to my friend. I congratulated him for being born, and asked for a few extra days - unfortunately, the purpose of the game was lost as the significant day passed.&lt;/p&gt;
+
+&lt;p&gt;Hence, I decided to abandon the project. FailedGame had projectile parrying, skeleton slaying, skeleton shooting, collision detection, NPC pathfinding and an initial map. R.I.P FailedGame.&lt;/p&gt;
+
+&lt;p&gt;This won’t be the first time I’m abandoning a project, neither will it be the last - I hope to eventually be capable of delivering projects at breakneck speeds, even if it involved 8 (or 9 if you include me watching Hololive streams like a addicted lunatic) apostles of time wasters. However, through the experience of developing the game, I’ve learned a lot - from setting up a webpack project from scratch, to various issues around using a tool &lt;em&gt;not&lt;/em&gt; designed for its purpose, to learning how to accept defeat and move on.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;What a ride! I hope the content of the blog post has been as engaging to you as it was for me to write - I paused my Hololive stream for this!&lt;/p&gt;
+
+&lt;p&gt;If you would like to try your hand at making games that is &lt;em&gt;not&lt;/em&gt; a Classic JRPG, do give &lt;a href=&quot;https://photonstorm.github.io/phaser3-docs/index.html&quot;&gt;Phaser&lt;/a&gt; a try. It is a powerful game framework that’ll bootstrap your way to an awesome indie title! If you’re not looking to make a game, then I hope my takeaways for the A* Search Algorithm, and my setting up of a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webpack&lt;/code&gt; project without a pre-configured template gave you some insights; although I do apologize for the quality of those insights, since it’s from a complete novice like me.&lt;/p&gt;
+
+&lt;p&gt;Other than that, please subscribe to my RSS feeds! If you like anime, subscribe to the &lt;a href=&quot;/feed/anime.xml&quot;&gt;Anime RSS feed&lt;/a&gt;, if you like technical content, subscribe to the &lt;a href=&quot;/feed.xml&quot;&gt;main RSS feed&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Until next time, Ciao!&lt;/p&gt;
+
+&lt;p&gt;Happy coding&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="game" /><category term="game" /><category term="javascript" /><category term="phaser" /><summary type="html">Yo! It’s been a while.</summary></entry><entry><title type="html">TypeSound (Developer)</title><link href="https://codingindex.xyz/2020/08/20/typesound-dev/" rel="alternate" type="text/html" title="TypeSound (Developer)" /><published>2020-08-20T04:00:00+00:00</published><updated>2020-08-20T04:00:00+00:00</updated><id>https://codingindex.xyz/2020/08/20/typesound-dev</id><content type="html" xml:base="https://codingindex.xyz/2020/08/20/typesound-dev/">&lt;p&gt;This is the development commentary blog post for &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt;, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the &lt;a href=&quot;/2020/08/20/typesound&quot;&gt;previous blog post&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Unexpectedly, I had to make quite a number of decisions during this project, something I wanted to avoid doing when making a &lt;em&gt;meme&lt;/em&gt; tool like TypeSound. The main issues are:&lt;/p&gt;
 &lt;ol&gt;
@@ -1484,124 +1748,4 @@ the greeter executable - screen is 0,0, drawing 0,0 login screen
 
 &lt;p&gt;Happy coding,&lt;/p&gt;
 
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="job" /><category term="code" /><summary type="html">Part 1</summary></entry><entry><title type="html">Interview Experience</title><link href="https://codingindex.xyz/2019/06/19/interview-experiences/" rel="alternate" type="text/html" title="Interview Experience" /><published>2019-06-19T01:00:00+00:00</published><updated>2019-06-19T01:00:00+00:00</updated><id>https://codingindex.xyz/2019/06/19/interview-experiences</id><content type="html" xml:base="https://codingindex.xyz/2019/06/19/interview-experiences/">&lt;p&gt;Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.&lt;/p&gt;
-
-&lt;p&gt;I was a little excited to do that at first, but I was not prepared to get spoonfed the answer as soon as I took too long to think. For context, my problem statement was this: “Find the next number, greater than the current number, for any number on a Binary Search Tree.”&lt;/p&gt;
-
-&lt;p&gt;Looking at the problem, I decided that I could solve it with a simple traversal-based algorithm, which caused my interviewer to raise his eyebrow, questioning my programming experience I have developed over the years. Turns out, that was not the solution he had in mind; he thought of a solution which involved &lt;em&gt;both&lt;/em&gt; Binary Search Tree and Binary Search (a wonder why they share similar names, huh?).&lt;/p&gt;
-
-&lt;p&gt;Back then, I didn’t really push to let my solution through, because he was the interviewer, and he dictated the interview room. Hence, when I took too long to solve the problem, he started to guide me by asking me to traverse the tree, insert the elements into a list, then use binary search, then add one to the pointer. Once I understood what he was doing, he asked me to only implement a simple binary search algorithm. However, when I returned home, I quickly wrote down his solution and compiled it; then, I wrote down what I would have wrote on the whiteboard if he didn’t stop me, and it turns out, my solution would work as well. In fact, mine will have better time &lt;strong&gt;and&lt;/strong&gt; space complexity, because his solution involves two algorithms: Binary Search Tree traversal, and Binary Search, while mine only does Binary Search Tree traversal. His solution requires an extra list, while mine doesn’t, hence the claim for a better space complexity. However, in terms of the Big-O notation, we would (annoyingly) have the same complexity for both time and space. The full code for the interviewer and myself can be found &lt;a href=&quot;https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Problem statement: Find the next number, greater than the current number, for any number on a Binary Search Tree&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;For the purposs of this blog post, I will trim away all the excess code. Have a look at the following snippet:&lt;/p&gt;
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sorted_it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-	&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sorted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sorted_it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;binarySearchNext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-	&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//next element cannot exist&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//get middle everytime&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-			&lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;	
-
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//can't even find the element&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;This was the interviewer’s answer to the problem statement. To use this snippet, you will need to call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse(parent_node)&lt;/code&gt;, and then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;binarySearchNext(sorted, 8, element)&lt;/code&gt;. We are using in-order traversal, and you can see that during the traversal, values get added into an array, making a sorted array. A binary search is then performed on the array, and when the element is found, we add one to the iterator, returning us the next number. As a reminder, a traversal in a Binary Search Tree has the time complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;, and Binary Search has the time complexity of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O( log(n) )&lt;/code&gt;. In terms of space complexity, the whole algorithm takes up &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;With that, let’s have a look at my possible answer:&lt;/p&gt;
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//answer will be here &lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findNextElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;traverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-	
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To use this snippet, you need to call &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;findNextElement(parent_node, element)&lt;/code&gt;. If you look closely, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;findNextElement&lt;/code&gt; is simply a wrapper function around &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt;, and tries to understand the output of the algorithm by inspecting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;element_found&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nextElementNode&lt;/code&gt;. Hence, the bulk of the work is done on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; function. The difference between the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;traverse&lt;/code&gt; function in my snippet, versus the snippet representing the interviewer’s answer, is that my traverse has a few extra lines of code, namely:&lt;/p&gt;
-&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element_found&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;nullptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;nextElementNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent_node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;This small block of code will assign the node to itself whenever &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;element_found&lt;/code&gt; is true, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nextElementNode&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nullptr&lt;/code&gt;. This is strategically placed &lt;em&gt;after&lt;/em&gt; traversing the left side of the node and &lt;em&gt;before&lt;/em&gt; checking the current node with the supplied value, so that if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;num&lt;/code&gt; is the last traversed element in the left side of the tree, then the recursive function will return all the way up to the parent node, making the parent node the next number to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;num&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;As you can see, this method only involves traversing, which hence makes the time complexity of the algorithm &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt; only. In terms of space complexity, my solution is also &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Some of the sharper ones among you realized something: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;? Wait, doesn’t that make linear search on the constructing list the same space-time complexity as both of these overly complicated algorithms?&lt;/p&gt;
-
-&lt;p&gt;Yes.&lt;/p&gt;
-
-&lt;p&gt;Yes it does.&lt;/p&gt;
-
-&lt;p&gt;We don’t do that here.&lt;/p&gt;
-
-&lt;p&gt;Although, you are right. A simple linear search, looking for the minimum of all the greater elements than the element we are searching for would have sufficed, and be as equally efficient.&lt;/p&gt;
-
-&lt;p&gt;Once again, the snippet is at this link: &lt;a href=&quot;https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1&quot;&gt;https://gist.github.com/jameshi16/8b2a6483ae2d304070fd35f5b4004ad1&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Do try and correct me if I’m wrong on any part of this blog post, because, I have no idea what I’m actually doing. All I know is that my algorithm is a strong contender to the algorithm he suggested.&lt;/p&gt;
-
-&lt;p&gt;I have another interview coming up soon, so you can probably expect a blog post from that too :new_moon_with_face:.&lt;/p&gt;
-
-&lt;p&gt;Until then:&lt;/p&gt;
-
-&lt;p&gt;Happy Coding,&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;
-
-&lt;p&gt;P.S. &lt;a href=&quot;/2019/06/19/interview-experiences-part-2/&quot;&gt;Part 2&lt;/a&gt;&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="code" /><summary type="html">Recently, I was interviewed for few internships in the same company. It so happened that these interviews are technically-inclined interviews, which menat whiteboard programming.</summary></entry></feed>
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="job" /><category term="code" /><summary type="html">Part 1</summary></entry></feed>

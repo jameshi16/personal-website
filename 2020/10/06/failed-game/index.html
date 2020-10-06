@@ -1,0 +1,325 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Yo! It’s been a while.I’ve been falling into the Hololive rabbit hole for a while now, going as far as to create one of my more “interesting” creations called 匚ㄩ尺丂乇ᗪ 爪ㄖㄖ几尺ㄩ几乇丂.Luckily for you, my readers, this shall not be the main point of discussion for this blog post. Instead, let’s talk about..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important; width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">I tried to make a game...</h1>
+      <p class="text-gray mb-5">Published Oct 06, 2020 15:30</p>
+      
+  <div class="article">
+    <p>Yo! It’s been a while.</p>
+
+<p>I’ve been falling into the <a href="https://www.youtube.com/channel/UCJFZiqLMntJufDCHc6bQixg">Hololive</a> rabbit hole for a while now, going as far as to create one of my more “interesting” creations called <a href="https://github.com/jameshi16/cursed_moonrunes">匚ㄩ尺丂乇ᗪ 爪ㄖㄖ几尺ㄩ几乇丂</a>.</p>
+
+<p>Luckily for you, my readers, this shall not be the main point of discussion for this blog post. Instead, let’s talk about <a href="https://github.com/jameshi16/failedgame">FailedGame</a>.</p>
+
+<hr>
+
+<h1 id="failedgame">FailedGame</h1>
+
+<p>For about a month, I worked on <a href="https://github.com/jameshi16/failedgame">FailedGame</a>, which I planned to finish before a certain day in September.</p>
+
+<p>You see, it was going to be my friend’s, <a href="https://modelconverge.xyz">ModelConverge</a>’s, birthday. Typically, you would buy the birthday person a material gift, like a card, or a letter, or something. However, I wanted my gift to be special - something made from my skills. Weeks ago, my friend created a faithful MIDI soundtrack of a song he liked, and excitedly got me to listen to it. That was when I got the idea to incorporate it into some sort of a birthday gift, where I eventually settled to make a game.</p>
+
+<p>Turns out, making a game was a lot harder than I thought. I made a few mistakes at the start of development that snowballed into huge issues that forced me to give up development of the project, and deliver nothing to my friend. Another possible cause could be my attempt at multi-tasking between watching Hololive streams while programming; I’m the type that must have silence to focus and get anything done.</p>
+
+<h2 id="the-plan">The plan</h2>
+
+<p>The game would be a 2D RPG, much like those you can create using tools like <a href="https://www.rpgmakerweb.com/">RPG Maker</a>. I wanted the movement to emulate the old classic RPG movement, i.e. the character will always move in integral unit of tiles, i.e. I don’t want “precise movement”.</p>
+
+<div class="d-flex flex-md-row flex-column flex-justify-center">
+<div style="margin: 0 4px">
+<img src="/images/20201006_1.gif" style="max-width: 300px; width: 100%; margin: 4px auto; display: block" alt="Precise movement">
+<p class="text-center text-gray lh-condensed-ultra f6">Precise Movement | Source: Me</p>
+</div>
+
+<div style="margin: 0 4px">
+<img src="/images/20201006_2.gif" style="max-width: 300px; width: 100%; margin: 4px auto; display: block" alt="Classic RPG movement">
+<p class="text-center text-gray lh-condensed-ultra f6">Classic RPG Movement | Source: Me</p>
+</div>
+</div>
+
+<p>Furthermore, I wanted the combat system to be as interactive as possible; meaning, no turn-based battle system. Something like this (low quality GIF warning):</p>
+
+<p><img src="/images/20201006_3.gif" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Cutting arrows then cutting skeletons"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Killing skeletons on the fly | Source: Me</p>
+
+<p>In terms of story, it was supposed to go like this:</p>
+
+<ol>
+  <li>Main character is returning home from work;</li>
+  <li>Main character enters the house, which is dark at first, then the lights are toggled, and surprise! Birthday cake on the table;</li>
+  <li>After some time, a ninja will appear and steal the cake;</li>
+  <li>Main character then chases the ninja to a forest, fighting hordes of Skeletons and Zombies through a maze;</li>
+  <li>Main character then fights the ninja, who reveals that he is an alter-ego of the main character’s personality;</li>
+  <li>Song made by friend plays, and an epic boss battle ensues.</li>
+</ol>
+
+<p>Well, supposed to. The lack of a GIF here should imply that I didn’t get nearly as far.</p>
+
+<hr>
+
+<h2 id="so-what-went-wrong">So, what went wrong?</h2>
+
+<p>As mentioned before, most of the things that went wrong happened right at the start - I chose the wrong game framework to work with.</p>
+
+<p>To develop this game, I used the <a href="https://phaser.io/">Phaser 3</a> game framework. Phaser 3 is an extremely powerful framework with an amazing physics engine, collision detection, resource management, texture management, and so on. It even has a fallback mechanism for rendering and hence works on almost any platform that supports a browser and JavaScript. Furthermore, it’s open-source and has an extensive API documentation, alongside a large community.</p>
+
+<p>“So…” I hear you ask. “What’s wrong with an extremely powerful game framework?”</p>
+
+<p>At the start, I had no doubt in my mind that Phaser would be sufficient for my needs, as it could practically do everything imaginable - however, problems came when I tried to <em>limit</em> the vast capabilities of the Phaser framework. In other words, the issue does not lie in the game framework itself - the issue lies in what I was <em>trying</em> to do.</p>
+
+<p>You see, in Phaser 3, you can create sprites and let them interact with the world via physics in a short amount of time: if you go through <a href="https://phaser.io/tutorials/making-your-first-phaser-3-game">their tutorial</a>, you’d create a 2D platformer complete with ball physics, collision detection with the world, and a scoring system. From the surface, Phaser was a perfect fit, as I wanted my sprite to collide with certain tiles in the world, the world boundary and have particle physics when I cast spells; much like what is accomplished in the tutorial.</p>
+
+<p>Hence, I chose to use the physics engine that came with Phaser, and decided to make an Arcade (Phaser lingo for stuff-affected-by-physics) type game. And ho boy, did that create a plethora of problems for me.</p>
+
+<h3 id="problem-1-setting-up-the-project">Problem 1: Setting up the project</h3>
+
+<p>I <em>know</em> that there is a <a href="https://github.com/photonstorm/phaser3-project-template">Phaser 3 Project Template</a> for webpack setup. But, FailedGame was an educational project, so I decided to set it up mostly from scratch. This meant installing and configuring webpack, babel, and the relevant loaders required for the project. If you have looked at the source, you would realize that there is no <code class="language-plaintext highlighter-rouge">.html</code> file - that’s the work of the <a href="https://webpack.js.org/plugins/html-webpack-plugin/"><code class="language-plaintext highlighter-rouge">HtmlWebpackPlugin</code></a>, which automatically generates one based on the contents of <code class="language-plaintext highlighter-rouge">index.js</code>. <em>I did that</em>.</p>
+
+<p>Learning how to configure webpack and babel from scratch taught me to appreciate tools like <code class="language-plaintext highlighter-rouge">npx create-react-app</code>; in the modern ecosystem of JavaScript frameworks, boilerplate configuration is time-consuming and aggravating. This <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">post</a> describes what needs to be in a typical JavaScript developer’s toolchain, how volatile knowledge is in the JavaScript world, and how annoying it feels to do something simple in JavaScript.</p>
+
+<p>If FailedGame wasn’t an educational project, the best option would have been to use the CDN version of Phaser 3, followed by using the Project Template, followed by doing… whatever I’ve done here.</p>
+
+<p>You can see the configurations I’ve created in the <a href="https://github.com/jameshi16/failedgame">repository</a> - I’m sure there are many mistakes in the configuration, but I’ve tried separating the dev environment configuration and the production environment configuration, albiet by the difference of an <code class="language-plaintext highlighter-rouge">inline-source-map</code> versus a <code class="language-plaintext highlighter-rouge">source-map</code>. To understand why it is viable to include a source map in production, read <a href="https://css-tricks.com/should-i-use-source-maps-in-production/">this article</a>; it boils down to “it’s easier to debug &amp; find out where a problem is in production”.</p>
+
+<h3 id="problem-2-sizes-mismatch">Problem 2: Sizes mismatch</h3>
+
+<p>If you know me in real life, I failed art in Secondary School. I have an artistic score lower than absolute zero, which should be impossible but ¯\_(ツ)_/¯. This essentially means that I can’t make tilesheets, draw sprites, make projectiles, or even make music (I know nuts about music). Hence, I needed to find online resources, like <a href="https://opengameart.org/">OpenGameArt</a>; you can find the exact tilesheets I used in the <a href="https://github.com/jameshi16/failedgame">Github repo</a>.</p>
+
+<p>An issue with crowd-sourcing is that sometimes, you get tilesheets that seem to practice individualism - they have different tile sizes, spacing, margin, etc. The disparity between these tilesheets should be rectified somehow, making the task seem like the data cleaning stage before feeding image inputs into a machine learning model. Furthermore, I obtained my sprites from a <a href="http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/">generator</a> that spits out 64x64 sprites, a stark contrast from the typical tilesheet sizes of 16x16 per tile.</p>
+
+<p><img src="/images/20201006_4.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="My player character"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">My player character | Source: Me</p>
+
+<p>So, I wrote a <a href="https://github.com/jameshi16/failedgame/blob/master/src/assets/imgs/16px_by_16px_1px_spacing.py">Python script</a> to standardize the format of all the tilesheets (luckily I only had two variants of tilesheets). To standardize the scaling between the sprites and the tilesheets, I had a few options:</p>
+
+<ol>
+  <li>Scale the 64x64 sprite down to 32x32 pixels;</li>
+  <li>Scale 16x16 tilesheets up to 32x32 pixels;</li>
+  <li>Scale by transforming in the game.</li>
+</ol>
+
+<blockquote>
+  <p><strong>NOTE:</strong> The reason why I wanted the sprite size (intended: 32x32) to be larger than the tilesize (intended: 16x16) is because the sprite looks tiny compared to its environment if I scaled it down to 16x16 pixels.
+<img src="/images/20201006_5.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Tiny player"></p>
+  <p class="text-center text-gray lh-condensed-ultra f6">Tiny player | Source: Me</p>
+</blockquote>
+
+<p>I chose option 3 to avoid the effects of scaling artifacts, and make the game play nice with <code class="language-plaintext highlighter-rouge">Phaser.Scene</code>’s zooming functionality. In the end, sprites were effectively 32x32 pixels, tiles were effectively 16x16 pixels, with the camera zoomed in by 2.</p>
+
+<h3 id="problem-3-resourcemanager">Problem 3: ResourceManager</h3>
+
+<p>If you looked at the Git commit history, I tried making a resource maanger at one point, because I was concerned about memory usage. But after spending approximately 24 manhours on it, I gave up and decided to let Phaser take the wheel.</p>
+
+<p>The factors for consideration to drop <code class="language-plaintext highlighter-rouge">ResourceManager</code> were:</p>
+<ul>
+  <li>My game was going to be small; all the resources loaded in memory together would definitely be less than 100MB;</li>
+  <li>I have no need to handle large levels, or many levels at once. Moreover, by using <code class="language-plaintext highlighter-rouge">Phaser.Scene</code> correctly, scenes that are destroyed <em>probably</em> also destroys any unused resources;</li>
+  <li>It was eating up a lot of time that I could have spent elsewhere.</li>
+</ul>
+
+<p>In a nutshell, bad decisions led to crazy amount of work with no visible benefits!</p>
+
+<h3 id="problem-4-sprite-spawns-in-the-middle-of-two-tiles">Problem 4: Sprite spawns in the middle of two tiles</h3>
+
+<p>If you recall from “Problem 2”, my sprites have a size of 32x32, while the tiles are 16x16. Hence, the sprite spawns like this on the tilemap by default:</p>
+
+<p><img src="/images/20201006_8.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Sprite in the middle of tiles"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Middle of two tiles | Source: Me</p>
+
+<p>To fix this problem, I shifted the origin point of the sprite in the code. Apparently, the origin point is defined as the fraction of the full width/height of one frame in the sprite. In other words:</p>
+
+<p><img src="/images/20201006_9.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="0.25 from x, and 0.125 from y"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Origin points | Source: Me</p>
+
+<p>Believe it or not, this took me a while to figure out, because I was trying to determine the origin points by visualizing it in my head. In hindsight, drawing a simple diagram like the above would have saved me lots of trouble.</p>
+
+<h3 id="problem-5-discrete-movement">Problem 5: Discrete movement</h3>
+
+<p>As one may recall, I wanted my sprite to have the “Classic RPG movement” feel.</p>
+
+<p>However, by default, you are expected to use the <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.setVelocity</code> or <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.setAcceleration</code> functions for anything related to movement. Our character hence moves in a continuous manner, and can stop at any arbitrary position. In other words, we see the following behaviour for movement:</p>
+
+<p><img src="/images/20201006_1.gif" style="max-width: 300px; width: 100%; margin: 4px auto; display: block" alt="Precise movement"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Character stops anywhere | Source: Me</p>
+
+<p>To implement the behaviour that I wanted, I had to snap the sprite to the correct tile <em>during</em> <strong>and</strong> <em>after</em> movement. One method I tried was to set the velocity of the sprite to a multiple of a tile’s length, and as soon as the input key is released, stop the sprite at the nearest multiple. This meant that I could define velocity in terms of tiles.</p>
+
+<p>When I implemented the solution, it seemed to have worked - however, as time progresses, the sprite drifts by a tiny bit:</p>
+
+<p><img src="/images/20201006_6.gif" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Sprite drifting"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Sprite drifting | Source: Me</p>
+
+<p>The subsequent no-brainer fix is to try and “snap” the sprite to the tile at the end of every movement, but this occurs:</p>
+
+<p><img src="/images/20201006_7.gif" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="???"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Sprite rubber-banding + extraneous movement | Source: Me</p>
+
+<p>The sprite sometimes experiences rubber-banding, and may walk an extra tile!</p>
+
+<p>Hence, I was forced to remove my reliance on <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.setVelocity</code>, and instead used my own method to move the player. Here is how it works:</p>
+<ol>
+  <li>When a direction input is received, a movement function is added to a map (the map key being a representation of the sprite);</li>
+  <li>Every call to <code class="language-plaintext highlighter-rouge">update()</code> calls the relevant movement functions with the time delta (for me, this is every 16 milliseconds) since the last call to <code class="language-plaintext highlighter-rouge">update()</code>;</li>
+  <li>In the movement function, <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.setPosition</code> will be used to move the player forward, based on the time step, desired velocity, and whether the change in position will go beyond the boundry of two tiles. If it does, the player is moved to the tile instead of beyond the tile;</li>
+  <li>In the absence of a direction input, the movement function removes itself from the map, stopping all movement.</li>
+</ol>
+
+<p>You can find the implementation in <a href="https://github.com/jameshi16/failedgame/blob/master/src/scripts/BaseScene.js#L222"><code class="language-plaintext highlighter-rouge">src/scripts/BaseScene.js</code></a>, which results in “smoother” tile-discrete movement.</p>
+
+<p><img src="/images/20201006_2.gif" style="max-width: 300px; width: 100%; margin: 4px auto; display: block" alt="Classic RPG movement"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Classic RPG Movement | Source: Me</p>
+
+<h3 id="problem-6-collision-detection">Problem 6: Collision detection</h3>
+
+<p>Phaser is great at collision detection. One can define groups, which can collide with other physics objects or groups, and provides a nice functional interface to handle events emitted by the collision to, say, reduce the player’s HP. Typically, if I wasn’t trying to achieve “Classic RPG movement”, I could have just used Phaser’s collision detection.</p>
+
+<p>Why can’t I just use the built-in collision detection? Well, see for youself:</p>
+
+<p><img src="/images/20201006_10.gif" style="max-width: 300px; width: 100%; margin: 0 auto; display: block;" alt="Oh no, we're no longer discrete!"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">No longer discrete | Source: Me</p>
+
+<p>The sprite collides with the blocking tile, and moves <em>ever so slightly</em> into the tile. This, plus my custom solution to detect movement, renders Phaser’s collision detection unusable. To fix this problem, I can either:</p>
+
+<ul>
+  <li>Increase/decrease the size of the hitbox using <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.setSize</code> (or <code class="language-plaintext highlighter-rouge">Phaser.Physics.Arcade.Sprite.input.hitArea.setSize</code>, but I didn’t do this);</li>
+  <li>Write my own collision routine.</li>
+</ul>
+
+<p>While setting the size of the hitbox did mitigate the issue somewhat, I didn’t want the hitbox to be at the position I set it to be (i.e. at the bottom), because I still wanted the sprite to receive arrow damage when skeletons headshot the sprite. Hence, I decided to write my own collision routine.</p>
+
+<p>I figured that in a game where all movement is discrete, it’ll be waste of resources to calculate hitbox intersections - instead, I decided to just check the tile before the sprite, in whichever direction the sprite is facing. So:</p>
+
+<ol>
+  <li>If a sprite is facing left, check if (<code class="language-plaintext highlighter-rouge">sprite.x - TILESIZE</code>, <code class="language-plaintext highlighter-rouge">sprite.y</code>) has a blocking tile;</li>
+  <li>If a sprite is facing right, check if (<code class="language-plaintext highlighter-rouge">sprite.x + TILESIZE</code>, <code class="language-plaintext highlighter-rouge">sprite.y</code>) has a blocking tile;</li>
+  <li>If a sprite is facing up, check if (<code class="language-plaintext highlighter-rouge">sprite.x</code>, <code class="language-plaintext highlighter-rouge">sprite.y - TILESIZE</code>) has a blocking tile;</li>
+  <li>If a sprite is facing down, check if (<code class="language-plaintext highlighter-rouge">sprite.x</code>, <code class="language-plaintext highlighter-rouge">sprite.y + TILESIZE</code>) has a blocking tile.</li>
+</ol>
+
+<p>A sub-problem I faced as I implemented my own collision detection was how co-ordinates are calculated by Phaser - which is wherever the origin point is. As you recall, the origin point is at the top-left of the sprite, meaning that I had to translate the co-ordinates to the bottom of the sprite before I could perform collision detection.</p>
+
+<p>After accounting for some annoying 1px-off errors, the result is proper collision detection:</p>
+
+<p><img src="/images/20201006_11.gif" style="max-width: 300px; width: 100%; margin: 0 auto; display: block;" alt="Good moves!"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Good moves! | Source: Me</p>
+
+<p>With my own collision detection method with tiles, I could then use Phaser’s accurate collision detection with projectiles and other sprites by reducing the sprite hitbox to 16px by 32px. All clear <img class="emoji" title=":thumbsup:" alt=":thumbsup:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20">.</p>
+
+<h3 id="problem-7-a-search-algorithm">Problem 7: A* Search Algorithm</h3>
+
+<p>The <a href="https://www.geeksforgeeks.org/a-search-algorithm/">A* Search Algorithm</a> is a graph-traversal algorithm that finds the optimal (based on heuristics) path to a destination point from a source point.</p>
+
+<p>When I first read about the A* Search Algorithm, I thought it had to be some kind of alien magical algorithm that could somehow find a path that avoids obstacles using complex mathematical equations that was way out of my league. Well, that was until I paused my Hololive stream and actually read what it was about, and how the algorithm worked.</p>
+
+<p>Turns out, it was way simpler than I thought; I implemented a version in Python relatively quickly. Essentially, the A* Search Algorithm calculates a score based on heuristics (which is just a distance function you choose based on your application) and distance from the source point for the eight squares around the point in question, starting from the source point. The algorithm then moves on the next point with the least score from the source point, and repeats the score calculation. It’s a little hard to describe with words, so here is a GIF:</p>
+
+<p><img src="/images/20201006_12.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="A* Search Algorithm"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A* Search Algorithm | Source: <a href="https://stackoverflow.com/a/21908165">Greg Jennings &amp; qiao</a></p>
+
+<p>Two list-like data structures are involved in the A* Search Algorithm, the open list (to be searched), and the closed list (already seached / blocked). These lists benefit the most from a heap with the score determining its position in the tree, where the lowest score is on top of the heap (i.e. min-heap). A heap can be implemented with a binary tree.</p>
+
+<p>Furthermore, there is a need to quickly obtain the existence of points within the two lists during the execution of the A* Search Algorithm; in a heap, searching for keys would have a time complexity of <code class="language-plaintext highlighter-rouge">O(n)</code>, which is not great. To mitigate this problem, we introduce a companion hash table, which has a search time complexity of <code class="language-plaintext highlighter-rouge">O(1)</code>. Hence, if I decided to use a heap + hash table, insertion would be <code class="language-plaintext highlighter-rouge">O(log n)</code>, search would be <code class="language-plaintext highlighter-rouge">O(1)</code>, deletion would be <code class="language-plaintext highlighter-rouge">O(log n)</code>, and cancer would be cured.</p>
+
+<p>For some reason, I decided to go with a heap + binary search tree. Don’t ask me why, but that’s how I did it; I probably thought something along the lines of: they’re both binary trees, so why not <img class="emoji" title=":man_shrugging:" alt=":man_shrugging:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f937-2642.png" height="20" width="20">. This meant that insertion is <code class="language-plaintext highlighter-rouge">O(log n)</code>, search is <code class="language-plaintext highlighter-rouge">O(log n)</code> and deletion is <code class="language-plaintext highlighter-rouge">O(log n)</code> at best - I reap what I sow!</p>
+
+<p>One last thing about the A* Search Algorithm and its applications: in typical games made by studios, map sizes are huge. Hence, it might not be wise to run the entire algorithm for every path-taking object in the game; instead, splicing the path after the first path search is a good idea. <a href="http://theory.stanford.edu/~amitp/GameProgramming/MovingObstacles.html">Here</a> is an article that explains how to deal with moving obstacles effectively while consuming not-so-much CPU cycles every call to <code class="language-plaintext highlighter-rouge">update()</code> with any graph search algorithm. As my game is small (and I need to get this done quickly), I decided to ignore optimizing the algorithm for larger maps.</p>
+
+<p><img src="/images/20201006_13.gif" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Pathfinding ingame"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Pathfinding in-game | Source: Me</p>
+
+<p>The path-finding you see in the GIF also included logic for the skeleton to stand still after having line of sight with the player.</p>
+
+<h3 id="problem-8-rendering-issues">Problem 8: Rendering issues</h3>
+
+<p>Thinking that I’ve resolved most of the problems, I decided to make a new map that will actually be included in the game. After having a jolly-good time of mapping, I loaded it up in the game and saw this:</p>
+
+<p><img src="/images/20201006_14.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Game glitch?"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">The tiles are glitching? | Source: Me</p>
+
+<p>In hindsight, the problem was very simple - but troubleshooting the problem as it occurred was a pain in the neck. I initially thought it was a tilesheet problem, so I examined the tilesheet on an image editor and didn’t find anything. Then, I changed the renderer to use <code class="language-plaintext highlighter-rouge">CANVAS</code> rending instead of <code class="language-plaintext highlighter-rouge">AUTO</code> (which defaults to <code class="language-plaintext highlighter-rouge">WEBGL</code>). Then, I changed tilesheets, changed zoom settings, and rescaled things. None of these solutions worked.</p>
+
+<p>Giving up, I searched DuckDuckGo for “Tile glitch Phaser 3” and “Black gaps tile Phaser 3”, but found no solutions that worked. After several days of frustruation, I searched my problem on <em>Google</em> instead, and no thanks to DuckDuckGo, I finally found leads. Of all the possible solutions, <a href="https://www.html5gamedevs.com/topic/38035-zooming-with-tilemaps/">this thread</a> eventually led me to a solution that worked.</p>
+
+<p>The problem was known as tile-bleeding, and could be fixed by extruding the tiles on the tilesheet by 1 pixel. I would then read the tiles off the tilesheets as 16px by 16px tiles with 1px spacing and margin. The tool that was included in the forum thread didn’t install right for me (probably a missing package or something, I was running out of time to check), so I decided to write my own using the <a href="https://pillow.readthedocs.io/en/stable/">Pillow</a> library. The <a href="https://github.com/jameshi16/failedgame/blob/master/src/assets/imgs/16px_by_16px_tile_bleed.py">code</a> is available in the <a href="https://github.com/jameshi16/failedgame">FailedGame repo</a>.</p>
+
+<p>After importing the image, and updating the configuration on Tiled, the map editor, the result is a game with no rendering artifacts.</p>
+
+<p><img src="/images/20201006_15.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Yay, it's fixed"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Fixed | Source: Me</p>
+
+<h3 id="problem-9-times-up">Problem 9: Time’s up</h3>
+
+<p>And with that, I ran out of time to deliver the project to my friend. I congratulated him for being born, and asked for a few extra days - unfortunately, the purpose of the game was lost as the significant day passed.</p>
+
+<p>Hence, I decided to abandon the project. FailedGame had projectile parrying, skeleton slaying, skeleton shooting, collision detection, NPC pathfinding and an initial map. R.I.P FailedGame.</p>
+
+<p>This won’t be the first time I’m abandoning a project, neither will it be the last - I hope to eventually be capable of delivering projects at breakneck speeds, even if it involved 8 (or 9 if you include me watching Hololive streams like a addicted lunatic) apostles of time wasters. However, through the experience of developing the game, I’ve learned a lot - from setting up a webpack project from scratch, to various issues around using a tool <em>not</em> designed for its purpose, to learning how to accept defeat and move on.</p>
+
+<hr>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>What a ride! I hope the content of the blog post has been as engaging to you as it was for me to write - I paused my Hololive stream for this!</p>
+
+<p>If you would like to try your hand at making games that is <em>not</em> a Classic JRPG, do give <a href="https://photonstorm.github.io/phaser3-docs/index.html">Phaser</a> a try. It is a powerful game framework that’ll bootstrap your way to an awesome indie title! If you’re not looking to make a game, then I hope my takeaways for the A* Search Algorithm, and my setting up of a <code class="language-plaintext highlighter-rouge">webpack</code> project without a pre-configured template gave you some insights; although I do apologize for the quality of those insights, since it’s from a complete novice like me.</p>
+
+<p>Other than that, please subscribe to my RSS feeds! If you like anime, subscribe to the <a href="/feed/anime.xml">Anime RSS feed</a>, if you like technical content, subscribe to the <a href="/feed.xml">main RSS feed</a>.</p>
+
+<p>Until next time, Ciao!</p>
+
+<p>Happy coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2020</p>
+			</div>
+		</footer>
+  </body>
+</html>
+
