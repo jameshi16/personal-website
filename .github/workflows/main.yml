@@ -17,8 +17,9 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2.1.3
         with:
-          path: ${{ env.workspace }}/vendor/bundle
-      - name: Install gems
+          path: ${{ github.workspace }}/vendor/bundle
+          key: gem_dependencies
+      - name: Install/Upgrade gems
         run: bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-${{ env.workspace }}}
       - name: Build website
         run: bundle exec jekyll build
