@@ -29,7 +29,10 @@ jobs:
           path: ${{ github.workspace }}/source/vendor/bundle
           key: gem_dependencies
       - name: Install/Upgrade gems
-        run: bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-/source/vendor/bundle}
+        run: |
+          cd ${{ github.workspace }}/source
+          bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-${{ github.workspace }}/source/vendor/bundle}
+          cd -
       - name: Build website
         run: |
           cd ${{ github.workspace }}/source
