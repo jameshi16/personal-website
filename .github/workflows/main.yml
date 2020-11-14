@@ -38,8 +38,8 @@ jobs:
           cd ${{ github.workspace }}/source
           bundle exec jekyll build
           cd -
-      - name: Copy built files to the built directoryy
-        run: mv ./source/_site/* ./built/
+      - name: Move built files to the built directoryy
+        run: (cd ./source/_site && tar c .) | (cd ./built && tar xf -)
       - name: Deploy
         uses: ./github/actions/pushToGithub/action.sh
         with:
