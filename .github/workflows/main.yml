@@ -26,9 +26,9 @@ jobs:
       - name: Copy built files to the right directory
         run: |
           TEMP_DIR=$(mktemp -d)
-          mv -r ./_site/* ${TEMP_DIR}
+          mv ./_site/* ${TEMP_DIR}
           git checkout gh-pages
-          mv -r ${TEMP_DIR}/* .
+          mv  ${TEMP_DIR}/* .
       - name: Deploy
         uses: ./github/actions/pushToGithub/action.sh
         with:
