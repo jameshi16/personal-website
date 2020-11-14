@@ -43,7 +43,5 @@ jobs:
       - name: Deploy
         uses: ./source/.github/actions/pushToGithub
         with:
-          github-token: ${{ secrets.TOKEN_GITHUB }}
-          username: ${{ github.repository_owner }}
           branch: gh-pages
           repository: ${{ github.repository }}.git

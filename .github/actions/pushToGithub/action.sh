@@ -7,5 +7,5 @@ git config user.name "CodingIndex Deploy"
 git config user.email "deploy@codingindex.xyz"
 git add .
 git commit -m "Deployment from GitHub runner"
-git push https://${USERNAME}:${GITHUB_TOKEN}@github.com/${REPOSITORY} gh-pages:${BRANCH}
+git push https://github.com/${REPOSITORY} gh-pages:${BRANCH}
 cd -

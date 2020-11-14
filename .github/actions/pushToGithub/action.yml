@@ -19,7 +19,5 @@ runs:
     - run: ${{ github.action_path }}/action.sh
       shell: bash
       env:
-        USERNAME: ${{inputs.username}}
-        GITHUB_TOKEN: ${{inputs.github-token}}
         BRANCH: ${{inputs.branch}}
         REPOSITORY: ${{inputs.repository}}
