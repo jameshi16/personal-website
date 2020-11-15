@@ -1,0 +1,234 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Why the move?In case you weren’t aware, the guys now in charge of Travis CI recently changed how their “free” plan worked. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine befor..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="bg-white height-full" style="background-color: #eeedde !important; width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Moving from Travis-CI to GitHub Actions</h1>
+      <p class="text-gray mb-5">Published Nov 15, 2020 00:30</p>
+      
+  <div class="article">
+    <h1 id="why-the-move">Why the move?</h1>
+
+<p>In case you weren’t aware, the guys <em>now</em> in charge of Travis CI recently <a href="https://www.theregister.com/2020/11/02/travis_ci_pricng/">changed how their “free” plan worked</a>. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine before you are forced to purchase a plan. Applying for additional free credits will be on a case-by-case basis.</p>
+
+<p>Putting aside my own personal thoughts on the matter, my personal website takes anywhere from 33 seconds to 4 minutes to compile depending on cache status. This means that I can only post 400 more blog posts before I run out of credits. Hence, I needed to find another way to build and deploy my website.</p>
+
+<p>Over the years, GitHub has evolved from being just another place for developers to dump their code, to a fuller suite of tools developers can use to create CI/CD pipelines from the code they create. I believe that this is a result of market demand, as a way to be competitive against platforms such as GitLab. GitHub’s offering, GitHub Actions, is another way to interact with code, issues, and pull requests without using web hooks or APIs.</p>
+
+<p>As a lone maintainer of my personal blog, I find it too cumbersome to submit an application to either GitLab or Travis CI to gain their open-source offerings for free CI runner minutes. Under GitHub Action’s pricing plans, public projects get to use GitHub Actions for free. There is no application process or a need to attach a credit card to your GitHub account - you just configure the right files, push them to the repository, and GitHub Actions will automatically kick into action. Furthermore, my blog is hosted on GitHub Pages, and the <a href="https://github.com/jameshi16/personal-website">source code</a> for it is also hosted on GitHub. Hence, GitHub actions was the most relevant choice of a CI/CD runner for me.</p>
+
+<blockquote>
+  <p>For those of you who have used Jekyll with GitHub pages before, possibly from <a href="https://github.com/github/personal-website">forking this repository</a>, you’d know that the GitHub Pages environment can actually directly deploy Jekyll websites. However, as mentioned in <a href="https://jekyllrb.com/docs/github-pages/#the-github-pages-gem">this documentation by Jekyll</a>, this only works with the <code class="language-plaintext highlighter-rouge">github-pages</code> gem. I personally use other gems, and hence I need a CI/CD runner to build and deploy my website.</p>
+</blockquote>
+
+<hr>
+
+<h1 id="how-i-moved">How I moved</h1>
+
+<p>I snooped around my <code class="language-plaintext highlighter-rouge">.travis.yml</code> and listed out the steps it took to build and deploy my website:</p>
+
+<ol>
+  <li>Get a Ruby &amp; Bundler environment</li>
+  <li>Install all the Gems listed in Gemfile or obtain them from the cache</li>
+  <li>Build the site</li>
+  <li>Deploy by pushing to <code class="language-plaintext highlighter-rouge">gh-pages</code>
+</li>
+</ol>
+
+<p>On Travis-CI, there are certain “magical” elements that abstracts away some elements of CI/CD. Hence, translating to GitHub Actions steps, the full list of steps would be:</p>
+
+<ol>
+  <li>Pull (with <code class="language-plaintext highlighter-rouge">--depth=1</code>) the website repository on the <code class="language-plaintext highlighter-rouge">master</code> branch</li>
+  <li>Pull (with <code class="language-plaintext highlighter-rouge">--depth=1</code>) the website repository on the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</li>
+  <li>Get a Ruby &amp; Bundler environment</li>
+  <li>Install all the Gems listed in Gemfile or obtain them from the cache</li>
+  <li>Build the site</li>
+  <li>Copy/Move the built site to the repository on the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch</li>
+  <li>Deploy by pushing to <code class="language-plaintext highlighter-rouge">gh-pages</code>.</li>
+</ol>
+
+<p>Defining the order of “steps” is essentially what a GitHub Actions workflow does. Hence, under <code class="language-plaintext highlighter-rouge">.github/workflows/main.yml</code>, I listed out the steps in YAML format:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="na">name</span><span class="pi">:</span> <span class="s">Build &amp; Deploy</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span> <span class="nv">master</span> <span class="pi">]</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">buildNdeploy</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout source</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">source</span>
+          <span class="na">ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">master'</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout built branch</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">built</span>
+          <span class="na">ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">gh-pages'</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Ruby environment</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">ruby/setup-ruby@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">ruby-version</span><span class="pi">:</span> <span class="m">2.5</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache dependencies</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/cache@v2.1.3</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">${{ github.workspace }}/source/vendor/bundle</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">gem_dependencies</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install/Upgrade gems</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">cd ${{ github.workspace }}/source</span>
+          <span class="s">bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-${{ github.workspace }}/source/vendor/bundle}</span>
+          <span class="s">cd -</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build website</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">cd ${{ github.workspace }}/source</span>
+          <span class="s">bundle exec jekyll build</span>
+          <span class="s">cd -</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Move built files to the built directory</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">./source/.github/actions/pushToGithub</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">branch</span><span class="pi">:</span> <span class="s">gh-pages</span>
+          <span class="na">repository</span><span class="pi">:</span> <span class="s">${{ github.repository }}.git</span>
+
+</code></pre></div></div>
+
+<p>Each “step” in a workflow could either run commands, like <code class="language-plaintext highlighter-rouge">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</code> or an action, like <code class="language-plaintext highlighter-rouge">actions/checkout@v2</code>. Steps are also capable of running in-repository actions, like <code class="language-plaintext highlighter-rouge">./source/.github/actions/pushToGithub</code>.</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</code> is a way to <em>update</em> files from one directory to another. The command is essentially piping the <code class="language-plaintext highlighter-rouge">tar</code> compressed version of all the files in one directory, then extracting that <code class="language-plaintext highlighter-rouge">tar</code> in another directory through a pipe. This piece of geek was found in <a href="https://askubuntu.com/a/269818">this StackOverflow post</a>.</p>
+</blockquote>
+
+<p>There are many GitHub actions available on the <a href="https://github.com/marketplace">GitHub marketplace</a>, which you can use directly in your workflow. I decided to make my own, since pushing to Git wasn’t rocket science, and it would be a good refresher to create a GitHub Action.</p>
+
+<hr>
+
+<h2 id="side-quest-creating-an-action-that-pushes-to-a-repository">Side-quest: Creating an action that pushes to a repository</h2>
+
+<p>Being a GitHub Action, the CI/CD runner would already had temporary read/write permissions to my repository. Hence, all I really needed to do was to add files, add a commit message, and push to the correct repository.</p>
+
+<p>This is easily done with the following lines of bash:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Deploy"</span>
+git push
+</code></pre></div></div>
+
+<p>For my setup, I’ve cloned the repository containing the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch to a subdirectory; furthermore, I wanted to customize the username and email used for the deployment, just for flair purposes. Hence, my bash script ended up looking like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>built
+git config user.name <span class="s2">"CodingIndex Deploy"</span>
+git config user.email <span class="s2">"deploy@codingindex.xyz"</span>
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Deployment from GitHub runner"</span>
+git push https://github.com/<span class="k">${</span><span class="nv">REPOSITORY</span><span class="k">}</span> gh-pages:<span class="k">${</span><span class="nv">BRANCH</span><span class="k">}</span>
+<span class="nb">cd</span> -
+</code></pre></div></div>
+
+<p>I placed this script in <code class="language-plaintext highlighter-rouge">.github/actions/pushToGithub/action.sh</code>, but it really shouldn’t matter where the script is, as long as the action’s path is specified correctly in <code class="language-plaintext highlighter-rouge">.github/workflows/main.yml</code>.</p>
+
+<p>Next, I created <code class="language-plaintext highlighter-rouge">.github/actions/pushToGithub/action.yml</code>, so that GitHub recognizes the parent directory as a valid GitHub action:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="na">name</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Push</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">GitHub'</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Pushes</span><span class="nv"> </span><span class="s">code</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">Github'</span>
+<span class="na">inputs</span><span class="pi">:</span>
+  <span class="na">branch</span><span class="pi">:</span>
+    <span class="na">description</span><span class="pi">:</span> <span class="s">Branch of the repository to push to</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">repository</span><span class="pi">:</span>
+    <span class="na">description</span><span class="pi">:</span> <span class="s">Target repository</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+<span class="na">runs</span><span class="pi">:</span>
+  <span class="na">using</span><span class="pi">:</span> <span class="s2">"</span><span class="s">composite"</span>
+  <span class="na">steps</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="s">${{ github.action_path }}/action.sh</span>
+      <span class="na">shell</span><span class="pi">:</span> <span class="s">bash</span>
+      <span class="na">env</span><span class="pi">:</span>
+        <span class="na">BRANCH</span><span class="pi">:</span> <span class="s">${{inputs.branch}}</span>
+        <span class="na">REPOSITORY</span><span class="pi">:</span> <span class="s">${{inputs.repository}}</span>
+
+</code></pre></div></div>
+
+<p>The action accepts 2 inputs: the branch, and the repository. Truth to be told, <code class="language-plaintext highlighter-rouge">inputs.repository</code> is not really needed, but I left that input just in case I decide to separate the repositories used for the source and the built version.</p>
+
+<hr>
+
+<p>And just like that, pushing the resultant files will build the website, cache the dependencies (leading to an extremely fast build later on), and deploy to the <code class="language-plaintext highlighter-rouge">gh-pages</code> branch where the GitHub Pages environment will pick up the new changes and update the website accordingly.</p>
+
+<p><img src="/images/20201115_1.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create a status badge"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create a status badge | Source: Me</p>
+
+<p>The last step is to create a status badge for your workflow, and display it in your README proudly - for you are now a GitHub Actions warrior! Remember to delete all references to Travis CI from your repository settings (e.g. <code class="language-plaintext highlighter-rouge">webhooks</code>) and user account settings, if you plan to migrate away from Travis CI for all your repositories permanently.</p>
+
+<hr>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>It is sad that Travis CI has basically left the open source community in the dust. While their claims of user abuse might have some sort of validity, I believe that such abuse can be better handled; perhaps instead of giving everyone free one-time “trial” minutes, they should top up some credits every month. They could also limit how long a runner can run for by default for open-source projects - maybe instead of 120 minutes, give each runner 30 minutes, thereafter charge the user by credit per minute.</p>
+
+<p>To add salt to the wound, Travis CI’s pricing plans are exclusive from the credits that an account can have; in other words, you need to pay for concurrency and credits <em>separately</em>. Interpret their <a href="https://travis-ci.com/plans">pricing plans</a> as you will.</p>
+
+<p>Oh well. We’ll see where the winds take us.</p>
+
+<p>Happy coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+		<footer>
+			<div class="container-md p-3 text-gray text-center">
+				<p>Copyright © CodingIndex 2020</p>
+			</div>
+		</footer>
+  </body>
+</html>
+

@@ -1,4 +1,176 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-11-14T17:10:29+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">I tried to make a game…</title><link href="https://codingindex.xyz/2020/10/06/failed-game/" rel="alternate" type="text/html" title="I tried to make a game…" /><published>2020-10-06T15:30:00+00:00</published><updated>2020-10-06T15:30:00+00:00</updated><id>https://codingindex.xyz/2020/10/06/failed-game</id><content type="html" xml:base="https://codingindex.xyz/2020/10/06/failed-game/">&lt;p&gt;Yo! It’s been a while.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2020-11-15T00:49:04+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Moving from Travis-CI to GitHub Actions</title><link href="https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions/" rel="alternate" type="text/html" title="Moving from Travis-CI to GitHub Actions" /><published>2020-11-15T00:30:00+00:00</published><updated>2020-11-15T00:30:00+00:00</updated><id>https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions</id><content type="html" xml:base="https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions/">&lt;h1 id=&quot;why-the-move&quot;&gt;Why the move?&lt;/h1&gt;
+
+&lt;p&gt;In case you weren’t aware, the guys &lt;em&gt;now&lt;/em&gt; in charge of Travis CI recently &lt;a href=&quot;https://www.theregister.com/2020/11/02/travis_ci_pricng/&quot;&gt;changed how their “free” plan worked&lt;/a&gt;. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine before you are forced to purchase a plan. Applying for additional free credits will be on a case-by-case basis.&lt;/p&gt;
+
+&lt;p&gt;Putting aside my own personal thoughts on the matter, my personal website takes anywhere from 33 seconds to 4 minutes to compile depending on cache status. This means that I can only post 400 more blog posts before I run out of credits. Hence, I needed to find another way to build and deploy my website.&lt;/p&gt;
+
+&lt;p&gt;Over the years, GitHub has evolved from being just another place for developers to dump their code, to a fuller suite of tools developers can use to create CI/CD pipelines from the code they create. I believe that this is a result of market demand, as a way to be competitive against platforms such as GitLab. GitHub’s offering, GitHub Actions, is another way to interact with code, issues, and pull requests without using web hooks or APIs.&lt;/p&gt;
+
+&lt;p&gt;As a lone maintainer of my personal blog, I find it too cumbersome to submit an application to either GitLab or Travis CI to gain their open-source offerings for free CI runner minutes. Under GitHub Action’s pricing plans, public projects get to use GitHub Actions for free. There is no application process or a need to attach a credit card to your GitHub account - you just configure the right files, push them to the repository, and GitHub Actions will automatically kick into action. Furthermore, my blog is hosted on GitHub Pages, and the &lt;a href=&quot;https://github.com/jameshi16/personal-website&quot;&gt;source code&lt;/a&gt; for it is also hosted on GitHub. Hence, GitHub actions was the most relevant choice of a CI/CD runner for me.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For those of you who have used Jekyll with GitHub pages before, possibly from &lt;a href=&quot;https://github.com/github/personal-website&quot;&gt;forking this repository&lt;/a&gt;, you’d know that the GitHub Pages environment can actually directly deploy Jekyll websites. However, as mentioned in &lt;a href=&quot;https://jekyllrb.com/docs/github-pages/#the-github-pages-gem&quot;&gt;this documentation by Jekyll&lt;/a&gt;, this only works with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;github-pages&lt;/code&gt; gem. I personally use other gems, and hence I need a CI/CD runner to build and deploy my website.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;how-i-moved&quot;&gt;How I moved&lt;/h1&gt;
+
+&lt;p&gt;I snooped around my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; and listed out the steps it took to build and deploy my website:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Get a Ruby &amp;amp; Bundler environment&lt;/li&gt;
+  &lt;li&gt;Install all the Gems listed in Gemfile or obtain them from the cache&lt;/li&gt;
+  &lt;li&gt;Build the site&lt;/li&gt;
+  &lt;li&gt;Deploy by pushing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;On Travis-CI, there are certain “magical” elements that abstracts away some elements of CI/CD. Hence, translating to GitHub Actions steps, the full list of steps would be:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Pull (with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--depth=1&lt;/code&gt;) the website repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt; branch&lt;/li&gt;
+  &lt;li&gt;Pull (with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--depth=1&lt;/code&gt;) the website repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
+  &lt;li&gt;Get a Ruby &amp;amp; Bundler environment&lt;/li&gt;
+  &lt;li&gt;Install all the Gems listed in Gemfile or obtain them from the cache&lt;/li&gt;
+  &lt;li&gt;Build the site&lt;/li&gt;
+  &lt;li&gt;Copy/Move the built site to the repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
+  &lt;li&gt;Deploy by pushing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Defining the order of “steps” is essentially what a GitHub Actions workflow does. Hence, under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/workflows/main.yml&lt;/code&gt;, I listed out the steps in YAML format:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build &amp;amp; Deploy&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;buildNdeploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ubuntu-latest&lt;/span&gt;
+
+    &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout source&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v2&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;source&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;master'&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout built branch&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v2&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;built&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;gh-pages'&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Ruby environment&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ruby/setup-ruby@v1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;ruby-version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2.5&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Cache dependencies&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/cache@v2.1.3&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.workspace }}/source/vendor/bundle&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gem_dependencies&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Install/Upgrade gems&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;cd ${{ github.workspace }}/source&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-${{ github.workspace }}/source/vendor/bundle}&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;cd -&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build website&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;cd ${{ github.workspace }}/source&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;bundle exec jekyll build&lt;/span&gt;
+          &lt;span class=&quot;s&quot;&gt;cd -&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Move built files to the built directory&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Deploy&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;./source/.github/actions/pushToGithub&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gh-pages&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;repository&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.repository }}.git&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Each “step” in a workflow could either run commands, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/code&gt; or an action, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;actions/checkout@v2&lt;/code&gt;. Steps are also capable of running in-repository actions, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./source/.github/actions/pushToGithub&lt;/code&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/code&gt; is a way to &lt;em&gt;update&lt;/em&gt; files from one directory to another. The command is essentially piping the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tar&lt;/code&gt; compressed version of all the files in one directory, then extracting that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tar&lt;/code&gt; in another directory through a pipe. This piece of geek was found in &lt;a href=&quot;https://askubuntu.com/a/269818&quot;&gt;this StackOverflow post&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;There are many GitHub actions available on the &lt;a href=&quot;https://github.com/marketplace&quot;&gt;GitHub marketplace&lt;/a&gt;, which you can use directly in your workflow. I decided to make my own, since pushing to Git wasn’t rocket science, and it would be a good refresher to create a GitHub Action.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;side-quest-creating-an-action-that-pushes-to-a-repository&quot;&gt;Side-quest: Creating an action that pushes to a repository&lt;/h2&gt;
+
+&lt;p&gt;Being a GitHub Action, the CI/CD runner would already had temporary read/write permissions to my repository. Hence, all I really needed to do was to add files, add a commit message, and push to the correct repository.&lt;/p&gt;
+
+&lt;p&gt;This is easily done with the following lines of bash:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Deploy&quot;&lt;/span&gt;
+git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For my setup, I’ve cloned the repository containing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch to a subdirectory; furthermore, I wanted to customize the username and email used for the deployment, just for flair purposes. Hence, my bash script ended up looking like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;built
+git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;CodingIndex Deploy&quot;&lt;/span&gt;
+git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;deploy@codingindex.xyz&quot;&lt;/span&gt;
+git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Deployment from GitHub runner&quot;&lt;/span&gt;
+git push https://github.com/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;REPOSITORY&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; gh-pages:&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BRANCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I placed this script in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/actions/pushToGithub/action.sh&lt;/code&gt;, but it really shouldn’t matter where the script is, as long as the action’s path is specified correctly in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/workflows/main.yml&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next, I created &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/actions/pushToGithub/action.yml&lt;/code&gt;, so that GitHub recognizes the parent directory as a valid GitHub action:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Push&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;GitHub'&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Pushes&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Github'&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Branch of the repository to push to&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;repository&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Target repository&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;runs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;using&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;composite&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.action_path }}/action.sh&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bash&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;BRANCH&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{inputs.branch}}&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;REPOSITORY&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{inputs.repository}}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The action accepts 2 inputs: the branch, and the repository. Truth to be told, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;inputs.repository&lt;/code&gt; is not really needed, but I left that input just in case I decide to separate the repositories used for the source and the built version.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;And just like that, pushing the resultant files will build the website, cache the dependencies (leading to an extremely fast build later on), and deploy to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch where the GitHub Pages environment will pick up the new changes and update the website accordingly.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20201115_1.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Create a status badge&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Create a status badge | Source: Me&lt;/p&gt;
+
+&lt;p&gt;The last step is to create a status badge for your workflow, and display it in your README proudly - for you are now a GitHub Actions warrior! Remember to delete all references to Travis CI from your repository settings (e.g. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webhooks&lt;/code&gt;) and user account settings, if you plan to migrate away from Travis CI for all your repositories permanently.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;It is sad that Travis CI has basically left the open source community in the dust. While their claims of user abuse might have some sort of validity, I believe that such abuse can be better handled; perhaps instead of giving everyone free one-time “trial” minutes, they should top up some credits every month. They could also limit how long a runner can run for by default for open-source projects - maybe instead of 120 minutes, give each runner 30 minutes, thereafter charge the user by credit per minute.&lt;/p&gt;
+
+&lt;p&gt;To add salt to the wound, Travis CI’s pricing plans are exclusive from the credits that an account can have; in other words, you need to pay for concurrency and credits &lt;em&gt;separately&lt;/em&gt;. Interpret their &lt;a href=&quot;https://travis-ci.com/plans&quot;&gt;pricing plans&lt;/a&gt; as you will.&lt;/p&gt;
+
+&lt;p&gt;Oh well. We’ll see where the winds take us.&lt;/p&gt;
+
+&lt;p&gt;Happy coding,&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="github" /><category term="actions" /><category term="pages" /><category term="website" /><category term="move" /><category term="cicd" /><summary type="html">Why the move?</summary></entry><entry><title type="html">I tried to make a game…</title><link href="https://codingindex.xyz/2020/10/06/failed-game/" rel="alternate" type="text/html" title="I tried to make a game…" /><published>2020-10-06T15:30:00+00:00</published><updated>2020-10-06T15:30:00+00:00</updated><id>https://codingindex.xyz/2020/10/06/failed-game</id><content type="html" xml:base="https://codingindex.xyz/2020/10/06/failed-game/">&lt;p&gt;Yo! It’s been a while.&lt;/p&gt;
 
 &lt;p&gt;I’ve been falling into the &lt;a href=&quot;https://www.youtube.com/channel/UCJFZiqLMntJufDCHc6bQixg&quot;&gt;Hololive&lt;/a&gt; rabbit hole for a while now, going as far as to create one of my more “interesting” creations called &lt;a href=&quot;https://github.com/jameshi16/cursed_moonrunes&quot;&gt;匚ㄩ尺丂乇ᗪ 爪ㄖㄖ几尺ㄩ几乇丂&lt;/a&gt;.&lt;/p&gt;
 
@@ -1692,60 +1864,4 @@ the greeter executable - screen is 0,0, drawing 0,0 login screen
 
 &lt;p&gt;Happy Coding,&lt;/p&gt;
 
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="aws" /><category term="aws" /><category term="iot" /><category term="mqtt" /><summary type="html">You read the title, let’s get started. For this tutorial, we will be using the Arduino IDE. This should be possible with ESP-IDF, too, because ESP-MQTT is included as part of the ESP-IDF.</summary></entry><entry><title type="html">Interview Experience - Part 2</title><link href="https://codingindex.xyz/2019/06/19/interview-experiences-part-2/" rel="alternate" type="text/html" title="Interview Experience - Part 2" /><published>2019-06-19T12:00:00+00:00</published><updated>2019-06-19T12:00:00+00:00</updated><id>https://codingindex.xyz/2019/06/19/interview-experiences-part-2</id><content type="html" xml:base="https://codingindex.xyz/2019/06/19/interview-experiences-part-2/">&lt;p&gt;&lt;a href=&quot;/2019/06/19/interview-experiences/&quot;&gt;Part 1&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Well; I told you - I would have had quite an experience and be able to make a blog post today.&lt;/p&gt;
-
-&lt;p&gt;I wanted to talk about one of the problems that was presented to me during the interview:&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;How do you figure out if a linked list is incorrectly looping?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.geeksforgeeks.org/wp-content/uploads/2009/04/Linked-List-Loop.gif&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;A looped linked list&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Incorrect Looped Link List | Source: &lt;a href=&quot;https://www.geeksforgeeks.org/detect-and-remove-loop-in-a-linked-list/&quot;&gt;geeksforgeeks.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;There are so many possible answers to this solution. I came up with a solution which involves using a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set&lt;/code&gt; object to store all the pointers, and check with the set to ensure that there are no duplicates. It’s a really bad algorithm, but I said it to answer the question. The interviewer’s (his) solution was more interesting, and is something that I haven’t encountered before - do keep in mind that I don’t indulge myself into algorithms in my diploma course and free time, because I’m more focused in actually trying to do something than to do it well.&lt;/p&gt;
-
-&lt;p&gt;Anyway, his algorithm was like this:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Create two pointers, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt;;&lt;/li&gt;
-  &lt;li&gt;Make &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; point at the same element;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; will advance two steps per iteration, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; will advance one step per iteration;&lt;/li&gt;
-  &lt;li&gt;If any of the two pointers hit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt;, then the algorithm proves that there are no loops in the linked list;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; will eventually collide in the loop, if neither pointer has hit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NULL&lt;/code&gt;, it signifies that there is a loop in the linked list.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;This blew my mind a little bit, and after hitting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;geeksforgeeks.org&lt;/code&gt;, this 5 step proceedure I described was actually one part of the Flyod’s Cycle detection algorithm (Flyod’s Cycle detection algorithm is completed in the subsequent steps). What really displaced what little intellectual points I had left in me was the next part:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;How do you resolve the incorrectly looping linked list?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;His algorithm was like this:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; back to the beginning of the linked list;&lt;/li&gt;
-  &lt;li&gt;Let &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; go through the link list at the same speed, at one step per iteration;&lt;/li&gt;
-  &lt;li&gt;Their first collision &lt;strong&gt;will be&lt;/strong&gt; the beginning of the loop.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;You may ask: wait, why is Step 3 true?&lt;/p&gt;
-
-&lt;p&gt;Let’s say &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; travels &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; number of nodes within the linked list. This menas that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; travelled &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2x&lt;/code&gt; number of nodes before it collides with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt;. What this also implies, is that if you were to let &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; travel another &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; number of nodes, it will collide with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; again, as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x + x = 2x&lt;/code&gt;, which is the same distance &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; has travelled. Now, think about the distances travelled by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt;: it needed &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; number of nodes to collide with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; &lt;em&gt;from the start&lt;/em&gt; of the linked list, and, by travelling another &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; number of nodes, it &lt;em&gt;collides with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; again&lt;/em&gt;. This implies that if I were to have another pointer, called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt;, which travels at the same speed as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt;, with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; starting at the collision position and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt; starting at the start, then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt; will collide at the same collision point. Meaning: the first collision point between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt; will signify the problematic node. If we were to make &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; travel through the whole loop again, checking the next node pointed by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt;, we can find the culprit causing the loop in the linked list, and route it to null.&lt;/p&gt;
-
-&lt;p&gt;In the above chunk of text, you realize that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; is only used to prove that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt;’s first collision is the point where the loop begins. Hence, we can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr2&lt;/code&gt; instead of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ptr3&lt;/code&gt;, saving us one memory location.&lt;/p&gt;
-
-&lt;p&gt;That’s was interesting ain’t it?&lt;/p&gt;
-
-&lt;p&gt;One more thing I learned during the interview is the existance of a trie:
-&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/b/be/Trie_example.svg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Trie tree&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;A trie | Source: &lt;a href=&quot;https://en.wikipedia.org/wiki/Trie&quot;&gt;Wikipedia&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Which is helpful in search suggestions, especially if you have hundreds of thousands of such suggestions.&lt;/p&gt;
-
-&lt;p&gt;Well, I’ll probably not get what I interviewed for; but that’s fine. The experience taught me how it’s like to be interviewed for my technical skills; and helped me come up with possible strategies to try before my next interview.&lt;/p&gt;
-
-&lt;p&gt;Good luck for your own interviews, if they’re coming up!&lt;/p&gt;
-
-&lt;p&gt;Happy coding,&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="fluff" /><category term="interview" /><category term="job" /><category term="code" /><summary type="html">Part 1</summary></entry></feed>
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="aws" /><category term="aws" /><category term="iot" /><category term="mqtt" /><summary type="html">You read the title, let’s get started. For this tutorial, we will be using the Arduino IDE. This should be possible with ESP-IDF, too, because ESP-MQTT is included as part of the ESP-IDF.</summary></entry></feed>
