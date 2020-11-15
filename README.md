@@ -1,5 +1,5 @@
 # James' Personal Website
-[![Build Status](https://travis-ci.org/jameshi16/personal-website.svg?branch=master)](https://travis-ci.org/jameshi16/personal-website)
+![Build & Deploy](https://github.com/jameshi16/personal-website/workflows/Build%20&%20Deploy/badge.svg)
 
 This website started as a fork from [Github's Personal Website Repository](https://github.com/github/personal-website).
 

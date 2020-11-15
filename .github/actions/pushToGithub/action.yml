@@ -1,12 +1,6 @@
 name: 'Push to GitHub'
 description: 'Pushes code to Github'
 inputs:
-  github-token:
-    description: GitHub Token that has push privileges to the repository
-    required: true
-  username:
-    description: GitHub username that has push privileges to the repository
-    required: true
   branch:
     description: Branch of the repository to push to
     required: true
