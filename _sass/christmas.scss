@@ -6,11 +6,15 @@ body.christmas {
 }
 
 .snowfall {
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  display: none;
+  @media (min-width: 768px) {
+    display: unset;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 @function random_range($min, $max) {
