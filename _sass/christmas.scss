@@ -1,7 +1,9 @@
 /* Shamelessly copied from: https://codepen.io/alphardex/pen/dyPorwJ */
 
 body.christmas {
-  filter: drop-shadow(0 0 10px white);
+  @media (min-device-width: 768px) {
+    filter: drop-shadow(0 0 10px white);
+  }
   background: #8FB14E;
 }
 
