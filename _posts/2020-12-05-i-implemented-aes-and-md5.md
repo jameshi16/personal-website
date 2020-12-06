@@ -66,7 +66,7 @@ Ah, what do we do now? We are trying to add two <img src="/images/20201205_11.pn
 
 <img src="/images/20201205_13.png" style="border-radius: 0px; max-height: 6em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) + (x^2 + x^1)\\ = x^3 + x^2 + x^1 + x^1 + 1\\ = x^3 + x^2 + 1"/>
 
-If you turn the co-efficients of the operands into binary and squint your eyes _ever_ so slightly, you'll realize that adding the two polynomials it's basically just XORing two binary operators: `1011 ^ 0110 = 1101`! And so, modifying our math equations one last time with the XOR operator:
+If you turn the co-efficients of the operands into binary and squint your eyes _ever_ so slightly, you'll realize that adding the two polynomials it's basically just XORing two binary numbers: `1011 ^ 0110 = 1101`! And so, modifying our math equations one last time with the XOR operator:
 
 <img src="/images/20201205_14.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) \oplus (x^2 + x^1) = x^3 + x^2 + 1"/>
 
@@ -89,7 +89,7 @@ Apart from a tiny bit of matrix multiplication, that is all of the mathematics w
 
 Let's implement an SBox. An SBox, or substitution box, is used to introduce confusion into cipher. It's also part of key expansion, which is the first major step in AES. For educational purposes, I did not copy the SBox table [off Wikipedia](https://en.wikipedia.org/wiki/Rijndael_S-box); instead, I ripped off the pseudo-code implementation on the same Wikipedia page.
 
-Of course, I took time to think about what exactly it was I was doing. Let's go through my resulting JavaScript code segment by segment.
+Of course, I took time to think about what exactly I was doing with the code. Let's go through my resulting JavaScript code segment by segment.
 
 ```js
 let p = 1, q = 1;
@@ -102,13 +102,13 @@ do {
     p = (p ^ ((p << 1) % 2**8) ^ (p & 0x80 ? 0x1B : 0)) % 2**8;
 ```
 
-In this line, we are (carry-less) multiplying by 3, in efforts to iterate through every element in the field. Other numbers can also be chosen, like 2. `% 2**8` is used to clip for the integers to stay within the limits of a byte. In carry-less multiplication, we do the following:
+In this line, we are (carry-less) multiplying by 3, in efforts to iterate through every element in the field. Other numbers can also be chosen, like 2. `% 2**8` is used to clip for the integers to stay within the limits of a byte, since there is no byte data type in JavaScript. In carry-less multiplication, we do the following:
 
 1. Figure out the positions of the bit `1` in the number `3`: `0011`, which means that there are bit `1`s in position 1 and 0.
 2. Without modifying `p` (i.e. make a copy), shift `p` left by those amount of positions for each bit `1`. This means shifting two copies of `p`, one time once to the left, the other 0 times to the left.
 3. XOR all copies of `p` and assign it back into `p`. In other words: `p = p ^ (p << 1)`.
 
-That explains the front portion. What about the `(p & 0x80 ? 0x1B : 0)` part? The mathematical notation of our field is <img src="/images/20201205_18.png" alt="GF(2^8) = GF(2)[x]/(x^8 + x^4 + x^3 + x + 1)" style="max-height: 1em; border-radius: 0px"/>, where <img src="/images/20201205_19.png" alt="x^8 + x^4 + x^3 + x + 1" style="max-height: 1em; border-radius: 0px"/> is the irreducible polynomials. An irreducible polynomial is something that cannot be reduced further to multiplications of two elements within the finite field, and is absolutely magical, because it can also generate all possible polynomials within a field. Remember that we shifted `p` 1 position to the left? If the significant bit was a `1` and it was shifted away, we need to account for it somehow, right? However, since that bit represents a co-efficient of <img src="/images/20201205_21.png" alt="x^8" style="max-height: 1em; border-radius: 0px"/>, which is too large to fit within our finite field, we must reduce it with the irreducible polynomial (i.e. generate the equivalent within our field) by modulo. Turns out:
+That explains the front portion. What about the `(p & 0x80 ? 0x1B : 0)` part? The mathematical notation of our field is <img src="/images/20201205_18.png" alt="GF(2^8) = GF(2)[x]/(x^8 + x^4 + x^3 + x + 1)" style="max-height: 1em; border-radius: 0px"/>, where <img src="/images/20201205_19.png" alt="x^8 + x^4 + x^3 + x + 1" style="max-height: 1em; border-radius: 0px"/> is the irreducible polynomial. An irreducible polynomial is something that cannot be reduced further to multiplications of two elements within the finite field, and is absolutely magical, because it can also generate all possible polynomials within a field. Remember that we shifted `p` 1 position to the left? If the most significant bit was a `1` and it was shifted away, we need to account for it somehow, right? However, since that bit represents a co-efficient of <img src="/images/20201205_21.png" alt="x^8" style="max-height: 1em; border-radius: 0px"/>, which is too large to fit within our finite field, we must reduce it with the irreducible polynomial (i.e. generate the equivalent within our field) by modulo. Turns out:
 
 <img src="/images/20201205_20.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 4em; margin: 0 auto; display: block;"/>
 
@@ -127,7 +127,7 @@ Here, we are dividing by 3, which is the same as multiplying by the inverse of 3
 
 <img src="/images/20201205_22.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 10em; margin: 0 auto; display: block;"/>
 
-Which means that `0xf6` is an inverse of `0x03` (remember that `p * q == 1` Galois Invariant?)! When performing the arcane art of carry-less multiplication, we find that there is no point shifting after 4. This is because the next shift, 8, would just shift the entirety of `q` out of existence (i.e. becomes `0x00` after shifting), wasting CPU cycles for calculation. This is repaired later on with the line `q ^= (q) ^ 0x80 ? 0x09 : 0`. The author of this `StackOverflow` explains how the mystery number, `0x09` is derived better than I can, so [do check out his answer](https://math.stackexchange.com/a/1231243).
+Which means that `0xf6` is an inverse of `0x03` (remember that `p * q == 1` Galois Invariant?)! When performing the arcane art of carry-less multiplication, we find that there is no point shifting after 4. This is because the next shift, 8, would just shift the entirety of `q` out of existence (i.e. becomes `0x00` after shifting), wasting CPU cycles for calculation. The missing co-efficients as a result of ignoring shifts after 4 is fixed later on with the line `q ^= (q) ^ 0x80 ? 0x09 : 0`. The author of a StackOverflow answer explains how the mystery number, `0x09` is derived better than I can, so [do check out his answer](https://math.stackexchange.com/a/1231243).
 
 Now that we have calculated `p` and `q`, we can continue following the instructions on deriving the `SBox`. In essence, we use the multiplicative inverse of `p` to perform the transformation:
 
@@ -191,7 +191,7 @@ function subWord(b1, b2, b3, b4) {
 }
 ```
 
-We also need to break up words into bytes, and vice-versa whenever we need to. So we define some helper functions:
+We also need to break up words into array of bytes, and vice-versa whenever we need to. So we define some helper functions:
 
 ```js
 function breakupWord(b) {
@@ -282,7 +282,7 @@ function addRoundKey(roundKeys, state, roundNo) {
 }
 ```
 
-Then, we substitute bytes with the SBox. Again, with the SBox, this is dead simple:
+Then, we substitute bytes with the SBox. Again, this is dead simple:
 
 ```js
 function subBytes(state) {
@@ -334,7 +334,7 @@ And then we modulo the result with:
 
 On further calculation as denoted in [the relevant Wikipedia article](https://en.wikipedia.org/wiki/Rijndael_MixColumns#Demonstration), the final calculation can be denoted as a matrix calculation:
 
-<img src="/images/20201205_28.svg" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="matrix multiplication equiv"/>
+<img src="/images/20201205_29.svg" style="border-radius: 0px; max-height: 8em; margin: 0 auto; display: block;" alt="matrix multiplication equiv"/>
 <p class="text-center text-gray lh-condensed-ultra f6">The equivalent matrix multiplication | Source: <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">Wikipedia</a></p>
 
 Which means that we can finally convert it into code. First, we need a generic way to perform XOR multiplication:
@@ -365,7 +365,7 @@ Then, I figure out the code to mix one column:
 
 ```js
 function innerMixColumns(a1, a2, a3, a4) {
-	const b1 = multiply(a4, 2) ^ multiply(a3, 3) ^ a2 ^ a1;
+    const b1 = multiply(a4, 2) ^ multiply(a3, 3) ^ a2 ^ a1;
     const b2 = a4 ^ multiply(a3, 2) ^ multiply(a2, 3) ^ a1;
     const b3 = a4 ^ a3 ^ multiply(a2, 2) ^ multiply(a1, 3);
     const b4 = multiply(a4, 3) ^ a3 ^ a2 ^ multiply(a1, 2);
