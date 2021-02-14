@@ -1,0 +1,554 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Duo Architecture&amp;lt;&amp;lt; Take me back to Part 1Solution Duo was designed with the following goals:  Guaranteed connectivity  High FederationStep 0: Pre-requisitesYou will need an Oracle Cloud account. An account will remain always-free until it is explicitly upgraded; so don’t worry too m..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">ZeroTier OpenVPN NAT - Part 3</h1>
+      <p class="text-gray mb-5">Published Feb 14, 2021 13:28</p>
+      
+  <div class="article">
+    <p><img src="/images/20210214_4.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Architecture"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Duo Architecture</p>
+
+<p><a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">&lt;&lt; Take me back to Part 1</a></p>
+
+<p>Solution Duo was designed with the following goals:</p>
+
+<ul>
+  <li>Guaranteed connectivity</li>
+  <li>High Federation</li>
+</ul>
+
+<h1 id="step-0-pre-requisites">Step 0: Pre-requisites</h1>
+
+<p>You will need an <a href="https://cloud.oracle.com">Oracle Cloud</a> account. An account will remain always-free until it is explicitly upgraded; so don’t worry too much about being charged.</p>
+
+<h1 id="step-1-creating-cloud-resources-skippable">Step 1: Creating cloud resources (Skippable)</h1>
+
+<p>It is not an explicit requirement to create any of the resources here; however, it is good practice (at least in AWS) to house all the resources in their proper groups.</p>
+
+<p>For this step we will be creating/modifying the following things:</p>
+<ul>
+  <li>Virtual Cloud Network</li>
+  <li>Subnet</li>
+  <li>Internet Gateway</li>
+  <li>Network Security Group</li>
+  <li>Security List</li>
+  <li>Route Table</li>
+</ul>
+
+<p>Navigate to the <a href="https://cloud.oracle.com/networking/vcns">Virtual Cloud Networks</a> page, and click on “Create VCN”.</p>
+
+<p><img src="/images/20210214_8.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Creating VCN"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Creating VCN | Source: Me</p>
+
+<p>Name the VCN whatever you like; it does not matter. After you are done, click on “Create VCN”.</p>
+
+<p>Oracle Cloud will redirect you to the page detailing the VCN. From the sidebar, click on “Internet Gateways”:</p>
+
+<p><img src="/images/20210214_14.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate to Route Tables"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate to Route Tables | Source: Me</p>
+
+<p>Create an Internet Gateway, and name it anything you want.</p>
+
+<p><img src="/images/20210214_15.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Create an Internet Gateway"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Name your internet gateway | Source: Me</p>
+
+<p>From the sidebar, click on “Route Tables”:</p>
+
+<p><img src="/images/20210214_10.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate to Route Tables"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate to Route Tables | Source: Me</p>
+
+<p>Click on “Create Route Table”:</p>
+
+<p><img src="/images/20210214_11.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create Route Table"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create a Route Table | Source: Me</p>
+
+<p>Name the Route Table anything you want, and then click on “Create”:</p>
+
+<p><img src="/images/20210214_12.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Naming the Route Table"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Name the Route Table | Source: Me</p>
+
+<p>After the page redirects, click into the Route Table you just created:</p>
+
+<p><img src="/images/20210214_13.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Click into the Route Table"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Click the Route Table | Source: Me</p>
+
+<p>Then, click on “Add Route Rules”:</p>
+
+<p><img src="/images/20210214_16.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Adding Route Rules"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Add Route Rules button | Source: Me</p>
+
+<p>In the dialog that appears, choose “Internet Gateway” as the Target Type, <code class="language-plaintext highlighter-rouge">0.0.0.0/0</code> as the Destination CIDR Block, and set <code class="language-plaintext highlighter-rouge">Target Internet Gateway</code> to the Internet Gateway you just created. After that, click on “Add Route Rules”.</p>
+
+<p><img src="/images/20210214_17.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Configuring Route Table"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Configure the Route Table | Source: Me</p>
+
+<p>Navigate back to the VCN page by clicking on the VCN name on the breadcrumbs bar:</p>
+
+<p><img src="/images/20210214_18.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate back to the VCN page"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate back to the VCN page | Source: Me</p>
+
+<p>From here, click on “Create Subnet”:</p>
+
+<p><img src="/images/20210214_9.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click on Create Subnet"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Creating Subnet | Source: Me</p>
+
+<p>Then, configure the subnet:</p>
+
+<p><img src="/images/20210214_19.png" style="max-width: 700px; width: 100%; margin: 0 auto; display: block;" alt="Click on Create Subnet"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Configuring the Subnet | Source: Me</p>
+
+<p>After being redirected back to the subnet page, click on “Security List” on the sidebar. You do not need to wait for the Subnet to finish provisioning:</p>
+
+<p><img src="/images/20210214_20.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate to Security List"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate to Security List | Source: Me</p>
+
+<p>Click on create “Create Security List”:</p>
+
+<p><img src="/images/20210214_21.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create Security List"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create a security list | Source: Me</p>
+
+<p>Fill in the details for the Security List. Take care to include rules for port 22 and port 443 (OpenVPN TCP) for TCP, and port 1194 (OpenVPN UDP) for UDP; you can click on “Add Ingress Rule” or “Add Egress Rule” to create new rules for the Security List accordingly. Keep the “Stateless” box unchecked, so that ZeroTier can smoothly perform UDP hole punching.</p>
+
+<p><img src="/images/20210214_22.png" style="max-width: 900px; width: 100%; margin: 0 auto; display: block;" alt="Configure Security List"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Configure the security list | Source: Me</p>
+
+<p>After being redirected back to the Security List page, click on “Network Security Groups” on the sidebar.</p>
+
+<p><img src="/images/20210214_23.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate to Network Security Groups"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate to Network Security Groups | Source: Me</p>
+
+<p>Click on “Create Network Security Group”.</p>
+
+<p><img src="/images/20210214_24.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create Network Security Group"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create Network Security Group | Source: Me</p>
+
+<p>Name the Network Security Group whatever you want, then click Next:</p>
+
+<p><img src="/images/20210214_25.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Name the Network Security Group"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Name the Network Security Group | Source: Me</p>
+
+<p>Add the same rules as you did for the Security List:</p>
+
+<p><img src="/images/20210214_26.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Configure the Network Security Group"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Configure the Network Security Group | Source: Me</p>
+
+<p>Go back to the subnet page:</p>
+
+<p><img src="/images/20210214_18.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate back to the VCN page"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate back to the VCN page | Source: Me</p>
+
+<p><img src="/images/20210214_27.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Navigate back to the subnet page"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Navigate to the subnet page | Source: Me</p>
+
+<p>Click into the public subnet created earlier:</p>
+
+<p><img src="/images/20210214_28.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click into the subnet created earlier"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Click into the subnet you created earlier | Source: Me</p>
+
+<p>Click on add security list:</p>
+
+<p><img src="/images/20210214_30.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Click on Add Security List"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Click on Add Security List | Source: Me</p>
+
+<p>Add the security list created earlier:</p>
+
+<p><img src="/images/20210214_29.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Add the security list created earlier"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Add the security list created earlier | Source: Me</p>
+
+<p>Delete the default security list from the subnet:</p>
+
+<p><img src="/images/20210214_31.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Delete default security list"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Delete the default security list | Source: Me</p>
+
+<h1 id="step-2-create-a-vm">Step 2: Create a VM</h1>
+
+<p>Go to the <a href="https://cloud.oracle.com/compute/instances">instances page</a>, and click on “Create Instance”:</p>
+
+<p><img src="/images/20210214_32.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create an instance"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create an instance | Source: Me</p>
+
+<p>You can leave the instance name as it’s default, or name it whatever you like. Click on the box containing the Container Image, and choose the “Canonical Ubuntu 20.04 Minimal” image. If you went through all the steps in Step 1, then under “Configure networking”, check “Use network security group to control traffic”; select the VCN, Subnet and Network Security Group created in Step 1. Under “Public IP Address”, select “Assign a public IPv4 address”.</p>
+
+<p>Remember to click on “Save Private Key” so that you can connect to the instance later on. Then, click the “Create” button.</p>
+
+<p><img src="/images/20210214_33.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Create a VM instance"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Create a VM instance | Source: Me</p>
+
+<h2 id="optional">Optional</h2>
+
+<p>If you want some redundancy that a Cloud VM instance can have, you can:</p>
+
+<ol>
+  <li>Create and attach a block volume (free tier: 100GB); put all your configuration files there.
+    <ul>
+      <li>You may need to stop the <code class="language-plaintext highlighter-rouge">zerotier-one</code> service to <code class="language-plaintext highlighter-rouge">rm -rf /var/lib/zerotier-one</code>, so that you can run <code class="language-plaintext highlighter-rouge">ln -s /var/lib/zerotier-one /mnt/blockvolume/zerotier</code> to more effectively transfer ZeroTier identities from one instance to another.</li>
+    </ul>
+  </li>
+  <li>Create an image once you are done setting up the instance; then, create an instance pool that uses the created image.</li>
+  <li>Reserve a public IP so that you can reattach it to a new instance.</li>
+  <li>Use Dynamic DNS for your instance, <em>or</em> use Oracle Cloud’s load balancer; take note that Oracle Cloud’s load balancer is a paid service.</li>
+</ol>
+
+<p>This guide doesn’t cover these, because I am too lazy to explain them, out of scope, and I’m running out of time <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20">, but they are simple enough that an afternoon should suffice to research how to accomplish them.</p>
+
+<h1 id="step-3-install-packages-on-vm">Step 3: Install packages on VM</h1>
+
+<p>For this step, we must install a text editor (vim, nano, etc), ZeroTier, easy-rsa and OpenVPN. Additionally it is recommended that you install UFW, although Step 1 should have amortized your instance enough.</p>
+
+<p>SSH to the instance with the downloaded key, then run the following command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> https://install.zerotier.com | <span class="nb">sudo </span>bash
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>openvpn vim easy-rsa ufw
+<span class="nb">sudo </span>systemctl <span class="nb">enable </span>zerotier-one <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>systemctl start zerotier-one
+<span class="nb">sudo </span>zerotier-cli <span class="nb">join</span> &lt;network ID&gt;
+</code></pre></div></div>
+
+<p>Ensure on ZeroTier Central or equivalent that your VM instance has joined the network. Do note down the ZeroTier tunnel device name:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip <span class="nb">link</span> | <span class="nb">grep</span> <span class="s2">"zt"</span>
+</code></pre></div></div>
+
+<p>Before you forget, allow SSH connections and enable UFW:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ufw allow 22/tcp
+<span class="nb">sudo </span>ufw <span class="nb">enable</span>
+</code></pre></div></div>
+
+<p>Oracle Cloud adds their own rules to <code class="language-plaintext highlighter-rouge">iptables</code>, which causes some routing problems later on down the road. If you plan on hosting other services, do take note of Oracle Cloud’s rules (which by default only allows connections from TCP port 22):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iptables <span class="nt">-vL</span>
+</code></pre></div></div>
+
+<p>This guide will add entries into <code class="language-plaintext highlighter-rouge">iptables</code> such that they are not blocked by Oracle Cloud’s default rules; you can refer to them to add rules for your own services.</p>
+
+<h1 id="step-4-create--configure-openvpn-server"><span id="step4">Step 4: Create &amp; Configure OpenVPN server</span></h1>
+
+<p>This step is adopted from <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean’s guide on how to setup an OpenVPN server</a>; that guide uses Ubuntu 16.04 with easy-rsa 2, while this guide uses Ubuntu 20.04 with easy-rsa 3. There are also easy setup scripts online, although you should exercise caution when running scripts downloaded from the internet.</p>
+
+<p>Before we can even configure the OpenVPN server, we must become a Certificate Authority and issue certificates for both the server and client. This allows clients authenticate the server, and vice-versa.</p>
+
+<p>Find a suitable working folder, and create a folder to store CA related files:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make-cadir openvpn-ca
+</code></pre></div></div>
+
+<p>Then, append the following lines into the <code class="language-plaintext highlighter-rouge">openvpn-ca/vars</code> file:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">export</span> <span class="py">KEY_COUNTRY</span><span class="p">=</span><span class="s">"US"</span>
+<span class="err">export</span> <span class="py">KEY_EMAIL</span><span class="p">=</span><span class="s">"donotemail@exdee.exdee"</span>
+<span class="err">export</span> <span class="py">KEY_CITY</span><span class="p">=</span><span class="s">"Somewhere"</span>
+<span class="err">export</span> <span class="py">KEY_PROVINCE</span><span class="p">=</span><span class="s">"There"</span>
+<span class="err">export</span> <span class="py">KEY_ORG</span><span class="p">=</span><span class="s">"CodingIndex"</span>
+<span class="err">export</span> <span class="py">KEY_OU</span><span class="p">=</span><span class="s">"ADMIN"</span>
+<span class="err">export</span> <span class="py">KEY_NAME</span><span class="p">=</span><span class="s">"server"</span>
+</code></pre></div></div>
+
+<p>Change the values of all the variables to whatever you want; just try not to change <code class="language-plaintext highlighter-rouge">KEY_NAME</code>, unless you have to - it is easier to follow the guide if you name your key “server”.</p>
+
+<p>Next, you will want to change your working directory to <code class="language-plaintext highlighter-rouge">openvpn-ca</code>, so that you can run the <code class="language-plaintext highlighter-rouge">easyrsa</code> executable with the following subcommands:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>openvpn-ca
+./easyrsa init-pki
+./easyrsa build-ca
+./easyrsa build-server-full server nopass
+./easyrsa gen-dh
+<span class="nb">mkdir </span>keys <span class="o">&amp;&amp;</span> openvpn <span class="nt">--genkey</span> <span class="nt">--secret</span> keys/ta.key
+</code></pre></div></div>
+
+<p>Easy-rsa may prompt you for additional information.</p>
+<blockquote>
+  <p>Run <code class="language-plaintext highlighter-rouge">easyrsa --pki-dir=&lt;insert directory here&gt;</code> to change where the PKIs are stored, which by default is <code class="language-plaintext highlighter-rouge">${PWD}/pki</code>.</p>
+</blockquote>
+
+<p>You <em>should</em> then create as many client certificates as the devices you plan to connect to this server. But it is not strictly necessary, as one certificate can be used for multiple devices. Here is how to create a single client certificate:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./easyrsa build-client-full client1 nopass
+</code></pre></div></div>
+
+<p>Copy the appropriate certificates to the <code class="language-plaintext highlighter-rouge">/etc/openvpn</code> folder:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo cp </span>keys/ta.key <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/pki/private/server.key <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/pki/issued/server.crt <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/pki/dh.pem /etc/openvpn
+</code></pre></div></div>
+
+<p>Next, download the sample server configuration file from the OpenVPN’s Git repository (if you are on an Ubuntu minimal image, you should not have this on your system because it has been minimized):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /etc/openvpn
+<span class="nb">sudo </span>wget https://raw.githubusercontent.com/OpenVPN/openvpn/master/sample/sample-config-files/server.conf
+</code></pre></div></div>
+
+<p>Edit the server configuration file; for this part, we will configure a TCP OpenVPN server listening on port 443, but the method to configure are the same for the UDP OpenVPN server listening on port 1194 if you decide to host two OpenVPN servers. Modify the following lines by searching for them in your favourite editor:</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/server.conf</code>:</p>
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">port</span> <span class="m">443</span>
+<span class="n">proto</span> <span class="n">tcp</span>
+<span class="n">user</span> <span class="n">nobody</span>
+<span class="n">group</span> <span class="n">nogroup</span>
+<span class="n">cipher</span> <span class="n">AES</span>-<span class="m">256</span>-<span class="n">CBC</span>
+<span class="n">auth</span> <span class="n">SHA256</span>
+<span class="n">push</span> <span class="s2">"redirect-gateway def1 bypass-dhcp"</span>
+<span class="n">push</span> <span class="s2">"dhcp-option DNS 208.67.222.222"</span>
+<span class="n">push</span> <span class="s2">"dhcp-option DNS 208.67.220.220"</span>
+<span class="n">dh</span> <span class="n">dh</span>.<span class="n">pem</span>
+
+<span class="c"># these line does not exist by default
+</span><span class="n">auth</span> <span class="n">SHA256</span>
+</code></pre></div></div>
+
+<p>Try starting the OpenVPN server:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start openvpn@server
+<span class="nb">sudo </span>systemctl status openvpn@server
+</code></pre></div></div>
+
+<p>If the server successfully initializes, then enable the server, and note down the tunnel device used for the connection:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>openvpn@server
+ip <span class="nb">link</span> | <span class="nb">grep</span> <span class="s2">"tun"</span>
+</code></pre></div></div>
+
+<p>More than likely, the result should show <code class="language-plaintext highlighter-rouge">tun0</code>.</p>
+
+<p>Download your VPN provider’s OpenVPN configuration file, and copy them into <code class="language-plaintext highlighter-rouge">/etc/openvpn</code>. Afterwards, create a service file in <code class="language-plaintext highlighter-rouge">/etc/systemd/system</code>:</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/systemd/system/vpnprovider.service</code>:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
+<span class="py">Description</span><span class="p">=</span><span class="s">Binds OpenVPN server tunnel to OpenVPN client tunnel</span>
+
+<span class="nn">[Service]</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">openvpn --cd /etc/openvpn --config &lt;client config file here&gt; --route-noexec --route-up /etc/openvpn/client-up.sh --route-pre-down /etc/openvpn/client-down.sh</span>
+
+<span class="nn">[Install]</span>
+<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Then, create the files <code class="language-plaintext highlighter-rouge">/etc/openvpn/client-up.sh</code> and <code class="language-plaintext highlighter-rouge">/etc/openvpn/client-down.sh</code> to manually route:</p>
+<ul>
+  <li>All connections to 0.0.0.0/0 to the VPN provider;</li>
+  <li>All connections to ZeroTier local address (e.g. 172.25.0.0/16) to ZeroTier.</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client-up.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">SRC_DEVICE</span><span class="o">=</span><span class="s2">"tun0"</span>
+<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
+<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
+
+<span class="nb">set</span> <span class="nt">-e</span>
+
+sysctl <span class="nt">-w</span> net.ipv4.ip_forward<span class="o">=</span>1
+
+<span class="nb">touch</span> /etc/iproute2/rt_tables.d/ovpn2ovpn.conf
+<span class="nb">echo</span> <span class="s2">"42070 ovpn2ovpn"</span> <span class="o">&gt;</span> /etc/iproute2/rt_tables.d/ovpn2ovpn.conf
+
+ip rule add from 10.8.0.0/24 table ovpn2ovpn
+ip route add default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table ovpn2ovpn
+ip route add <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table ovpn2ovpn
+
+iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-t</span> nat <span class="nt">-I</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
+iptables <span class="nt">-t</span> nat <span class="nt">-I</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> MASQUERADE
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client-down.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">SRC_DEVICE</span><span class="o">=</span><span class="s2">"tun0"</span>
+<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
+<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
+
+ip rule delete from 10.8.0.0/24 table ovpn2ovpn
+ip route delete default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table ovpn2ovpn
+ip route delete <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table ovpn2ovpn
+
+<span class="nb">rm</span> <span class="nt">-f</span> /etc/iproute2/rt_tables.d/ovpn2ovpn.conf
+
+iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">SRC_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-t</span> nat <span class="nt">-D</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
+iptables <span class="nt">-t</span> nat <span class="nt">-D</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> <span class="nt">-j</span> MASQUERADE
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">10.8.0.0/24</code> is the CIDR used by default for <code class="language-plaintext highlighter-rouge">/etc/openvpn/server.conf</code>. Remember to flag the scripts as executable:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo chmod</span> +x /etc/openvpn/client-up.sh /etc/openvpn/client-down.sh
+</code></pre></div></div>
+
+<p>Start the custom service:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl start vpnprovider
+<span class="nb">sudo </span>systemctl status vpnprovider
+</code></pre></div></div>
+
+<p>If successfully started, enable the service:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>vpnprovider
+</code></pre></div></div>
+
+<p>Now that all the services are in place, allow them through the UFW:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ufw allow 9993/udp <span class="c"># for ZeroTier</span>
+ufw allow 443/tcp
+ufw allow 1194/udp
+</code></pre></div></div>
+
+<p>In theory anyway. On Oracle Cloud VM instances, UFW rules are placed <strong>below</strong> a REJECT rule on the IPTables, like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+    4  1344 ACCEPT     all  --  tun0   any     anywhere             anywhere            
+ 848K  472M ACCEPT     all  --  any    any     anywhere             anywhere             state RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  any    any     anywhere             anywhere            
+  688 59382 ACCEPT     all  --  lo     any     anywhere             anywhere            
+    0     0 ACCEPT     udp  --  any    any     anywhere             anywhere             udp spt:ntp
+ 1294 75128 ACCEPT     tcp  --  any    any     anywhere             anywhere             state NEW tcp dpt:ssh
+10739 5199K REJECT     all  --  any    any     anywhere             anywhere             reject-with icmp-host-prohibited
+    0     0 ufw-before-logging-input  all  --  any    any     anywhere             anywhere            
+    0     0 ufw-before-input  all  --  any    any     anywhere             anywhere            
+    0     0 ufw-after-input  all  --  any    any     anywhere             anywhere            
+    0     0 ufw-after-logging-input  all  --  any    any     anywhere             anywhere            
+    0     0 ufw-reject-input  all  --  any    any     anywhere             anywhere            
+    0     0 ufw-track-input  all  --  any    any     anywhere             anywhere 
+</code></pre></div></div>
+
+<p>In other words, UFW becomes absolutely useless. As an interesting side note, trying to connect to a port other than TCP port 22 will yield ‘Destination Host Unreachable’ error messages thanks to IPTable rejecting connections with <code class="language-plaintext highlighter-rouge">icmp-host-prohibited</code>. There are two ways to circumvent this:</p>
+<ol>
+  <li>Delete the REJECT rule;</li>
+  <li>Add my own IPTable rules.</li>
+</ol>
+
+<p>For this guide, I decided to just <em>add</em> my own iptable rules, since I don’t know the implications of deleting the REJECT rule:</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/iptables/rules.v4</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">*</span>filter
+:INPUT ACCEPT <span class="o">[</span>0:0]
+...
+<span class="nt">-A</span> INPUT <span class="nt">-p</span> tcp <span class="nt">--dport</span> 443 <span class="nt">-j</span> ACCEPT
+<span class="nt">-A</span> INPUT <span class="nt">-p</span> udp <span class="nt">--dport</span> 1194 <span class="nt">-j</span> ACCEPT
+<span class="nt">-A</span> FORWARD <span class="nt">-s</span> tun0 <span class="nt">-j</span> ACCEPT
+<span class="nt">-A</span> FORWARD <span class="nt">-s</span> tun1 <span class="nt">-j</span> ACCEPT
+...
+</code></pre></div></div>
+
+<h1 id="step-5-create-client-configurations"><span id="step5">Step 5: Create Client Configurations</span></h1>
+
+<p>Now, we generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> files used by the clients. For convenience (and to rip off <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean’s guide</a>), we’ll combine the CA certificate, Client certificate and Client’s key into the <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+
+<p>Firstly, we generate a working directory to store the files needed for the <code class="language-plaintext highlighter-rouge">.ovpn</code> file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/client/files
+</code></pre></div></div>
+
+<p>Then, we download the example client configuration from the official Git repository:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-O</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/client/files/base.conf https://raw.githubusercontent.com/OpenVPN/openvpn/master/sample/sample-config-files/client.conf
+</code></pre></div></div>
+
+<p>Modify <code class="language-plaintext highlighter-rouge">client.conf</code> to match the server configuration (assuming TCP on 443):</p>
+
+<p><code class="language-plaintext highlighter-rouge">${PWD}/client/client.conf</code>:</p>
+<div class="language-conf highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">remote</span> <span class="n">x</span>.<span class="n">x</span>.<span class="n">x</span>.<span class="n">x</span> <span class="m">443</span>
+<span class="n">proto</span> <span class="n">tcp</span>
+<span class="n">user</span> <span class="n">nobody</span>
+<span class="n">group</span> <span class="n">nogroup</span>
+<span class="n">cipher</span> <span class="n">AES</span>-<span class="m">256</span>-<span class="n">CBC</span>
+<span class="n">auth</span> <span class="n">SHA256</span>
+
+<span class="c"># comment out these lines
+</span>;<span class="n">ca</span> <span class="n">ca</span>.<span class="n">crt</span>
+;<span class="n">cert</span> <span class="n">client</span>.<span class="n">crt</span>
+;<span class="n">key</span> <span class="n">client</span>.<span class="n">key</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">x.x.x.x</code> with the IP assigned to your Oracle VM instance.</p>
+
+<p>The <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean guide</a> uses a script to generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> file, so that is what we will be doing too. It essentially concatenates all the necessary files together and spits out an <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+
+<p><code class="language-plaintext highlighter-rouge">${PWD}/client/make_config.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># First argument: Client identifier</span>
+<span class="nv">PKI_DIR</span><span class="o">=</span><span class="s2">"../pki"</span>
+<span class="nv">CA_DIR</span><span class="o">=</span><span class="s2">"../openvpn-ca"</span>
+<span class="nv">OUTPUT_DIR</span><span class="o">=</span><span class="s2">"./files"</span>
+<span class="nv">BASE_CONFIG</span><span class="o">=</span><span class="s2">"./files/base.conf"</span>
+
+<span class="nb">cat</span> <span class="k">${</span><span class="nv">BASE_CONFIG</span><span class="k">}</span> <span class="se">\</span>
+    &lt;<span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'&lt;ca&gt;'</span><span class="o">)</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">PKI_DIR</span><span class="k">}</span>/ca.crt <span class="se">\</span>
+    &lt;<span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'&lt;/ca&gt;\n&lt;cert&gt;'</span><span class="o">)</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">PKI_DIR</span><span class="k">}</span>/issued/<span class="k">${</span><span class="nv">1</span><span class="k">}</span>.crt <span class="se">\</span>
+    &lt;<span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'&lt;/cert&gt;\n&lt;key&gt;'</span><span class="o">)</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">PKI_DIR</span><span class="k">}</span>/private/<span class="k">${</span><span class="nv">1</span><span class="k">}</span>.key <span class="se">\</span>
+    &lt;<span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'&lt;/key&gt;\n&lt;tls-auth&gt;'</span><span class="o">)</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">CA_DIR</span><span class="k">}</span>/keys/ta.key <span class="se">\</span>
+    &lt;<span class="o">(</span><span class="nb">echo</span> <span class="nt">-e</span> <span class="s1">'&lt;/tls-auth&gt;'</span><span class="o">)</span> <span class="se">\</span>
+    <span class="o">&gt;</span> <span class="k">${</span><span class="nv">OUTPUT_DIR</span><span class="k">}</span>/<span class="k">${</span><span class="nv">1</span><span class="k">}</span>.ovpn
+</code></pre></div></div>
+
+<p>Adjust the directories to their absolute paths just to be sure. Once you are confident that the paths are accurate, give the script the executable go-ahead, and run the script with the parameter of the client name (should be <code class="language-plaintext highlighter-rouge">client1</code>, as generated with <code class="language-plaintext highlighter-rouge">./easyrsa build-client-full client nopass</code>):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> &lt;path to client directory&gt;
+<span class="nb">chmod</span> +x make_config.sh
+./make_config.sh client1
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">.ovpn</code> should be generated in the <code class="language-plaintext highlighter-rouge">./files</code> directory. This file can then be transferred to another device, like your Android device or ISP-controlled router. Give it a spin, and ensure everything is in working order by:</p>
+<ul>
+  <li>Checking IP address with <a href="https://ifconfig.so">ifconfig.so</a>, or VPN provider internet checker;</li>
+  <li>Checking ZeroTier connectivity by pinging peers in the same network.</li>
+</ul>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>You have successfully set up Solution Duo. <a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">Click here</a> to go back to Part 1; otherwise, if you are satisfied with your setup, then we’re done here.</p>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+

@@ -1,0 +1,215 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Uno Architecture&amp;lt;&amp;lt; Take me back to Part 1In this part, we will be implementing Solution Uno. Solution Uno has the following main design goals:  Connect from a device that can only have one VPN connection (like an Android device)  Connect from a restricted device that only allows VPN..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">ZeroTier OpenVPN NAT - Part 2</h1>
+      <p class="text-gray mb-5">Published Feb 14, 2021 13:29</p>
+      
+  <div class="article">
+    <p><img src="/images/20210214_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Architecture"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Uno Architecture</p>
+
+<p><a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">&lt;&lt; Take me back to Part 1</a></p>
+
+<p>In this part, we will be implementing Solution Uno. Solution Uno has the following main design goals:</p>
+
+<ul>
+  <li>Connect from a device that can only have one VPN connection (like an Android device)</li>
+  <li>Connect from a restricted device that only allows VPN configurations (like a ISP home router)</li>
+</ul>
+
+<h1 id="step-0-pre-requisites">Step 0: Pre-requisites</h1>
+
+<p>You will need a low-powered host capable of hosting an OpenVPN Server and maintaining a ZeroTier connection, like a Single Board Computer. Preferably, you will want administrative privileges; this guide will assume that you’ve got your hands on a Raspberry Pi with some flavour of Linux installed, particularly, Debian/Ubuntu.</p>
+
+<p>You will need administrative access to your ZeroTier network through ZeroTier Central or some equivalent (if you run your own controller).</p>
+
+<h1 id="step-1-installing-packages">Step 1: Installing packages</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> https://install.zerotier.com | <span class="nb">sudo </span>bash
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>openvpn
+</code></pre></div></div>
+
+<p>After installing ZeroTier, configure it to join your network; a simple <code class="language-plaintext highlighter-rouge">sudo zerotier-cli join &lt;networkID&gt;</code> should do. Run:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip <span class="nb">link</span> | <span class="nb">grep</span> <span class="s2">"zt"</span>
+</code></pre></div></div>
+
+<p>Note down the full device name; it should look like this: <code class="language-plaintext highlighter-rouge">ztly52mmwy</code>.</p>
+
+<h1 id="step-2-create-files">Step 2: Create files</h1>
+
+<p>In this step, we are going to create a SystemD unit file, and two scripts that the OpenVPN daemon will call when routes are being setup and torn down. If you are not using a flavour of Linux that uses SystemD, then adapt the files based on your favoured init system.</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/systemd/system/zt2ovpn.service</code>:</p>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
+<span class="py">Description</span><span class="p">=</span><span class="s">Binds ZeroTier tunnel to OpenVPN</span>
+
+<span class="nn">[Service]</span>
+<span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
+<span class="py">ExecStart</span><span class="p">=</span><span class="s">openvpn --cd /etc/openvpn/client --config &lt;insert_vpn_conf_here&gt;.conf --route-noexec --route-up /etc/openvpn/client/up-script.sh --route-pre-down /etc/openvpn/client/down-script.sh</span>
+
+<span class="nn">[Install]</span>
+<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+</code></pre></div></div>
+
+<p>Remember to replace <code class="language-plaintext highlighter-rouge">&lt;insert_vpn_conf_here&gt;.conf</code> with your VPN provider’s configuration.</p>
+
+<p>The most important part of this service is the command in the <code class="language-plaintext highlighter-rouge">ExecStart</code> directive:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openvpn <span class="nt">--cd</span> /etc/openvpn/client <span class="nt">--config</span> &lt;insert_vpn_conf_here&gt;.conf <span class="nt">--route-noexec</span> <span class="nt">--route-up</span> /etc/openvpn/client/up-script.sh <span class="nt">--route-pre-down</span> /etc/openvpn/client/down-script.sh
+</code></pre></div></div>
+
+<p>As long as there is some variant of this in the init system, the setup should work as expected. One peculiar flag you may notice is the <code class="language-plaintext highlighter-rouge">--route-noexec</code> flag; this flag prevents the VPN from writing to the route table. This is required to fulfill constraint #3, which states that the ZeroTier to OpenVPN tunnel should be otherwise unaffecting.</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
+<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
+
+<span class="nb">set</span> <span class="nt">-e</span>
+
+sysctl <span class="nt">-w</span> net.ipv4.ip_forward<span class="o">=</span>1
+
+<span class="nb">touch</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
+<span class="nb">echo</span> <span class="s2">"42069 zt2ovpn"</span> <span class="o">&gt;</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
+
+ip rule add from <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> table zt2ovpn
+ip route add default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table zt2ovpn
+ip route add <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table zt2ovpn
+
+iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-t</span> nat <span class="nt">-I</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
+</code></pre></div></div>
+<p>Edit <code class="language-plaintext highlighter-rouge">ZT_DEVICE</code> to whatever device name you’ve noted down in step 1, and <code class="language-plaintext highlighter-rouge">ZT_CIDR</code> to whatever you set in ZeroTier Central or equivalent.</p>
+
+<p>This script will be executed by OpenVPN when a connection is up; since we told OpenVPN not to add routes, we have to do it manually in this script. The line <code class="language-plaintext highlighter-rouge">sysctl -w net.ipv4.ip_forward=1</code> enables IP forwarding on the system, which is required to forward packets between the ZeroTier adapter and the VPN tunnel. The next few lines adds a new route table effective only for <code class="language-plaintext highlighter-rouge">${ZT_CIDR}</code>: this is required as we do not want to affect the host system’s routing, dictated by constraint #3. We set the default route to the VPN gateway, and properly route any connections to ZeroTier devices for the new table that we just created. The last few <code class="language-plaintext highlighter-rouge">iptables</code> lines essentially just accepts connections from the ZeroTier adapter, allow forwarding for that device, and allow any exiting connections to the OpenVPN tunnel adapter to be masqueraded.</p>
+
+<p>For some systems, you may need to add a few lines to accept connections from the OpenVPN tunnel adapter:</p>
+
+<p>(Optional addon for <code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
+</code></pre></div></div>
+
+<p>Next, create the down script.</p>
+
+<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client/down-script.sh</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
+<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
+
+ip rule delete from <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> table zt2ovpn
+ip route delete default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table zt2ovpn
+ip route delete <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table zt2ovpn
+
+<span class="nb">rm</span> <span class="nt">-f</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
+
+iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-t</span> nat <span class="nt">-D</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
+</code></pre></div></div>
+
+<p>The down script is essentially the opposite of the up script; it deletes the entries created by the up script. If you added the optional addons for <code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>, then you may need these lines too:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
+iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
+</code></pre></div></div>
+
+<h1 id="step-3-enable--start-the-service">Step 3: Enable &amp; Start the service</h1>
+
+<p>Try starting the service with:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl start zt2ovpn
+</code></pre></div></div>
+
+<p>Hopefully, there would be no errors. If there are errors, then find out what they are:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl status zt2ovpn
+<span class="nb">sudo </span>journalctl <span class="nt">-u</span> zt2ovpn <span class="nt">-f</span>
+</code></pre></div></div>
+
+<p>If everything is alright, enable the service to start it on system start:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>zt2ovpn
+</code></pre></div></div>
+
+<h1 id="step-4-add-entry-to-zerotier-central-or-equivalent">Step 4: Add entry to ZeroTier Central (or equivalent)</h1>
+
+<p>Navigate to your network on ZeroTier, and add a Managed Route:</p>
+
+<p><img src="/images/20210214_6.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Adding a Managed Route"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Adding a Managed Route | Source: Me</p>
+
+<p>Under <code class="language-plaintext highlighter-rouge">(Via)</code> should be the IP address of the host (Single Board Computer) you are using; for me, it was <code class="language-plaintext highlighter-rouge">172.25.0.1</code>. Once done, click on Submit.</p>
+
+<h1 id="step-5-testing">Step 5: Testing</h1>
+
+<p>Now, test it on your devices. For any device with <code class="language-plaintext highlighter-rouge">zerotier-cli</code>, run:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>zerotier-cli <span class="nb">set</span> &lt;networkId&gt; <span class="nv">allowDefault</span><span class="o">=</span>1
+</code></pre></div></div>
+
+<p>For Android/iOS devices, find the “Route Via ZeroTier” option:
+<img src="/images/20210214_7.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Route Via ZeroTier"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Route Via ZeroTier option | Source: Me</p>
+
+<p>Check your IP address with your favourite method; if your VPN provider provides a way to check IP addresses, DNS and WebRTC leaks, use that instead.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Congratulations! You’ve successfully set up Solution Uno. <a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">Click here</a> to go back to Part 1; otherwise, if you are satisfied, then we’re done here.</p>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+

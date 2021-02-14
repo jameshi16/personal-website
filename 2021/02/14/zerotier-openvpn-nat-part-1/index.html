@@ -1,0 +1,181 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Happy New Year :fireworks:! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?Well, as they (read: I) say, the day doesn’t end until you go to sleep; and I’ve been awake for a really, really long time :coffee:. Regardless of the late and obligatory greeting, my ..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">ZeroTier OpenVPN NAT - Part 1</h1>
+      <p class="text-gray mb-5">Published Feb 14, 2021 13:31</p>
+      
+  <div class="article">
+    <p>Happy New Year <img class="emoji" title=":fireworks:" alt=":fireworks:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f386.png" height="20" width="20">! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?</p>
+
+<p>Well, as they (read: <em>I</em>) say, the day doesn’t end until you go to sleep; and I’ve been awake for a really, <em>really</em> long time <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20">. Regardless of the late and obligatory greeting, my New Year’s resolution is to deliver interesting blog posts every month of the year - let’s hope I don’t run out of unconventional ideas to blog about. Also, January doesn’t count as a month.</p>
+
+<p>Enjoy!</p>
+
+<h1 id="preface-skippable">Preface (Skippable)</h1>
+
+<p><a href="#goal">SKIP: I don’t have the time, bring me to the next section <img class="emoji" title=":angry:" alt=":angry:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f620.png" height="20" width="20"></a></p>
+
+<p>Decentralized networks are quite interesting. Instead of a star-like topology like in traditional client-server models, decentralized networks are usually peer-to-peer (P2P), meaning they have a spider-web-like topology.</p>
+
+<p><img src="/images/20210214_1.svg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Star Model"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Traditional Client-Server Model | Source: <a href="https://en.wikipedia.org/wiki/Peer-to-peer">Wikipedia</a></p>
+
+<p><img src="/images/20210214_2.svg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Spider-web Model"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Peer-to-Peer Model | Source: <a href="https://en.wikipedia.org/wiki/Peer-to-peer">Wikipedia</a></p>
+
+<p>There are many arguments online about which model is better than the other in terms of network performance, redundancy and host stability; you can read more about a standardized response to “Client-Server Model vs Peer-to-Peer model” <a href="https://cio-wiki.org/wiki/Client_Server_Architecture#Advantages_and_Disadvantages_of_the_Client_Server_Architecture.5B7.5D">through this link</a>.</p>
+
+<p>In this decade, we saw the rise of Bitcoin, a cryptocurrency that uses Blockchain technology, as a decentralized payment alternative to standard bank transfers / credit card payments. Many began to ride on the bandwagon, inventing new cryptocurrencies, merging Blockchain technology with the supply chain, and applying the idea of decentralization into every nook and cranny of technology.</p>
+
+<p>One such impacted technology is Virtual Private Networks (VPNs). Recently, the consumer definition of VPNs are “a more privacy oriented internet connection that can be used to bypass geological restrictions”; however, this is not the original purpose or definition of VPN. Instead, VPNs, by definition from <a href="https://www.cisco.com/c/en/us/products/security/vpn-endpoint-security-clients/what-is-vpn.html">Cisco</a>, are extensions of another network by making it available on the internet; a user can securely access the resources on a private network via a VPN service.</p>
+
+<p>An advantage of accessing the private network over exposing the services to the internet is the battle-tested authentication &amp; encryption tunnel created for the connection: no matter what protocol the services in the private network use, be it encrypted or not, they can all be securely accessed via a VPN tunnel over the network. Moreover, given a properly configured firewall for each host in the network, creating and hosting new services becomes a simple task, as private networks are implicitly trusted by many applications.</p>
+
+<p>Before 2011, most users or corporates leveraged the power of (true) VPNs either by hosting it themselves, or via a managed decentralized P2P service like <a href="https://en.wikipedia.org/wiki/LogMeIn_Hamachi">LogMeIn Hamachi</a>; as a side-note reminiscing my past, Hamachi was one of the services I used frequently, as it was one of the easier ways to host a Minecraft server without port-forwarding. It is also worth it to note that Hamachi’s selling point was not it’s decentralization, but it’s ability to create a VLAN. In 2011, a lesser-known alternative sprung up, known as <a href="https://www.zerotier.com/">ZeroTier</a>.</p>
+
+<p>Unlike Hamachi, ZeroTier has less restrictions on the number of hosts per network (5 vs 50 at the time of writing), has Software-Defined Networking (i.e. something like kernel IPTables and iproute2), allowed for Full Bridging Mode (i.e. tunnel all internet connection to a host on the Software-Defiend network), and is mostly open-source; this means that the technology behind the core aspects of ZeroTier, such as using <a href="https://en.wikipedia.org/wiki/STUN">STUN</a>, <a href="https://en.wikipedia.org/wiki/UDP_hole_punching">UDP Hole Punching</a>, route discovery and tunnel encryption are under public scrutiny, which helps to create a more secure service. Moreover, ZeroTier is constantly evolving to become more decentralized; with the introduction of <a href="https://www.zerotier.com/manual/#4_4">Moons</a>, it is ZeroTier’s aim to achieve infrastructure federation, i.e. little to no reliance on ZeroTier’s root servers. In a nutshell, the main difference between Hamachi and ZeroTier is their emphasis on decentralization.</p>
+
+<p>Personally, I believe that true decentralization can only occur when the community is heavily involved in the project; barring conspiracy, projects such as the <a href="https://en.wikipedia.org/wiki/Tor_%5C(anonymity_network%5C)">Tor Project</a> or <a href="https://geti2p.net/en/">I2P</a> can only achieve their “freedom of internet via anonymity” goal through peer-hosted servers or clients. Hence, it makes sense for more users to jump aboard the decentralization train - so that we may ideally achieve a freer internet with less surveillance.</p>
+
+<hr>
+
+<h1 id="goal">Goal</h1>
+
+<p>On almost all of my devices (which includes one Single Board Computer akin to a Raspberry Pi), I have a VPN connection to a provider I trust, and an installation of ZeroTier. The VPN provider connects me to the internet, while ZeroTier gives me access to services on my VLAN; however, there are two main problems with this setup:</p>
+
+<ol>
+  <li>Android devices cannot dual-wield VPN connections; in other words, I cannot connect to my VPN provider and ZeroTier at the same time;</li>
+  <li>For <em>true</em> decentralization &amp; federation, this setup relies too much on UDP connectivity - despite being in 2021, several locations (universities, coffee shops) still block UDP connections.</li>
+</ol>
+
+<p>As my goal is to achieve peak decentralization, <strong>and</strong> retain my VPN connection to my VPN provider, it falls on me to implement a solution that can combine the best of both worlds. Additionally, there are the following constraints:</p>
+
+<ol>
+  <li>I cannot port-forward. My solution must rely on resources most people can access; routers have subjective access levels for each individual. Moreover, dynamic IP addresses are a thing; any solution that requires the exposure of a service to the plain internet is out of the question.</li>
+  <li>One device. The solution must be implementable on a single device; money (and hence, resources) does not grow on trees.</li>
+  <li>Otherwise unaffecting. The solution must not disrupt the default gateways on the implemented devices; in other words, the device can still have plain internet access <em>alongside</em> hosting whatever solution I implement.</li>
+  <li>Free. The solution cannot cost extra money.</li>
+</ol>
+
+<p>These constraints will help make my solutions implementable across a wider audience, irregardless of how complex a given country’s NAT systems or firewalls are. After racking my head for a bit, I came up with two possible solutions, but none of them perfectly mitigates the problems above; if you decide to implement them, read the text carefully.</p>
+
+<blockquote>
+  <p><strong>NOTE</strong>: For all the solutions, I’m assuming that the subnet for ZeroTier is <code class="language-plaintext highlighter-rouge">172.25.0.0/16</code>.</p>
+</blockquote>
+
+<h2 id="solution-uno">Solution Uno</h2>
+
+<p>Solution Uno requires a device on your local LAN; a small Single Board Computer (SBC) is good enough. By some clever masquerade and manipulation of the Kernel IP Tables, it is possible to send all internet-bound connections from the ZeroTier adapter to an OpenVPN <code class="language-plaintext highlighter-rouge">tun</code> adapter. Hence, all one needs to do is to establish an OpenVPN connection to the VPN provider while ensuring it does not affect the route table (constraint #3), and create suitable entries in the route table to facilitate forwarding between ZeroTier and OpenVPN.</p>
+
+<p><img src="/images/20210214_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; ZeroTier -&gt; SBC -&gt; OpenVPN -&gt; OpenVPN Provider"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Uno | Source: Me</p>
+
+<p>Solution Uno’s downside occurs when a network restricts UDP connectivity, and hence prevents ZeroTier from achieving P2P connections; the device will instead be using a root server as a relay, which docks some points in federation.</p>
+
+<h2 id="solution-duo">Solution Duo</h2>
+
+<p>Cloud Computing providers fiercely compete with one another, offering unprecedented prices for infinite scalability, fault tolerance and availability. For non-business consumers like us, we benefit from the competition through the free-tier offerings; for Solution Duo, we utilize Oracle Cloud’s “Always Free Tier”, which allows us to have two <code class="language-plaintext highlighter-rouge">VM.Standard.E2.1.Micro</code> VMs for the low price of absolutely free.</p>
+
+<p><img src="/images/20210214_4.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; OpenVPN -&gt; Oracle Cloud VM -&gt; OpenVPN -&gt; OpenVPN Provider"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Duo | Source: Me</p>
+
+<p>By configuring an OpenVPN server and ZeroTier on an Oracle Cloud VM, it becomes possible to set up routes to forward packets to and fro the OpenVPN <code class="language-plaintext highlighter-rouge">tun</code> and ZeroTier adapter. Taking care not to disrupt the default gateway (constraint #3), an OpenVPN client connection can be established from within the VM, connecting to the VPN provider. In essence, an external device will be connecting to a OpenVPN proxy that also happens to route ZeroTier addresses.</p>
+
+<p>The main downside of this approach is the connection speed; Oracle Cloud does not have datacenters in certain parts of the world, which may increase latency of any given VPN connection.</p>
+
+<h2 id="bonus-solution-dinosaur">Bonus: Solution Dinosaur</h2>
+
+<p>As a bonus solution (and if you have time), both Solution Uno and Solution Duo can be implemented together, forming something akin a multi-directional bridge. If the device has an unrestricted internet connection, and is also an Android device, then simply connecting to the ZeroTier network via the official Android app will connect it to both the VPN provider and the ZeroTier network. If you want to maximize federation, and the device has an internet connection that blocks UDP connections, then connecting to the Oracle Cloud VM via an OpenVPN app will also connect the device to both the VPN and the ZeroTier network.</p>
+
+<p><img src="/images/20210214_5.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; OpenVPN -&gt; Oracle Cloud VM -&gt; ZeroTier -&gt; SBC -&gt; OpenVPN -&gt; OpenVPN Provider"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Dinosaur | Source: Me</p>
+
+<p>While it is an abomination, I personally use this method. A more ideal solution would be to host a ZeroTier moon on Oracle Cloud, and then getting the device to orbit it, but such a feature is unavailable on Android at the time of writing.</p>
+
+<blockquote>
+  <p><strong>NOTE</strong>: There is a rumor that this feature will come in ZeroTier 2.0, according to this <a href="https://www.reddit.com/r/zerotier/comments/d9xuv3/force_zerotier_client_to_only_use_your_own_moons/">Reddit post</a>.</p>
+</blockquote>
+
+<hr>
+
+<h1 id="bookmark">Bookmark</h1>
+
+<p>I will implement all three solutions in different parts:</p>
+
+<ul>
+  <li>
+<a href="/2021/02/14/zerotier-openvpn-nat-part-2">Part 2</a> - Solution Uno</li>
+  <li>
+<a href="/2021/02/14/zerotier-openvpn-nat-part-3">Part 3</a> - Solution Duo</li>
+  <li>
+<a href="/2021/02/14/zerotier-openvpn-nat-part-4">Part 4</a> - Solution Dinosaur</li>
+</ul>
+
+<p>You can bookmark <a href="#bookmark">this link</a> to come back later.</p>
+
+<hr>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>While decentralization is an important step forward for the internet, a large part of the world is still resisting those changes; by disrupting UDP connectivity, peer-to-peer connections are difficult, if not, impossible to establish, hindering the progress towards a freer and open internet.</p>
+
+<p>I hope that by coming up with solutions to workaround these disruptions, we can bridge the missing gaps required to get everyone on decentralized networks, private or not.</p>
+
+<p>This was a particularly long series of blog posts - if you find any mistakes in the posts, please tweet <a href="https://twitter.com/jameshi16">@me</a>.</p>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
