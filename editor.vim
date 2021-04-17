@@ -27,12 +27,15 @@ syntax include @PYTHON syntax/python.vim
 syntax region pythonSnippet start='```python' end='```' contains=@PYTHON keepend
 
 " Blog Header Syntax (it's YAML, but I wanted to limit / customize it)
-syn keyword blogHeaderKeywords title japTitle nextgroup=blogHeaderStringDelimitter contained
+syn keyword blogHeaderKeywords title japTitle published image nextgroup=blogHeaderStringDelimitter contained
 syn keyword blogHeaderKeywords date nextgroup=blogHeaderDateDelimitter contained
 syn keyword blogHeaderKeywords tags categories nextgroup=blogHeaderListDelimitter contained
+syn keyword blogHeaderKeywords rating nextgroup=blogHeaderNumberDelimitter contained
 syn match blogHeaderStringDelimitter ':' nextgroup=blogHeaderString skipwhite contained
 syn match blogHeaderListDelimitter ':' nextgroup=blogHeaderList skipwhite contained
 syn match blogHeaderDateDelimitter ':' nextgroup=blogHeaderDate skipwhite contained
+syn match blogHeaderNumberDelimitter ':' nextgroup=blogHeaderNumber skipwhite contained
+syn match blogHeaderNumber '\d\+' contained
 syn match blogHeaderString '\w\+' contained
 syn match blogHeaderDate '\d\{4}-\d\{2}-\d\{2} \d\{2}:\d\{2} +\d\{2}:\=\d\{2}' contained
 syn match blogHeaderListDelimitter ',' contained
@@ -140,8 +143,32 @@ function ToggleUpdateDates()
 	endif
 endfunction
 
+function InsertImage(imgPath)
+	let l:currentPath = expand('<sfile>:p:h')
+	let l:filePrefix = strftime("%Y%m%d_")
+	let l:imgDir = l:currentPath . '/images/'
+	let l:fileext = matchstr(a:imgPath, '\.\(\w\+\)')
+	let l:nextSeqNo = GetNextAvailableSeqNo(l:imgDir, l:filePrefix)
+
+	call rename(a:imgPath, l:imgDir . l:filePrefix . l:nextSeqNo  . l:fileext)
+	call append('.', '<img src="/images/' . l:filePrefix . l:nextSeqNo . l:fileext . '" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="<%%>"/>')
+	call append('.', '<p class="text-center text-gray lh-condensed-ultra f6"><%%></p>')
+endfunction
+
+function InsertHeader()
+	call append(0, ['---', 'title:', 'date:', 'published: true', '---'])
+endfunction
+
+function InsertAnimeHeader()
+	call append(0, ['---', 'title:', 'japTitle:', 'date:', 'image:', 'rating:', '---'])
+endfunction
+
+
 command Timestamp :call UpdateTimestamps()
 command UpdateDates :call ToggleUpdateDates()
+command -nargs=1 -complete=file InsertImage call InsertImage(<f-args>)
+command InsertHeader :call InsertHeader()
+command InsertAnimeHeader :call InsertAnimeHeader()
 
 au BufWrite <buffer> :silent! call SaveFile()
 
