@@ -27,28 +27,37 @@ syntax include @PYTHON syntax/python.vim
 syntax region pythonSnippet start='```python' end='```' contains=@PYTHON keepend
 
 " Blog Header Syntax (it's YAML, but I wanted to limit / customize it)
-syn keyword blogHeaderKeywords title japTitle published image nextgroup=blogHeaderStringDelimitter contained
+syn keyword blogHeaderKeywords title japTitle published nextgroup=blogHeaderStringDelimitter contained
 syn keyword blogHeaderKeywords date nextgroup=blogHeaderDateDelimitter contained
 syn keyword blogHeaderKeywords tags categories nextgroup=blogHeaderListDelimitter contained
 syn keyword blogHeaderKeywords rating nextgroup=blogHeaderNumberDelimitter contained
+syn keyword blogHeaderKeywords image nextgroup=blogHeaderURLDelimitter contained
 syn match blogHeaderStringDelimitter ':' nextgroup=blogHeaderString skipwhite contained
+syn match blogHeaderURLDelimitter ':' nextgroup=blogHeaderURL skipwhite contained
 syn match blogHeaderListDelimitter ':' nextgroup=blogHeaderList skipwhite contained
 syn match blogHeaderDateDelimitter ':' nextgroup=blogHeaderDate skipwhite contained
 syn match blogHeaderNumberDelimitter ':' nextgroup=blogHeaderNumber skipwhite contained
 syn match blogHeaderNumber '\d\+' contained
-syn match blogHeaderString '\w\+' contained
+syn match blogHeaderString '.\+\n' contained
+syn match blogHeaderStringEnclosed '\(\w\|\s\)\+' contained
 syn match blogHeaderDate '\d\{4}-\d\{2}-\d\{2} \d\{2}:\d\{2} +\d\{2}:\=\d\{2}' contained
+syn match blogHeaderURL /https\?:\/\/\(\w\+\(:\w\+\)\?@\)\?\([A-Za-z][-_0-9A-Za-z]*\.\)\{1,}\(\w\{2,}\.\?\)\{1,}\(:[0-9]\{1,5}\)\?\S*/ contained
 syn match blogHeaderListDelimitter ',' contained
-syn region blogHeaderList start="\[" end="\]" contains=blogHeaderString,blogHeaderListDelimitter
+syn region blogHeaderList start="\[" end="\]" contains=blogHeaderStringEnclosed,blogHeaderListDelimitter contained
 syn region blogHeaderBlock start="^---$" end="^---$" contains=blogHeaderKeywords transparent fold
+syn cluster @NoSpell add=blogHeaderString,blogHeaderURL
 
 let b:current_syntax = "blog"
-hi def link blogHeaderString   Constant 
-hi def link blogHeaderDate     Constant
-hi def link blogHeaderKeywords Type
+hi def link blogHeaderString         Constant 
+hi def link blogHeaderStringEnclosed Constant
+hi def link blogHeaderURL            Constant 
+hi def link blogHeaderNumber         Constant
+hi def link blogHeaderDate           Constant
+hi def link blogHeaderKeywords       Type
 
 " Functions
 let s:current_file = expand('<sfile>')
+let s:current_dir = expand('<sfile>:p:h')
 function! GetAllUsedImgFiles()
 	let l:cursorpos = getcurpos()
 	let l:result = search('<img.\+src\s*=\s*\"\/images\/', 'c', line('$'))
@@ -72,7 +81,7 @@ function! GetNextAvailableSeqNo(dir, prefix)
 	let l:files = readdir(a:dir, {n -> n =~ a:prefix})
 	let l:highestseqno = 0
 	for l:file in l:files
-		let l:seqno = matchstr(l:file, '_\(\d\+\)')
+		let l:seqno = matchlist(l:file, '_\(\d\+\)')[1]
 		if l:seqno > l:highestseqno
 			let l:highestseqno = l:seqno
 		endif
@@ -94,8 +103,7 @@ function! UpdateTimestamps()
 	endif
 
 	" update ts for all the img files defined in blog post
-	let l:currentPath = expand('<sfile>:p:h')
-	let l:imgDir = l:currentPath . '/images/'
+	let l:imgDir = s:current_dir . '/images/'
 	let l:imgFiles = GetAllUsedImgFiles()
 	let l:seqno = GetNextAvailableSeqNo(l:imgDir, l:filePrefix)
 
@@ -144,15 +152,15 @@ function ToggleUpdateDates()
 endfunction
 
 function InsertImage(imgPath)
-	let l:currentPath = expand('<sfile>:p:h')
 	let l:filePrefix = strftime("%Y%m%d_")
-	let l:imgDir = l:currentPath . '/images/'
+	let l:imgDir = s:current_dir . '/images/'
 	let l:fileext = matchstr(a:imgPath, '\.\(\w\+\)')
 	let l:nextSeqNo = GetNextAvailableSeqNo(l:imgDir, l:filePrefix)
+	echom l:nextSeqNo
 
 	call rename(a:imgPath, l:imgDir . l:filePrefix . l:nextSeqNo  . l:fileext)
-	call append('.', '<img src="/images/' . l:filePrefix . l:nextSeqNo . l:fileext . '" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="<%%>"/>')
-	call append('.', '<p class="text-center text-gray lh-condensed-ultra f6"><%%></p>')
+	call append('.', '<p class="text-center text-gray lh-condensed-ultra f6">%%</p>')
+	call append('.', '<img src="/images/' . l:filePrefix . l:nextSeqNo . l:fileext . '" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="%%"/>')
 endfunction
 
 function InsertHeader()
