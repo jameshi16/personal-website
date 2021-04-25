@@ -1,4 +1,105 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2021-04-25T09:23:12+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">AutoLockdown</title><link href="https://codingindex.xyz/2021/04/25/autolockdown/" rel="alternate" type="text/html" title="AutoLockdown" /><published>2021-04-25T09:22:00+00:00</published><updated>2021-04-25T09:22:00+00:00</updated><id>https://codingindex.xyz/2021/04/25/autolockdown</id><content type="html" xml:base="https://codingindex.xyz/2021/04/25/autolockdown/">&lt;p&gt;Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2021-04-25T11:12:00+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Coffee :coffee:</title><link href="https://codingindex.xyz/2021/04/25/coffee/" rel="alternate" type="text/html" title="Coffee :coffee:" /><published>2021-04-25T11:11:00+00:00</published><updated>2021-04-25T11:11:00+00:00</updated><id>https://codingindex.xyz/2021/04/25/coffee</id><content type="html" xml:base="https://codingindex.xyz/2021/04/25/coffee/">&lt;p&gt;Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to &lt;a href=&quot;https://en.wikipedia.org/wiki/Reverse_engineering&quot;&gt;Wikipedia&lt;/a&gt;, which is definitely the best source of legal advice. But seriously though, I’m doing it for educational purpose and nothing else.). However, whenever life gives you lemons, you sigh &lt;i&gt;ugh&lt;/i&gt; and wait for a better fruit.&lt;/p&gt;
+
+&lt;p&gt;Instead, I changed my plans and wanted to write about studying techniques for remembering content you have little interest in, since that has been my most utilized skill for the past few months. Then, I looked at my coffee, drank the coffee, thought about how interesting it was that coffee was banned a few times in history and decided that I was going to do a blog post about coffee instead.&lt;/p&gt;
+
+&lt;p&gt;So, let’s get started!&lt;/p&gt;
+
+&lt;h1 id=&quot;why-do-we-drink-coffee&quot;&gt;Why do we drink coffee&lt;/h1&gt;
+
+&lt;p&gt;Coffee contains caffeine, which is a drug that stimulates the brain and helps us stay awake and alert (ref. 1, 2, 3). The usage of coffee is ubiquitous for almost any profession and scenario that requires the worker to stay awake - artists, musicians, labourers, architects, engineers, and of course, programmers. For enterprise programmers, it helps them trudge through client complaints, unreasonable demands from product managers, and fixing failing unit tests - just to name a few. Caffeine also boosts mood, metabolism and physical performance (ref. 8).&lt;/p&gt;
+
+&lt;p&gt;Despite its name, &lt;em&gt;decaffeinated&lt;/em&gt; coffee is not fully caffeine free; a cup of coffee containing 180mg of caffeine will end up having 5.4mg of caffeine when decaffeinated (ref. 11).&lt;/p&gt;
+
+&lt;h1 id=&quot;how-much-coffee-can-we-ingest-in-a-day&quot;&gt;How much coffee can we ingest in a day?&lt;/h1&gt;
+
+&lt;p&gt;For adults, the recommended daily caffeine intake is 400mg - which is about 4 or 5 cups of coffee per day (ref. 4). For reference, a cup conventionally contains 200ml to 250ml of coffee (ref. 5) (the former will limit coffee intake to 5 cups a day, while the latter will limit coffee to 4 cups a day) - this would mean that, in metric units, an adult can drink up to 1 litre of coffee a day.&lt;/p&gt;
+
+&lt;p&gt;There exists light coffee drinkers and heavy coffee drinkers differentiated by their caffeine tolerance (ref. 6), which affects the magnitude and duration of the undesirable side effects of coffee. An individual that is unsure of their caffeine intake should try to only ingest a maximum of 200mg of caffeine per day, which amounts to 2 or 2.5 cups a day.&lt;/p&gt;
+
+&lt;p&gt;Some figures for commonly ingested source of caffeine:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20210425_5.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Caffeine doses&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Caffeine doses in coffee | Source: &lt;a href=&quot;https://www.apa.org/gradpsych/2015/11/coffee&quot;&gt;Stacy Lu, APA (ref. 7)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Some more figures from ref. 6:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Coffee: 96mg per cup&lt;/li&gt;
+  &lt;li&gt;Energy Drink: 72mg per cup&lt;/li&gt;
+  &lt;li&gt;Green Tea: 29mg per cup&lt;/li&gt;
+  &lt;li&gt;Soft Drink: 34mg per cup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;side-effects-of-coffee&quot;&gt;Side-effects of coffee&lt;/h1&gt;
+
+&lt;p&gt;Recalling that the recommended maximum daily caffeine intake is 400mg, ingesting 3 times the amount will likely result to toxic effects (ref. 4). Some toxic effects include (ref. 8, 9):&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Anxiety&lt;/li&gt;
+  &lt;li&gt;Sleep disorder&lt;/li&gt;
+  &lt;li&gt;Increased blood sugar levels&lt;/li&gt;
+  &lt;li&gt;Increased heart rate &amp;amp; blood pressure&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20210425_6.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Coffee&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Coffee | Photo by Nathan Dumlao on &lt;a href=&quot;https://unsplash.com/photos/6VhPY27jdps&quot;&gt;Unsplash (ref. 10)&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;history-of-coffee&quot;&gt;History of coffee&lt;/h1&gt;
+
+&lt;p&gt;The origins of coffee (as in the coffee beans) is highly debatable (ref. 12), although it can be said that due to its discovery since time immemorial, it has touched upon every aspect of human civilisation, including religion (as with the case with it replacing wine in the Muslim religion), politics (as with the various bans on coffee) and trade.&lt;/p&gt;
+
+&lt;p&gt;An interesting aspect of coffee was its use by America in World War I, and its relation to coffeehouses, which were cornerstones for people to “hang out”.&lt;/p&gt;
+
+&lt;h2 id=&quot;world-war-i&quot;&gt;World War I&lt;/h2&gt;
+
+&lt;p&gt;In World War I, coffee was considered to be an essential item in the America army (ref. 13) - it was so essential that coffee became a rationed item in November 29, 1942 (ref. 14). There were only two reasons any resources needed to be rationed in the context of war:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;To ensure all civilians get access to said resource fairly;&lt;/li&gt;
+  &lt;li&gt;To ensure the military has access to said resource.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20210425_7.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;A propaganda poster for coffee rationing&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Coffee Rationing in US | Source: &lt;a href=&quot;https://www.wearethemighty.com/articles/brief-history-coffee-field/&quot;&gt;WeAreTheMighty (ref. 15)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;As for the reasons why coffee was much needed in the trenches of World War I, it was to combat fatigue, much like how we use coffee nowadays. Having re-energized troops can make a huge difference in the context of war.&lt;/p&gt;
+
+&lt;h2 id=&quot;coffeehouses&quot;&gt;Coffeehouses&lt;/h2&gt;
+
+&lt;p&gt;Coffeehouses were popular places for people of all classes to “meet, discuss business, exchange ideas and debate the news of the day” (ref. 16). Having free debate and discussion between people of all social statuses lead to the spread of democracy. However, because coffeehouses were so commonplace and popular, some were filled with criminals, scoundrels and pimps (ref. 16), enough to warrant an attempt was made to ban coffeehouses in 1675.&lt;/p&gt;
+
+&lt;p&gt;Coffeehouses soon fell out of favour as the popularity of tea rose, but its impact on democracy can still be felt today.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;It is strange to make a blog post about a commodity that is widely enjoyed instead of a programming blog post; luckily, as my blog name suggests, I like to do “Random Shenanigans”, which means that once in a while, an informative blog post such as this is nice to have.&lt;/p&gt;
+
+&lt;p&gt;I hope you enjoyed this blog post, as much as I enjoyed writing it! Let’s hope that I get apples instead of lemons from life next time; I haven’t got a lemonade maker.&lt;/p&gt;
+
+&lt;p&gt;Happy Coding (&amp;amp; enjoy a cup of coffee :coffee:),&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
+
+&lt;p&gt;Here are a list of references informally attributed, because I’m too lazy to do a proper citation.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.webmd.com/vitamins/ai/ingredientmono-979/caffeine&quot;&gt;https://www.webmd.com/vitamins/ai/ingredientmono-979/caffeine&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.healthline.com/nutrition/what-is-caffeine#what-it-is&quot;&gt;https://www.healthline.com/nutrition/what-is-caffeine#what-it-is&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.healthline.com/health/caffeine-effects-on-body&quot;&gt;https://www.healthline.com/health/caffeine-effects-on-body&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much&quot;&gt;https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Cup\_(unit)&quot;&gt;https://en.wikipedia.org/wiki/Cup_(unit)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.healthline.com/nutrition/caffeine-tolerance&quot;&gt;https://www.healthline.com/nutrition/caffeine-tolerance&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.apa.org/gradpsych/2015/11/coffee&quot;&gt;https://www.apa.org/gradpsych/2015/11/coffee&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.healthline.com/nutrition/caffeine-side-effects&quot;&gt;https://www.healthline.com/nutrition/caffeine-side-effects&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.aarp.org/health/healthy-living/info-10-2013/coffee-for-health.html&quot;&gt;https://www.aarp.org/health/healthy-living/info-10-2013/coffee-for-health.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://unsplash.com/photos/6VhPY27jdps?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditShareLink&quot;&gt;https://unsplash.com/photos/6VhPY27jdps?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditShareLink&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.healthline.com/nutrition/caffeine-in-decaf&quot;&gt;https://www.healthline.com/nutrition/caffeine-in-decaf&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/History\_of\_coffee&quot;&gt;https://en.wikipedia.org/wiki/History_of_coffee&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.npr.org/sections/thesalt/2017/04/06/522071853/in-wwi-trenches-instant-coffee-gave-troops-a-much-needed-boost&quot;&gt;https://www.npr.org/sections/thesalt/2017/04/06/522071853/in-wwi-trenches-instant-coffee-gave-troops-a-much-needed-boost&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.history.com/this-day-in-history/coffee-rationing-begins&quot;&gt;https://www.history.com/this-day-in-history/coffee-rationing-begins&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.wearethemighty.com/articles/brief-history-coffee-field/&quot;&gt;https://www.wearethemighty.com/articles/brief-history-coffee-field/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/&quot;&gt;https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><author><name>James</name></author><category term="coffee" /><category term="history" /><category term="coffee" /><summary type="html">Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to Wikipedia, which is definitely the best source of legal advice. But seriously though, I’m doing it for educational purpose and nothing else.). However, whenever life gives you lemons, you sigh ugh and wait for a better fruit.</summary></entry><entry><title type="html">AutoLockdown</title><link href="https://codingindex.xyz/2021/04/25/autolockdown/" rel="alternate" type="text/html" title="AutoLockdown" /><published>2021-04-25T09:22:00+00:00</published><updated>2021-04-25T09:22:00+00:00</updated><id>https://codingindex.xyz/2021/04/25/autolockdown</id><content type="html" xml:base="https://codingindex.xyz/2021/04/25/autolockdown/">&lt;p&gt;Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.&lt;/p&gt;
 
 &lt;p&gt;It should come as no surprise to some of you that I avoid biometric authentication religiously: this is because the attack vectors are so simple, that it renders the purpose of authentication useless. Here are some reasons why:&lt;/p&gt;
 
@@ -3001,186 +3102,4 @@ git push https://github.com/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;s
 
 &lt;p&gt;Happy coding&lt;/p&gt;
 
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="game" /><category term="game" /><category term="javascript" /><category term="phaser" /><summary type="html">Yo! It’s been a while.</summary></entry><entry><title type="html">TypeSound (Developer)</title><link href="https://codingindex.xyz/2020/08/20/typesound-dev/" rel="alternate" type="text/html" title="TypeSound (Developer)" /><published>2020-08-20T04:00:00+00:00</published><updated>2020-08-20T04:00:00+00:00</updated><id>https://codingindex.xyz/2020/08/20/typesound-dev</id><content type="html" xml:base="https://codingindex.xyz/2020/08/20/typesound-dev/">&lt;p&gt;This is the development commentary blog post for &lt;a href=&quot;https://github.com/jameshi16/TypeSound&quot;&gt;TypeSound&lt;/a&gt;, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the &lt;a href=&quot;/2020/08/20/typesound&quot;&gt;previous blog post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Unexpectedly, I had to make quite a number of decisions during this project, something I wanted to avoid doing when making a &lt;em&gt;meme&lt;/em&gt; tool like TypeSound. The main issues are:&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Choosing the right sound library;&lt;/li&gt;
-  &lt;li&gt;Acquiring keyboard input;&lt;/li&gt;
-  &lt;li&gt;Figuring out how to adjust playback rate on the fly;&lt;/li&gt;
-  &lt;li&gt;Making the tool support future extensions; and&lt;/li&gt;
-  &lt;li&gt;Writing meaningful unit tests.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;choosing-the-right-sound-library&quot;&gt;Choosing the right sound library&lt;/h1&gt;
-
-&lt;p&gt;The whole point of &lt;em&gt;writing&lt;/em&gt; a meme tool is to take close to zero development time, but deliver functional results. Hence, Python and JavaScript were good candidates; although I decided to go with Python given how traumatized I was with JavaScript at work. Hence, I snooped around &lt;a href=&quot;https://pypi.org&quot;&gt;PyPi&lt;/a&gt;, I saw that there exists audio packages that fulfill the not-so-well-thought-out criteria of:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;It played music.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_1.gif&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Barack Obama Applause GIF&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Criteria fulfilled, we win. | Source: &lt;a href=&quot;https://giphy.com/gifs/obama-barack-obama-president-l4q8cJzGdR9J8w3hS&quot;&gt;Giphy&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;When I actually got around to doing the project, I realized that I had more urgent criteria to consider:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;It still needs to play music;&lt;/li&gt;
-  &lt;li&gt;The library should be cross-platform as much as possible (i.e. not reliant on only 1 method of playback);&lt;/li&gt;
-  &lt;li&gt;But also be able to adjust playback rate &lt;em&gt;on the fly&lt;/em&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Believe it or not, tuning the velocity at which music is projected to the ears of the listener is a much harder task than I initially thought. After all, the meme around Python was to just import the packages you need:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_6.jpg&quot; style=&quot;max-width: 300px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Meme about importing all functionality in Python&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;import TypeSound | Source: &lt;a href=&quot;https://www.reddit.com/r/ProgrammerHumor/comments/6a59fw/import_essay/&quot;&gt;Reddit / somethingofthatilk.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I searched high and low for a package that can do this natively, including:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://simpleaudio.readthedocs.io/en/latest/&quot;&gt;simpleaudio&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://people.csail.mit.edu/hubert/pyaudio/docs/&quot;&gt;pyaudio&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://pypi.org/project/playsound/&quot;&gt;playsound&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://python-sounddevice.readthedocs.io/en/0.4.0/&quot;&gt;sounddevice&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://pypi.org/project/miniaudio/&quot;&gt;miniaudio&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This essentially means that I had to do the on-the-fly playback adjustment manually, either through a callback, or through inheriting a class and providing a stream manually. Hence, the competition was essentially between &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sounddevice&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;, as they supported callbacks.&lt;/p&gt;
-
-&lt;p&gt;Alas, I, a container maniac, was developing TypeSound from a container. I realized that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sounddevice&lt;/code&gt; uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PortAudio&lt;/code&gt; library, which directly uses ALSA, which means it required access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; files on my container. While I was happy to provide it, it failed the “cross-platform” requirement; I needed a library that can both use ALSA, and PulseAudio. This is a personal necessity because I still want to support the network connectivity that PulseAudio offers for another project called &lt;a href=&quot;/2019/09/04/desktop-in-lxd-containers&quot;&gt;ContainerTop&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;h2 id=&quot;alsa-vs-pulseaudio&quot;&gt;ALSA vs PulseAudio&lt;/h2&gt;
-
-  &lt;p&gt;The Advanced Linux Sound Architecture (ALSA) is essentially a layer on top of our sound devices, which is why playing music through ALSA would require that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; exist in my container filesystem. With the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmix&lt;/code&gt; extension (&lt;a href=&quot;https://superuser.com/a/144649&quot;&gt;information source&lt;/a&gt;), ALSA can mix sound from various applications and play it through a playback device, while it traditionally can only play sound from one application at a time.&lt;/p&gt;
-
-  &lt;p&gt;PulseAudio is a layer on top of ALSA, which mixes and provides network connectivity. The network connectivity part of PulseAudio allows me to create things like &lt;a href=&quot;/2019/09/04/desktop-in-lxd-containers&quot;&gt;ContainerTop&lt;/a&gt; with absolutely no user mapping (a big deal for privacy &amp;amp; security).&lt;/p&gt;
-
-  &lt;p&gt;Which is better? The answer is I don’t want to start a war, but I would like to support both.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Hence, only &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt; remains. In C/C++, &lt;a href=&quot;https://github.com/dr-soft/miniaudio&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;&lt;/a&gt; is an absolute beast of a single-header library, boasting the following impressive list of backends:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;WASAPI&lt;/li&gt;
-  &lt;li&gt;DirectSound&lt;/li&gt;
-  &lt;li&gt;WinMM&lt;/li&gt;
-  &lt;li&gt;Core Audio (Apple)&lt;/li&gt;
-  &lt;li&gt;ALSA&lt;/li&gt;
-  &lt;li&gt;PulseAudio&lt;/li&gt;
-  &lt;li&gt;JACK&lt;/li&gt;
-  &lt;li&gt;sndio&lt;/li&gt;
-  &lt;li&gt;audio&lt;/li&gt;
-  &lt;li&gt;OSS&lt;/li&gt;
-  &lt;li&gt;AAudio&lt;/li&gt;
-  &lt;li&gt;OpenSL|ES&lt;/li&gt;
-  &lt;li&gt;Web Audio&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;sox&quot;&gt;sox&lt;/h2&gt;
-
-&lt;p&gt;I know most music players out there have equalizers; they’re what behind concert-hall effects and bass-boosted audio effects you can enable in your music player. Hence, I looked for an audio manipulation library, and the best one I found was &lt;a href=&quot;http://sox.sourceforge.net/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Initially, I wanted to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; to also speed up the audio on-the-fly, but &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; did not provide that functionality; I could only speed up the whole audio track before playback, which is not so ideal. Thereafter, I left &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sox&lt;/code&gt; in TypeSound for a possible future feature involving an equalizer for music playback, if I get around to doing that.&lt;/p&gt;
-
-&lt;p&gt;It should also be noted that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;’s full set of features includes filters, which can change audio in most ways a normal equalizer can - unfortunately, at the time of writing, the &lt;a href=&quot;https://pypi.org/project/miniaudio/&quot;&gt;python package&lt;/a&gt; of miniaudio did not support filters.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;acquiring-keyboard-input&quot;&gt;Acquiring keyboard input&lt;/h1&gt;
-
-&lt;p&gt;Short of being a keylogger by a simple logging routine, TypeSound needs to know when a user has activated buttons on their keyboard to calculate the key presses per second, or KPS for short.&lt;/p&gt;
-
-&lt;p&gt;Sounds simple, right?&lt;/p&gt;
-
-&lt;p&gt;It is simple, and PyPi once again pulls through with another package: the &lt;a href=&quot;https://pypi.org/project/keyboard/&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package&lt;/a&gt;. Want to know the unfortunate thing?&lt;/p&gt;
-
-&lt;p&gt;On Linux, it requires access to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt;, which contains the raw device files - much like how I needed to forward &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/snd&lt;/code&gt; to my container for ALSA to work, I now need to forward &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt; to my container for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package to work.&lt;/p&gt;
-
-&lt;p&gt;Want to know another special thing that only affects me because I’m a nerd that obsessively uses containers?&lt;/p&gt;
-
-&lt;p&gt;You need &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; package to work, &lt;em&gt;and&lt;/em&gt; I’m using a container. Container’s UID 0 and host’s UID 0 ain’t actually the same UID, and I ain’t about to make the container privileged just so my container can have access to my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/dev/input/input*&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Another thing, imagine a &lt;em&gt;meme&lt;/em&gt; tool requiring you to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo ./main.py&lt;/code&gt;, which hence requires users to install packages to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; so that root’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python&lt;/code&gt; instance can find it - it’s absolutely bonkers!&lt;/p&gt;
-
-&lt;p&gt;On Windows and Mac OSX, according to what I can see from the &lt;a href=&quot;https://pypi.org/project/keyboard/#description&quot;&gt;project description&lt;/a&gt;, it doesn’t seem to require &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt;. Hence, I decided to apply abstraction to the keyboard-related dealings for this Python script, and implement both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;keyboard&lt;/code&gt; for Windows and Mac OSX computers and an X11 method using &lt;a href=&quot;https://github.com/python-xlib/python-xlib&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python-xlib&lt;/code&gt;&lt;/a&gt; for Linux users.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;figuring-out-how-to-adjust-playback-rate-on-the-fly&quot;&gt;Figuring out how to adjust playback rate on the fly&lt;/h1&gt;
-
-&lt;p&gt;The implementation of on-the-fly adjustment of the playback rate fell on me, as I had to do so in the callback function every second.&lt;/p&gt;
-
-&lt;p&gt;Traditionally, to increase the speed of an audio track, you would do so by re-sampling the audio, and then playing back the audio at the audio’s original sample rate. For instance, if my audio’s original sample rate is 44100, and I would like to see it played back twice as fast, I would re-sample the audio to 22050, and playback the resultant audio at 44100.&lt;/p&gt;
-
-&lt;p&gt;Refer to the following images. The y-axis represent the audio, while the x-axis can represent the time, both in arbitrary units. The graph as a whole represents a explanatory audio waveform. The distance between each point represent the playback sample rate, and the distance between each bar under the graph represents the audio file’s sample rate.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_2.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;A sine waveform representing audio&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Before re-sampling | Source: Me&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_3.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;The previous sine waveform representing audio, but shrinked&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;After re-sampling | Source: Me&lt;/p&gt;
-
-&lt;p&gt;From the images:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The distance between each point remains the same =&amp;gt; playback sample rate is the same&lt;/li&gt;
-  &lt;li&gt;The distance between each bar under the graph decreases by half =&amp;gt; audio file sample rate is reduced by half&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Since the playback speed is the same, and the graph is compressed horizontally, hence, the user will hear the audio played back at twice the original speed.&lt;/p&gt;
-
-&lt;p&gt;However, we cannot simply change any of the two available sample rates on the fly during playback. We either need to adjust the playback sample rate before restarting the playback device, or we can be true-blood engineers and find a “good enough” alternative.&lt;/p&gt;
-
-&lt;h2 id=&quot;pulse-code-modulation-pcm-data&quot;&gt;Pulse-code modulation (PCM) data&lt;/h2&gt;
-
-&lt;p&gt;During a callback, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt; requests a fixed number of frames (basically an array of 16-bit PCM data in our case) based on the playback sample rate. From the number of channels (i.e. width), we can obtain the total amount of PCM data to return, which is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;playback rate * number of channels&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the most part, when we talk about PCM in this context, we are actually talking about Linear PCM (LPCM), which means that all the points encoded in an audio waveform is linearly related to their analog equivalents.&lt;/p&gt;
-
-&lt;p&gt;This is good, because this means that we can do linear piece-wise (i.e. line between every two points in an array) interpolation to obtain a representation of the audio waveform every callback, and then re-sample from that segment of the waveform to speed up / slow down the audio on demand.&lt;/p&gt;
-
-&lt;h2 id=&quot;interpolation&quot;&gt;Interpolation&lt;/h2&gt;
-
-&lt;p&gt;In a nutshell, linear piece-wise interpolation is just plotting all the points you have, and the connecting every two points with a straight line.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_4.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Interpolated sine-wave&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Interpolated sine-wave | Source: Me&lt;/p&gt;
-
-&lt;p&gt;To increase playback rate by 2, we need to re-sample the audio such that there is half as many points as there are in our original graph. The blue dots in the graph below represents the newly sampled points from our interpolated graph.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20200820_5.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Extracting points from the interpolated sine-wave&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Extracting points from interpolated sine-wave | Source: Me&lt;/p&gt;
-
-&lt;p&gt;Practically speaking, we would also need to obtain twice as much data from the audio as per normal, as we need to return the exact number of required frames to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;. In the above graphs, there are 17 red points but only 9 blue points; hence, we need another 8 blue points, which can be acquired by taking the subsequent same-sized chunk of the audio and sampling another 8 blue points from there.&lt;/p&gt;
-
-&lt;p&gt;In conclusion, we draw &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sample rate * playback rate&lt;/code&gt; of data from the array of original audio data, perform interpolation, then extract &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sample rate&lt;/code&gt; amount of data - this would effectively control the playback rate of our audio.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;making-the-tool-support-future-extensions&quot;&gt;Making the tool support future extensions&lt;/h1&gt;
-
-&lt;p&gt;If you poke around the codebase, you would see that I’ve made most of the functionality required for TypeSound accessible via interfaces. This is a plan towards making the tool extensible in the future, so that I can swap out any of the underlying packages anytime I need to; i.e. instead of using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;miniaudio&lt;/code&gt;, I can choose to use another package, or select specific implementations for certain operating systems, or change the configuration schema without breaking the previous versions of config files.&lt;/p&gt;
-
-&lt;p&gt;The main challenge is generalizing before I have the underlying possible implementations done - it’s easy to miss out certain required functions in abstractions if all I’m doing is designing the interface first. Fortunately, this is a small enough project where such mistakes don’t cost a lot of effort to rectify; however, I imagine this to be an issue in a large team.&lt;/p&gt;
-
-&lt;p&gt;It’s also relatively challenging to see the benefits of abstraction this early on in the project; hopefully I won’t have to redo major parts of the project just to benefit some from abstraction.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;writing-meaningful-unit-tests&quot;&gt;Writing meaningful unit tests&lt;/h1&gt;
-
-&lt;p&gt;How exactly does one go about writing unit tests for scripts with functionality so close to its inputs (keyboard) and outputs (music playback rate)? For now, I’ve placed unit tests wherever I can, except for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;config.py&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main.py&lt;/code&gt; scripts. I would imagine testing those would qualify as functional tests since they’re using the components I’ve built as a system; moreover, the environments in GitHub runners where the tests run neither have X Servers nor sound devices to perform meaningful or conclusive tests.&lt;/p&gt;
-
-&lt;p&gt;So, good enough? :man_shrugging:&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;That ends the developer commentary for TypeSound. Honestly, I did not expect this project to take more than a weekend to complete, but I would imagine that the information I’ve learnt off the project was a good enough trade-off.&lt;/p&gt;
-
-&lt;p&gt;If you’ve got an Ubuntu system, do give TypeSound a try; otherwise, wait a while while I add support for Windows and Mac OSX!&lt;/p&gt;
-
-&lt;p&gt;Until then!&lt;/p&gt;
-
-&lt;p&gt;Happy coding&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="developer" /><category term="developer" /><category term="python" /><category term="typesound" /><summary type="html">This is the development commentary blog post for TypeSound, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the previous blog post.</summary></entry></feed>
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="game" /><category term="game" /><category term="javascript" /><category term="phaser" /><summary type="html">Yo! It’s been a while.</summary></entry></feed>

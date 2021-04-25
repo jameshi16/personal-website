@@ -1,0 +1,163 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to Wikipedia, which is definitely the best source of legal advic..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20">
+</h1>
+      <p class="text-gray mb-5">Published Apr 25, 2021 11:11</p>
+      
+  <div class="article">
+    <p>Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to <a href="https://en.wikipedia.org/wiki/Reverse_engineering">Wikipedia</a>, which is definitely the best source of legal advice. But seriously though, I’m doing it for educational purpose and nothing else.). However, whenever life gives you lemons, you sigh <i>ugh</i> and wait for a better fruit.</p>
+
+<p>Instead, I changed my plans and wanted to write about studying techniques for remembering content you have little interest in, since that has been my most utilized skill for the past few months. Then, I looked at my coffee, drank the coffee, thought about how interesting it was that coffee was banned a few times in history and decided that I was going to do a blog post about coffee instead.</p>
+
+<p>So, let’s get started!</p>
+
+<h1 id="why-do-we-drink-coffee">Why do we drink coffee</h1>
+
+<p>Coffee contains caffeine, which is a drug that stimulates the brain and helps us stay awake and alert (ref. 1, 2, 3). The usage of coffee is ubiquitous for almost any profession and scenario that requires the worker to stay awake - artists, musicians, labourers, architects, engineers, and of course, programmers. For enterprise programmers, it helps them trudge through client complaints, unreasonable demands from product managers, and fixing failing unit tests - just to name a few. Caffeine also boosts mood, metabolism and physical performance (ref. 8).</p>
+
+<p>Despite its name, <em>decaffeinated</em> coffee is not fully caffeine free; a cup of coffee containing 180mg of caffeine will end up having 5.4mg of caffeine when decaffeinated (ref. 11).</p>
+
+<h1 id="how-much-coffee-can-we-ingest-in-a-day">How much coffee can we ingest in a day?</h1>
+
+<p>For adults, the recommended daily caffeine intake is 400mg - which is about 4 or 5 cups of coffee per day (ref. 4). For reference, a cup conventionally contains 200ml to 250ml of coffee (ref. 5) (the former will limit coffee intake to 5 cups a day, while the latter will limit coffee to 4 cups a day) - this would mean that, in metric units, an adult can drink up to 1 litre of coffee a day.</p>
+
+<p>There exists light coffee drinkers and heavy coffee drinkers differentiated by their caffeine tolerance (ref. 6), which affects the magnitude and duration of the undesirable side effects of coffee. An individual that is unsure of their caffeine intake should try to only ingest a maximum of 200mg of caffeine per day, which amounts to 2 or 2.5 cups a day.</p>
+
+<p>Some figures for commonly ingested source of caffeine:</p>
+
+<p><img src="/images/20210425_5.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Caffeine doses"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Caffeine doses in coffee | Source: <a href="https://www.apa.org/gradpsych/2015/11/coffee">Stacy Lu, APA (ref. 7)</a></p>
+
+<p>Some more figures from ref. 6:</p>
+
+<ul>
+  <li>Coffee: 96mg per cup</li>
+  <li>Energy Drink: 72mg per cup</li>
+  <li>Green Tea: 29mg per cup</li>
+  <li>Soft Drink: 34mg per cup</li>
+</ul>
+
+<h1 id="side-effects-of-coffee">Side-effects of coffee</h1>
+
+<p>Recalling that the recommended maximum daily caffeine intake is 400mg, ingesting 3 times the amount will likely result to toxic effects (ref. 4). Some toxic effects include (ref. 8, 9):</p>
+<ol>
+  <li>Anxiety</li>
+  <li>Sleep disorder</li>
+  <li>Increased blood sugar levels</li>
+  <li>Increased heart rate &amp; blood pressure</li>
+</ol>
+
+<p><img src="/images/20210425_6.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Coffee"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Coffee | Photo by Nathan Dumlao on <a href="https://unsplash.com/photos/6VhPY27jdps">Unsplash (ref. 10)</a></p>
+
+<h1 id="history-of-coffee">History of coffee</h1>
+
+<p>The origins of coffee (as in the coffee beans) is highly debatable (ref. 12), although it can be said that due to its discovery since time immemorial, it has touched upon every aspect of human civilisation, including religion (as with the case with it replacing wine in the Muslim religion), politics (as with the various bans on coffee) and trade.</p>
+
+<p>An interesting aspect of coffee was its use by America in World War I, and its relation to coffeehouses, which were cornerstones for people to “hang out”.</p>
+
+<h2 id="world-war-i">World War I</h2>
+
+<p>In World War I, coffee was considered to be an essential item in the America army (ref. 13) - it was so essential that coffee became a rationed item in November 29, 1942 (ref. 14). There were only two reasons any resources needed to be rationed in the context of war:</p>
+<ol>
+  <li>To ensure all civilians get access to said resource fairly;</li>
+  <li>To ensure the military has access to said resource.</li>
+</ol>
+
+<p><img src="/images/20210425_7.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="A propaganda poster for coffee rationing"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Coffee Rationing in US | Source: <a href="https://www.wearethemighty.com/articles/brief-history-coffee-field/">WeAreTheMighty (ref. 15)</a></p>
+
+<p>As for the reasons why coffee was much needed in the trenches of World War I, it was to combat fatigue, much like how we use coffee nowadays. Having re-energized troops can make a huge difference in the context of war.</p>
+
+<h2 id="coffeehouses">Coffeehouses</h2>
+
+<p>Coffeehouses were popular places for people of all classes to “meet, discuss business, exchange ideas and debate the news of the day” (ref. 16). Having free debate and discussion between people of all social statuses lead to the spread of democracy. However, because coffeehouses were so commonplace and popular, some were filled with criminals, scoundrels and pimps (ref. 16), enough to warrant an attempt was made to ban coffeehouses in 1675.</p>
+
+<p>Coffeehouses soon fell out of favour as the popularity of tea rose, but its impact on democracy can still be felt today.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>It is strange to make a blog post about a commodity that is widely enjoyed instead of a programming blog post; luckily, as my blog name suggests, I like to do “Random Shenanigans”, which means that once in a while, an informative blog post such as this is nice to have.</p>
+
+<p>I hope you enjoyed this blog post, as much as I enjoyed writing it! Let’s hope that I get apples instead of lemons from life next time; I haven’t got a lemonade maker.</p>
+
+<p>Happy Coding (&amp; enjoy a cup of coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20">),</p>
+
+<p>CodingIndex</p>
+
+<h1 id="references">References</h1>
+
+<p>Here are a list of references informally attributed, because I’m too lazy to do a proper citation.</p>
+
+<ol>
+  <li><a href="https://www.webmd.com/vitamins/ai/ingredientmono-979/caffeine">https://www.webmd.com/vitamins/ai/ingredientmono-979/caffeine</a></li>
+  <li><a href="https://www.healthline.com/nutrition/what-is-caffeine#what-it-is">https://www.healthline.com/nutrition/what-is-caffeine#what-it-is</a></li>
+  <li><a href="https://www.healthline.com/health/caffeine-effects-on-body">https://www.healthline.com/health/caffeine-effects-on-body</a></li>
+  <li><a href="https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much">https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Cup%5C_(unit)">https://en.wikipedia.org/wiki/Cup_(unit)</a></li>
+  <li><a href="https://www.healthline.com/nutrition/caffeine-tolerance">https://www.healthline.com/nutrition/caffeine-tolerance</a></li>
+  <li><a href="https://www.apa.org/gradpsych/2015/11/coffee">https://www.apa.org/gradpsych/2015/11/coffee</a></li>
+  <li><a href="https://www.healthline.com/nutrition/caffeine-side-effects">https://www.healthline.com/nutrition/caffeine-side-effects</a></li>
+  <li><a href="https://www.aarp.org/health/healthy-living/info-10-2013/coffee-for-health.html">https://www.aarp.org/health/healthy-living/info-10-2013/coffee-for-health.html</a></li>
+  <li><a href="https://unsplash.com/photos/6VhPY27jdps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditShareLink">https://unsplash.com/photos/6VhPY27jdps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditShareLink</a></li>
+  <li><a href="https://www.healthline.com/nutrition/caffeine-in-decaf">https://www.healthline.com/nutrition/caffeine-in-decaf</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/History%5C_of%5C_coffee">https://en.wikipedia.org/wiki/History_of_coffee</a></li>
+  <li><a href="https://www.npr.org/sections/thesalt/2017/04/06/522071853/in-wwi-trenches-instant-coffee-gave-troops-a-much-needed-boost">https://www.npr.org/sections/thesalt/2017/04/06/522071853/in-wwi-trenches-instant-coffee-gave-troops-a-much-needed-boost</a></li>
+  <li><a href="https://www.history.com/this-day-in-history/coffee-rationing-begins">https://www.history.com/this-day-in-history/coffee-rationing-begins</a></li>
+  <li><a href="https://www.wearethemighty.com/articles/brief-history-coffee-field/">https://www.wearethemighty.com/articles/brief-history-coffee-field/</a></li>
+  <li><a href="https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/">https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/</a></li>
+</ol>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
