@@ -1,0 +1,152 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.It should come as no surprise to some of you that I avoid biometric authentication religiously: this is because the attack vectors are so simple, that ..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">AutoLockdown</h1>
+      <p class="text-gray mb-5">Published Apr 25, 2021 09:22</p>
+      
+  <div class="article">
+    <p>Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.</p>
+
+<p>It should come as no surprise to some of you that I avoid biometric authentication religiously: this is because the attack vectors are so simple, that it renders the purpose of authentication useless. Here are some reasons why:</p>
+
+<ol>
+  <li>It is easy to uncover a fingerprint from the surfaces of your phone to be used as moulding to unlock your phone;</li>
+  <li>You can be unconscious when your (physical) finger is being used to unlock your phone;</li>
+  <li>Should the manufacturer of the fingerprint sensor be untrustworthy, your fingerprint data could be stolen; you only have one fingerprint for your entire life, and it is not changeable.</li>
+</ol>
+
+<p>Therefore, I have been using a 14 character password to protect access to my phone for the past three years.</p>
+
+<h1 id="reality">Reality</h1>
+
+<p>In life, there cannot be too much of a good thing; when you are pressed for time, you need to get work done as quickly as possible. Typing a 14 character password might not sound like a time-consuming process on the surface, but one must account for accidental human errors when keying in the password.</p>
+
+<p>Furthermore, with how frequent we unlock our phones during active use, the time taken to unlock the phone accumulates to many hours of frustration, and triggers impatient superiors to no end.</p>
+
+<p>Of course, it is out of the question to simply forgo the use of a locking mechanism - what about all the precious data, banking applications and confidential company documents that you’re storing?</p>
+
+<p>Hence, in conclusion, a quick, yet secure method of authentication has a need to exist.</p>
+
+<h2 id="evaluation">Evaluation</h2>
+
+<p>Let’s evaluate the pros and cons of fingerprint authentication, alongside password authentication one more time.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Feature</th>
+      <th style="text-align: center">Password</th>
+      <th style="text-align: center">Fingerprint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Fast to unlock</td>
+      <td style="text-align: center">No</td>
+      <td style="text-align: center"><strong>Yes</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Secure</td>
+      <td style="text-align: center">Following guidelines, <strong>Yes</strong>
+</td>
+      <td style="text-align: center">No</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Changeable</td>
+      <td style="text-align: center"><strong>Yes</strong></td>
+      <td style="text-align: center">No</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Lots of apps use it</td>
+      <td style="text-align: center">No</td>
+      <td style="text-align: center"><strong>Yes</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Many banking apps, and some password managers use fingerprint authentication as a way to quickly unlock an account. As long as you are conscious while you are doing it, such a feature does not sound too bad; after all, it is comparatively safer than typing a 6 digit numerical pin (banking apps) or a 3 alphanumerical pin (KeepassXC for Android) in the public under the prying eyes of many, to quickly unlock your most precious resources.</p>
+
+<p>To solve our dilemma, why not have both fingerprint and password?</p>
+
+<h1 id="android-feature-lockdown-mode">Android Feature: Lockdown Mode</h1>
+
+<p>In Android 9 (Pie), there exist a feature known as <code class="language-plaintext highlighter-rouge">Lockdown Mode</code>. In this mode, “Smart Lock” features are disabled, biometric authentication is disabled, and notifications no longer show. Users who wish to turn on Lockdown Mode can do it through the power menu, after the feature is enabled.</p>
+
+<p>To learn what is Lockdown Mode, and how to enable it for your phone, visit <a href="https://screenrant.com/android-lockdown-mode-purpose-enable-how-explained/">this screenrant link</a>.</p>
+
+<p>Having discovered Lockdown Mode, I gave in to the temptations of the fingerprint, and registered my own biometrics. However, I found that turning on Lockdown Mode is too user-dependent, meaning that there might be times where I am too fatigued to turn on the mode to protect my phone. Hence, I tried automating the process.</p>
+
+<h1 id="automation">Automation</h1>
+
+<p>I downloaded <a href="https://play.google.com/store/apps/details?id=com.llamalab.automate">Automate</a> and <a href="https://play.google.com/store/apps/details?id=com.radefffactory.lockdown">this nifty app</a> that provides shortcuts to enable Lockdown mode, and linked it up such that whenever I turn off the screen, a 5 minute timer will go off, which will launch the second app to enable Lockdown mode.</p>
+
+<p>5 minutes is an arbitrarily decided duration - I felt that as long as I tried unlocking my phone again within 5 minutes, a fingerprint would be acceptable. While this does not guarantee the safety of my data if I were to be suddenly robbed, I felt that it would “good enough” to prevent my data from being accessed in my sleep by a sneaky adversary.</p>
+
+<p>While it worked well, the whole setup was clunky and cumbersome; furthermore, I felt like it was too overkill. Having used Tasker and Automate before, I knew that battery consumption might become an issue.</p>
+
+<h1 id="the-creation-of-autolockdown">The creation of AutoLockdown</h1>
+
+<p>Hence, to solve all of these problems in one fell swoop, I decided to make an app. The <a href="https://github.com/jameshi16/AutoLockdown">repository</a> can be found on GitHub; essentially, the phone automatically removes biometric authentication as a possible authentication method after a user-configuration period of time.</p>
+
+<p>In the future, I hope to also add scheduling; so, apart from removing biometric authentication after a set duration, it will be removed during, say, bedtime, as well.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>If you were in the same dilemma as me, I hope you find <a href="https://github.com/jameshi16/AutoLockdown">AutoLockdown</a> satisfactory; otherwise, go ahead and give me some feedback through <a target="_blank" href="mailto:me@codingindex.xyz">my email</a>!</p>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
