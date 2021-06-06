@@ -7,6 +7,7 @@ plugins:
   - jekyll-paginate-v2
   - jekyll-feed
   - jemoji
+  - jekyll-target-blank
 
 permalink: /:year/:month/:day/:title/
 
