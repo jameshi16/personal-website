@@ -44,7 +44,7 @@
       <p class="text-gray mb-5">Published Aug 20, 2020 04:00</p>
       
   <div class="article">
-    <p>This is the development commentary blog post for <a href="https://github.com/jameshi16/TypeSound">TypeSound</a>, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the <a href="/2020/08/20/typesound">previous blog post</a>.</p>
+    <p>This is the development commentary blog post for <a href="https://github.com/jameshi16/TypeSound" target="_blank" rel="noopener noreferrer">TypeSound</a>, which outlines the decisions behind some of the components that make the project tick. To know more about the release of TypeSound and how to use it, refer to the <a href="/2020/08/20/typesound">previous blog post</a>.</p>
 
 <p>Unexpectedly, I had to make quite a number of decisions during this project, something I wanted to avoid doing when making a <em>meme</em> tool like TypeSound. The main issues are:</p>
 <ol>
@@ -59,13 +59,13 @@
 
 <h1 id="choosing-the-right-sound-library">Choosing the right sound library</h1>
 
-<p>The whole point of <em>writing</em> a meme tool is to take close to zero development time, but deliver functional results. Hence, Python and JavaScript were good candidates; although I decided to go with Python given how traumatized I was with JavaScript at work. Hence, I snooped around <a href="https://pypi.org">PyPi</a>, I saw that there exists audio packages that fulfill the not-so-well-thought-out criteria of:</p>
+<p>The whole point of <em>writing</em> a meme tool is to take close to zero development time, but deliver functional results. Hence, Python and JavaScript were good candidates; although I decided to go with Python given how traumatized I was with JavaScript at work. Hence, I snooped around <a href="https://pypi.org" target="_blank" rel="noopener noreferrer">PyPi</a>, I saw that there exists audio packages that fulfill the not-so-well-thought-out criteria of:</p>
 <ul>
   <li>It played music.</li>
 </ul>
 
 <p><img src="/images/20200820_1.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Barack Obama Applause GIF"></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Criteria fulfilled, we win. | Source: <a href="https://giphy.com/gifs/obama-barack-obama-president-l4q8cJzGdR9J8w3hS">Giphy</a></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Criteria fulfilled, we win. | Source: <a href="https://giphy.com/gifs/obama-barack-obama-president-l4q8cJzGdR9J8w3hS" target="_blank" rel="noopener noreferrer">Giphy</a></p>
 
 <p>When I actually got around to doing the project, I realized that I had more urgent criteria to consider:</p>
 <ul>
@@ -77,15 +77,15 @@
 <p>Believe it or not, tuning the velocity at which music is projected to the ears of the listener is a much harder task than I initially thought. After all, the meme around Python was to just import the packages you need:</p>
 
 <p><img src="/images/20200820_6.jpg" style="max-width: 300px; width: 100%; margin: 0 auto; display: block;" alt="Meme about importing all functionality in Python"></p>
-<p class="text-center text-gray lh-condensed-ultra f6">import TypeSound | Source: <a href="https://www.reddit.com/r/ProgrammerHumor/comments/6a59fw/import_essay/">Reddit / somethingofthatilk.com</a></p>
+<p class="text-center text-gray lh-condensed-ultra f6">import TypeSound | Source: <a href="https://www.reddit.com/r/ProgrammerHumor/comments/6a59fw/import_essay/" target="_blank" rel="noopener noreferrer">Reddit / somethingofthatilk.com</a></p>
 
 <p>I searched high and low for a package that can do this natively, including:</p>
 <ul>
-  <li><a href="https://simpleaudio.readthedocs.io/en/latest/">simpleaudio</a></li>
-  <li><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/">pyaudio</a></li>
-  <li><a href="https://pypi.org/project/playsound/">playsound</a></li>
-  <li><a href="https://python-sounddevice.readthedocs.io/en/0.4.0/">sounddevice</a></li>
-  <li><a href="https://pypi.org/project/miniaudio/">miniaudio</a></li>
+  <li><a href="https://simpleaudio.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">simpleaudio</a></li>
+  <li><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/" target="_blank" rel="noopener noreferrer">pyaudio</a></li>
+  <li><a href="https://pypi.org/project/playsound/" target="_blank" rel="noopener noreferrer">playsound</a></li>
+  <li><a href="https://python-sounddevice.readthedocs.io/en/0.4.0/" target="_blank" rel="noopener noreferrer">sounddevice</a></li>
+  <li><a href="https://pypi.org/project/miniaudio/" target="_blank" rel="noopener noreferrer">miniaudio</a></li>
 </ul>
 
 <p>This essentially means that I had to do the on-the-fly playback adjustment manually, either through a callback, or through inheriting a class and providing a stream manually. Hence, the competition was essentially between <code class="language-plaintext highlighter-rouge">sounddevice</code> and <code class="language-plaintext highlighter-rouge">miniaudio</code>, as they supported callbacks.</p>
@@ -95,14 +95,14 @@
 <blockquote>
   <h2 id="alsa-vs-pulseaudio">ALSA vs PulseAudio</h2>
 
-  <p>The Advanced Linux Sound Architecture (ALSA) is essentially a layer on top of our sound devices, which is why playing music through ALSA would require that <code class="language-plaintext highlighter-rouge">/dev/snd</code> exist in my container filesystem. With the <code class="language-plaintext highlighter-rouge">dmix</code> extension (<a href="https://superuser.com/a/144649">information source</a>), ALSA can mix sound from various applications and play it through a playback device, while it traditionally can only play sound from one application at a time.</p>
+  <p>The Advanced Linux Sound Architecture (ALSA) is essentially a layer on top of our sound devices, which is why playing music through ALSA would require that <code class="language-plaintext highlighter-rouge">/dev/snd</code> exist in my container filesystem. With the <code class="language-plaintext highlighter-rouge">dmix</code> extension (<a href="https://superuser.com/a/144649" target="_blank" rel="noopener noreferrer">information source</a>), ALSA can mix sound from various applications and play it through a playback device, while it traditionally can only play sound from one application at a time.</p>
 
   <p>PulseAudio is a layer on top of ALSA, which mixes and provides network connectivity. The network connectivity part of PulseAudio allows me to create things like <a href="/2019/09/04/desktop-in-lxd-containers">ContainerTop</a> with absolutely no user mapping (a big deal for privacy &amp; security).</p>
 
   <p>Which is better? The answer is I don’t want to start a war, but I would like to support both.</p>
 </blockquote>
 
-<p>Hence, only <code class="language-plaintext highlighter-rouge">miniaudio</code> remains. In C/C++, <a href="https://github.com/dr-soft/miniaudio"><code class="language-plaintext highlighter-rouge">miniaudio</code></a> is an absolute beast of a single-header library, boasting the following impressive list of backends:</p>
+<p>Hence, only <code class="language-plaintext highlighter-rouge">miniaudio</code> remains. In C/C++, <a href="https://github.com/dr-soft/miniaudio" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">miniaudio</code></a> is an absolute beast of a single-header library, boasting the following impressive list of backends:</p>
 <ul>
   <li>WASAPI</li>
   <li>DirectSound</li>
@@ -121,11 +121,11 @@
 
 <h2 id="sox">sox</h2>
 
-<p>I know most music players out there have equalizers; they’re what behind concert-hall effects and bass-boosted audio effects you can enable in your music player. Hence, I looked for an audio manipulation library, and the best one I found was <a href="http://sox.sourceforge.net/"><code class="language-plaintext highlighter-rouge">sox</code></a>.</p>
+<p>I know most music players out there have equalizers; they’re what behind concert-hall effects and bass-boosted audio effects you can enable in your music player. Hence, I looked for an audio manipulation library, and the best one I found was <a href="http://sox.sourceforge.net/" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">sox</code></a>.</p>
 
 <p>Initially, I wanted to use <code class="language-plaintext highlighter-rouge">sox</code> to also speed up the audio on-the-fly, but <code class="language-plaintext highlighter-rouge">sox</code> did not provide that functionality; I could only speed up the whole audio track before playback, which is not so ideal. Thereafter, I left <code class="language-plaintext highlighter-rouge">sox</code> in TypeSound for a possible future feature involving an equalizer for music playback, if I get around to doing that.</p>
 
-<p>It should also be noted that <code class="language-plaintext highlighter-rouge">miniaudio</code>’s full set of features includes filters, which can change audio in most ways a normal equalizer can - unfortunately, at the time of writing, the <a href="https://pypi.org/project/miniaudio/">python package</a> of miniaudio did not support filters.</p>
+<p>It should also be noted that <code class="language-plaintext highlighter-rouge">miniaudio</code>’s full set of features includes filters, which can change audio in most ways a normal equalizer can - unfortunately, at the time of writing, the <a href="https://pypi.org/project/miniaudio/" target="_blank" rel="noopener noreferrer">python package</a> of miniaudio did not support filters.</p>
 
 <hr>
 
@@ -135,7 +135,7 @@
 
 <p>Sounds simple, right?</p>
 
-<p>It is simple, and PyPi once again pulls through with another package: the <a href="https://pypi.org/project/keyboard/"><code class="language-plaintext highlighter-rouge">keyboard</code> package</a>. Want to know the unfortunate thing?</p>
+<p>It is simple, and PyPi once again pulls through with another package: the <a href="https://pypi.org/project/keyboard/" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">keyboard</code> package</a>. Want to know the unfortunate thing?</p>
 
 <p>On Linux, it requires access to <code class="language-plaintext highlighter-rouge">/dev/input/input*</code>, which contains the raw device files - much like how I needed to forward <code class="language-plaintext highlighter-rouge">/dev/snd</code> to my container for ALSA to work, I now need to forward <code class="language-plaintext highlighter-rouge">/dev/input/input*</code> to my container for the <code class="language-plaintext highlighter-rouge">keyboard</code> package to work.</p>
 
@@ -145,7 +145,7 @@
 
 <p>Another thing, imagine a <em>meme</em> tool requiring you to run <code class="language-plaintext highlighter-rouge">sudo ./main.py</code>, which hence requires users to install packages to <code class="language-plaintext highlighter-rouge">site-packages</code> so that root’s <code class="language-plaintext highlighter-rouge">python</code> instance can find it - it’s absolutely bonkers!</p>
 
-<p>On Windows and Mac OSX, according to what I can see from the <a href="https://pypi.org/project/keyboard/#description">project description</a>, it doesn’t seem to require <code class="language-plaintext highlighter-rouge">sudo</code>. Hence, I decided to apply abstraction to the keyboard-related dealings for this Python script, and implement both <code class="language-plaintext highlighter-rouge">keyboard</code> for Windows and Mac OSX computers and an X11 method using <a href="https://github.com/python-xlib/python-xlib"><code class="language-plaintext highlighter-rouge">python-xlib</code></a> for Linux users.</p>
+<p>On Windows and Mac OSX, according to what I can see from the <a href="https://pypi.org/project/keyboard/#description" target="_blank" rel="noopener noreferrer">project description</a>, it doesn’t seem to require <code class="language-plaintext highlighter-rouge">sudo</code>. Hence, I decided to apply abstraction to the keyboard-related dealings for this Python script, and implement both <code class="language-plaintext highlighter-rouge">keyboard</code> for Windows and Mac OSX computers and an X11 method using <a href="https://github.com/python-xlib/python-xlib" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">python-xlib</code></a> for Linux users.</p>
 
 <hr>
 

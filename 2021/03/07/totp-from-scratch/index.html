@@ -46,13 +46,13 @@
   <div class="article">
     <p>“How do One-Time Passwords (OTP) work?” I asked myself, as I fiddled with my digital banking token to check my non-existent wealth online.</p>
 
-<p>Is there some kind of magic communicating protocol and hardware that I didn’t know of? Perhaps GSM is being used in these banking tokens, or mobile data is being used in my <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Google Authenticator</a> app?</p>
+<p>Is there some kind of magic communicating protocol and hardware that I didn’t know of? Perhaps GSM is being used in these banking tokens, or mobile data is being used in my <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank" rel="noopener noreferrer">Google Authenticator</a> app?</p>
 
-<p>Well, of course not. Firstly, hardware tokens need to be low-power and durable; radio communication isn’t exactly the best thing to fit those criteria. Secondly, it would be ridiculous to spend mobile data for a 6 to 8 digit pin. Some <a href="https://www.freecodecamp.org/news/how-time-based-one-time-passwords-work-and-why-you-should-use-them-in-your-app-fdd2b9ed43c3/">quick preliminary research</a> shows that OTPs are generated offline, via a pre-shared key known to both the verifier (i.e. the entity that needs to know it’s you) and the generator (i.e. you).</p>
+<p>Well, of course not. Firstly, hardware tokens need to be low-power and durable; radio communication isn’t exactly the best thing to fit those criteria. Secondly, it would be ridiculous to spend mobile data for a 6 to 8 digit pin. Some <a href="https://www.freecodecamp.org/news/how-time-based-one-time-passwords-work-and-why-you-should-use-them-in-your-app-fdd2b9ed43c3/" target="_blank" rel="noopener noreferrer">quick preliminary research</a> shows that OTPs are generated offline, via a pre-shared key known to both the verifier (i.e. the entity that needs to know it’s you) and the generator (i.e. you).</p>
 
 <p>Naturally, the next question to ask is: “How?”</p>
 
-<p>And, as commonsensical as dunking a donut into beer, I decided to understand and implement Time-based OTP (TOTP) and its components from scratch. The aftermath of this disaster can be found <a href="https://github.com/jameshi16/Bad-TOTP">on my GitHub repository</a>, which comes with GitHub Actions powered tests because I like torturing myself.</p>
+<p>And, as commonsensical as dunking a donut into beer, I decided to understand and implement Time-based OTP (TOTP) and its components from scratch. The aftermath of this disaster can be found <a href="https://github.com/jameshi16/Bad-TOTP" target="_blank" rel="noopener noreferrer">on my GitHub repository</a>, which comes with GitHub Actions powered tests because I like torturing myself.</p>
 
 <h1 id="table-of-contents">Table Of Contents</h1>
 
@@ -73,9 +73,9 @@
 
 <h1 id="hashes">Hashes</h1>
 
-<p>TOTP, or lesser known as <a href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>, is a simple algorithm built on the already existing counter-based OTP algorithm, Hash-Message-Authenticator-Code-based OTP (HOTP). As the name suggests, HOTP uses hashes; in <a href="https://tools.ietf.org/html/rfc4226">RFC 4226</a>, the preferred hashes belong to the SHA family, specifically SHA1.</p>
+<p>TOTP, or lesser known as <a href="https://tools.ietf.org/html/rfc6238" target="_blank" rel="noopener noreferrer">RFC 6238</a>, is a simple algorithm built on the already existing counter-based OTP algorithm, Hash-Message-Authenticator-Code-based OTP (HOTP). As the name suggests, HOTP uses hashes; in <a href="https://tools.ietf.org/html/rfc4226" target="_blank" rel="noopener noreferrer">RFC 4226</a>, the preferred hashes belong to the SHA family, specifically SHA1.</p>
 
-<p>If you’ve dabbled with hashes, you would know that alongside <a href="/2020/12/05/i-implemented-aes-and-md5/#md5">MD5</a>, SHA-1 is known to be <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision">“broken”</a>; two PDFs of differing content has colliding SHA-1 functions according to <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision">an article on ComputerWorld</a>. An alternative interpretation is that SHA-1 is no longer cryptographically safe. However, most of the internet still uses SHA-1 to generate OTPs; while practically infeasible to impersonate, it is nevertheless still a concern for the paranoid.</p>
+<p>If you’ve dabbled with hashes, you would know that alongside <a href="/2020/12/05/i-implemented-aes-and-md5/#md5">MD5</a>, SHA-1 is known to be <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision" target="_blank" rel="noopener noreferrer">“broken”</a>; two PDFs of differing content has colliding SHA-1 functions according to <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision" target="_blank" rel="noopener noreferrer">an article on ComputerWorld</a>. An alternative interpretation is that SHA-1 is no longer cryptographically safe. However, most of the internet still uses SHA-1 to generate OTPs; while practically infeasible to impersonate, it is nevertheless still a concern for the paranoid.</p>
 
 <p>To ease my mind a little, I also decided to implement SHA-256 and SHA-512 as “drop-in” replacements for SHA-1 when it comes to OTP generation. Hence, this blog post will describe the implementation of SHA-1, SHA-256, and SHA-512.</p>
 
@@ -94,7 +94,7 @@
   <li>Everything in the SHA family should be expressed in Big Endian byte order; furthermore, platform-agnostic endianness should be enforced.</li>
 </ul>
 
-<p>In <a href="https://tools.ietf.org/html/rfc3174#section-5">RFC 3174 section 5</a>, some functions are defined for use by SHA-1. In C, they are implemented like so:</p>
+<p>In <a href="https://tools.ietf.org/html/rfc3174#section-5" target="_blank" rel="noopener noreferrer">RFC 3174 section 5</a>, some functions are defined for use by SHA-1. In C, they are implemented like so:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHA1_WORD</span> <span class="nf">sha1_f</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">t</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">B</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">C</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">19</span><span class="p">)</span> <span class="p">{</span>
@@ -288,9 +288,9 @@
   <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>The full code to compute SHA-1 can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha1.h">in my GitHub repository</a>; the file is project-independent, so you can drop it into your codebase. Do note that nothing within the repository is production-ready, since roll-your-own-crypto is a bad idea. Use libraries such as <code class="language-plaintext highlighter-rouge">openssl</code> or <code class="language-plaintext highlighter-rouge">libressl</code>.</p>
+<p>The full code to compute SHA-1 can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha1.h" target="_blank" rel="noopener noreferrer">in my GitHub repository</a>; the file is project-independent, so you can drop it into your codebase. Do note that nothing within the repository is production-ready, since roll-your-own-crypto is a bad idea. Use libraries such as <code class="language-plaintext highlighter-rouge">openssl</code> or <code class="language-plaintext highlighter-rouge">libressl</code>.</p>
 
-<p>In theory, SHA-1 is all you need for modern TOTP, especially with the use of <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format#algorithm">Google Authenticator</a>, since, at the time of writing, the <code class="language-plaintext highlighter-rouge">algorithm</code> parameter that specifies the hashing algorithm is ignored by Google Authenticator.</p>
+<p>In theory, SHA-1 is all you need for modern TOTP, especially with the use of <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format#algorithm" target="_blank" rel="noopener noreferrer">Google Authenticator</a>, since, at the time of writing, the <code class="language-plaintext highlighter-rouge">algorithm</code> parameter that specifies the hashing algorithm is ignored by Google Authenticator.</p>
 
 <h2 id="sha-256-optional"><span id="sha256">SHA-256 (Optional)</span></h2>
 
@@ -320,7 +320,7 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<p>According to <a href="https://tools.ietf.org/html/rfc6234#page-11">RFC 6234</a>, these constants represent “the first 32 bits of the fractional parts of the cube roots of the first sixty-four prime numbers”.</p>
+<p>According to <a href="https://tools.ietf.org/html/rfc6234#page-11" target="_blank" rel="noopener noreferrer">RFC 6234</a>, these constants represent “the first 32 bits of the fractional parts of the cube roots of the first sixty-four prime numbers”.</p>
 
 <p>The binary operations are defined with the following code:</p>
 
@@ -404,7 +404,7 @@
   <span class="n">SHA2_WORD</span> <span class="n">h7</span> <span class="o">=</span> <span class="mh">0x5be0cd19</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>Unlike SHA-1, these numbers aren’t as nice looking - in fact, they are “the first 32 bits of the fractional parts of the square roots of the first eight prime numbers” according to <a href="https://tools.ietf.org/html/rfc6234#page-13">the RFC</a>. Hence, to make your own variant of SHA-256, you should look for the fractional parts of some other eight prime numbers.</p>
+<p>Unlike SHA-1, these numbers aren’t as nice looking - in fact, they are “the first 32 bits of the fractional parts of the square roots of the first eight prime numbers” according to <a href="https://tools.ietf.org/html/rfc6234#page-13" target="_blank" rel="noopener noreferrer">the RFC</a>. Hence, to make your own variant of SHA-256, you should look for the fractional parts of some other eight prime numbers.</p>
 
 <p>Pad the message.</p>
 
@@ -426,7 +426,7 @@
     <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Calculate the rest of the WORDS in <code class="language-plaintext highlighter-rouge">W</code> with the algorithm specified in <a href="https://tools.ietf.org/html/rfc6234#page-13">RFC 6234</a>.</p>
+<p>Calculate the rest of the WORDS in <code class="language-plaintext highlighter-rouge">W</code> with the algorithm specified in <a href="https://tools.ietf.org/html/rfc6234#page-13" target="_blank" rel="noopener noreferrer">RFC 6234</a>.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha2_SSIG1</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">sha2_SSIG0</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">15</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">16</span><span class="p">];</span>
@@ -499,7 +499,7 @@
 <span class="err">}</span>
 </code></pre></div></div>
 
-<p>The code is <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha256.h">available on my GitHub repository</a>.</p>
+<p>The code is <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha256.h" target="_blank" rel="noopener noreferrer">available on my GitHub repository</a>.</p>
 
 <h1 id="sha-512-optional"><span id="sha512">SHA-512 (Optional)</span></h1>
 
@@ -507,7 +507,7 @@
 
 <p>In SHA-512, the function return a 512-bit string based on 1024-bit blocks of data. SHA-512 also uses 64-bit words, which means that we have to use <code class="language-plaintext highlighter-rouge">uint64_t</code> over <code class="language-plaintext highlighter-rouge">uint32_t</code>.</p>
 
-<p>From <a href="https://tools.ietf.org/html/rfc6234#page-11">RFC 6234</a>, the magic number array, <code class="language-plaintext highlighter-rouge">K</code>, is defined as:</p>
+<p>From <a href="https://tools.ietf.org/html/rfc6234#page-11" target="_blank" rel="noopener noreferrer">RFC 6234</a>, the magic number array, <code class="language-plaintext highlighter-rouge">K</code>, is defined as:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">SHA512_WORD</span> <span class="n">sha512_K</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
   <span class="mh">0x428a2f98d728ae22</span><span class="p">,</span> <span class="mh">0x7137449123ef65cd</span><span class="p">,</span> <span class="mh">0xb5c0fbcfec4d3b2f</span><span class="p">,</span> <span class="mh">0xe9b5dba58189dbbc</span><span class="p">,</span>
@@ -698,7 +698,7 @@
   <span class="err">}</span>
 </code></pre></div></div>
 
-<p>Perform some memory management, and copy <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code> in a platform-agnostic way to preserve big-endianness. The full code can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha512.h">in my GitHub repository</a>.</p>
+<p>Perform some memory management, and copy <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code> in a platform-agnostic way to preserve big-endianness. The full code can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha512.h" target="_blank" rel="noopener noreferrer">in my GitHub repository</a>.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
   <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">retVal</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
@@ -744,8 +744,8 @@
 <p>Lets say Bob wants to send a message to Alice, with HMAC as a way to verify and authenticate the message:</p>
 
 <ol>
-  <li>Bob and Alice exchange a shared secret, perhaps through the <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">Diffie-Hellman key exchange</a>, or going retro-style and exchanging it physically with paper and pen;</li>
-  <li>Bob writes a message, uses a hash algorithm like SHA-256 and combines it with the shared secret in a manner described in <a href="https://tools.ietf.org/html/rfc2104">RFC 2104</a> to produce a HMAC;</li>
+  <li>Bob and Alice exchange a shared secret, perhaps through the <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange" target="_blank" rel="noopener noreferrer">Diffie-Hellman key exchange</a>, or going retro-style and exchanging it physically with paper and pen;</li>
+  <li>Bob writes a message, uses a hash algorithm like SHA-256 and combines it with the shared secret in a manner described in <a href="https://tools.ietf.org/html/rfc2104" target="_blank" rel="noopener noreferrer">RFC 2104</a> to produce a HMAC;</li>
   <li>Bob sends the resulting message and HMAC to Alice, perhaps through two independent communication channels;</li>
   <li>Alice receives the message, uses a hash algorithm like SHA-256, combines it with the shared secret that was given to her in Step 1, and computes her own HMAC;</li>
   <li>Alice compares her HMAC to the HMAC generated by Bob;</li>
@@ -762,7 +762,7 @@
 <p>In truth, while HMAC might be surrounded in mystery and seem like a difficult algorithm, it cannot get easier to implement:</p>
 
 <p><img src="/images/20210307_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="hash(key xor opad, hash(key xor ipad, text))"></p>
-<p class="text-center text-gray lh-condensed-ultra f6">HMAC algorithm | Source: <a href="https://tools.ietf.org/html/rfc2104">RFC 2104</a></p>
+<p class="text-center text-gray lh-condensed-ultra f6">HMAC algorithm | Source: <a href="https://tools.ietf.org/html/rfc2104" target="_blank" rel="noopener noreferrer">RFC 2104</a></p>
 
 <p>Moreover, the padding for the key is dead-simple: append <code class="language-plaintext highlighter-rouge">0x00</code> until the key equals the block size of the hashing algorithm. RFC 2104 is a very ancient RFC, and hence only mentions MD5 and SHA-1 as possible hashing algorithms; in truth, any modern-day hashing algorithms can be used.</p>
 
@@ -841,7 +841,7 @@
   <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>And presto, we’ve implemented HMAC! I used <a href="https://www.devglan.com/online-tools/hmac-sha256-online">this online tool</a> to test the same HMAC implementation on the SHA-256 and SHA-512 algorithms. To call this function, we have to do the following:</p>
+<p>And presto, we’ve implemented HMAC! I used <a href="https://www.devglan.com/online-tools/hmac-sha256-online" target="_blank" rel="noopener noreferrer">this online tool</a> to test the same HMAC implementation on the SHA-256 and SHA-512 algorithms. To call this function, we have to do the following:</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "hmac.h"
 </span><span class="c1">// include only one of these</span>
@@ -875,13 +875,13 @@
   <li>SHA512 has a 1024-bit block size (128 bytes) and 512-bit result (64 bytes)</li>
 </ul>
 
-<p>The code is available <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hmac.h">on my GitHub repository</a>.</p>
+<p>The code is available <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hmac.h" target="_blank" rel="noopener noreferrer">on my GitHub repository</a>.</p>
 
 <h1 id="hotp">HOTP</h1>
 
 <p><a href="#table-of-contents">Back to Table Of Contents</a></p>
 
-<p>With HMAC implemented, we can finally implement <a href="https://tools.ietf.org/html/rfc4226">RFC 4226</a>, one step shy of our goal to get TOTPs! Being one step away from TOTPs, HOTPs are counter-based, meaning that the end-user would need to manually increment a counter to generate the next OTP used for authentication.</p>
+<p>With HMAC implemented, we can finally implement <a href="https://tools.ietf.org/html/rfc4226" target="_blank" rel="noopener noreferrer">RFC 4226</a>, one step shy of our goal to get TOTPs! Being one step away from TOTPs, HOTPs are counter-based, meaning that the end-user would need to manually increment a counter to generate the next OTP used for authentication.</p>
 
 <p>You can probably already see how to generate TOTPs from HOTPs, but for the sake of completeness, let’s talk about how HOTP works. With the HMAC algorithm, we need to specific a message and the key; in the context of HOTPs, the message would be the counter value, and the key would be an actual cryptographic secret. From there, we would get a unique value from HMAC every increment of the counter. However, even though getting the user to type 20 hexadecimal numbers might be a fun way to torture them, we have to think about practicality, and instead choose to <em>truncate</em> the value produced by the HMAC algorithm.</p>
 
@@ -924,7 +924,7 @@
 <span class="p">}</span> <span class="n">hotp_context</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>Using <code class="language-plaintext highlighter-rouge">uint64_t</code> for the counter might seem overkill, but the size of the counter is <a href="https://tools.ietf.org/html/rfc4226#page-5">defined</a> in the RFC; it makes sense too, because later on in TOTP, we are going to need <code class="language-plaintext highlighter-rouge">uint64_t</code>, as storing time in a <code class="language-plaintext highlighter-rouge">uint32_t</code> variable will be a bad idea closer to the year 2038. Let’s work on the HOTP algorithm itself.</p>
+<p>Using <code class="language-plaintext highlighter-rouge">uint64_t</code> for the counter might seem overkill, but the size of the counter is <a href="https://tools.ietf.org/html/rfc4226#page-5" target="_blank" rel="noopener noreferrer">defined</a> in the RFC; it makes sense too, because later on in TOTP, we are going to need <code class="language-plaintext highlighter-rouge">uint64_t</code>, as storing time in a <code class="language-plaintext highlighter-rouge">uint32_t</code> variable will be a bad idea closer to the year 2038. Let’s work on the HOTP algorithm itself.</p>
 
 <p>Since we have a 64-bit counter of unknown byte order, we need to first break it down into a Big Endian byte array.</p>
 
@@ -983,13 +983,13 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Refer to the <a href="#hmac">HMAC</a> section to change the values of <code class="language-plaintext highlighter-rouge">ctx.hashFn</code>, <code class="language-plaintext highlighter-rouge">ctx.blockSize</code> and <code class="language-plaintext highlighter-rouge">ctx.outputLength</code>. The full C code can be found in <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hotp.h">my GitHub repository</a>.</p>
+<p>Refer to the <a href="#hmac">HMAC</a> section to change the values of <code class="language-plaintext highlighter-rouge">ctx.hashFn</code>, <code class="language-plaintext highlighter-rouge">ctx.blockSize</code> and <code class="language-plaintext highlighter-rouge">ctx.outputLength</code>. The full C code can be found in <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hotp.h" target="_blank" rel="noopener noreferrer">my GitHub repository</a>.</p>
 
 <h1 id="totp">TOTP</h1>
 
 <p><a href="#table-of-contents">Back to Table Of Contents</a></p>
 
-<p>And finally, <a href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>, the whole purpose of this blog post. TOTPs! HOTPs are slightly troublesome, requiring the user to increment the counter manually - this meant that receivers of HOTP needed to define an interval of OTPs that they’ll accept, through the resynchronization parameter. This is error-prone, and highly frustrating for the end-user, especially due to off-by-one errors and naughty toddlers incrementing HOTP counters.</p>
+<p>And finally, <a href="https://tools.ietf.org/html/rfc6238" target="_blank" rel="noopener noreferrer">RFC 6238</a>, the whole purpose of this blog post. TOTPs! HOTPs are slightly troublesome, requiring the user to increment the counter manually - this meant that receivers of HOTP needed to define an interval of OTPs that they’ll accept, through the resynchronization parameter. This is error-prone, and highly frustrating for the end-user, especially due to off-by-one errors and naughty toddlers incrementing HOTP counters.</p>
 
 <p>TOTPs solve this problem by using Real-Time clocks available on most low-powered hardware, and relatively high-powered devices like smart phones and laptops - they use time as a means to calculate the counter value in HOTP. In other words, TOTP can be said to be a simple extension of HOTPs.</p>
 
@@ -1037,13 +1037,13 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>The OTP generated by the code written so far matches with the <a href="https://totp.danhersam.com/">TOTP generator</a> written by <a href="https://dan.hersam.com/">Dan Hersam</a>. Do note that Dan’s site uses Base32 keys, so you’ll need a <a href="https://emn178.github.io/online-tools/base32_encode.html">Base32 encoder</a>; <strong>make sure to remove all the padding before using it as a key (i.e. delete all the <code class="language-plaintext highlighter-rouge">=</code>)</strong>.</p>
+<p>The OTP generated by the code written so far matches with the <a href="https://totp.danhersam.com/" target="_blank" rel="noopener noreferrer">TOTP generator</a> written by <a href="https://dan.hersam.com/" target="_blank" rel="noopener noreferrer">Dan Hersam</a>. Do note that Dan’s site uses Base32 keys, so you’ll need a <a href="https://emn178.github.io/online-tools/base32_encode.html" target="_blank" rel="noopener noreferrer">Base32 encoder</a>; <strong>make sure to remove all the padding before using it as a key (i.e. delete all the <code class="language-plaintext highlighter-rouge">=</code>)</strong>.</p>
 
 <blockquote>
-  <p>Why? Dan’s implementation of TOTP relies on a library called <code class="language-plaintext highlighter-rouge">otpauth</code> on version <code class="language-plaintext highlighter-rouge">v3.1.3</code>. In <a href="https://github.com/hectorm/otpauth/blob/v3.1.3/src/utils.js#L143">line 143 of this version’s utility function</a>, where base32 is encoded into an <code class="language-plaintext highlighter-rouge">ArrayBuffer</code>, the padding characters, <code class="language-plaintext highlighter-rouge">=</code> are not handled at all, leading to an error that causes the token to be generated wrongly. This is fixed in a subsequent version of <code class="language-plaintext highlighter-rouge">otpauth</code>, but unfortunately, Dan has since stopped maintaining the TOTP generator.</p>
+  <p>Why? Dan’s implementation of TOTP relies on a library called <code class="language-plaintext highlighter-rouge">otpauth</code> on version <code class="language-plaintext highlighter-rouge">v3.1.3</code>. In <a href="https://github.com/hectorm/otpauth/blob/v3.1.3/src/utils.js#L143" target="_blank" rel="noopener noreferrer">line 143 of this version’s utility function</a>, where base32 is encoded into an <code class="language-plaintext highlighter-rouge">ArrayBuffer</code>, the padding characters, <code class="language-plaintext highlighter-rouge">=</code> are not handled at all, leading to an error that causes the token to be generated wrongly. This is fixed in a subsequent version of <code class="language-plaintext highlighter-rouge">otpauth</code>, but unfortunately, Dan has since stopped maintaining the TOTP generator.</p>
 </blockquote>
 
-<p>The code for <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/totp.h">TOTP can be found on my GitHub repository</a>.</p>
+<p>The code for <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/totp.h" target="_blank" rel="noopener noreferrer">TOTP can be found on my GitHub repository</a>.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 

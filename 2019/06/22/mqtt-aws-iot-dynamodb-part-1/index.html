@@ -44,7 +44,7 @@
       <p class="text-gray mb-5">Published Jun 22, 2019 12:00</p>
       
   <div class="article">
-    <p>You read the title, let’s get started. For this tutorial, we will be using the <a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a>. This should be possible with <a href="https://github.com/espressif/esp-idf">ESP-IDF</a>, too, because <a href="https://github.com/espressif/esp-mqtt">ESP-MQTT</a> is included as part of the ESP-IDF.</p>
+    <p>You read the title, let’s get started. For this tutorial, we will be using the <a href="https://www.arduino.cc/en/Main/Software" target="_blank" rel="noopener noreferrer">Arduino IDE</a>. This should be possible with <a href="https://github.com/espressif/esp-idf" target="_blank" rel="noopener noreferrer">ESP-IDF</a>, too, because <a href="https://github.com/espressif/esp-mqtt" target="_blank" rel="noopener noreferrer">ESP-MQTT</a> is included as part of the ESP-IDF.</p>
 
 <h1 id="tested-on">Tested on</h1>
 <p>This tutorial was created on Ubuntu 18.04.</p>
@@ -53,16 +53,16 @@
 <p>Before the tutorial begins, please download the following pre-requisites (the version numbers are the versions used to create this tutorial):</p>
 <ul>
   <li>
-<a href="https://www.arduino.cc/">Arduino IDE</a> - 1.8.9</li>
+<a href="https://www.arduino.cc/" target="_blank" rel="noopener noreferrer">Arduino IDE</a> - 1.8.9</li>
   <li>
-<a href="https://www.python.org/downloads/">Python</a> - 3.6.8</li>
+<a href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">Python</a> - 3.6.8</li>
 </ul>
 
 <h1 id="setting-up-prerequisites">Setting up prerequisites</h1>
 <h2 id="arduino-ide">Arduino IDE</h2>
 
 <ol>
-  <li>Download the <a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a> if you don’t already have it.</li>
+  <li>Download the <a href="https://www.arduino.cc/en/Main/Software" target="_blank" rel="noopener noreferrer">Arduino IDE</a> if you don’t already have it.</li>
   <li>Start Arduino, then select <strong>File</strong> &gt; <strong>Preferences</strong>.
  <img src="/images/20190622_21.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="File &gt; Preferences">
     <p class="text-center text-gray lh-condensed-ultra f6">File &gt; Preferences | Source: Me</p>
@@ -116,7 +116,7 @@
  <img src="/images/20190622_4.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Alternate IoT Policy"></p>
     <p class="text-center text-gray lh-condensed-ultra f6">If you already have policies, use this button instead | Source: Me</p>
   </li>
-  <li>A wizard should appear. Name your policy through the <em>Name</em> field, key in <code class="language-plaintext highlighter-rouge">iot:*</code> into the <em>Action</em> field, key in <code class="language-plaintext highlighter-rouge">*</code> under the <em>Resource ARN</em> field, and finally, check the ‘Allow’ box under <em>Effect</em>. Should you wish to restrict your policy more for higher security, or prevent other <em>authorized</em> (yes, <em>authorized</em>) users from using your topic, please refer to <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html">this AWS Documentation</a> to construct your own policy. After checking your fields, press <strong>Create</strong>.
+  <li>A wizard should appear. Name your policy through the <em>Name</em> field, key in <code class="language-plaintext highlighter-rouge">iot:*</code> into the <em>Action</em> field, key in <code class="language-plaintext highlighter-rouge">*</code> under the <em>Resource ARN</em> field, and finally, check the ‘Allow’ box under <em>Effect</em>. Should you wish to restrict your policy more for higher security, or prevent other <em>authorized</em> (yes, <em>authorized</em>) users from using your topic, please refer to <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html" target="_blank" rel="noopener noreferrer">this AWS Documentation</a> to construct your own policy. After checking your fields, press <strong>Create</strong>.
  <img src="/images/20190622_5.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Wizard options">
     <p class="text-center text-gray lh-condensed-ultra f6">Values for the wizard | Source: Me</p>
   </li>
@@ -139,7 +139,7 @@
  <img src="/images/20190622_10.jpg" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="One click certificate creation">
     <p class="text-center text-gray lh-condensed-ultra f6">Certificate Creation | Source: Me</p>
   </li>
-  <li>After a while, the wizard should generate a certificate. Download the certificate, and the private key. Also, get the root CA, here is a <a href="https://www.amazontrust.com/repository/AmazonRootCA1.pem">direct link</a> to it. Make sure to activate the certificate before clicking <strong>Attach a policy</strong>.
+  <li>After a while, the wizard should generate a certificate. Download the certificate, and the private key. Also, get the root CA, here is a <a href="https://www.amazontrust.com/repository/AmazonRootCA1.pem" target="_blank" rel="noopener noreferrer">direct link</a> to it. Make sure to activate the certificate before clicking <strong>Attach a policy</strong>.
  <img src="/images/20190622_11.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Download certificate, private key, CA">
     <p class="text-center text-gray lh-condensed-ultra f6">Download the cert, private key, CA cert, and activate before continuing. | Source: Me</p>
   </li>
@@ -169,7 +169,7 @@
 
 <ol>
   <li>Open the Arduino IDE / Switch to the Arduino IDE.</li>
-  <li>Completely replace all the code in the IDE with code <a href="https://gist.github.com/jameshi16/7f277bb8dfecf38a30aea0093f30477a">from this gist</a>.</li>
+  <li>Completely replace all the code in the IDE with code <a href="https://gist.github.com/jameshi16/7f277bb8dfecf38a30aea0093f30477a" target="_blank" rel="noopener noreferrer">from this gist</a>.</li>
   <li>Fill in the configuration options by editing the content within the double quotes ("):
     <ul>
       <li>

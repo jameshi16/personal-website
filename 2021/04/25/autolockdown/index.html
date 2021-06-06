@@ -111,13 +111,13 @@
 
 <p>In Android 9 (Pie), there exist a feature known as <code class="language-plaintext highlighter-rouge">Lockdown Mode</code>. In this mode, “Smart Lock” features are disabled, biometric authentication is disabled, and notifications no longer show. Users who wish to turn on Lockdown Mode can do it through the power menu, after the feature is enabled.</p>
 
-<p>To learn what is Lockdown Mode, and how to enable it for your phone, visit <a href="https://screenrant.com/android-lockdown-mode-purpose-enable-how-explained/">this screenrant link</a>.</p>
+<p>To learn what is Lockdown Mode, and how to enable it for your phone, visit <a href="https://screenrant.com/android-lockdown-mode-purpose-enable-how-explained/" target="_blank" rel="noopener noreferrer">this screenrant link</a>.</p>
 
 <p>Having discovered Lockdown Mode, I gave in to the temptations of the fingerprint, and registered my own biometrics. However, I found that turning on Lockdown Mode is too user-dependent, meaning that there might be times where I am too fatigued to turn on the mode to protect my phone. Hence, I tried automating the process.</p>
 
 <h1 id="automation">Automation</h1>
 
-<p>I downloaded <a href="https://play.google.com/store/apps/details?id=com.llamalab.automate">Automate</a> and <a href="https://play.google.com/store/apps/details?id=com.radefffactory.lockdown">this nifty app</a> that provides shortcuts to enable Lockdown mode, and linked it up such that whenever I turn off the screen, a 5 minute timer will go off, which will launch the second app to enable Lockdown mode.</p>
+<p>I downloaded <a href="https://play.google.com/store/apps/details?id=com.llamalab.automate" target="_blank" rel="noopener noreferrer">Automate</a> and <a href="https://play.google.com/store/apps/details?id=com.radefffactory.lockdown" target="_blank" rel="noopener noreferrer">this nifty app</a> that provides shortcuts to enable Lockdown mode, and linked it up such that whenever I turn off the screen, a 5 minute timer will go off, which will launch the second app to enable Lockdown mode.</p>
 
 <p>5 minutes is an arbitrarily decided duration - I felt that as long as I tried unlocking my phone again within 5 minutes, a fingerprint would be acceptable. While this does not guarantee the safety of my data if I were to be suddenly robbed, I felt that it would “good enough” to prevent my data from being accessed in my sleep by a sneaky adversary.</p>
 
@@ -125,13 +125,13 @@
 
 <h1 id="the-creation-of-autolockdown">The creation of AutoLockdown</h1>
 
-<p>Hence, to solve all of these problems in one fell swoop, I decided to make an app. The <a href="https://github.com/jameshi16/AutoLockdown">repository</a> can be found on GitHub; essentially, the phone automatically removes biometric authentication as a possible authentication method after a user-configuration period of time.</p>
+<p>Hence, to solve all of these problems in one fell swoop, I decided to make an app. The <a href="https://github.com/jameshi16/AutoLockdown" target="_blank" rel="noopener noreferrer">repository</a> can be found on GitHub; essentially, the phone automatically removes biometric authentication as a possible authentication method after a user-configuration period of time.</p>
 
 <p>In the future, I hope to also add scheduling; so, apart from removing biometric authentication after a set duration, it will be removed during, say, bedtime, as well.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 
-<p>If you were in the same dilemma as me, I hope you find <a href="https://github.com/jameshi16/AutoLockdown">AutoLockdown</a> satisfactory; otherwise, go ahead and give me some feedback through <a target="_blank" href="mailto:me@codingindex.xyz">my email</a>!</p>
+<p>If you were in the same dilemma as me, I hope you find <a href="https://github.com/jameshi16/AutoLockdown" target="_blank" rel="noopener noreferrer">AutoLockdown</a> satisfactory; otherwise, go ahead and give me some feedback through <a target="_blank" href="mailto:me@codingindex.xyz">my email</a>!</p>
 
 <p>Happy Coding</p>
 

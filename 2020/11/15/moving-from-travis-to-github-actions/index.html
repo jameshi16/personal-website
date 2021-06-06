@@ -46,16 +46,16 @@
   <div class="article">
     <h1 id="why-the-move">Why the move?</h1>
 
-<p>In case you weren’t aware, the guys <em>now</em> in charge of Travis CI recently <a href="https://www.theregister.com/2020/11/02/travis_ci_pricng/">changed how their “free” plan worked</a>. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine before you are forced to purchase a plan. Applying for additional free credits will be on a case-by-case basis.</p>
+<p>In case you weren’t aware, the guys <em>now</em> in charge of Travis CI recently <a href="https://www.theregister.com/2020/11/02/travis_ci_pricng/" target="_blank" rel="noopener noreferrer">changed how their “free” plan worked</a>. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine before you are forced to purchase a plan. Applying for additional free credits will be on a case-by-case basis.</p>
 
 <p>Putting aside my own personal thoughts on the matter, my personal website takes anywhere from 33 seconds to 4 minutes to compile depending on cache status. This means that I can only post 400 more blog posts before I run out of credits. Hence, I needed to find another way to build and deploy my website.</p>
 
 <p>Over the years, GitHub has evolved from being just another place for developers to dump their code, to a fuller suite of tools developers can use to create CI/CD pipelines from the code they create. I believe that this is a result of market demand, as a way to be competitive against platforms such as GitLab. GitHub’s offering, GitHub Actions, is another way to interact with code, issues, and pull requests without using web hooks or APIs.</p>
 
-<p>As a lone maintainer of my personal blog, I find it too cumbersome to submit an application to either GitLab or Travis CI to gain their open-source offerings for free CI runner minutes. Under GitHub Action’s pricing plans, public projects get to use GitHub Actions for free. There is no application process or a need to attach a credit card to your GitHub account - you just configure the right files, push them to the repository, and GitHub Actions will automatically kick into action. Furthermore, my blog is hosted on GitHub Pages, and the <a href="https://github.com/jameshi16/personal-website">source code</a> for it is also hosted on GitHub. Hence, GitHub actions was the most relevant choice of a CI/CD runner for me.</p>
+<p>As a lone maintainer of my personal blog, I find it too cumbersome to submit an application to either GitLab or Travis CI to gain their open-source offerings for free CI runner minutes. Under GitHub Action’s pricing plans, public projects get to use GitHub Actions for free. There is no application process or a need to attach a credit card to your GitHub account - you just configure the right files, push them to the repository, and GitHub Actions will automatically kick into action. Furthermore, my blog is hosted on GitHub Pages, and the <a href="https://github.com/jameshi16/personal-website" target="_blank" rel="noopener noreferrer">source code</a> for it is also hosted on GitHub. Hence, GitHub actions was the most relevant choice of a CI/CD runner for me.</p>
 
 <blockquote>
-  <p>For those of you who have used Jekyll with GitHub pages before, possibly from <a href="https://github.com/github/personal-website">forking this repository</a>, you’d know that the GitHub Pages environment can actually directly deploy Jekyll websites. However, as mentioned in <a href="https://jekyllrb.com/docs/github-pages/#the-github-pages-gem">this documentation by Jekyll</a>, this only works with the <code class="language-plaintext highlighter-rouge">github-pages</code> gem. I personally use other gems, and hence I need a CI/CD runner to build and deploy my website.</p>
+  <p>For those of you who have used Jekyll with GitHub pages before, possibly from <a href="https://github.com/github/personal-website" target="_blank" rel="noopener noreferrer">forking this repository</a>, you’d know that the GitHub Pages environment can actually directly deploy Jekyll websites. However, as mentioned in <a href="https://jekyllrb.com/docs/github-pages/#the-github-pages-gem" target="_blank" rel="noopener noreferrer">this documentation by Jekyll</a>, this only works with the <code class="language-plaintext highlighter-rouge">github-pages</code> gem. I personally use other gems, and hence I need a CI/CD runner to build and deploy my website.</p>
 </blockquote>
 
 <hr>
@@ -140,10 +140,10 @@
 <p>Each “step” in a workflow could either run commands, like <code class="language-plaintext highlighter-rouge">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</code> or an action, like <code class="language-plaintext highlighter-rouge">actions/checkout@v2</code>. Steps are also capable of running in-repository actions, like <code class="language-plaintext highlighter-rouge">./source/.github/actions/pushToGithub</code>.</p>
 
 <blockquote>
-  <p><code class="language-plaintext highlighter-rouge">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</code> is a way to <em>update</em> files from one directory to another. The command is essentially piping the <code class="language-plaintext highlighter-rouge">tar</code> compressed version of all the files in one directory, then extracting that <code class="language-plaintext highlighter-rouge">tar</code> in another directory through a pipe. This piece of geek was found in <a href="https://askubuntu.com/a/269818">this StackOverflow post</a>.</p>
+  <p><code class="language-plaintext highlighter-rouge">(cd ./source/_site &amp;&amp; tar c .) | (cd ./built &amp;&amp; tar xf -)</code> is a way to <em>update</em> files from one directory to another. The command is essentially piping the <code class="language-plaintext highlighter-rouge">tar</code> compressed version of all the files in one directory, then extracting that <code class="language-plaintext highlighter-rouge">tar</code> in another directory through a pipe. This piece of geek was found in <a href="https://askubuntu.com/a/269818" target="_blank" rel="noopener noreferrer">this StackOverflow post</a>.</p>
 </blockquote>
 
-<p>There are many GitHub actions available on the <a href="https://github.com/marketplace">GitHub marketplace</a>, which you can use directly in your workflow. I decided to make my own, since pushing to Git wasn’t rocket science, and it would be a good refresher to create a GitHub Action.</p>
+<p>There are many GitHub actions available on the <a href="https://github.com/marketplace" target="_blank" rel="noopener noreferrer">GitHub marketplace</a>, which you can use directly in your workflow. I decided to make my own, since pushing to Git wasn’t rocket science, and it would be a good refresher to create a GitHub Action.</p>
 
 <hr>
 
@@ -211,7 +211,7 @@ git push https://github.com/<span class="k">${</span><span class="nv">REPOSITORY
 
 <p>It is sad that Travis CI has basically left the open source community in the dust. While their claims of user abuse might have some sort of validity, I believe that such abuse can be better handled; perhaps instead of giving everyone free one-time “trial” minutes, they should top up some credits every month. They could also limit how long a runner can run for by default for open-source projects - maybe instead of 120 minutes, give each runner 30 minutes, thereafter charge the user by credit per minute.</p>
 
-<p>To add salt to the wound, Travis CI’s pricing plans are exclusive from the credits that an account can have; in other words, you need to pay for concurrency and credits <em>separately</em>. Interpret their <a href="https://travis-ci.com/plans">pricing plans</a> as you will.</p>
+<p>To add salt to the wound, Travis CI’s pricing plans are exclusive from the credits that an account can have; in other words, you need to pay for concurrency and credits <em>separately</em>. Interpret their <a href="https://travis-ci.com/plans" target="_blank" rel="noopener noreferrer">pricing plans</a> as you will.</p>
 
 <p>Oh well. We’ll see where the winds take us.</p>
 

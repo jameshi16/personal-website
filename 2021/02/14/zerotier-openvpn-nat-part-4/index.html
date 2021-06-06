@@ -223,7 +223,7 @@ ufw allow 1194/udp
 
 <p>This step is the same as <a href="/2021/02/14/zerotier-openvpn-nat-part-3#step5">Step 5 of Solution Duo</a>.</p>
 
-<p>Now, we generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> files used by the clients. For convenience (and to rip off <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean’s guide</a>), we’ll combine the CA certificate, Client certificate and Client’s key into the <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+<p>Now, we generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> files used by the clients. For convenience (and to rip off <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04" target="_blank" rel="noopener noreferrer">DigitalOcean’s guide</a>), we’ll combine the CA certificate, Client certificate and Client’s key into the <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
 
 <p>Firstly, we generate a working directory to store the files needed for the <code class="language-plaintext highlighter-rouge">.ovpn</code> file:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/client/files
@@ -251,7 +251,7 @@ ufw allow 1194/udp
 
 <p>Replace <code class="language-plaintext highlighter-rouge">x.x.x.x</code> with the IP assigned to your Oracle VM instance.</p>
 
-<p>The <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean guide</a> uses a script to generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> file, so that is what we will be doing too. It essentially concatenates all the necessary files together and spits out an <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+<p>The <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04" target="_blank" rel="noopener noreferrer">DigitalOcean guide</a> uses a script to generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> file, so that is what we will be doing too. It essentially concatenates all the necessary files together and spits out an <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
 
 <p><code class="language-plaintext highlighter-rouge">${PWD}/client/make_config.sh</code>:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
@@ -283,7 +283,7 @@ ufw allow 1194/udp
 
 <p>The <code class="language-plaintext highlighter-rouge">.ovpn</code> should be generated in the <code class="language-plaintext highlighter-rouge">./files</code> directory. This file can then be transferred to another device, like your Android device or ISP-controlled router. Give it a spin, and ensure everything is in working order by:</p>
 <ul>
-  <li>Checking IP address with <a href="https://ifconfig.so">ifconfig.so</a>, or VPN provider internet checker;</li>
+  <li>Checking IP address with <a href="https://ifconfig.so" target="_blank" rel="noopener noreferrer">ifconfig.so</a>, or VPN provider internet checker;</li>
   <li>Checking ZeroTier connectivity by pinging peers in the same network.</li>
 </ul>
 

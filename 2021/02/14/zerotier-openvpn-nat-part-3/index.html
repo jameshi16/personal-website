@@ -58,7 +58,7 @@
 
 <h1 id="step-0-pre-requisites">Step 0: Pre-requisites</h1>
 
-<p>You will need an <a href="https://cloud.oracle.com">Oracle Cloud</a> account. An account will remain always-free until it is explicitly upgraded; so don’t worry too much about being charged.</p>
+<p>You will need an <a href="https://cloud.oracle.com" target="_blank" rel="noopener noreferrer">Oracle Cloud</a> account. An account will remain always-free until it is explicitly upgraded; so don’t worry too much about being charged.</p>
 
 <h1 id="step-1-creating-cloud-resources-skippable">Step 1: Creating cloud resources (Skippable)</h1>
 
@@ -74,7 +74,7 @@
   <li>Route Table</li>
 </ul>
 
-<p>Navigate to the <a href="https://cloud.oracle.com/networking/vcns">Virtual Cloud Networks</a> page, and click on “Create VCN”.</p>
+<p>Navigate to the <a href="https://cloud.oracle.com/networking/vcns" target="_blank" rel="noopener noreferrer">Virtual Cloud Networks</a> page, and click on “Create VCN”.</p>
 
 <p><img src="/images/20210214_8.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Creating VCN"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Creating VCN | Source: Me</p>
@@ -201,7 +201,7 @@
 
 <h1 id="step-2-create-a-vm">Step 2: Create a VM</h1>
 
-<p>Go to the <a href="https://cloud.oracle.com/compute/instances">instances page</a>, and click on “Create Instance”:</p>
+<p>Go to the <a href="https://cloud.oracle.com/compute/instances" target="_blank" rel="noopener noreferrer">instances page</a>, and click on “Create Instance”:</p>
 
 <p><img src="/images/20210214_32.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Create an instance"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Create an instance | Source: Me</p>
@@ -259,7 +259,7 @@
 
 <h1 id="step-4-create--configure-openvpn-server"><span id="step4">Step 4: Create &amp; Configure OpenVPN server</span></h1>
 
-<p>This step is adopted from <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean’s guide on how to setup an OpenVPN server</a>; that guide uses Ubuntu 16.04 with easy-rsa 2, while this guide uses Ubuntu 20.04 with easy-rsa 3. There are also easy setup scripts online, although you should exercise caution when running scripts downloaded from the internet.</p>
+<p>This step is adopted from <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04" target="_blank" rel="noopener noreferrer">DigitalOcean’s guide on how to setup an OpenVPN server</a>; that guide uses Ubuntu 16.04 with easy-rsa 2, while this guide uses Ubuntu 20.04 with easy-rsa 3. There are also easy setup scripts online, although you should exercise caution when running scripts downloaded from the internet.</p>
 
 <p>Before we can even configure the OpenVPN server, we must become a Certificate Authority and issue certificates for both the server and client. This allows clients authenticate the server, and vice-versa.</p>
 
@@ -467,7 +467,7 @@ ufw allow 1194/udp
 
 <h1 id="step-5-create-client-configurations"><span id="step5">Step 5: Create Client Configurations</span></h1>
 
-<p>Now, we generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> files used by the clients. For convenience (and to rip off <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean’s guide</a>), we’ll combine the CA certificate, Client certificate and Client’s key into the <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+<p>Now, we generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> files used by the clients. For convenience (and to rip off <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04" target="_blank" rel="noopener noreferrer">DigitalOcean’s guide</a>), we’ll combine the CA certificate, Client certificate and Client’s key into the <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
 
 <p>Firstly, we generate a working directory to store the files needed for the <code class="language-plaintext highlighter-rouge">.ovpn</code> file:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span>/client/files
@@ -495,7 +495,7 @@ ufw allow 1194/udp
 
 <p>Replace <code class="language-plaintext highlighter-rouge">x.x.x.x</code> with the IP assigned to your Oracle VM instance.</p>
 
-<p>The <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04">DigitalOcean guide</a> uses a script to generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> file, so that is what we will be doing too. It essentially concatenates all the necessary files together and spits out an <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
+<p>The <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04" target="_blank" rel="noopener noreferrer">DigitalOcean guide</a> uses a script to generate the <code class="language-plaintext highlighter-rouge">.ovpn</code> file, so that is what we will be doing too. It essentially concatenates all the necessary files together and spits out an <code class="language-plaintext highlighter-rouge">.ovpn</code> file.</p>
 
 <p><code class="language-plaintext highlighter-rouge">${PWD}/client/make_config.sh</code>:</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
@@ -527,7 +527,7 @@ ufw allow 1194/udp
 
 <p>The <code class="language-plaintext highlighter-rouge">.ovpn</code> should be generated in the <code class="language-plaintext highlighter-rouge">./files</code> directory. This file can then be transferred to another device, like your Android device or ISP-controlled router. Give it a spin, and ensure everything is in working order by:</p>
 <ul>
-  <li>Checking IP address with <a href="https://ifconfig.so">ifconfig.so</a>, or VPN provider internet checker;</li>
+  <li>Checking IP address with <a href="https://ifconfig.so" target="_blank" rel="noopener noreferrer">ifconfig.so</a>, or VPN provider internet checker;</li>
   <li>Checking ZeroTier connectivity by pinging peers in the same network.</li>
 </ul>
 

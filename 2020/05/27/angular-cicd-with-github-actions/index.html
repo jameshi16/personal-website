@@ -48,15 +48,15 @@
 
 <h1 id="step-0-concepts">Step 0: Concepts</h1>
 
-<p>GitHub workflows uses GitHub actions, and GitHub actions are ideally public repositories that are published on the Marketplace. As of writing, first-class support for private GitHub repository actions <a href="https://github.com/actions/checkout/issues/95">does not exist</a>.</p>
+<p>GitHub workflows uses GitHub actions, and GitHub actions are ideally public repositories that are published on the Marketplace. As of writing, first-class support for private GitHub repository actions <a href="https://github.com/actions/checkout/issues/95" target="_blank" rel="noopener noreferrer">does not exist</a>.</p>
 
 <p>There are three main ways around it:</p>
 
 <ol>
   <li>Git Submodules,</li>
   <li>
-<a href="https://github.community/t5/GitHub-Actions/Github-action-action-in-private-repository/m-p/54341/highlight/true#M9141">Cloning the action with an access token on run</a>,</li>
-  <li><a href="https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-using-action-in-the-same-repository-as-the-workflow">Local GitHub actions</a></li>
+<a href="https://github.community/t5/GitHub-Actions/Github-action-action-in-private-repository/m-p/54341/highlight/true#M9141" target="_blank" rel="noopener noreferrer">Cloning the action with an access token on run</a>,</li>
+  <li><a href="https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-using-action-in-the-same-repository-as-the-workflow" target="_blank" rel="noopener noreferrer">Local GitHub actions</a></li>
 </ol>
 
 <p>There are two types of GitHub Actions:</p>
@@ -77,9 +77,9 @@
 
 <p>As I’m setting up GitHub Actions for a private repository, I decided to use a self-hosted GitHub actions runner, since I have an unused VPS server lying around doing nothing. At the time of writing, a self-hosted GitHub actions runner is not required, as GitHub’s Free Plan gives 2,000 action minutes per month for private repositories which seems enough for a few small projects.</p>
 
-<p>Installing the GitHub Actions runner can be easily done by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners">this GitHub help page</a>. A unit service can then be created by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service">this other GitHub help page</a>, although I wrote mine manually just for giggles.</p>
+<p>Installing the GitHub Actions runner can be easily done by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners" target="_blank" rel="noopener noreferrer">this GitHub help page</a>. A unit service can then be created by following the instructions on <a href="https://help.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service" target="_blank" rel="noopener noreferrer">this other GitHub help page</a>, although I wrote mine manually just for giggles.</p>
 
-<p>If you’re using Docker container actions, ensure that the environment has Docker installed, and is accessible by the user running the GitHub action runner. If you’re using Javascript actions, you <em>should</em> install <a href="https://github.com/actions/toolkit"><code class="language-plaintext highlighter-rouge">actions/toolkit</code></a>.</p>
+<p>If you’re using Docker container actions, ensure that the environment has Docker installed, and is accessible by the user running the GitHub action runner. If you’re using Javascript actions, you <em>should</em> install <a href="https://github.com/actions/toolkit" target="_blank" rel="noopener noreferrer"><code class="language-plaintext highlighter-rouge">actions/toolkit</code></a>.</p>
 
 <p>After following the steps properly, I observe that the runner pops up in my settings page:
 <img src="/images/20200527_2.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Self-hosted GitHub Runner"></p>
@@ -110,7 +110,7 @@
   <li><code class="language-plaintext highlighter-rouge">ng test &amp;&amp; ng e2e</code></li>
 </ul>
 
-<p>Hence, all I need to do now is to translate our CLI commands into a GitHub action. Luckily, <a href="https://github.com/colbyhill21/angular-full-ci">colbyhill21 has already made a full CI action for Angular</a>, which is easy to integrate into your own GitHub workflow.</p>
+<p>Hence, all I need to do now is to translate our CLI commands into a GitHub action. Luckily, <a href="https://github.com/colbyhill21/angular-full-ci" target="_blank" rel="noopener noreferrer">colbyhill21 has already made a full CI action for Angular</a>, which is easy to integrate into your own GitHub workflow.</p>
 
 <p>However, I decided to reinvent the wheel, because I’m bored and have nothing better to do. Furthermore, understanding how the black box works speeds up debugging issues pertaining to <code class="language-plaintext highlighter-rouge">ng test</code> and <code class="language-plaintext highlighter-rouge">ng e2e</code>, which I experienced while writing this blog post.</p>
 

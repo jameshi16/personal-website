@@ -103,7 +103,7 @@
 <img src="/images/20190906_9.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Fill in the fields, and create the function">
     <p class="text-center text-gray lh-condensed-ultra f6">Fill in the fields, and create the function | Source: Me</p>
   </li>
-  <li>Fill the code editor with code from <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d">this gist</a>.
+  <li>Fill the code editor with code from <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d" target="_blank" rel="noopener noreferrer">this gist</a>.
 <img src="/images/20190906_10.jpg" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Fill in the code for the lambda function">
     <p class="text-center text-gray lh-condensed-ultra f6">Fill in the code for the lambda function | Source: Me</p>
   </li>
@@ -148,7 +148,7 @@
 
 <p>Similar to how it was done in <a href="/2019/09/05/mqtt-aws-iot-dynamodb-part-2/">Part II</a>, go to the DynamoDB table and refresh the contents. Count the number of records currently on the table, and press the ‘BOOT’ button on the ESP32 until that count reaches a multiple of 10. The led of the ESP32 should light up only when there is a multiple of 10, otherwise, it will be turned off.</p>
 
-<p>The <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d">lambda script</a> you pasted earlier is in charge of causing this to happen; firstly, it will obtain device data. Then, it will make a decision based on the device data; in this case, “is the number of records a multiple of 10? If so, turn on the led, else, turn it off”.</p>
+<p>The <a href="https://gist.github.com/jameshi16/851dc9de904811c1b2304cfc1f819f1d" target="_blank" rel="noopener noreferrer">lambda script</a> you pasted earlier is in charge of causing this to happen; firstly, it will obtain device data. Then, it will make a decision based on the device data; in this case, “is the number of records a multiple of 10? If so, turn on the led, else, turn it off”.</p>
 
 <p>Try connecting multiple ESP32s to the same topics, and see what happens when one of the devices are used to make the number of records reach a multiple of 10!</p>
 

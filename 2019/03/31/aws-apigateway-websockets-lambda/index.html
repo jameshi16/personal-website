@@ -47,7 +47,7 @@
     <p>While working on a hackathon project, I had difficulty getting AWS Lambda to communicate with API Gateway’s (relatively) new WebSocket Connection URL (which has the form of: <code class="language-plaintext highlighter-rouge">https://&lt;api gateway id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage&gt;/@connections</code>),</p>
 
 <h1 id="environment">Environment</h1>
-<p>At the time of writing, AWS Lambda provides the following <a href="https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html">environments</a> that I use:</p>
+<p>At the time of writing, AWS Lambda provides the following <a href="https://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html" target="_blank" rel="noopener noreferrer">environments</a> that I use:</p>
 <ul>
   <li>Python 3.7</li>
   <li>Boto3 1.12.42</li>
@@ -56,12 +56,12 @@
 <h1 id="what-i-tried-to-do">What I tried to do</h1>
 <ol>
   <li>
-<a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/apigatewaymanagementapi.html">Boto3’s</a> <code class="language-plaintext highlighter-rouge">ApiGatewayManagementApi</code>:
+<a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/apigatewaymanagementapi.html" target="_blank" rel="noopener noreferrer">Boto3’s</a> <code class="language-plaintext highlighter-rouge">ApiGatewayManagementApi</code>:
     <ul>
       <li>Didn’t work, because AWS Lambda runs some weird version of Boto3, because despite the version number being higher than the documentation I consulted (v1.9.125), AWS Lambda’s Boto3 doesn’t have <code class="language-plaintext highlighter-rouge">ApiGatewayManagementApi</code>. Maybe it is only available on an offline installation of Boto3, but I didn’t have <img class="emoji" title=":clock10:" alt=":clock10:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f559.png" height="20" width="20">, so I couldn’t test it out.</li>
     </ul>
   </li>
-  <li>Looking at the code required for <a href="https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html">implementing AWS SigV4</a>:
+  <li>Looking at the code required for <a href="https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html" target="_blank" rel="noopener noreferrer">implementing AWS SigV4</a>:
     <ul>
       <li>Because AWS Services sometimes need SigV4 so that only authenticated requests are executed;</li>
       <li>Hence, AWS API Gateway’s WebSocket Connection URL requires requests signed with SigV4;</li>
@@ -69,7 +69,7 @@
       <li>So I didn’t do this in the end. This would have worked, if I had enough <img class="emoji" title=":clock10:" alt=":clock10:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f559.png" height="20" width="20"> and patience.</li>
     </ul>
   </li>
-  <li>Adding a Boto3 <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">layer</a> on AWS Lambda:
+  <li>Adding a Boto3 <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html" target="_blank" rel="noopener noreferrer">layer</a> on AWS Lambda:
     <ul>
       <li>Layers are like packages for AWS Lambda;</li>
       <li>However, the Boto3 version probably isn’t the issue, because the Boto3 on AWS Lambda has a higher version number compared to the documentation I referred to;</li>
@@ -77,7 +77,7 @@
       <li>And more pressingly, I didn’t have <img class="emoji" title=":clock10:" alt=":clock10:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f559.png" height="20" width="20"> to do the above.</li>
     </ul>
   </li>
-  <li>Adding a SigV4 layer <a href="https://github.com/DavidMuller/aws-requests-auth">using the code written by David Muller</a> or <a href="https://github.com/jmenga/requests-aws-sign">the one by jmenga</a>:
+  <li>Adding a SigV4 layer <a href="https://github.com/DavidMuller/aws-requests-auth" target="_blank" rel="noopener noreferrer">using the code written by David Muller</a> or <a href="https://github.com/jmenga/requests-aws-sign" target="_blank" rel="noopener noreferrer">the one by jmenga</a>:
     <ul>
       <li>Which would have worked, but I found another solution almost immediately after that.</li>
     </ul>
@@ -85,7 +85,7 @@
 </ol>
 
 <h1 id="what-worked">What worked</h1>
-<p>On the <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python">StackOverflow post</a> that (3) and (4) came from, there was one very underrated solution by <code class="language-plaintext highlighter-rouge">b.b3rn4rd</code>:</p>
+<p>On the <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python" target="_blank" rel="noopener noreferrer">StackOverflow post</a> that (3) and (4) came from, there was one very underrated solution by <code class="language-plaintext highlighter-rouge">b.b3rn4rd</code>:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto3</span>
 <span class="kn">import</span> <span class="nn">botocore.credentials</span>
@@ -104,7 +104,7 @@
 <span class="n">session</span> <span class="o">=</span> <span class="n">BotocoreHTTPSession</span><span class="p">()</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">prepare</span><span class="p">())</span>
 </code></pre></div></div>
-<p class="text-center text-gray lh-condensed-ultra f6">Credit: <code>b.b3rn4rd</code> from <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python">StackOverflow</a></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Credit: <code>b.b3rn4rd</code> from <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python" target="_blank" rel="noopener noreferrer">StackOverflow</a></p>
 
 <p>The problem with the above code is that <code class="language-plaintext highlighter-rouge">BotocoreHTTPSession</code> no longer exists in newer versions of Botocore (and by extension, Boto3), and so I dived into the source code of Boto3 and botocore to find a drop-in replacement: <code class="language-plaintext highlighter-rouge">URLLib3Session</code>,</p>
 

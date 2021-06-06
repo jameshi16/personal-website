@@ -54,13 +54,13 @@
 
 <p>In the previous part, the ESP32 was linked to DynamoDB via MQTT, and it was possible to control the LED of the ESP32 by publishing a message via the AWS IoT testing console to the subscribed IoT topic. However, IoT is much more than just controlling devices from the cloud. There are some devices, known as “IoT Sensors”, which are able to report sensor data to the internet. Combined with the ability to control devices and with the massive power of Cloud Computing, this allows more powerful machines to make decisions based on the data collected from the sensors, then returning those results as commands to control devices based on inferences made from aforementioned data.</p>
 
-<p>We can then integrate advanced computing techniques like Big Data and Machine Learning with IoT to better improve lives based around IoT products in a household. This vaguely composites into what is known as “Smart Home”; using a cluster of IoT sensors and actuators to: (i) cut utility bills, (ii) make living more convenient, and (iii) make living more entertaining (<a href="https://www.androidauthority.com/what-is-a-smart-home-806483/">AndroidAuthority</a>, 2019). Scale that to the size of a city, and the term becomes “Smart City”, making payments, transport, security, et. cetera more convenient.</p>
+<p>We can then integrate advanced computing techniques like Big Data and Machine Learning with IoT to better improve lives based around IoT products in a household. This vaguely composites into what is known as “Smart Home”; using a cluster of IoT sensors and actuators to: (i) cut utility bills, (ii) make living more convenient, and (iii) make living more entertaining (<a href="https://www.androidauthority.com/what-is-a-smart-home-806483/" target="_blank" rel="noopener noreferrer">AndroidAuthority</a>, 2019). Scale that to the size of a city, and the term becomes “Smart City”, making payments, transport, security, et. cetera more convenient.</p>
 
 <p>Therefore, in this section, you will be modifying your handiwork in Part I to make it such that the ESP32 would publish a JSON object indicating that a button on the ESP32 has been pressed. This JSON object will then be mapped as columns on a DynamoDB table.</p>
 
 <p>Looking at the ESP32 schematics:
 <img src="/images/20190905_1.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Schematics for the 'BOOT' button"></p>
-<p class="text-center text-gray lh-condensed-ultra f6">The schematics for the 'BOOT' button | <a href="https://dl.espressif.com/dl/schematics/ESP32-Core-Board-V2_sch.pdf">Source</a></p>
+<p class="text-center text-gray lh-condensed-ultra f6">The schematics for the 'BOOT' button | <a href="https://dl.espressif.com/dl/schematics/ESP32-Core-Board-V2_sch.pdf" target="_blank" rel="noopener noreferrer">Source</a></p>
 
 <p>It appears that the ‘BOOT’ active-low button can be used as a typical button, which is perfect for the current use case.</p>
 
@@ -170,7 +170,7 @@
 
 <h3 id="step-ni">Step Ni</h3>
 
-<p>Now that the AWS services are setup properly, it is time to update the Arduino code. Replace (or selectively replace, if you know what you’re doing) the old code with new code from <a href="https://gist.github.com/jameshi16/5846acdec40279028319c680fe8314b5">this gist</a>. Here is the summary of the changes made since the previous Arduino program:</p>
+<p>Now that the AWS services are setup properly, it is time to update the Arduino code. Replace (or selectively replace, if you know what you’re doing) the old code with new code from <a href="https://gist.github.com/jameshi16/5846acdec40279028319c680fe8314b5" target="_blank" rel="noopener noreferrer">this gist</a>. Here is the summary of the changes made since the previous Arduino program:</p>
 
 <ul>
   <li>Recieving a message from the subscription topic no longer echos to the publishing topic;</li>
@@ -209,9 +209,9 @@
 
 <h1 id="what-did-i-just-do">What did I just do?</h1>
 
-<p>Now, you have a means to control a device, <strong>and</strong> a means to get device information from the ESP32. If all you need is to store the state of IoT things, including the state history, AWS IoT provides a feature to do just that - it is known as “Shadow Document”, which allows an IoT device to be stateless while reporting information to AWS IoT, which can keep track of state. You can learn more about that <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-document.html">here</a>.</p>
+<p>Now, you have a means to control a device, <strong>and</strong> a means to get device information from the ESP32. If all you need is to store the state of IoT things, including the state history, AWS IoT provides a feature to do just that - it is known as “Shadow Document”, which allows an IoT device to be stateless while reporting information to AWS IoT, which can keep track of state. You can learn more about that <a href="https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-document.html" target="_blank" rel="noopener noreferrer">here</a>.</p>
 
-<p>However, for our application, we want to process data as it comes in; computing something from the device information so that we can control the said device. Hence, we don’t have a need for the Shadow Document; instead, we opted to use a database like DynamoDB. You can learn more about DynamoDB <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html">here</a>.</p>
+<p>However, for our application, we want to process data as it comes in; computing something from the device information so that we can control the said device. Hence, we don’t have a need for the Shadow Document; instead, we opted to use a database like DynamoDB. You can learn more about DynamoDB <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" target="_blank" rel="noopener noreferrer">here</a>.</p>
 
 <p>Hence, we still have a missing step; the part where we process the data. (Part III? <em>wink wink</em>)</p>
 

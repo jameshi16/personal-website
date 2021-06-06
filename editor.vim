@@ -26,6 +26,21 @@ unlet b:current_syntax
 syntax include @PYTHON syntax/python.vim
 syntax region pythonSnippet start='```python' end='```' contains=@PYTHON keepend
 
+" Highlight Dockerfiles
+unlet b:current_syntax
+syntax include @DOCKERFILE syntax/dockerfile.vim
+syntax region dockerSnippet start='```dockerfile' end='```' contains=@DOCKERFILE keepend
+
+" Highlight YML
+unlet b:current_syntax
+syntax include @YAML syntax/yaml.vim
+syntax region yamlSnippet start='```yaml' end='```' contains=@YAML keepend
+
+" Highlight Bash
+unlet b:current_syntax
+syntax include @BASH syntax/bash.vim
+syntax region bashSnippet start='```bash' end='```' contains=@BASH keepend
+
 " Blog Header Syntax (it's YAML, but I wanted to limit / customize it)
 syn keyword blogHeaderKeywords title japTitle published nextgroup=blogHeaderStringDelimitter contained
 syn keyword blogHeaderKeywords date nextgroup=blogHeaderDateDelimitter contained
