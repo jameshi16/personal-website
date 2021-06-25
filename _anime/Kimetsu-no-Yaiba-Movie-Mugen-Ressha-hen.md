@@ -33,7 +33,7 @@ Speaking of actual events, some story elements to progress the plot were a littl
 
 As a shounen anime, the plotline was marginally predictable. However, I was surprised to find out that there were multiple climaxes to the movie - my surprise comes partly due to the PV only suggesting one major fight.
 
-<div style="text-align:center"><iframe style="display:block; margin:auto" width="560" height="315" src="https://www.youtube.com/embed/PrZ0O8Qp18s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<div style="text-align:center"><iframe style="display:block; margin:auto" width="560" height="315" src="https://www.youtube-nocookie.com/embed/PrZ0O8Qp18s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 <p class="text-center text-gray lh-condensed-ultra f6 mt-3">Kimetsu no Yaiba PV | Source: <a href="https://www.youtube.com/watch?v=PrZ0O8Qp18s">YouTube</a></p>
 
 Thankfully, the movie remained mostly consistent with the facts we learned from the anime, which made the movie easy to follow. Another factor that contributed to understanding the movie was the good pacing of the movie - viewers were slowly introduced to the quirks of the enemy, before a fast-paced action sequence to defeat the enemy, followed by a short cooldown for all the viewers to catch their breath, followed by the display of quirks of the next enemy, and so on.

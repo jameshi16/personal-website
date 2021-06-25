@@ -10,7 +10,7 @@ Color me surprised - this was quite a unique watch. Are you perhaps living in a 
 
 When I first watched Deca-Dence, I was expecting it to be something like [Shingeki no Kyojin](/anime/Shingeki-no-Kyojin/), with all the post-apocalyptic hyping that the promotional video did.
 
-<div style="text-align: center"><iframe style="display: block; margin: auto" width="560" height="315" src="https://www.youtube.com/embed/OziblTliUbw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<div style="text-align: center"><iframe style="display: block; margin: auto" width="560" height="315" src="https://www.youtube-nocookie.com/embed/OziblTliUbw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 <p class="text-center text-gray lh-condensed-ultra f6 mt-3">Deca-Dence PV | Source <a href="https://www.youtube.com/watch?v=OziblTliUbw">YouTube</a></p>
 
 # What it really was

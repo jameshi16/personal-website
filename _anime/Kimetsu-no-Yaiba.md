@@ -17,11 +17,11 @@ Let's talk about audiovisual mastery. There is a studio that puts out unlimited 
 
 The background music playing for this scene is astonishingly fitting, with the right transitions playing at the right frame - seriously, if you have no idea what I'm talking about, just watch (and hear) this short clip from Demon Slayer:
 
-<div style="text-align:center"><iframe width="560" height="315" src="https://www.youtube.com/embed/brCe7D0vLVE" style="display:block; margin:auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br/></div>
+<div style="text-align:center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/brCe7D0vLVE" style="display:block; margin:auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br/></div>
 
 Then, there is the buildup towards the "ultimate action" in a fight. If you ask me, the core of any Shounen fight is the ultimate deciding move - the move where the fight is at it's climax, and the winner/loser can be easily discerned. Demon Slayer: Kimetsu no Yaiba does this exceptoinally well, especially for fights involving Zenitsu; the OST for him is absolutely on point, and you can feel it in your soul when he unleashes an epic move. If you've already watched the show, you would know what I mean, just look at this clip:
 
-<div style="text-align:center"><iframe width="560" height="315" src="https://www.youtube.com/embed/ce6dhqGWdrA" style="display:block; margin:auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br/></div>
+<div style="text-align:center"><iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ce6dhqGWdrA" style="display:block; margin:auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br/></div>
 
 In short, if you haven't watched Demon Slayer: Kimetsu no Yaiba yet, you should definitely do it. It's worth the hype :+1:.
 
