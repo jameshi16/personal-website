@@ -38,8 +38,9 @@ syntax region yamlSnippet start='```yaml' end='```' contains=@YAML keepend
 
 " Highlight Bash
 unlet b:current_syntax
-syntax include @BASH syntax/bash.vim
+syntax include @BASH syntax/sh.vim
 syntax region bashSnippet start='```bash' end='```' contains=@BASH keepend
+syntax region shSnippet start='```sh' end='```' contains=@BASH keepend
 
 " Blog Header Syntax (it's YAML, but I wanted to limit / customize it)
 syn keyword blogHeaderKeywords title japTitle published nextgroup=blogHeaderStringDelimitter contained
