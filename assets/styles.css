@@ -135,6 +135,10 @@ body { font-family: 'Rubik', sans-serif; background: #eeedde; }
 
 img { max-width: 100%; height: auto; border-radius: 8px; }
 
+a { overflow-wrap: anywhere; }
+
+iframe { max-width: 100%; }
+
 div.highlight { margin-top: 16px; margin-bottom: 12px; }
 
 code, pre { font-family: 'Roboto Mono', monospace; font-size: 16px; }
@@ -145,12 +149,6 @@ code { background: #f8f8f8; border: 1px solid #ddd; padding: .2em .4em; font-siz
 
 pre code { background: transparent; border: 0; padding: 0; font-size: 80%; }
 
-.repo-language-color { filter: brightness(125%) !important; border-radius: 50%; display: inline-block; height: 12px; position: relative; top: 2px; width: 12px; }
-
-img + em { display: block; color: #555; font-size: 0.85em; text-align: center; margin-top: 6px; }
-
-a + em { display: block; color: #555; font-size: 0.85em; text-align: center; margin-top: 6px; }
-
 ol, ul { margin-left: 30px; display: block; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 0px; margin-inline-end: 0px; padding-inline-start: 40px; }
 
 li { margin-bottom: 5px; }
@@ -158,8 +156,6 @@ li { margin-bottom: 5px; }
 ul.list-style-none { padding-left: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
 
 .github-component { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol !important; }
-
-.repo-language-color { filter: brightness(125%) !important; border-radius: 50%; display: inline-block; height: 12px; position: relative; top: 2px; width: 12px; }
 
 .article h1, .article h2, .article h3, .article h4 { margin-bottom: 16px; }
 
