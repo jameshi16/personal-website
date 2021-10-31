@@ -1,16 +1,16 @@
 ---
 title: "Moriarty the Patriot"
 japTitle: "憂国のモリアーティ"
-date: 2021-02-15 08:40 +08:00
+date: 2021-10-31 17:45 +0800
 image: https://cdn.myanimelist.net/images/anime/1464/108330.jpg
 rating: 9
 ---
 
-In my opinion, this is the hidden gem of Fall 2020; perhaps I am too intoxicated by my love for the psychological genre, but I never expected an anime on the ever-so-popular Sherlock Holmes through the perspective of James Moriarty.
+**EDIT: Season 2** In my opinion, this is the hidden gem of Fall 2020; perhaps I am too intoxicated by my love for the psychological genre, but I never expected an anime on the ever-so-popular Sherlock Holmes through the perspective of James Moriarty.
 
 Sherlock Holmes is a repeating concept throughout many media, and individually has many interpretations attached to his name. In the context of anime, I am reminded of [Aria Holmes Kanzaki](https://hidannoaria.fandom.com/wiki/Aria_H._Kanzaki) from the [Hidan no Aria](https://myanimelist.net/anime/8630/Hidan_no_Aria) series, an anime I consider a classical fundamental to the action-comedy-romance-school combo genre.
 
-<img src="/images/20210215_1.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Aria H. Kanzaki"/>
+<img src="/images/20211031_6.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Aria H. Kanzaki"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Aria H. Kanzaki illustrated on the Light Novel Cover | Source: <a href="https://hidannoaria.fandom.com/wiki/Aria_H._Kanzaki">Hidan no Aria Fandom Wiki</a></p>
 
 Aria is a descendent of Holmes, but she inherited none of Holmes' wit and deduction skills - even in a action-comedy-romance-school combo genre anime, a tribute and interpretation of Sherlock Holmes is formed to better tell the story. However, while most media affectionately draw inspirations from Sherlock Holmes, none of them bat an eye on James Moriarty, who arguably is the most complex character in the tales spun from Sherlock Holmes' legacy.
@@ -21,7 +21,7 @@ In Moriarty the Patriot, we see an interpretation of the prequel to the Sherlock
 
 Despite knowing the events that take place within the novel, "Moriarty the Patriot" creates a compelling story by telling it from a different point-of-view, not to mention the how easy it was to follow the plot thanks to the characters' clear dialogue with one another.
 
-<img src="/images/20210215_2.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="James Moriarty 'William'"/>
+<img src="/images/20211031_7.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="James Moriarty 'William'"/>
 <p class="text-center text-gray lh-condensed-ultra f6">James Moriarty 'William' | Source: <a href="https://akashi-tetsuki.tumblr.com/post/631696865472266240/william-james-moriarty-yukoku-no-moriarty">Tumblr</a></p>
 
 Seeing the perspective of the antagonist of the Sherlock Holmes novels, and his overarching plan to achieve his goals is _very_ refreshing - it made me think about how there is no difference in being overly good and overly evil; everyone is righteous from someone's point-of-view. The true evil, is being neutral to it all.
@@ -39,6 +39,10 @@ It is important for certain characters to remain stagnant in terms of character 
 # Conclusion
 
 Hidden gem :gem: which I personally enjoyed way too much; I even ignored my deadlines to binge the anime. Put this anime somewhere at the top of your anime bucket list, I'm sure you won't regret it!
+
+# EDIT: Season 2
+
+As expected, Yuukoku no Moriarty Season 2 brings the story to it's grand conclusion the best way possible. Maintaining good audiovisuals and captivating character dynamics between Sherlock and Moriarty, I believe that this anime is a :gem: of 2021/22, that not only psychological freaks should watch, but everyone should give a watch, too.
 
 Happy Coding
 
