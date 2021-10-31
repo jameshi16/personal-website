@@ -1,4 +1,112 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2021-06-26T05:30:17+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Making a Signal bot</title><link href="https://codingindex.xyz/2021/06/06/making-a-signal-bot/" rel="alternate" type="text/html" title="Making a Signal bot" /><published>2021-06-06T10:38:00+00:00</published><updated>2021-06-06T10:38:00+00:00</updated><id>https://codingindex.xyz/2021/06/06/making-a-signal-bot</id><content type="html" xml:base="https://codingindex.xyz/2021/06/06/making-a-signal-bot/">&lt;p&gt;Yes, yes, okay, I get it. I missed the May deadline. Here, calm down and have a coffee :coffee:.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2021-10-31T10:56:00+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Activities Thus Far</title><link href="https://codingindex.xyz/2021/10/31/activities-thus-far/" rel="alternate" type="text/html" title="Activities Thus Far" /><published>2021-10-31T08:44:00+00:00</published><updated>2021-10-31T08:44:00+00:00</updated><id>https://codingindex.xyz/2021/10/31/activities-thus-far</id><content type="html" xml:base="https://codingindex.xyz/2021/10/31/activities-thus-far/">&lt;p&gt;Happy Halloween! :tada:&lt;/p&gt;
+
+&lt;p&gt;It’s been a while, huh? I’ve completely broke my &lt;a href=&quot;/2021/02/14/zerotier-openvpn-nat-part-1/&quot;&gt;New Year’s resolution&lt;/a&gt; of delivering 1 blog post every month, gotten listless in my life, and generally lost a great chunk of motivation to maintain my Gentoo installation. In terms of recreation during my weekends, I spend a great deal of time playing Gacha video games (as a free-to-play because I’m broke) and watching a &lt;a href=&quot;/anime/&quot;&gt;bunch of anime&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It has been a few months since I last touched code for recreation - something I regret greatly. Sometimes, in moments of panic and anxiety for the future, I would log into HackerRank just to practice. Recently, I’ve been slowly going through the &lt;a href=&quot;https://doc.rust-lang.org/book/title-page.html&quot;&gt;Rust Programming Language&lt;/a&gt; book, which has a notable “borrowing” concept to manage memory that piques my interest to explore it in the near future.&lt;/p&gt;
+
+&lt;p&gt;Of course, this isn’t all I’ve been doing for the past few months. I’ve picked up chess puzzles (not chess itself), learnt how to solve the Rubik’s cube, automated some parts of my job with simple excel skills, and:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Found out my Maxtor External HDD died&lt;/li&gt;
+  &lt;li&gt;Repaired my HP 23es monitor&lt;/li&gt;
+  &lt;li&gt;Created a ephemeral Windows 10 LiveCD with WinPE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;maxtor-external-hdd&quot;&gt;Maxtor External HDD&lt;/h1&gt;
+
+&lt;p&gt;This external HDD has been with me for three years, containing many projects and Linux containers used for academic purposes and hackathons. My laptop, while a powerhouse, has limited storage, and could not meet the storage demand required to archive these projects. Hence, I rely on the external HDD as-if it was a built-in drive, which meant that it was plugged in at every moment the laptop is online.&lt;/p&gt;
+
+&lt;p&gt;Despite knowing that &lt;a href=&quot;https://www.newegg.com/insider/how-long-do-hard-drives-and-ssds-last/&quot;&gt;the typical hard drive lasts for 3 to 5 years&lt;/a&gt;, I thought that there was no need to do predictive maintenance (like backing up) on the drive; furthermore, S.M.A.R.T was still returning an “ok” a few weeks prior to the failure. Alas, it failed spectacularly, and I was unable to recover the data on the drive with tools like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dd&lt;/code&gt; and Live Recovery CDs like &lt;a href=&quot;https://clonezilla.org/&quot;&gt;CloneZilla&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To troubleshoot further, I thought about what an external (implied: portable) HDD is typically made up of:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;SATA to USB3.0 converter;&lt;/li&gt;
+  &lt;li&gt;2.5” HDD&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Cracking open my Maxtor drive, I found out that my Maxtor’s internal HDD uses a 1TB harddrive from Seagate. Inputting the serial number into the Seagate warranty website suggests that the internal HDD was made particularly for Maxtor HDDs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20211031_1.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Internal HDD photo&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Internal HDD bundled with the adapter | Source: Me&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20211031_2.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;SATA to USB3&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;SATA to USB3.0 adapter | Source: Me&lt;/p&gt;
+
+&lt;p&gt;I took the Maxtor internal HDD and plugged it into a desktop with a SATA cable to try recovering the data again.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20211031_3.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Plugging in the HDD&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Plugging in the HDD | Source: Me&lt;/p&gt;
+
+&lt;p&gt;To my dismay, it didn’t work: all of the sectors after the header sector is completely unreadable; furthermore, I’ve encrypted the drive with VeraCrypt, so chances are, the data is impractical to recover.&lt;/p&gt;
+
+&lt;h2 id=&quot;harddrive-lifespan&quot;&gt;Harddrive Lifespan&lt;/h2&gt;
+
+&lt;p&gt;It may seem like I am barking up the wrong tree here, but I am quite disappointed in the performance of Seagate drives in general. A majority of the drives in my possession are from Western Digital, which are fantastic drives that have lasted me 5 - 6 years since I’ve acquired them.&lt;/p&gt;
+
+&lt;p&gt;And it’s not just me; a majority of those in the tech community agrees that WD drives (particularly WD Black) are very reliable hard drives. In my life, I’ve owned two Seagate drives; both of them have failed, despite being newer than my WD Blue drives. I also own an old WD Passport from 2015, which has outlasted everything I’ve had in my possession, although it is an unfair comparison since I don’t run the drive unless necessary.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;In the first place, relying on the external HDD for daily, I/O intensive stuff is generally a bad idea :tm:. So, I decided to solve the root cause: my laptop did not have enough storage capacity for my needs. My laptop has a 512GB Samsung 960 M.2 SSD, which is partitioned somewhat in half for dual-booting Windows &amp;amp; Ubuntu. This meant around 230GB for each operating system for programs, documents, Machine Learning models, and highly bloated IDEs.&lt;/p&gt;
+
+&lt;p&gt;Hence, I decided to get a 1TB Samsung 980 M.2 SSD:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20211031_4.webp&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Samsung 980&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Samsung 980 M.2 SSD | Source: &lt;a href=&quot;https://www.samsung.com/sg/memory-storage/nvme-ssd/980-pro-pcle-4-0-nvme-m-2-ssd-1tb-mz-v8p1t0bw/&quot;&gt;Samsung Official Site&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I also decided to replace the external HDD with a new WD Passport, to archive projects that I won’t be working on anymore. This new management of storage will allow my HDD to last much longer, and allow me to bring items with my laptop to do productive work. Furthermore, the upgrade even increased my boot times quite a bit.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;hp-23es-monitor&quot;&gt;HP 23es Monitor&lt;/h1&gt;
+
+&lt;p&gt;One day, my display ceased to function. To troubleshoot it, I decided to open up both of my monitors and swap parts until I figured out that:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The panel itself was still functional;&lt;/li&gt;
+  &lt;li&gt;The power supply still outputs the correct voltage;&lt;/li&gt;
+  &lt;li&gt;The motherboard couldn’t output to the functional panel &amp;amp; functional power supply.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This is the motherboard in question:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/20211031_5.jpg&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;23es Motherboard&quot; /&gt;&lt;/p&gt;
+&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;23es Motherboard | Source: Me&lt;/p&gt;
+
+&lt;p&gt;I bought the monitor in a sale for $150, which is an insanely good price because on Amazon, it costs about $250. However, because I have basic repair skills, I instead bought the motherboard on &lt;a href=&quot;https://aliexpress.ru/item/1005002610876248.html?sku_id=12000021382193912&amp;amp;spm=a2g2w.productlist.0.0.2cf2f060HjY9rb&quot;&gt;Aliexpress&lt;/a&gt; for $30.&lt;/p&gt;
+
+&lt;p&gt;Sure enough, swapping out the parts fixed the issue; however, seeing as how this (perfectly normal, cool-less) monitor’s motherboard broke down after a mere 4 years of usage, the problem by and large is likely the humid yet dry environment the monitor is operating in, which causes wear and tear in its components. At the same time, I have an Acer monitor that has lived longer - hopefully, this was just a one-time fluke in the operating life expectancy of the HP 23es monitor.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;ephemeral-windows-10-livecd&quot;&gt;Ephemeral Windows 10 LiveCD&lt;/h1&gt;
+
+&lt;p&gt;Windows is a widely used operating system used worldwide in various environments and settings. Hence, there are games and tools built specifically for Windows alone. Linux has many tools to try and bridge the gap between Windows applications and the Linux operating system, either by porting the application, building an alternative, using WINE, or optimizing virtual machines to run only for Windows applications.&lt;/p&gt;
+
+&lt;p&gt;The last option stated above has gotten &lt;em&gt;really&lt;/em&gt; good recently; by applying a technique known as &lt;a href=&quot;https://github.com/joeknock90/Single-GPU-Passthrough&quot;&gt;Single GPU passthrough&lt;/a&gt;, Linux users can use applications that require hardware acceleration, most notably in video games or professional video editing software. However, this technique does not work on CPUs prior to Intel Broadwell, which is unfortunately exactly what I have on my &lt;a href=&quot;/2019/05/01/thinkpad-x220/&quot;&gt;x220&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As an advocate of privacy, I love the concept of ephemeral runtimes: whatever changes done by any applications within an ephemeral runtime will not be committed to the system, which makes it simple to run “throwaway” applications should I only need them occasionally, rather than frequently. When I am done with the application, I can simply shutdown the system, and it was like I never used the application in the first place. Furthermore, it does not take up space in the harddrive like a traditional operating system would, meaning that I can have more space storing the files and application that affect my day-to-day life, which makes my setup more organized and purposeful.&lt;/p&gt;
+
+&lt;p&gt;Hence, I decided to create my own ephemeral Windows 10 LiveCD, using a tool called &lt;a href=&quot;https://en.wikipedia.org/wiki/WinBuilder&quot;&gt;Winbuilder&lt;/a&gt;. To support 3D applications and as wide of an application spectrum as possible, I ensured that the following feaures were enabled:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Logon as Administrator&lt;/li&gt;
+  &lt;li&gt;DirectX&lt;/li&gt;
+  &lt;li&gt;DotNet&lt;/li&gt;
+  &lt;li&gt;VC++ redistributable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Another consideration, when choosing which project to run within Winbuilder, is the difference between WinRE and WinPE. RE stands for Recovery Environment, while PE stands for Pre-installation Environment.&lt;/p&gt;
+
+&lt;p&gt;Even though WinRE is based on WinPE, WinPE loads network drivers and is a more complete environment compared to WinRE, which provides more recovery tools than operating system utility (&lt;a href=&quot;https://www.tomsguide.com/us/winpe-winre-bootable,review-1191-6.html&quot;&gt;Toms’ Guide&lt;/a&gt;). Since what I need is essentially as complete of a Windows 10 environment as possible, the natural right answer is WinPE. Furthermore, in my testing, there were some applications that just refuses to run on WinRE, but runs perfectly fine on WinPE.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Happy Coding&lt;/p&gt;
+
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="general" /><summary type="html">Happy Halloween! :tada:</summary></entry><entry><title type="html">Making a Signal bot</title><link href="https://codingindex.xyz/2021/06/06/making-a-signal-bot/" rel="alternate" type="text/html" title="Making a Signal bot" /><published>2021-06-06T10:38:00+00:00</published><updated>2021-06-06T10:38:00+00:00</updated><id>https://codingindex.xyz/2021/06/06/making-a-signal-bot</id><content type="html" xml:base="https://codingindex.xyz/2021/06/06/making-a-signal-bot/">&lt;p&gt;Yes, yes, okay, I get it. I missed the May deadline. Here, calm down and have a coffee :coffee:.&lt;/p&gt;
 
 &lt;p&gt;So, I don’t have many friends. The friends that I have are… strange, to say the least.&lt;/p&gt;
 
@@ -2938,176 +3046,4 @@ ufw allow 1194/udp
 
 &lt;p&gt;Happy Coding&lt;/p&gt;
 
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="encryption" /><category term="javascript" /><category term="encryption" /><category term="javascript" /><category term="aes" /><category term="md5" /><summary type="html">For many people, encryption is a magic black box that turns plaintext into ciphertext, via the use of a shared secret key. It is a way to privately share information through the internet, which, by nature of publicly exposed wires, is susceptible to eavesdropping. It is no wonder encryption became the cornerstone for secure internet banking, e-government transactions, and one of the strongest anti-snooping &amp;amp; anti-surveillance weapon society has today. Without encryption, anyone and everyone can simply tap onto the wire, steal your passwords, identity and money.</summary></entry><entry><title type="html">Moving from Travis-CI to GitHub Actions</title><link href="https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions/" rel="alternate" type="text/html" title="Moving from Travis-CI to GitHub Actions" /><published>2020-11-15T00:30:00+00:00</published><updated>2020-11-15T00:30:00+00:00</updated><id>https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions</id><content type="html" xml:base="https://codingindex.xyz/2020/11/15/moving-from-travis-to-github-actions/">&lt;h1 id=&quot;why-the-move&quot;&gt;Why the move?&lt;/h1&gt;
-
-&lt;p&gt;In case you weren’t aware, the guys &lt;em&gt;now&lt;/em&gt; in charge of Travis CI recently &lt;a href=&quot;https://www.theregister.com/2020/11/02/travis_ci_pricng/&quot;&gt;changed how their “free” plan worked&lt;/a&gt;. TL;DR: Open-source Travis CI is no longer fully free - instead, you will now be allocated limited amount of credits, which will get you 1,000 minutes on a Linux machine before you are forced to purchase a plan. Applying for additional free credits will be on a case-by-case basis.&lt;/p&gt;
-
-&lt;p&gt;Putting aside my own personal thoughts on the matter, my personal website takes anywhere from 33 seconds to 4 minutes to compile depending on cache status. This means that I can only post 400 more blog posts before I run out of credits. Hence, I needed to find another way to build and deploy my website.&lt;/p&gt;
-
-&lt;p&gt;Over the years, GitHub has evolved from being just another place for developers to dump their code, to a fuller suite of tools developers can use to create CI/CD pipelines from the code they create. I believe that this is a result of market demand, as a way to be competitive against platforms such as GitLab. GitHub’s offering, GitHub Actions, is another way to interact with code, issues, and pull requests without using web hooks or APIs.&lt;/p&gt;
-
-&lt;p&gt;As a lone maintainer of my personal blog, I find it too cumbersome to submit an application to either GitLab or Travis CI to gain their open-source offerings for free CI runner minutes. Under GitHub Action’s pricing plans, public projects get to use GitHub Actions for free. There is no application process or a need to attach a credit card to your GitHub account - you just configure the right files, push them to the repository, and GitHub Actions will automatically kick into action. Furthermore, my blog is hosted on GitHub Pages, and the &lt;a href=&quot;https://github.com/jameshi16/personal-website&quot;&gt;source code&lt;/a&gt; for it is also hosted on GitHub. Hence, GitHub actions was the most relevant choice of a CI/CD runner for me.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;For those of you who have used Jekyll with GitHub pages before, possibly from &lt;a href=&quot;https://github.com/github/personal-website&quot;&gt;forking this repository&lt;/a&gt;, you’d know that the GitHub Pages environment can actually directly deploy Jekyll websites. However, as mentioned in &lt;a href=&quot;https://jekyllrb.com/docs/github-pages/#the-github-pages-gem&quot;&gt;this documentation by Jekyll&lt;/a&gt;, this only works with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;github-pages&lt;/code&gt; gem. I personally use other gems, and hence I need a CI/CD runner to build and deploy my website.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;how-i-moved&quot;&gt;How I moved&lt;/h1&gt;
-
-&lt;p&gt;I snooped around my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.travis.yml&lt;/code&gt; and listed out the steps it took to build and deploy my website:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Get a Ruby &amp;amp; Bundler environment&lt;/li&gt;
-  &lt;li&gt;Install all the Gems listed in Gemfile or obtain them from the cache&lt;/li&gt;
-  &lt;li&gt;Build the site&lt;/li&gt;
-  &lt;li&gt;Deploy by pushing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;On Travis-CI, there are certain “magical” elements that abstracts away some elements of CI/CD. Hence, translating to GitHub Actions steps, the full list of steps would be:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Pull (with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--depth=1&lt;/code&gt;) the website repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;master&lt;/code&gt; branch&lt;/li&gt;
-  &lt;li&gt;Pull (with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--depth=1&lt;/code&gt;) the website repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
-  &lt;li&gt;Get a Ruby &amp;amp; Bundler environment&lt;/li&gt;
-  &lt;li&gt;Install all the Gems listed in Gemfile or obtain them from the cache&lt;/li&gt;
-  &lt;li&gt;Build the site&lt;/li&gt;
-  &lt;li&gt;Copy/Move the built site to the repository on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
-  &lt;li&gt;Deploy by pushing to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Defining the order of “steps” is essentially what a GitHub Actions workflow does. Hence, under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/workflows/main.yml&lt;/code&gt;, I listed out the steps in YAML format:&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build &amp;amp; Deploy&lt;/span&gt;
-
-&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;master&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;na&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;buildNdeploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ubuntu-latest&lt;/span&gt;
-
-    &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout source&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v2&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;source&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;master'&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Checkout built branch&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/checkout@v2&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;built&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;gh-pages'&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Ruby environment&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ruby/setup-ruby@v1&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;ruby-version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2.5&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Cache dependencies&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;actions/cache@v2.1.3&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.workspace }}/source/vendor/bundle&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gem_dependencies&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Install/Upgrade gems&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;cd ${{ github.workspace }}/source&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-${{ github.workspace }}/source/vendor/bundle}&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;cd -&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Build website&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;cd ${{ github.workspace }}/source&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;bundle exec jekyll build&lt;/span&gt;
-          &lt;span class=&quot;s&quot;&gt;cd -&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Move built files to the built directory&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Deploy&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;./source/.github/actions/pushToGithub&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gh-pages&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;repository&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.repository }}.git&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Each “step” in a workflow could either run commands, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/code&gt; or an action, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;actions/checkout@v2&lt;/code&gt;. Steps are also capable of running in-repository actions, like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./source/.github/actions/pushToGithub&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(cd ./source/_site &amp;amp;&amp;amp; tar c .) | (cd ./built &amp;amp;&amp;amp; tar xf -)&lt;/code&gt; is a way to &lt;em&gt;update&lt;/em&gt; files from one directory to another. The command is essentially piping the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tar&lt;/code&gt; compressed version of all the files in one directory, then extracting that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tar&lt;/code&gt; in another directory through a pipe. This piece of geek was found in &lt;a href=&quot;https://askubuntu.com/a/269818&quot;&gt;this StackOverflow post&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;There are many GitHub actions available on the &lt;a href=&quot;https://github.com/marketplace&quot;&gt;GitHub marketplace&lt;/a&gt;, which you can use directly in your workflow. I decided to make my own, since pushing to Git wasn’t rocket science, and it would be a good refresher to create a GitHub Action.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;side-quest-creating-an-action-that-pushes-to-a-repository&quot;&gt;Side-quest: Creating an action that pushes to a repository&lt;/h2&gt;
-
-&lt;p&gt;Being a GitHub Action, the CI/CD runner would already had temporary read/write permissions to my repository. Hence, all I really needed to do was to add files, add a commit message, and push to the correct repository.&lt;/p&gt;
-
-&lt;p&gt;This is easily done with the following lines of bash:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Deploy&quot;&lt;/span&gt;
-git push
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For my setup, I’ve cloned the repository containing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch to a subdirectory; furthermore, I wanted to customize the username and email used for the deployment, just for flair purposes. Hence, my bash script ended up looking like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;built
-git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;CodingIndex Deploy&quot;&lt;/span&gt;
-git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;deploy@codingindex.xyz&quot;&lt;/span&gt;
-git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-git commit &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Deployment from GitHub runner&quot;&lt;/span&gt;
-git push https://github.com/&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;REPOSITORY&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; gh-pages:&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;BRANCH&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; -
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I placed this script in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/actions/pushToGithub/action.sh&lt;/code&gt;, but it really shouldn’t matter where the script is, as long as the action’s path is specified correctly in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/workflows/main.yml&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Next, I created &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.github/actions/pushToGithub/action.yml&lt;/code&gt;, so that GitHub recognizes the parent directory as a valid GitHub action:&lt;/p&gt;
-
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Push&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;GitHub'&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Pushes&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Github'&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;branch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Branch of the repository to push to&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;repository&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Target repository&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;runs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;using&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;composite&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{ github.action_path }}/action.sh&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bash&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;BRANCH&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{inputs.branch}}&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;REPOSITORY&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${{inputs.repository}}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The action accepts 2 inputs: the branch, and the repository. Truth to be told, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;inputs.repository&lt;/code&gt; is not really needed, but I left that input just in case I decide to separate the repositories used for the source and the built version.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;And just like that, pushing the resultant files will build the website, cache the dependencies (leading to an extremely fast build later on), and deploy to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch where the GitHub Pages environment will pick up the new changes and update the website accordingly.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/20201115_1.png&quot; style=&quot;max-width: 400px; width: 100%; margin: 0 auto; display: block;&quot; alt=&quot;Create a status badge&quot; /&gt;&lt;/p&gt;
-&lt;p class=&quot;text-center text-gray lh-condensed-ultra f6&quot;&gt;Create a status badge | Source: Me&lt;/p&gt;
-
-&lt;p&gt;The last step is to create a status badge for your workflow, and display it in your README proudly - for you are now a GitHub Actions warrior! Remember to delete all references to Travis CI from your repository settings (e.g. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webhooks&lt;/code&gt;) and user account settings, if you plan to migrate away from Travis CI for all your repositories permanently.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;It is sad that Travis CI has basically left the open source community in the dust. While their claims of user abuse might have some sort of validity, I believe that such abuse can be better handled; perhaps instead of giving everyone free one-time “trial” minutes, they should top up some credits every month. They could also limit how long a runner can run for by default for open-source projects - maybe instead of 120 minutes, give each runner 30 minutes, thereafter charge the user by credit per minute.&lt;/p&gt;
-
-&lt;p&gt;To add salt to the wound, Travis CI’s pricing plans are exclusive from the credits that an account can have; in other words, you need to pay for concurrency and credits &lt;em&gt;separately&lt;/em&gt;. Interpret their &lt;a href=&quot;https://travis-ci.com/plans&quot;&gt;pricing plans&lt;/a&gt; as you will.&lt;/p&gt;
-
-&lt;p&gt;Oh well. We’ll see where the winds take us.&lt;/p&gt;
-
-&lt;p&gt;Happy coding,&lt;/p&gt;
-
-&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="github" /><category term="actions" /><category term="pages" /><category term="website" /><category term="move" /><category term="cicd" /><summary type="html">Why the move?</summary></entry></feed>
+&lt;p&gt;CodingIndex&lt;/p&gt;</content><author><name>James</name></author><category term="encryption" /><category term="javascript" /><category term="encryption" /><category term="javascript" /><category term="aes" /><category term="md5" /><summary type="html">For many people, encryption is a magic black box that turns plaintext into ciphertext, via the use of a shared secret key. It is a way to privately share information through the internet, which, by nature of publicly exposed wires, is susceptible to eavesdropping. It is no wonder encryption became the cornerstone for secure internet banking, e-government transactions, and one of the strongest anti-snooping &amp;amp; anti-surveillance weapon society has today. Without encryption, anyone and everyone can simply tap onto the wire, steal your passwords, identity and money.</summary></entry></feed>

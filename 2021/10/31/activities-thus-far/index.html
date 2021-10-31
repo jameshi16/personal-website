@@ -1,0 +1,169 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Happy Halloween! :tada:It’s been a while, huh? I’ve completely broke my New Year’s resolution of delivering 1 blog post every month, gotten listless in my life, and generally lost a great chunk of motivation to maintain my Gentoo installation. In terms of recreation during my weekends, I spend a ..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Activities Thus Far</h1>
+      <p class="text-gray mb-5">Published Oct 31, 2021 08:44</p>
+      
+  <div class="article">
+    <p>Happy Halloween! <img class="emoji" title=":tada:" alt=":tada:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f389.png" height="20" width="20"></p>
+
+<p>It’s been a while, huh? I’ve completely broke my <a href="/2021/02/14/zerotier-openvpn-nat-part-1/">New Year’s resolution</a> of delivering 1 blog post every month, gotten listless in my life, and generally lost a great chunk of motivation to maintain my Gentoo installation. In terms of recreation during my weekends, I spend a great deal of time playing Gacha video games (as a free-to-play because I’m broke) and watching a <a href="/anime/">bunch of anime</a>.</p>
+
+<p>It has been a few months since I last touched code for recreation - something I regret greatly. Sometimes, in moments of panic and anxiety for the future, I would log into HackerRank just to practice. Recently, I’ve been slowly going through the <a href="https://doc.rust-lang.org/book/title-page.html" target="_blank" rel="noopener noreferrer">Rust Programming Language</a> book, which has a notable “borrowing” concept to manage memory that piques my interest to explore it in the near future.</p>
+
+<p>Of course, this isn’t all I’ve been doing for the past few months. I’ve picked up chess puzzles (not chess itself), learnt how to solve the Rubik’s cube, automated some parts of my job with simple excel skills, and:</p>
+
+<ul>
+  <li>Found out my Maxtor External HDD died</li>
+  <li>Repaired my HP 23es monitor</li>
+  <li>Created a ephemeral Windows 10 LiveCD with WinPE</li>
+</ul>
+
+<hr>
+
+<h1 id="maxtor-external-hdd">Maxtor External HDD</h1>
+
+<p>This external HDD has been with me for three years, containing many projects and Linux containers used for academic purposes and hackathons. My laptop, while a powerhouse, has limited storage, and could not meet the storage demand required to archive these projects. Hence, I rely on the external HDD as-if it was a built-in drive, which meant that it was plugged in at every moment the laptop is online.</p>
+
+<p>Despite knowing that <a href="https://www.newegg.com/insider/how-long-do-hard-drives-and-ssds-last/" target="_blank" rel="noopener noreferrer">the typical hard drive lasts for 3 to 5 years</a>, I thought that there was no need to do predictive maintenance (like backing up) on the drive; furthermore, S.M.A.R.T was still returning an “ok” a few weeks prior to the failure. Alas, it failed spectacularly, and I was unable to recover the data on the drive with tools like <code class="language-plaintext highlighter-rouge">dd</code> and Live Recovery CDs like <a href="https://clonezilla.org/" target="_blank" rel="noopener noreferrer">CloneZilla</a>.</p>
+
+<p>To troubleshoot further, I thought about what an external (implied: portable) HDD is typically made up of:</p>
+<ol>
+  <li>SATA to USB3.0 converter;</li>
+  <li>2.5” HDD</li>
+</ol>
+
+<p>Cracking open my Maxtor drive, I found out that my Maxtor’s internal HDD uses a 1TB harddrive from Seagate. Inputting the serial number into the Seagate warranty website suggests that the internal HDD was made particularly for Maxtor HDDs.</p>
+
+<p><img src="/images/20211031_1.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Internal HDD photo"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Internal HDD bundled with the adapter | Source: Me</p>
+
+<p><img src="/images/20211031_2.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="SATA to USB3"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">SATA to USB3.0 adapter | Source: Me</p>
+
+<p>I took the Maxtor internal HDD and plugged it into a desktop with a SATA cable to try recovering the data again.</p>
+
+<p><img src="/images/20211031_3.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Plugging in the HDD"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Plugging in the HDD | Source: Me</p>
+
+<p>To my dismay, it didn’t work: all of the sectors after the header sector is completely unreadable; furthermore, I’ve encrypted the drive with VeraCrypt, so chances are, the data is impractical to recover.</p>
+
+<h2 id="harddrive-lifespan">Harddrive Lifespan</h2>
+
+<p>It may seem like I am barking up the wrong tree here, but I am quite disappointed in the performance of Seagate drives in general. A majority of the drives in my possession are from Western Digital, which are fantastic drives that have lasted me 5 - 6 years since I’ve acquired them.</p>
+
+<p>And it’s not just me; a majority of those in the tech community agrees that WD drives (particularly WD Black) are very reliable hard drives. In my life, I’ve owned two Seagate drives; both of them have failed, despite being newer than my WD Blue drives. I also own an old WD Passport from 2015, which has outlasted everything I’ve had in my possession, although it is an unfair comparison since I don’t run the drive unless necessary.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>In the first place, relying on the external HDD for daily, I/O intensive stuff is generally a bad idea <img class="emoji" title=":tm:" alt=":tm:" src="https://github.githubassets.com/images/icons/emoji/unicode/2122.png" height="20" width="20">. So, I decided to solve the root cause: my laptop did not have enough storage capacity for my needs. My laptop has a 512GB Samsung 960 M.2 SSD, which is partitioned somewhat in half for dual-booting Windows &amp; Ubuntu. This meant around 230GB for each operating system for programs, documents, Machine Learning models, and highly bloated IDEs.</p>
+
+<p>Hence, I decided to get a 1TB Samsung 980 M.2 SSD:</p>
+
+<p><img src="/images/20211031_4.webp" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Samsung 980"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Samsung 980 M.2 SSD | Source: <a href="https://www.samsung.com/sg/memory-storage/nvme-ssd/980-pro-pcle-4-0-nvme-m-2-ssd-1tb-mz-v8p1t0bw/" target="_blank" rel="noopener noreferrer">Samsung Official Site</a></p>
+
+<p>I also decided to replace the external HDD with a new WD Passport, to archive projects that I won’t be working on anymore. This new management of storage will allow my HDD to last much longer, and allow me to bring items with my laptop to do productive work. Furthermore, the upgrade even increased my boot times quite a bit.</p>
+
+<hr>
+
+<h1 id="hp-23es-monitor">HP 23es Monitor</h1>
+
+<p>One day, my display ceased to function. To troubleshoot it, I decided to open up both of my monitors and swap parts until I figured out that:</p>
+
+<ol>
+  <li>The panel itself was still functional;</li>
+  <li>The power supply still outputs the correct voltage;</li>
+  <li>The motherboard couldn’t output to the functional panel &amp; functional power supply.</li>
+</ol>
+
+<p>This is the motherboard in question:</p>
+
+<p><img src="/images/20211031_5.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="23es Motherboard"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">23es Motherboard | Source: Me</p>
+
+<p>I bought the monitor in a sale for $150, which is an insanely good price because on Amazon, it costs about $250. However, because I have basic repair skills, I instead bought the motherboard on <a href="https://aliexpress.ru/item/1005002610876248.html?sku_id=12000021382193912&amp;spm=a2g2w.productlist.0.0.2cf2f060HjY9rb" target="_blank" rel="noopener noreferrer">Aliexpress</a> for $30.</p>
+
+<p>Sure enough, swapping out the parts fixed the issue; however, seeing as how this (perfectly normal, cool-less) monitor’s motherboard broke down after a mere 4 years of usage, the problem by and large is likely the humid yet dry environment the monitor is operating in, which causes wear and tear in its components. At the same time, I have an Acer monitor that has lived longer - hopefully, this was just a one-time fluke in the operating life expectancy of the HP 23es monitor.</p>
+
+<hr>
+
+<h1 id="ephemeral-windows-10-livecd">Ephemeral Windows 10 LiveCD</h1>
+
+<p>Windows is a widely used operating system used worldwide in various environments and settings. Hence, there are games and tools built specifically for Windows alone. Linux has many tools to try and bridge the gap between Windows applications and the Linux operating system, either by porting the application, building an alternative, using WINE, or optimizing virtual machines to run only for Windows applications.</p>
+
+<p>The last option stated above has gotten <em>really</em> good recently; by applying a technique known as <a href="https://github.com/joeknock90/Single-GPU-Passthrough" target="_blank" rel="noopener noreferrer">Single GPU passthrough</a>, Linux users can use applications that require hardware acceleration, most notably in video games or professional video editing software. However, this technique does not work on CPUs prior to Intel Broadwell, which is unfortunately exactly what I have on my <a href="/2019/05/01/thinkpad-x220/">x220</a>.</p>
+
+<p>As an advocate of privacy, I love the concept of ephemeral runtimes: whatever changes done by any applications within an ephemeral runtime will not be committed to the system, which makes it simple to run “throwaway” applications should I only need them occasionally, rather than frequently. When I am done with the application, I can simply shutdown the system, and it was like I never used the application in the first place. Furthermore, it does not take up space in the harddrive like a traditional operating system would, meaning that I can have more space storing the files and application that affect my day-to-day life, which makes my setup more organized and purposeful.</p>
+
+<p>Hence, I decided to create my own ephemeral Windows 10 LiveCD, using a tool called <a href="https://en.wikipedia.org/wiki/WinBuilder" target="_blank" rel="noopener noreferrer">Winbuilder</a>. To support 3D applications and as wide of an application spectrum as possible, I ensured that the following feaures were enabled:</p>
+
+<ul>
+  <li>Logon as Administrator</li>
+  <li>DirectX</li>
+  <li>DotNet</li>
+  <li>VC++ redistributable</li>
+</ul>
+
+<p>Another consideration, when choosing which project to run within Winbuilder, is the difference between WinRE and WinPE. RE stands for Recovery Environment, while PE stands for Pre-installation Environment.</p>
+
+<p>Even though WinRE is based on WinPE, WinPE loads network drivers and is a more complete environment compared to WinRE, which provides more recovery tools than operating system utility (<a href="https://www.tomsguide.com/us/winpe-winre-bootable,review-1191-6.html" target="_blank" rel="noopener noreferrer">Toms’ Guide</a>). Since what I need is essentially as complete of a Windows 10 environment as possible, the natural right answer is WinPE. Furthermore, in my testing, there were some applications that just refuses to run on WinRE, but runs perfectly fine on WinPE.</p>
+
+<hr>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2021</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
