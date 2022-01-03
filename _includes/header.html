@@ -7,7 +7,7 @@
 {% assign meta_description = page.content | strip_html | strip_newlines | xml_escape | truncate: 300 %}
 
 <!doctype html>
-<html>
+<html class="height-full">
   <head>
     <meta charset="utf-8">
     <meta name="description" content="{{ meta_description }}" />
@@ -18,10 +18,4 @@
     <link href="{{ "/assets/styles.css" | relative_url }}" rel="stylesheet" type="text/css">
     <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
   </head>
-  <body class="christmas" style="width: 100vw; overflow: hidden">
-    <div class="snowfall">
-      {% for i in (1..180) %}
-        <div class="snow"></div>
-      {% endfor %}
-    </div>
-    <div style="height: 100vh; overflow-y: scroll">
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
