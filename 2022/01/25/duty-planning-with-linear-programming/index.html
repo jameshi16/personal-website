@@ -1,0 +1,280 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Hello! It sure has been a while, huh? Here, have a coffee :coffee:.Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it LibreOffice Calc, Excel, or Google Sheets.Basics of Linear ProgrammingUnlike the other posts you ..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Duty Planning with Linear Programming</h1>
+      <p class="text-gray mb-5">Published Jan 25, 2022 09:13</p>
+      
+  <div class="article">
+    <p>Hello! It sure has been a while, huh? Here, have a coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20">.</p>
+
+<p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/" target="_blank" rel="noopener noreferrer">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
+
+<hr>
+
+<h1 id="basics-of-linear-programming">Basics of Linear Programming</h1>
+
+<p>Unlike the other posts you might have seen within my blog, Linear Programming isn’t actually programming. Rather, it is “a method to achieve the best outcome in a mathematical model whose requirements are represented by linear relationships”, according to <a href="https://en.wikipedia.org/wiki/Linear_programming" target="_blank" rel="noopener noreferrer">Wikipedia</a>.</p>
+
+<p>For those who are uninitiated, or need a mini-not-so-professional-refresher, let us break down the definition.</p>
+
+<h2 id="a-method-to-achieve-the-best-outcome">A method to achieve the best outcome</h2>
+
+<p>Essentially, this is “optimization”. We construct an equation, and we try to either minimize or maximize it - you probably had some exposure to it in high school when they taught us how to differentiate.</p>
+
+<p>However, in optimization, instead of figuring out if an equation should be minimized/maximized, we <em>define</em> if the equation should be minimized/maximized based on our requirements.</p>
+
+<h2 id="whose-requirements-are-represented-by-linear-relationships">Whose requirements are represented by linear relationships</h2>
+
+<p>Linear relationships are essentially either equalities, or inequalities (<code class="language-plaintext highlighter-rouge">=</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;</code> and so on):</p>
+
+<p><img src="/images/20220125_1.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="An example of a linear inequality"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
+
+<p>Since the relationships must be <em>linear</em>, it implies that equations like the following cannot be solved with Linear Programming:</p>
+
+<p><img src="/images/20220125_3.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="An example of a non-linear inequality"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">An example of a non-linear inequality | Source: Me</p>
+
+<p>If inequalities like the above presents itself, the best course of action would be to use another kind of solver, like a nonlinear programming solver, or a Constraint Problem (CP) solver <a href="https://developers.google.com/optimization/cp#tools" target="_blank" rel="noopener noreferrer">like this one by Google</a>. However, chances are, that with a touch of creativity, most problems can be expressed as a linear programming problem.</p>
+
+<h2 id="linear-programming">Linear Programming</h2>
+
+<p>In a nutshell, given a bunch of inputs, lets say:</p>
+
+<p><img src="/images/20220125_2.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="A bunch of x"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A bunch of inputs | Source: Me</p>
+
+<p>We can define a bunch of constraints represented via <strong>linear</strong> relationships, like:</p>
+
+<p><img src="/images/20220125_1.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="An example of a linear inequality"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
+
+<p>For Linear Programming involving only two variables, we can visualize how it works with graphs. Let’s say our two variables are <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code>, and our constraints are:</p>
+
+<p><img src="/images/20220125_4.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="First Constraint"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">First Constraint | Source: Me</p>
+
+<p><img src="/images/20220125_5.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="Second Constraint"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Second Constraint | Source: Me</p>
+
+<p>We will find that the graph on <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener noreferrer">Desmos</a> will look like this:</p>
+
+<p><img src="/images/20220125_6.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Graph"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Graph. Green represents constraint 1, Blue represents constraint 2 | Source: Me</p>
+
+<p>The intersected area (i.e. areas where both blue and green) are the solutions to the inequality (note that the intersection itself is not a solution, since both of our inequalities are not inclusive). Now, if we were to define an objective function, which is the function we want to minimize or maximize:</p>
+
+<p><img src="/images/20220125_7.png" style="max-width: 50px; width: 100%; margin: 0 auto; display: block;" alt="Objective Function"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Objective Function, 2x + y | Source: Me</p>
+
+<p>And then plot it on the graph:</p>
+
+<p><img src="/images/20220125_8.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Objective Function plotted on the graph"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Objective Function (purple) on the graph | Source: Me</p>
+
+<p>We see that the intersection between the line, and the overlapping shaded areas contain all the values that satisfies both constraints, and also the objective function. All we need to do now is to determine what <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code> should be if we choose to maximize or minimize our objective function. If it was to maximize our objective function, then the answer we seek is as close to the intersection as possible. Otherwise, if we were to minimize our objective, then the answer we seek should
+technically be at another intersection, which isn’t possible with these particular constraints, hence, minimizing the objective would be “INFEASIBLE”.</p>
+
+<p>To wrap up the example, performing linear programming would give us a few results:</p>
+<ul>
+  <li>The value of <code class="language-plaintext highlighter-rouge">x</code> if the objective function was minimized/maximized</li>
+  <li>The value of <code class="language-plaintext highlighter-rouge">y</code> if the objective function was minimized/maximized</li>
+  <li>The value of the objective function after minimizing / maximizing</li>
+</ul>
+
+<p>And subsequently, to wrap up generally:</p>
+<ul>
+  <li>The value of <code class="language-plaintext highlighter-rouge">x_1, x_2, x_3, ... x_n</code> if the objective function was minimized/maximized</li>
+  <li>The value of the objective function after minimizing / maximizing</li>
+</ul>
+
+<p>With more variables, we are essentially working with linear constraints in n-dimensional graphs, which might sound difficult to visualize until you realize it doesn’t really matter, since the user is the one that defines the constraints anyway.</p>
+
+<p>To learn more about how exactly to <em>solve</em> Linear Programming problems, look at the <a href="https://en.wikipedia.org/wiki/Simplex_algorithm" target="_blank" rel="noopener noreferrer">Simplex</a> algorithm. Good solvers would indicate if there is more than one possible answer, or if there is a “close-enough” solution should the entire system be infeasible - although, that is in no way necessary or universal in well-used solvers.</p>
+
+<hr>
+
+<h1 id="duty-planning">Duty Planning</h1>
+
+<p>In my line of work (and probably most of yours, too), duty is a necessary part of work. As a software engineer, this could be translated to being on-call, as a doctor, it could be shifts to do ER, and so on. Needless to say, countless of psychological battles have been waged across the globe thanks to conflicts in agenda when it comes to planning for duty slots: “no weekends please”, or “no public holidays please”, or “my wife’s pregnant” or “I need to walk my pet rock”.</p>
+
+<p>As a duty planner, if you were to ignore these claims, you would be seen as a cold-hearted human being. So I thought: why not just offload the work onto a computer program? Not only would this save time and be much fairer compared to a human (especially if you are also planning it yourself), you would be disguising your own stone-cold, immovable heart and instead blaming your inhumanness on a computer program.</p>
+
+<p>Leveraging on Google Sheet’s integration with Google Forms, I modeled our own planning considerations as linear relationships, maximized preferred dates, and minimized the amount &amp; quality (defined by weekends and public holidays) of duty disparity between each duty personnel. Then, I solved them using Google’s Linear Optimization Service (GLOS).</p>
+
+<blockquote>
+  <p>Originally, I used the <a href="https://workspace.google.com/marketplace/app/opensolver/207251662973" target="_blank" rel="noopener noreferrer">OpenSolver</a> app on Google Sheets to solve, but I later realized how slow it was when I was developing the Google Sheet.</p>
+</blockquote>
+
+<p>Here is a <a href="https://gist.github.com/jameshi16/bf6583a09a05d490c6ad36d68d377105" target="_blank" rel="noopener noreferrer">GitHub snippet link</a> that contains all of the Google Apps Script used within the relevant Google Sheet. The Google Sheet itself is not open-source, since it contains sensitive data that I won’t try cleaning.</p>
+
+<blockquote>
+  <p>Did you know that Google Sheet collaboration isn’t actually simultaneous? The edits from each user just happens so quickly that you see it as simultaneous. Not only is this due to JavaScript browser engines being incapable of multi-processing, but also based on personal experience, where a script can hog out all of the users when busy.  Also, programmatically reading / writing each cell is extremely slow compared to bulk-writing an entire matrix into Google Sheets.</p>
+</blockquote>
+
+<p>Instead, allow me to explain how I managed to create linear relationships for some of our planning considerations.</p>
+
+<p>Take <code class="language-plaintext highlighter-rouge">x_i_j</code> (synonymous to <code class="language-plaintext highlighter-rouge">x</code> generally) to be any duty date where <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">j</code> is the personnel and day respectively, and <code class="language-plaintext highlighter-rouge">b_i_j</code> (synonymous to <code class="language-plaintext highlighter-rouge">b</code> generally) to be any backup date, where the personnel is to serve as a backup for the duty personnel.</p>
+
+<p><code class="language-plaintext highlighter-rouge">1</code> represents duty / backup on that day (depending on whether <code class="language-plaintext highlighter-rouge">x</code> or <code class="language-plaintext highlighter-rouge">b</code> is referred to), and <code class="language-plaintext highlighter-rouge">0</code> represents no duty / backup on that day.</p>
+
+<h2 id="set-in-stone">Set-In-Stone</h2>
+
+<p>As this is considered an “innovation” rather than an “invention”, it is meant to work as a transition between the old process (manually planning) to the new process (automatically planning). Hence, <strong>dates that are manually planted must not be changed</strong>. “Set-In-Stone” acquires non-empty cells, and adds a linear constraint for each affected cell:</p>
+
+<ul>
+  <li>If there is a duty slot on that day, then <code class="language-plaintext highlighter-rouge">x = 1</code>, <code class="language-plaintext highlighter-rouge">b = 0</code>.</li>
+  <li>If there is no duty slot on that day (forced), then <code class="language-plaintext highlighter-rouge">x = 0</code>, <code class="language-plaintext highlighter-rouge">b = 0</code>.</li>
+  <li>If the person is meant to be a backup personnel, then <code class="language-plaintext highlighter-rouge">x = 0</code>, <code class="language-plaintext highlighter-rouge">b = 1</code>.</li>
+</ul>
+
+<h2 id="daily-personnel">Daily personnel</h2>
+
+<p>Every single day should have 1 personnel performing duties, while another personnel will be the backup. This is achieved simply by summing for all <code class="language-plaintext highlighter-rouge">i</code>, in the same <code class="language-plaintext highlighter-rouge">j</code>, for all duties / backups.</p>
+
+<p><img src="/images/20220125_9.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Sum"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every `j` | Source: Me</p>
+
+<h2 id="no-consecutive-days">No consecutive days</h2>
+
+<p>If we were to generate a duty timetable now without some specific constraints, the model would simply assign all the duty to one single person who is free. There are three ways that we are combating this:</p>
+
+<ol>
+  <li>Ensuring that there are no consecutive days being served by any given person (in this sub-header);</li>
+  <li>Ensuring that everyone’s total points (sum of all of the days that they have served * a modifier based on weekend / public holiday) are <em>close</em> to the average points (pseudo-standard deviation, since we can’t break the linear property);</li>
+  <li>Ensuring that all personnel has a chance to do duty, based on the projected number of duty per personnel available in the date range.</li>
+</ol>
+
+<p>For a single slot (i.e. the status of duty for a particular person on a particular day), consecutive days are prevented by using this clever little equation, iterating <code class="language-plaintext highlighter-rouge">x_ij</code> over all possible values of <code class="language-plaintext highlighter-rouge">j</code> for <code class="language-plaintext highlighter-rouge">a</code> number of days, where <code class="language-plaintext highlighter-rouge">a</code> is the limit to the number of days someone is allowed to serve.</p>
+
+<p><img src="/images/20220125_10.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Sum over all possible values of j for a number of days"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Clever Sum | Source: Me</p>
+
+<p>In effect, this ensures that <code class="language-plaintext highlighter-rouge">a</code> days after a duty / backup (not shown) slot, there will not be any more duties.</p>
+
+<h2 id="roughly-equal-points">Roughly equal points</h2>
+
+<p>Without delving too deep into the point system details (as this is subjected to individual implementation), a common understanding between the planners and personnel involved alike are the roughly equal points that everyone should have.</p>
+
+<p>As one of the pivotal factors to eliminate model bias, the points must be allocated fairly to each person. This is done quite simply by taking the projected amount of points (calculated by summing the possible points earned throughout the entire period, dividing by the number of days in the period), introducing a deviation variable, which dictates how many points can each person differ from one another, and then summing the points for each person, ensuring that it is between <code class="language-plaintext highlighter-rouge">point_avg -
+deviation</code> to <code class="language-plaintext highlighter-rouge">point_avg + deviation</code>.</p>
+
+<p><img src="/images/20220125_11.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Approximate equation"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every i | Source: Me</p>
+
+<p>In effect, this means that the model itself would determine the value of <code class="language-plaintext highlighter-rouge">deviation</code>, which means that we want to minimize this as much as possible.</p>
+
+<h2 id="backup--actual-day-cannot-be-on-an-unavailable-date">Backup &amp; Actual Day cannot be on an unavailable date</h2>
+
+<p>This is actually quite simple. After plotting each unavailable date onto a matrix, the <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">b</code> just has to be <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">0</code> or <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">1</code>, if unavailable or available respectively.</p>
+
+<h2 id="backup--actual-day-cannot-be-on-the-same-slot">Backup &amp; Actual Day cannot be on the same slot</h2>
+
+<p>This is also pretty simple. <code class="language-plaintext highlighter-rouge">0 &lt; x + b &lt; 1</code> would do the trick: <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">b</code> cannot both be <code class="language-plaintext highlighter-rouge">1</code>, as that would result to <code class="language-plaintext highlighter-rouge">2</code>, which is greater than <code class="language-plaintext highlighter-rouge">1</code>. This prevents a person from simultaneously being his own backup.</p>
+
+<h2 id="chance-to-do-duty">Chance to do duty</h2>
+
+<p>This is done in two parts:</p>
+
+<ol>
+  <li>Everyone must do duty based on the projected average;</li>
+  <li>Everyone must do a weekday duty the equal number of times, based on projected average.</li>
+</ol>
+
+<p>The constraints are quite simple:</p>
+
+<ol>
+  <li>Sum up everyone’s duty slots (barring points, all of <code class="language-plaintext highlighter-rouge">j</code> per <code class="language-plaintext highlighter-rouge">i</code>), and it must be greater or equal to the projected average;</li>
+  <li>Sum up everyone’s duty slots but only on the weekdays, and it must be greater or equal to the projected average.</li>
+</ol>
+
+<p>Weekday is chosen solely due to the large availability compared to weekends - there may be less weekends than the amount of people you are planning for!</p>
+
+<h2 id="unsaid-constraints">Unsaid Constraints</h2>
+
+<p>For obvious reasons, <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">b</code> can only either be <code class="language-plaintext highlighter-rouge">0</code> or <code class="language-plaintext highlighter-rouge">1</code>. <code class="language-plaintext highlighter-rouge">deviation</code> is a continuous variable, solely because points can be expressed as decimals.</p>
+
+<hr>
+
+<h2 id="the-objective">The Objective</h2>
+
+<p>Combined together, the objective of our function is to prioritize &amp; maximize preferred slots (by modifying the points at the objective level, which has benefits over constraint level, as objective is suggestive, while constraints are requirements), while <em>minimizing</em> the deviation variable mentioned earlier.</p>
+
+<p>In a nutshell we are <em>maximizing</em>:</p>
+
+<p><img src="/images/20220125_11.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Objective Function"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Objective Function | Source: Me</p>
+
+<p>The result:</p>
+
+<p><img src="/images/20220125_12.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Result"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Beautiful Result | Source: Me</p>
+
+<blockquote>
+  <p>Green is duty, Yellow is backup, Black is unavailable, and Red is nothing. C is special consideration.</p>
+</blockquote>
+
+<hr>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Before I learnt about optimization functions through a mathematical nerd friend of mine, I always thought this kind of problem would be easier solved with things like Machine Learning, or brute-force search.</p>
+
+<p>However, optimization functions not only reduces the search-space by a lot, it also ensures that the result is mathematically sound, and a hundred percent cold and calculating so that you can freeze anyone who decides you are being too inhumane in planning. Or, you could be soft like me and add in dates of consideration (like ethnic holidays). Feel free to use my Google Apps Script code, that is, after you figure out how to create a Google Sheet that it requires as input!</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2022</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
