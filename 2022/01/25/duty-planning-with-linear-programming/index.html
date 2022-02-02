@@ -66,12 +66,12 @@
 
 <p>Linear relationships are essentially either equalities, or inequalities (<code class="language-plaintext highlighter-rouge">=</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;</code> and so on):</p>
 
-<p><img src="/images/20220125_1.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="An example of a linear inequality"></p>
+<p><img src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px;" alt="An example of a linear inequality"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
 
 <p>Since the relationships must be <em>linear</em>, it implies that equations like the following cannot be solved with Linear Programming:</p>
 
-<p><img src="/images/20220125_3.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="An example of a non-linear inequality"></p>
+<p><img src="/images/20220125_3.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a non-linear inequality"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a non-linear inequality | Source: Me</p>
 
 <p>If inequalities like the above presents itself, the best course of action would be to use another kind of solver, like a nonlinear programming solver, or a Constraint Problem (CP) solver <a href="https://developers.google.com/optimization/cp#tools" target="_blank" rel="noopener noreferrer">like this one by Google</a>. However, chances are, that with a touch of creativity, most problems can be expressed as a linear programming problem.</p>
@@ -80,20 +80,20 @@
 
 <p>In a nutshell, given a bunch of inputs, lets say:</p>
 
-<p><img src="/images/20220125_2.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="A bunch of x"></p>
+<p><img src="/images/20220125_2.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="A bunch of x"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">A bunch of inputs | Source: Me</p>
 
 <p>We can define a bunch of constraints represented via <strong>linear</strong> relationships, like:</p>
 
-<p><img src="/images/20220125_1.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="An example of a linear inequality"></p>
+<p><img src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a linear inequality"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
 
 <p>For Linear Programming involving only two variables, we can visualize how it works with graphs. Let’s say our two variables are <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code>, and our constraints are:</p>
 
-<p><img src="/images/20220125_4.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="First Constraint"></p>
+<p><img src="/images/20220125_4.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="First Constraint"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">First Constraint | Source: Me</p>
 
-<p><img src="/images/20220125_5.png" style="max-width: 100px; width: 100%; margin: 0 auto; display: block;" alt="Second Constraint"></p>
+<p><img src="/images/20220125_5.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Second Constraint"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Second Constraint | Source: Me</p>
 
 <p>We will find that the graph on <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener noreferrer">Desmos</a> will look like this:</p>
@@ -103,7 +103,7 @@
 
 <p>The intersected area (i.e. areas where both blue and green) are the solutions to the inequality (note that the intersection itself is not a solution, since both of our inequalities are not inclusive). Now, if we were to define an objective function, which is the function we want to minimize or maximize:</p>
 
-<p><img src="/images/20220125_7.png" style="max-width: 50px; width: 100%; margin: 0 auto; display: block;" alt="Objective Function"></p>
+<p><img src="/images/20220125_7.svg" style="max-width: 50px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Objective Function, 2x + y | Source: Me</p>
 
 <p>And then plot it on the graph:</p>
@@ -171,7 +171,7 @@ technically be at another intersection, which isn’t possible with these partic
 
 <p>Every single day should have 1 personnel performing duties, while another personnel will be the backup. This is achieved simply by summing for all <code class="language-plaintext highlighter-rouge">i</code>, in the same <code class="language-plaintext highlighter-rouge">j</code>, for all duties / backups.</p>
 
-<p><img src="/images/20220125_9.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Sum"></p>
+<p><img src="/images/20220125_9.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every `j` | Source: Me</p>
 
 <h2 id="no-consecutive-days">No consecutive days</h2>
@@ -186,7 +186,7 @@ technically be at another intersection, which isn’t possible with these partic
 
 <p>For a single slot (i.e. the status of duty for a particular person on a particular day), consecutive days are prevented by using this clever little equation, iterating <code class="language-plaintext highlighter-rouge">x_ij</code> over all possible values of <code class="language-plaintext highlighter-rouge">j</code> for <code class="language-plaintext highlighter-rouge">a</code> number of days, where <code class="language-plaintext highlighter-rouge">a</code> is the limit to the number of days someone is allowed to serve.</p>
 
-<p><img src="/images/20220125_10.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Sum over all possible values of j for a number of days"></p>
+<p><img src="/images/20220125_10.svg" style="max-width: 150px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum over all possible values of j for a number of days"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Clever Sum | Source: Me</p>
 
 <p>In effect, this ensures that <code class="language-plaintext highlighter-rouge">a</code> days after a duty / backup (not shown) slot, there will not be any more duties.</p>
@@ -198,7 +198,7 @@ technically be at another intersection, which isn’t possible with these partic
 <p>As one of the pivotal factors to eliminate model bias, the points must be allocated fairly to each person. This is done quite simply by taking the projected amount of points (calculated by summing the possible points earned throughout the entire period, dividing by the number of days in the period), introducing a deviation variable, which dictates how many points can each person differ from one another, and then summing the points for each person, ensuring that it is between <code class="language-plaintext highlighter-rouge">point_avg -
 deviation</code> to <code class="language-plaintext highlighter-rouge">point_avg + deviation</code>.</p>
 
-<p><img src="/images/20220125_11.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Approximate equation"></p>
+<p><img src="/images/20220125_11.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Approximate equation"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every i | Source: Me</p>
 
 <p>In effect, this means that the model itself would determine the value of <code class="language-plaintext highlighter-rouge">deviation</code>, which means that we want to minimize this as much as possible.</p>
@@ -241,12 +241,14 @@ deviation</code> to <code class="language-plaintext highlighter-rouge">point_avg
 
 <p>In a nutshell we are <em>maximizing</em>:</p>
 
-<p><img src="/images/20220125_11.png" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="Objective Function"></p>
+<p><img src="/images/20220125_13.svg" style="max-width: 350px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Objective Function | Source: Me</p>
+
+<p>where <code class="language-plaintext highlighter-rouge">deviation</code> and <code class="language-plaintext highlighter-rouge">x</code> is as expected, while <code class="language-plaintext highlighter-rouge">s</code> is a matrix containing values that are either <code class="language-plaintext highlighter-rouge">0</code>, <code class="language-plaintext highlighter-rouge">1</code> or <code class="language-plaintext highlighter-rouge">2</code>. <code class="language-plaintext highlighter-rouge">1</code> represents a normal day, while <code class="language-plaintext highlighter-rouge">2</code> represents a preferred day; <code class="language-plaintext highlighter-rouge">0</code> is essentially <code class="language-plaintext highlighter-rouge">nil</code> - since there is already a <em>constraint</em> that prevents duty slots from being filled if personnel is unavailable.</p>
 
 <p>The result:</p>
 
-<p><img src="/images/20220125_12.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Result"></p>
+<p><img src="/images/20220125_12.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Result"></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Beautiful Result | Source: Me</p>
 
 <blockquote>
