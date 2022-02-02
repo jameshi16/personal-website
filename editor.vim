@@ -62,6 +62,7 @@ syn match blogHeaderListDelimitter ',' contained
 syn region blogHeaderList start="\[" end="\]" contains=blogHeaderStringEnclosed,blogHeaderListDelimitter contained
 syn region blogHeaderBlock start="^---$" end="^---$" contains=blogHeaderKeywords transparent fold
 syn cluster @NoSpell add=blogHeaderString,blogHeaderURL
+syn iskeyword @,48-57,_,192-255,$,-
 
 let b:current_syntax = "blog"
 hi def link blogHeaderString         Constant 
@@ -70,6 +71,7 @@ hi def link blogHeaderURL            Constant
 hi def link blogHeaderNumber         Constant
 hi def link blogHeaderDate           Constant
 hi def link blogHeaderKeywords       Type
+hi SpellBad ctermfg=white ctermbg=red cterm=underline guifg=red guibg=white gui=underline
 
 " Functions
 let s:current_file = expand('<sfile>')
@@ -97,7 +99,7 @@ function! GetNextAvailableSeqNo(dir, prefix)
 	let l:files = readdir(a:dir, {n -> n =~ a:prefix})
 	let l:highestseqno = 0
 	for l:file in l:files
-		let l:seqno = matchlist(l:file, '_\(\d\+\)')[1]
+		let l:seqno = str2nr(matchlist(l:file, '_\(\d\+\)')[1])
 		if l:seqno > l:highestseqno
 			let l:highestseqno = l:seqno
 		endif
