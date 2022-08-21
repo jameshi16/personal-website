@@ -53,7 +53,7 @@
 <p>It’s a really nice <strong>DC</strong> motor. It spins. It stops. It starts. Good torque. Pretty okay motor, except for its price; although I can’t complain because I got it for free.</p>
 
 <p><strong>However</strong>: I’ll complain about one thing; the lack of documentation. I had to perform a few rounds of trial and error just to make sense of the value I’m reading from the “encoding” part of the motor. For context, this motor has a few pins: M+, M-, GND, VCC, A, and B. After a round of searching, I found <a href="http://learn.makeblock.com/ultimate2-arduino-programming/" target="_blank" rel="noopener noreferrer">this link</a>, which displayed the following code:</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "MeMegaPi.h"
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"MeMegaPi.h"</span><span class="cp">
 </span><span class="k">const</span> <span class="n">byte</span> <span class="n">interruptPin</span> <span class="o">=</span><span class="mi">18</span><span class="p">;</span>    
 <span class="k">const</span> <span class="n">byte</span> <span class="n">NE1</span><span class="o">=</span><span class="mi">31</span><span class="p">;</span>                 
 <span class="kt">long</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
@@ -68,7 +68,7 @@
     <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">interruptPin</span><span class="p">),</span> <span class="n">blink</span><span class="p">,</span><span class="n">RISING</span><span class="p">);</span>   
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>   
 <span class="p">}</span>
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">motor1</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">motorSpeed</span><span class="p">);</span>       <span class="c1">// value: between -255 and 255</span>
     <span class="n">time</span> <span class="o">=</span><span class="n">millis</span><span class="p">();</span> 
@@ -78,7 +78,7 @@
           <span class="n">last_time</span><span class="o">=</span><span class="n">time</span><span class="p">;</span>
    <span class="p">}</span>
 <span class="p">}</span>
-<span class="kt">void</span> <span class="nf">blink</span><span class="p">()</span>
+<span class="kt">void</span> <span class="n">blink</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">NE1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>   
     <span class="n">count</span><span class="o">++</span><span class="p">;</span>
@@ -121,7 +121,7 @@ Here is what I know:</p>
 <p>With that, I performed a few calculations, to find that the number was between 7.5 to 8.5. Testing with 7 and 8, I figured out that 8 was the correct answer. In other words, the formula for calculating the <strong>number of revolutions</strong> from the <strong>werid number thing</strong> produced by the encoder motor is: <code class="language-plaintext highlighter-rouge">(weird number thing / gear ratio) / 8</code>. After discussing with my friend a little, I realized that the ‘8’ can represent the number of ticks within the motor; in his words: “(there) could be the 8 points about that revolution”. Afterwards, I found this <a href="https://forum.makeblock.com/t/information-about-25mm-dc-encoder-motor/10791/3" target="_blank" rel="noopener noreferrer">fourm post</a>, which had the Original Poster (OP) sharing the same frustration (lack of documentation) as me, but more importantly, contained the information that the “ticks per rev is 8”. Alongside the Gear Ratio, this makes the formula the correct method of calculating the revolutions per minute.</p>
 
 <p>Here’s the working Arduino sketch:</p>
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "MeMegaPi.h"
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"MeMegaPi.h"</span><span class="cp">
 #define GearRatio 75
 </span><span class="k">const</span> <span class="n">byte</span> <span class="n">interruptPin</span> <span class="o">=</span><span class="mi">18</span><span class="p">;</span>    
 <span class="k">const</span> <span class="n">byte</span> <span class="n">NE1</span><span class="o">=</span><span class="mi">31</span><span class="p">;</span>                 
@@ -137,7 +137,7 @@ Here is what I know:</p>
     <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">interruptPin</span><span class="p">),</span> <span class="n">blink</span><span class="p">,</span><span class="n">RISING</span><span class="p">);</span>   
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>   
 <span class="p">}</span>
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">motor1</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">motorSpeed</span><span class="p">);</span>       <span class="c1">// value: between -255 and 255</span>
     <span class="n">time</span> <span class="o">=</span><span class="n">millis</span><span class="p">();</span> 
@@ -147,7 +147,7 @@ Here is what I know:</p>
           <span class="n">last_time</span><span class="o">=</span><span class="n">time</span><span class="p">;</span>
    <span class="p">}</span>
 <span class="p">}</span>
-<span class="kt">void</span> <span class="nf">blink</span><span class="p">()</span>
+<span class="kt">void</span> <span class="n">blink</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">NE1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>   
     <span class="n">count</span><span class="o">++</span><span class="p">;</span>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-02-02T13:28:43+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-08-21T11:28:47+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
@@ -1587,11 +1587,11 @@ docker-compose config
 
 <p>And presto, we’ve implemented HMAC! I used <a href="https://www.devglan.com/online-tools/hmac-sha256-online">this online tool</a> to test the same HMAC implementation on the SHA-256 and SHA-512 algorithms. To call this function, we have to do the following:</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "hmac.h"
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"hmac.h"</span><span class="cp">
 </span><span class="c1">// include only one of these</span>
-<span class="cp">#include "sha1.h"
-#include "sha256.h"
-#include "sha512.h"
+<span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
+#include</span> <span class="cpf">"sha256.h"</span><span class="cp">
+#include</span> <span class="cpf">"sha512.h"</span><span class="cp">
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">const</span> <span class="kt">char</span> <span class="n">message</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"the quick brown fox jumped over the lazy sleeping dog"</span><span class="p">;</span>
@@ -1707,10 +1707,10 @@ docker-compose config
 
 <p>To use the <code class="language-plaintext highlighter-rouge">hotp</code> function, the following C code can be used:</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "sha1.h"
-#include "hotp.h"
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
+#include</span> <span class="cpf">"hotp.h"</span><span class="cp">
 </span>
-<span class="cp">#include &lt;stdio.h&gt;
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">const</span> <span class="kt">char</span> <span class="n">secret</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"a very secret key!!!"</span><span class="p">;</span>
@@ -1758,11 +1758,11 @@ docker-compose config
 
 <p>Bam. Done. That’s TOTP, RFC 6238. The RFC also talks about time drift and whatnot, but since we are <em>generating</em> OTPs, it shouldn’t be too much of a bother for us. You can test the <code class="language-plaintext highlighter-rouge">totp</code> implementation with:</p>
 
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "sha1.h"
-#include "hotp.h"
-#include "totp.h"
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
+#include</span> <span class="cpf">"hotp.h"</span><span class="cp">
+#include</span> <span class="cpf">"totp.h"</span><span class="cp">
 </span>
-<span class="cp">#include &lt;stdio.h&gt;
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">const</span> <span class="kt">char</span> <span class="n">secret</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"a very secret key!!!"</span><span class="p">;</span>
