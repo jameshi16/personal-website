@@ -2,7 +2,7 @@
 title: Tokyo Revengers
 japTitle: 東京リベンジャーズ
 date: 2021-11-01 07:00 +0800
-image: https://cdn.myanimelist.net/images/anime/1884/114790.jpg
+image: https://cdn.myanimelist.net/images/anime/1839/122012.jpg
 rating: 9
 ---
 
