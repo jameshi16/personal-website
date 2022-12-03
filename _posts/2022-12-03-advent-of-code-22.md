@@ -1,6 +1,6 @@
 ---
 title: Advent of Code 22
-date: 2022-12-02 19:51 +0000
+date: 2022-12-03 12:19 +0000
 published: true
 ---
 
@@ -216,3 +216,84 @@ inputStr.split('\n').reduce((acc, curr) =>
 ```
 
 Notice the change at `raw[1].charCodeAt() - 89`, which essentially absorbed an offset of `-1`.
+
+# Day 3
+
+## Part 1
+
+Today's part 1 problem can be broken down into the following sub-problems:
+
+- Go through the input line by line;
+- For each line, split the line by half, and find the intersect between the two lines;
+- Due to the nature of the problem, it is guaranteed that the intersection is one and unique;
+- For each of the intersections, calculate the respective priorities.
+
+I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
+
+<img src="/images/20221203_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
+
+Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
+
+Let's solve each sub-problem in Haskell:
+
+```haskell
+-- input string
+input = ""
+
+-- going through line by line
+lines input
+
+-- split line by half
+splitAt (round $ (/2) $ fromIntegral $ length line) line
+
+-- find intersection between the two halfs
+intersect splitted_xs splitted_ys
+
+-- calculate priority
+(\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) $ (!! 0) intersected_list
+```
+
+Some notes:
+- `length line` strictly returns an integer, which needs to be converted for division in Haskell;
+- In the priority calculation, we subtract 96, which is 1 less than the ASCII value for 'a', so we introduce an offset of `+1`;
+- The range `['A'..'Z']` has an offset of 26 + 1 after getting it's sequence number from the ASCII value for 'A'.
+
+Combining these together, we have:
+
+```haskell
+import Data.Char
+import Data.List
+
+input = ""
+solution input = sum [(\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) $ (!! 0) $ (\(xs, ys) -> intersect xs ys) $ splitAt (round $ (/2) $ fromIntegral $ length line) line | line <- lines input]
+```
+
+## Part 2
+
+The slight twist introduced here require us to do the following:
+
+- Group the lines by 3;
+- Instead of getting the intersect between the two halves of a string, get the intersect between all elements in the groups of 3.
+
+It is guaranteed by the nature of the problem that our input's number of lines will be divisible by 3.
+
+There are many ways to group the lines by 3, and the way I chose is to maintain an accumulated list of lists, where each element list will contain 3 elements.
+
+With that, we solve the sub-problems:
+
+```haskell
+-- grouping the lines by 3
+foldr (\x acc@(y:ys) -> if length y == 3 then [x]:acc else (x:y):ys) [[]] $ lines input
+
+-- intersecting 3 lines
+map (foldr1 intersect) output_of_above
+```
+
+Then, reassembling the final solution:
+```haskell
+import Data.Char
+import Data.List
+
+solution' input = sum $ map ((\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) . (!! 0)) $ map (foldr1 intersect) $ foldr (\x acc@(y:ys) -> if length y == 3 then [x]:acc else (x:y):ys) [[]] $ lines input
+```
