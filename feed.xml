@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-03T09:25:21+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/02/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-02T19:51:00+00:00</published><updated>2022-12-02T19:51:00+00:00</updated><id>https://codingindex.xyz/2022/12/02/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/02/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-03T12:21:57+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/03/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-03T12:19:00+00:00</published><updated>2022-12-03T12:19:00+00:00</updated><id>https://codingindex.xyz/2022/12/03/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/03/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
 
 <p>After having absolutely <em>zero</em> blog posts for the past 11 months, including my treasured <a href="/anime">anime</a> page, here I am declaring that I will be participating in the <a href="https://adventofcode.com/">Advent of Code</a> (AOC).</p>
 
@@ -353,7 +353,90 @@
         <span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">curr</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">curr</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Notice the change at <code class="language-plaintext highlighter-rouge">raw[1].charCodeAt() - 89</code>, which essentially absorbed an offset of <code class="language-plaintext highlighter-rouge">-1</code>.</p>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+<p>Notice the change at <code class="language-plaintext highlighter-rouge">raw[1].charCodeAt() - 89</code>, which essentially absorbed an offset of <code class="language-plaintext highlighter-rouge">-1</code>.</p>
+
+<h1 id="day-3">Day 3</h1>
+
+<h2 id="part-1-2">Part 1</h2>
+
+<p>Today’s part 1 problem can be broken down into the following sub-problems:</p>
+
+<ul>
+  <li>Go through the input line by line;</li>
+  <li>For each line, split the line by half, and find the intersect between the two lines;</li>
+  <li>Due to the nature of the problem, it is guaranteed that the intersection is one and unique;</li>
+  <li>For each of the intersections, calculate the respective priorities.</li>
+</ul>
+
+<p>I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
+
+<p><img src="/images/20221203_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
+
+<p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
+
+<p>Let’s solve each sub-problem in Haskell:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- input string</span>
+<span class="n">input</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="c1">-- going through line by line</span>
+<span class="n">lines</span> <span class="n">input</span>
+
+<span class="c1">-- split line by half</span>
+<span class="n">splitAt</span> <span class="p">(</span><span class="n">round</span> <span class="o">$</span> <span class="p">(</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">$</span> <span class="n">fromIntegral</span> <span class="o">$</span> <span class="n">length</span> <span class="n">line</span><span class="p">)</span> <span class="n">line</span>
+
+<span class="c1">-- find intersection between the two halfs</span>
+<span class="n">intersect</span> <span class="n">splitted_xs</span> <span class="n">splitted_ys</span>
+
+<span class="c1">-- calculate priority</span>
+<span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">)</span> <span class="n">intersected_list</span>
+</code></pre></div></div>
+
+<p>Some notes:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">length line</code> strictly returns an integer, which needs to be converted for division in Haskell;</li>
+  <li>In the priority calculation, we subtract 96, which is 1 less than the ASCII value for ‘a’, so we introduce an offset of <code class="language-plaintext highlighter-rouge">+1</code>;</li>
+  <li>The range <code class="language-plaintext highlighter-rouge">['A'..'Z']</code> has an offset of 26 + 1 after getting it’s sequence number from the ASCII value for ‘A’.</li>
+</ul>
+
+<p>Combining these together, we have:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Data.Char</span>
+<span class="kr">import</span> <span class="nn">Data.List</span>
+
+<span class="n">input</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">solution</span> <span class="n">input</span> <span class="o">=</span> <span class="n">sum</span> <span class="p">[(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">intersect</span> <span class="n">xs</span> <span class="n">ys</span><span class="p">)</span> <span class="o">$</span> <span class="n">splitAt</span> <span class="p">(</span><span class="n">round</span> <span class="o">$</span> <span class="p">(</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">$</span> <span class="n">fromIntegral</span> <span class="o">$</span> <span class="n">length</span> <span class="n">line</span><span class="p">)</span> <span class="n">line</span> <span class="o">|</span> <span class="n">line</span> <span class="o">&lt;-</span> <span class="n">lines</span> <span class="n">input</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="part-2-2">Part 2</h2>
+
+<p>The slight twist introduced here require us to do the following:</p>
+
+<ul>
+  <li>Group the lines by 3;</li>
+  <li>Instead of getting the intersect between the two halves of a string, get the intersect between all elements in the groups of 3.</li>
+</ul>
+
+<p>It is guaranteed by the nature of the problem that our input’s number of lines will be divisible by 3.</p>
+
+<p>There are many ways to group the lines by 3, and the way I chose is to maintain an accumulated list of lists, where each element list will contain 3 elements.</p>
+
+<p>With that, we solve the sub-problems:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- grouping the lines by 3</span>
+<span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="n">acc</span><span class="o">@</span><span class="p">(</span><span class="n">y</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">length</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">3</span> <span class="kr">then</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">:</span><span class="n">acc</span> <span class="kr">else</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">y</span><span class="p">)</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="p">[</span><span class="kt">[]</span><span class="p">]</span> <span class="o">$</span> <span class="n">lines</span> <span class="n">input</span>
+
+<span class="c1">-- intersecting 3 lines</span>
+<span class="n">map</span> <span class="p">(</span><span class="n">foldr1</span> <span class="n">intersect</span><span class="p">)</span> <span class="n">output_of_above</span>
+</code></pre></div></div>
+
+<p>Then, reassembling the final solution:</p>
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Data.Char</span>
+<span class="kr">import</span> <span class="nn">Data.List</span>
+
+<span class="n">solution'</span> <span class="n">input</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">$</span> <span class="n">map</span> <span class="p">((</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">.</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">))</span> <span class="o">$</span> <span class="n">map</span> <span class="p">(</span><span class="n">foldr1</span> <span class="n">intersect</span><span class="p">)</span> <span class="o">$</span> <span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="n">acc</span><span class="o">@</span><span class="p">(</span><span class="n">y</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">length</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">3</span> <span class="kr">then</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">:</span><span class="n">acc</span> <span class="kr">else</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">y</span><span class="p">)</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="p">[</span><span class="kt">[]</span><span class="p">]</span> <span class="o">$</span> <span class="n">lines</span> <span class="n">input</span>
+</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
