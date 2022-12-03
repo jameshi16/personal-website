@@ -223,19 +223,19 @@ run_bot
 </span>  print("msgRcv called")
   print(message)
   return
-
-+ def msgSyncRcv(timestamp, source, destination, groupID, message, attachments):
-<span class="gi">+   msgRcv(timestamp, source, groupId, message, attachments)
+<span class="err">
+</span><span class="gi">+ def msgSyncRcv(timestamp, source, destination, groupID, message, attachments):
++   msgRcv(timestamp, source, groupId, message, attachments)
 +   return
-</span>
-...
-
-signal = bus.get('org.asamk.Signal', '/org/asamk/Signal')
-<span class="p">signal.onMessageReceived = msgRcv
+</span><span class="err">
+</span>...
+<span class="err">
+</span><span class="p">signal = bus.get('org.asamk.Signal', '/org/asamk/Signal')
+signal.onMessageReceived = msgRcv
 </span><span class="gi">+ signal.onSyncMessageReceived = msgSyncRcv
-</span>
-if __name__ == '__main__':
-</code></pre></div></div>
+</span><span class="err">
+</span><span class="p">if __name__ == '__main__':
+</span></code></pre></div></div>
 
 <p>And then run the bot again with the <code class="language-plaintext highlighter-rouge">run_bot</code> command.</p>
 
