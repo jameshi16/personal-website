@@ -21,8 +21,6 @@ jobs:
           ref: 'gh-pages'
       - name: Ruby environment
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
       - name: Cache dependencies
         uses: actions/cache@v2.1.3
         with:
