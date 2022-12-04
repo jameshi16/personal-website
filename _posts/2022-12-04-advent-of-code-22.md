@@ -1,6 +1,6 @@
 ---
 title: Advent of Code 22
-date: 2022-12-03 12:19 +0000
+date: 2022-12-04 10:21 +0000
 published: true
 ---
 
@@ -230,7 +230,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221203_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221204_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -296,4 +296,100 @@ import Data.Char
 import Data.List
 
 solution' input = sum $ map ((\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) . (!! 0)) $ map (foldr1 intersect) $ foldr (\x acc@(y:ys) -> if length y == 3 then [x]:acc else (x:y):ys) [[]] $ lines input
+```
+
+# Day 4
+
+## Part 1
+
+Feeling a little lazy today, I decided to work in Python. Today's problem is broken down into the following, familiar sub-problems:
+
+1. Read input line by line;
+2. Split the line by `,`, which we will call segments;
+3. Split the segments by `-`, which we will call fragments;
+4. Convert resulting fragments to integers;
+5. Figure out if one of the two segments are fully contained in one or another;
+6. Count the number of fully contained lines.
+
+Let's talk about step 5. In set theory, if we wanted to know if `A` is fully contained in `B`, then `A⊂B`; however, this can be simplified if `A` and `B` are sorted lists, which is the case for ranges defined solely by their boundaries. So, if I had an input line of `6-6,4-6` we can verify quite quickly that the left range is fully contained in the right range, not because we imagined if all elements of the left range is in the right range, but because of the lower bounds: `6 > 4`, and the upper bounds: `6 == 6`, so therefore `6-6` is in `4-6`.
+
+Similarly, for `2-8,3-7`, we see that `3 > 2` and `7 < 8`, so this means `3-7` must be in `2-8`.
+
+With that context, the sub-problems can be solve like so in Python:
+
+```python
+# read input line by line e.g. "2-8,3-7"
+open("input.txt", "r").readlines()
+
+# split line by ',', so we get ["2-8", "3-7"]
+segments = line.split(',')
+
+# split a single segment by '-' so we get fragment = ["2", "8"]
+fragment = segment.split('-')
+# note that all fragments = [["2", "8"], ["3", "7"]]
+
+# convert to int [2, 8]
+fragment_prime = map(int, fragment)
+
+# compare the ranges
+possibility_1 = fragment_1[0] <= fragment_2[0] and fragment_1[1] >= fragment_2[1]
+possibility_2 = fragment_2[0] <= fragment_1[0] and fragment_2[1] >= fragment_1[1]
+result = possibility_1 or possibility_2
+```
+
+The way I used to combine all of the sub-problems together is to use an unholy concoction of maps:
+```python
+print(sum(list(map(lambda xys: (xys[0][0] <= xys[1][0] and xys[0][1] >= xys[1][1]) or (xys[1][0] <= xys[0][0] and xys[1][1] >= xys[0][1]), list(map(lambda segments: list(map(lambda segment: list(map(int, segment.split('-'))), segments)), list(map(lambda line: line.split(','), open("input.txt", "r").readlines()))))))))
+```
+
+## Part 2
+
+Part 2 changes the so-called "set operation" we are performing. Instead of "fully contains", we are looking for overlaps, or in set terms we are looking for, "A∩B≠Ø".
+
+Let's consider the few possible cases, if we have a string in the format `a-b,x-y`:
+
+```
+case 1
+......a###########b...
+.x#y..................
+
+case 2
+..a######b...
+.x###y....
+
+case 3
+..a###b....
+....x###y..
+
+case 4
+.a####b.......
+.........x##y.
+
+case 5
+....a####b....
+......x#y.....
+```
+
+The cases imply the following:
+
+1. No intersect: `a > x`, `b > x`, `x < a`, `y < a`;
+2. Intersect: `a > x`, `b > x`, **`x < a`, `y > a`**;
+3. Intersect: **`a < x`, `b > x`**, `x > a`, `y > a`;
+4. No intersect: `a < x`, `b < x`, `x > a`, `y > a`;
+5. Intersect: **`a < x`, `b > x`**, `x > a`, `y > a`.
+
+The relations in bold matter the most; we see that for any two ranges to intersect, the lower bound of the first range must be less than the lower bound of the second range, and the upper bound of the first range must be greater than the lower bound of the second range, *or* vice-versa.
+
+Writing that in code, the testing statement becomes:
+
+```python
+possibility_1 = fragment_1[0] <= fragment_2[0] and fragment_1[1] >= fragment_2[0]
+possibility_2 = fragment_2[0] <= fragment_1[0] and fragment_2[1] >= fragment_1[0]
+result = possibility_1 or possibility_2
+```
+
+So, our resulting code looks very similar to part 1, with a minor change of index in our comparison lambda:
+
+```python
+print(sum(list(map(lambda xys: (xys[0][0] <= xys[1][0] and xys[0][1] >= xys[1][0]) or (xys[1][0] <= xys[0][0] and xys[1][1] >= xys[0][0]), list(map(lambda segments: list(map(lambda segment: list(map(int, segment.split('-'))), segments)), list(map(lambda line: line.split(','), open("input.txt", "r").readlines()))))))))
 ```
