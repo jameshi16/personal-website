@@ -1,6 +1,6 @@
 ---
 title: Advent of Code 22
-date: 2022-12-04 10:21 +0000
+date: 2022-12-05 23:50 +0000
 published: true
 ---
 
@@ -230,7 +230,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221204_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221205_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -392,4 +392,104 @@ So, our resulting code looks very similar to part 1, with a minor change of inde
 
 ```python
 print(sum(list(map(lambda xys: (xys[0][0] <= xys[1][0] and xys[0][1] >= xys[1][0]) or (xys[1][0] <= xys[0][0] and xys[1][1] >= xys[0][0]), list(map(lambda segments: list(map(lambda segment: list(map(int, segment.split('-'))), segments)), list(map(lambda line: line.split(','), open("input.txt", "r").readlines()))))))))
+```
+
+# Analysis - Week 1
+
+> TODO: I'll populate this later
+
+# Day 5
+
+Deadlines are looming, so I've haven't got the time to compact this. However, a streak is a streak!
+
+## Part 1
+
+Immediately after reading the question, I immediately thought of stacks. The sub-problems are as follows:
+
+1. Split the input into two, the visual representation and the instructions;
+2. Break down the visual representation into stacks;
+3. Break down the instructions into something we can use;
+4. Use the instructions to identify:
+    - `from` queue;
+    - `to` queue;
+    - how many items to move.
+
+Not being in the headspace to do function composition, I left the code separated in their respective chunks:
+
+```python
+import functools                                                                              
+                                                                                              
+data = open('input.txt', 'r').readlines()                                                     
+                                                                                              
+# \n here is the divider                                                                      
+segments = functools.reduce(lambda accum, x: accum[:-1] + [accum[-1] + [x]] if x != '\n' else accum + [[]], data, [[]])
+
+# all characters are +4 away from one another, first one at pos 1. reparse accordingly        
+segments[0] = list(map(lambda x: [x[i] for i in range(1, len(x), 4)], segments[0]))
+
+# flatten segments[0] into a queue-like structure                                             
+stacks = [[] for i in range(len(segments[0][0]))]                                             
+for row in segments[0][:-1]:
+  for i, col in enumerate(row):                                                               
+    if col != ' ':
+      stacks[i].append(col)                                                                   
+stacks = [list(reversed(stack)) for stack in stacks]                                          
+
+# flatten segments[1] into a list of tuple instructions                                       
+digit_fn = lambda s: [int(x) for x in s.split() if x.isdigit()]                               
+instructions = [digit_fn(s) for s in segments[1]]
+
+# do the movements                                                                            
+for instruction in instructions:                                                              
+  stack_from = instruction[1] - 1                                                             
+  stack_to = instruction[2] - 1 
+  number = instruction[0]
+  
+  for _ in range(number):                                                                     
+    stacks[stack_to].append(stacks[stack_from].pop()) 
+  
+# get the top of all                                                                          
+print(''.join([s[-1] for s in stacks]))
+```
+
+## Part 2
+
+Part 2 essentially changes the data structure we are working with. Now, we're breaking off lists at any arbitrary point, and appending it to another list (is there a name for this type of data structure)?
+
+However, since this is a small change, I decided to change two lines and reuse the rest of the code, meaning that the main data structure in use is misnamed. Regardless, here it is:
+
+```python
+import functools                                                                              
+                                                                                              
+data = open('input.txt', 'r').readlines()                                                     
+                                                                                              
+# \n here is the divider                                                                      
+segments = functools.reduce(lambda accum, x: accum[:-1] + [accum[-1] + [x]] if x != '\n' else accum + [[]], data, [[]])
+
+# all characters are +4 away from one another, first one at pos 1. reparse accordingly        
+segments[0] = list(map(lambda x: [x[i] for i in range(1, len(x), 4)], segments[0]))
+
+# flatten segments[0] into a queue-like structure                                             
+stacks = [[] for i in range(len(segments[0][0]))]                                             
+for row in segments[0][:-1]:
+  for i, col in enumerate(row):                                                               
+    if col != ' ':
+      stacks[i].append(col)                                                                   
+stacks = [list(reversed(stack)) for stack in stacks]                                          
+
+# flatten segments[1] into a list of tuple instructions                                       
+digit_fn = lambda s: [int(x) for x in s.split() if x.isdigit()]                               
+instructions = [digit_fn(s) for s in segments[1]]
+
+# do the movements                                                                            
+for instruction in instructions:                                                              
+  stack_from = instruction[1] - 1                                                             
+  stack_to = instruction[2] - 1 
+  number = instruction[0]
+  
+  stacks[stack_to].extend(stacks[stack_from][-number:])                                       
+  stacks[stack_from] = stacks[stack_from][:-number]
+  
+# get the top of all                                                                          
+print(''.join([s[-1] for s in stacks]))
 ```
