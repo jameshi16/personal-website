@@ -1,0 +1,704 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content=":coffee: Hi!After having absolutely zero blog posts for the past 11 months, including my treasured anime page, here I am declaring that I will be participating in the Advent of Code (AOC).I’ve never completed an AOC before, so it’ll be a nice challenge to breathe vitality into this blog before th..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Advent of Code 22</h1>
+      <p class="text-gray mb-5">Published Dec 05, 2022 23:50</p>
+      
+  <div class="article">
+    <p><img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"> Hi!</p>
+
+<p>After having absolutely <em>zero</em> blog posts for the past 11 months, including my treasured <a href="/anime">anime</a> page, here I am declaring that I will be participating in the <a href="https://adventofcode.com/" target="_blank" rel="noopener noreferrer">Advent of Code</a> (AOC).</p>
+
+<p>I’ve never completed an AOC before, so it’ll be a nice challenge to breathe vitality into this blog before the New Years. To motivate me, I have invited my buddies over at <a href="https://modelconverge.xyz" target="_blank" rel="noopener noreferrer">modelconverge</a> and <a href="https://nikhilr.io" target="_blank" rel="noopener noreferrer">nikhilr</a> to join me.</p>
+
+<p>Each of us will attempt each AOC, and discuss our solutions at the end of each week to judge each solution with its time-space complexity, and elegance. We will use any language we have at our disposal.</p>
+
+<p>Throughout AOC, I will update this blog post in a rolling manner to discuss my thought processes from ideation to solution. Do check back every day!</p>
+
+<h1 id="day-1">Day 1</h1>
+
+<p>Thanks to deadlines being a thing, I ended up doing Day 1 24 hours late. Anyways, it seems like we need to make a simple program to figure out who is carrying the most amount of calories among the elves.</p>
+
+<h2 id="part-1">Part 1</h2>
+
+<p>I broke down the problem into processing chunks of numbers at once:</p>
+
+<ol>
+  <li>Each block is delimited by <code class="language-plaintext highlighter-rouge">\n\n</code> (two newlines), and</li>
+  <li>Each calorie-qualifying item is delimited by <code class="language-plaintext highlighter-rouge">\n</code>.</li>
+</ol>
+
+<p>So, the steps to solve this problem will be:</p>
+
+<ol>
+  <li>Define a list, <code class="language-plaintext highlighter-rouge">l</code>;</li>
+  <li>Read input line by line;</li>
+  <li>For each line, check if the string is just space;</li>
+  <li>If it is just space, we add an integer, <code class="language-plaintext highlighter-rouge">0</code> into the list, <code class="language-plaintext highlighter-rouge">l</code>;</li>
+  <li>Otherwise, we parse the input as an integer and add it to the last integer in <code class="language-plaintext highlighter-rouge">l</code>;</li>
+  <li>Repeat step 2 until EOF;</li>
+  <li>We take the maximum of the list <code class="language-plaintext highlighter-rouge">l</code>, completing our algorithm.</li>
+</ol>
+
+<p>Framing the problem another way, <code class="language-plaintext highlighter-rouge">l</code> is the accumulator of integers, and we are processing a list of strings with a function that:</p>
+
+<ol>
+  <li>Adds a new number to the accumulator if string is empty;</li>
+  <li>Otherwise, adds the integer representation of the string into the last element of the accumulator.</li>
+</ol>
+
+<p>Then, we take the maximum of the list. Naturally, this means that the problem can be solved with two lines of Python:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="s">""</span> <span class="k">else</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)],</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">splitlines</span><span class="p">(),</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))))</span>
+</code></pre></div></div>
+
+<p>Where the contents of <code class="language-plaintext highlighter-rouge">input.txt</code> are given by the puzzle input.</p>
+
+<h2 id="part-2">Part 2</h2>
+
+<p>The second part essentially want us to get the three highest elements in the list. So, just a small tweak to part 1:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">sorted</span><span class="p">((</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="s">""</span> <span class="k">else</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)],</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">splitlines</span><span class="p">(),</span> <span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]))</span>
+</code></pre></div></div>
+
+<p>All I did here was to replace <code class="language-plaintext highlighter-rouge">max</code> with a composition of <code class="language-plaintext highlighter-rouge">sum</code> and <code class="language-plaintext highlighter-rouge">sorted</code>.</p>
+
+<h1 id="day-2">Day 2</h1>
+
+<h2 id="part-1-1">Part 1</h2>
+
+<p>Parsing the problem into programmer monkey brain language, the question is essentially:</p>
+
+<ul>
+  <li>Given an input:
+    <ul>
+      <li>Each line is a combination of two characters from different source ranges delimited by space, i.e.: <code class="language-plaintext highlighter-rouge">A X</code> where <code class="language-plaintext highlighter-rouge">A = ['A','B','C']</code> and <code class="language-plaintext highlighter-rouge">X = ['X','Y','Z']</code>.</li>
+      <li>Lines delimited by <code class="language-plaintext highlighter-rouge">\n</code>.</li>
+    </ul>
+  </li>
+  <li>
+<code class="language-plaintext highlighter-rouge">A</code> and <code class="language-plaintext highlighter-rouge">X</code> are enumeration representations of the possible moves in rock, paper and scissors. The truth table is as follows:</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Left</strong></th>
+      <th><strong>Right</strong></th>
+      <th><strong>State</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>X</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>Y</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>Z</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>Y</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>Z</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>X</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>A</td>
+      <td>Z</td>
+      <td>Lose</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>X</td>
+      <td>Lose</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>Y</td>
+      <td>Lose</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">X</code>, <code class="language-plaintext highlighter-rouge">Y</code>, <code class="language-plaintext highlighter-rouge">Z</code> have a partial score of 1, 2, 3 respectively</li>
+  <li>Winning will grant a partial score of 6, Ties will grant 3, and losing will grant 0.</li>
+</ul>
+
+<p>The first thing I did was to “normalize” and simplify the truth table by taking the difference between <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">A</code>. So, before simplification, the table looked like this:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Left</strong></th>
+      <th><strong>Right</strong></th>
+      <th><strong>Diff</strong></th>
+      <th><strong>State</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>-2</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>3</td>
+      <td>2</td>
+      <td>Lose</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1</td>
+      <td>-1</td>
+      <td>Lose</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2</td>
+      <td>-1</td>
+      <td>Lose</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>I then simplify the table with the following thoughts:</p>
+<ul>
+  <li>Consider only the difference and states;</li>
+  <li>Losing will grant zero points, which makes it inconsequential in our score calculation, so it can be completely removed.</li>
+</ul>
+
+<p>So, the table looks like this:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Diff</strong></th>
+      <th><strong>State</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Tie</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Win</td>
+    </tr>
+    <tr>
+      <td>-2</td>
+      <td>Win</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Now, the problem of obtaining the win/tie/loss partial score has been simplified to check for these 3 cases. So, I could now write something like:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// a is normalized left, x is normalized right</span>
+<span class="kt">int</span> <span class="n">partial_score</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">x</span> <span class="o">-</span> <span class="n">a</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The next sub-problem to tackle will be to normalize our inputs. All ASCII characters can be expressed as integers, and hence can be normalized by the lowest value of each range. In other words:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// a is left, x is right</span>
+<span class="kt">int</span> <span class="n">normalised_a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">normalised_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="sc">'X'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Performing this normalization almost conforms to the partial sum where <code class="language-plaintext highlighter-rouge">'X', 'Y', 'Z' -&gt; 1, 2, 3</code>. Right now, the map looks like <code class="language-plaintext highlighter-rouge">'X', 'Y', 'Z' -&gt; 0, 1, 2</code>. To fix this, just add 1:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// normalised_x as above</span>
+<span class="kt">int</span> <span class="n">partial_score</span> <span class="o">=</span> <span class="n">normalised_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>So, the total score can now be expressed as:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// a is normalised left, x is normalised right</span>
+<span class="kt">int</span> <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">x</span> <span class="o">-</span> <span class="n">a</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>All we need to do now is to do the preprocessing and required code to actually obtain <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">a</code>. I first wrote it in C, which looks like this:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">eval_score</span><span class="p">(</span><span class="kt">char</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="n">opp_a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="sc">'A'</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">opp_b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="sc">'X'</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">opp_b</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">opp_b</span> <span class="o">-</span> <span class="n">opp_a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">opp_b</span> <span class="o">-</span> <span class="n">opp_a</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="p">(</span><span class="n">opp_a</span> <span class="o">==</span> <span class="n">opp_b</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+  <span class="kt">long</span> <span class="n">accum_score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">do</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">;</span>
+    <span class="n">fscanf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s">"%c %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">first</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">second</span><span class="p">);</span>
+    <span class="n">accum_score</span> <span class="o">+=</span> <span class="n">eval_score</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">feof</span><span class="p">(</span><span class="n">file</span><span class="p">));</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">"%ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">accum_score</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This was too long, so I decided to re-write the same thing in JavaScript:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">inputStr</span> <span class="o">=</span> <span class="s2">``</span> <span class="c1">// puzzle input</span>
+
+<span class="nx">inputStr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">).</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">curr</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="nx">acc</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span>
+                <span class="p">((</span><span class="nx">codes</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="nx">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">(((</span><span class="nx">raw</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">()</span> <span class="o">-</span> <span class="mi">65</span><span class="p">,</span> <span class="nx">raw</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">()</span> <span class="o">-</span> <span class="mi">88</span><span class="p">])(</span><span class="nx">curr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">)))),</span> <span class="p">[])</span>
+        <span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">curr</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">curr</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Which is shorter but kinda unreadable.</p>
+
+<h2 id="part-2-1">Part 2</h2>
+
+<p>Part 2 changes the interpretation of <code class="language-plaintext highlighter-rouge">X</code>. <code class="language-plaintext highlighter-rouge">"X"</code>, <code class="language-plaintext highlighter-rouge">"Y"</code>, and <code class="language-plaintext highlighter-rouge">"Z"</code> now represents <code class="language-plaintext highlighter-rouge">lose</code>, <code class="language-plaintext highlighter-rouge">tie</code>, and <code class="language-plaintext highlighter-rouge">win</code>. Upon closer inspection, this really only affects the partial sum used to calculate the score based on state; if anything, it made calculating the win/loss/tie partial score simple.</p>
+
+<p>It can be easily realised that associating tie to <code class="language-plaintext highlighter-rouge">0</code>, win to <code class="language-plaintext highlighter-rouge">1</code> and loss to <code class="language-plaintext highlighter-rouge">-1</code> will make deriving the rock/paper/scissors move simple.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Left</strong></th>
+      <th><strong>State</strong></th>
+      <th><strong>Right</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>Tie (0)</td>
+      <td>x</td>
+    </tr>
+    <tr>
+      <td>x</td>
+      <td>Win (1)</td>
+      <td>0 if x + 1 == 3 else x + 1</td>
+    </tr>
+    <tr>
+      <td>x</td>
+      <td>Lose (-1)</td>
+      <td>2 if x - 1 == -1 else x - 1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Remember that the normalised <code class="language-plaintext highlighter-rouge">"A", "B", "C" -&gt; 0, 1, 2</code>, so ties would imply <code class="language-plaintext highlighter-rouge">"A", "B", "C" -&gt; Scissors, Paper, Rock</code>, wins would imply <code class="language-plaintext highlighter-rouge">"A", "B", "C" -&gt; Paper, Rock, Scissors</code>, and losses will be <code class="language-plaintext highlighter-rouge">"A", "B", "C" -&gt; Scissors, Rock, Paper</code>.</p>
+
+<p>Hence, the code would be changed to:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">inputStr</span> <span class="o">=</span> <span class="s2">``</span>
+
+<span class="nx">inputStr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">).</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">curr</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="nx">acc</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span>
+                <span class="p">((</span><span class="nx">codes</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">((</span><span class="nx">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="p">(</span><span class="nx">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span>
+                        <span class="p">(</span><span class="nx">codes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">(((</span><span class="nx">raw</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">()</span> <span class="o">-</span> <span class="mi">65</span><span class="p">,</span> <span class="nx">raw</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">()</span> <span class="o">-</span> <span class="mi">89</span><span class="p">])(</span><span class="nx">curr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">)))),</span> <span class="p">[])</span>
+        <span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">curr</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">curr</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Notice the change at <code class="language-plaintext highlighter-rouge">raw[1].charCodeAt() - 89</code>, which essentially absorbed an offset of <code class="language-plaintext highlighter-rouge">-1</code>.</p>
+
+<h1 id="day-3">Day 3</h1>
+
+<h2 id="part-1-2">Part 1</h2>
+
+<p>Today’s part 1 problem can be broken down into the following sub-problems:</p>
+
+<ul>
+  <li>Go through the input line by line;</li>
+  <li>For each line, split the line by half, and find the intersect between the two lines;</li>
+  <li>Due to the nature of the problem, it is guaranteed that the intersection is one and unique;</li>
+  <li>For each of the intersections, calculate the respective priorities.</li>
+</ul>
+
+<p>I decided to use Haskell, because <img class="emoji" title=":shrug:" alt=":shrug:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f937.png" height="20" width="20">. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
+
+<p><img src="/images/20221205_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
+
+<p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
+
+<p>Let’s solve each sub-problem in Haskell:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- input string</span>
+<span class="n">input</span> <span class="o">=</span> <span class="s">""</span>
+
+<span class="c1">-- going through line by line</span>
+<span class="n">lines</span> <span class="n">input</span>
+
+<span class="c1">-- split line by half</span>
+<span class="n">splitAt</span> <span class="p">(</span><span class="n">round</span> <span class="o">$</span> <span class="p">(</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">$</span> <span class="n">fromIntegral</span> <span class="o">$</span> <span class="n">length</span> <span class="n">line</span><span class="p">)</span> <span class="n">line</span>
+
+<span class="c1">-- find intersection between the two halfs</span>
+<span class="n">intersect</span> <span class="n">splitted_xs</span> <span class="n">splitted_ys</span>
+
+<span class="c1">-- calculate priority</span>
+<span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">)</span> <span class="n">intersected_list</span>
+</code></pre></div></div>
+
+<p>Some notes:</p>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">length line</code> strictly returns an integer, which needs to be converted for division in Haskell;</li>
+  <li>In the priority calculation, we subtract 96, which is 1 less than the ASCII value for ‘a’, so we introduce an offset of <code class="language-plaintext highlighter-rouge">+1</code>;</li>
+  <li>The range <code class="language-plaintext highlighter-rouge">['A'..'Z']</code> has an offset of 26 + 1 after getting it’s sequence number from the ASCII value for ‘A’.</li>
+</ul>
+
+<p>Combining these together, we have:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Data.Char</span>
+<span class="kr">import</span> <span class="nn">Data.List</span>
+
+<span class="n">input</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">solution</span> <span class="n">input</span> <span class="o">=</span> <span class="n">sum</span> <span class="p">[(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">)</span> <span class="o">$</span> <span class="p">(</span><span class="nf">\</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">intersect</span> <span class="n">xs</span> <span class="n">ys</span><span class="p">)</span> <span class="o">$</span> <span class="n">splitAt</span> <span class="p">(</span><span class="n">round</span> <span class="o">$</span> <span class="p">(</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">$</span> <span class="n">fromIntegral</span> <span class="o">$</span> <span class="n">length</span> <span class="n">line</span><span class="p">)</span> <span class="n">line</span> <span class="o">|</span> <span class="n">line</span> <span class="o">&lt;-</span> <span class="n">lines</span> <span class="n">input</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="part-2-2">Part 2</h2>
+
+<p>The slight twist introduced here require us to do the following:</p>
+
+<ul>
+  <li>Group the lines by 3;</li>
+  <li>Instead of getting the intersect between the two halves of a string, get the intersect between all elements in the groups of 3.</li>
+</ul>
+
+<p>It is guaranteed by the nature of the problem that our input’s number of lines will be divisible by 3.</p>
+
+<p>There are many ways to group the lines by 3, and the way I chose is to maintain an accumulated list of lists, where each element list will contain 3 elements.</p>
+
+<p>With that, we solve the sub-problems:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- grouping the lines by 3</span>
+<span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="n">acc</span><span class="o">@</span><span class="p">(</span><span class="n">y</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">length</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">3</span> <span class="kr">then</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">:</span><span class="n">acc</span> <span class="kr">else</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">y</span><span class="p">)</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="p">[</span><span class="kt">[]</span><span class="p">]</span> <span class="o">$</span> <span class="n">lines</span> <span class="n">input</span>
+
+<span class="c1">-- intersecting 3 lines</span>
+<span class="n">map</span> <span class="p">(</span><span class="n">foldr1</span> <span class="n">intersect</span><span class="p">)</span> <span class="n">output_of_above</span>
+</code></pre></div></div>
+
+<p>Then, reassembling the final solution:</p>
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Data.Char</span>
+<span class="kr">import</span> <span class="nn">Data.List</span>
+
+<span class="n">solution'</span> <span class="n">input</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">$</span> <span class="n">map</span> <span class="p">((</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">x</span> <span class="p">`</span><span class="n">elem</span><span class="p">`</span> <span class="p">[</span><span class="sc">'a'</span><span class="o">..</span><span class="sc">'z'</span><span class="p">]</span> <span class="kr">then</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">96</span> <span class="kr">else</span> <span class="n">ord</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">27</span><span class="p">)</span> <span class="o">.</span> <span class="p">(</span><span class="o">!!</span> <span class="mi">0</span><span class="p">))</span> <span class="o">$</span> <span class="n">map</span> <span class="p">(</span><span class="n">foldr1</span> <span class="n">intersect</span><span class="p">)</span> <span class="o">$</span> <span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="n">acc</span><span class="o">@</span><span class="p">(</span><span class="n">y</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kr">if</span> <span class="n">length</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">3</span> <span class="kr">then</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">:</span><span class="n">acc</span> <span class="kr">else</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">y</span><span class="p">)</span><span class="o">:</span><span class="n">ys</span><span class="p">)</span> <span class="p">[</span><span class="kt">[]</span><span class="p">]</span> <span class="o">$</span> <span class="n">lines</span> <span class="n">input</span>
+</code></pre></div></div>
+
+<h1 id="day-4">Day 4</h1>
+
+<h2 id="part-1-3">Part 1</h2>
+
+<p>Feeling a little lazy today, I decided to work in Python. Today’s problem is broken down into the following, familiar sub-problems:</p>
+
+<ol>
+  <li>Read input line by line;</li>
+  <li>Split the line by <code class="language-plaintext highlighter-rouge">,</code>, which we will call segments;</li>
+  <li>Split the segments by <code class="language-plaintext highlighter-rouge">-</code>, which we will call fragments;</li>
+  <li>Convert resulting fragments to integers;</li>
+  <li>Figure out if one of the two segments are fully contained in one or another;</li>
+  <li>Count the number of fully contained lines.</li>
+</ol>
+
+<p>Let’s talk about step 5. In set theory, if we wanted to know if <code class="language-plaintext highlighter-rouge">A</code> is fully contained in <code class="language-plaintext highlighter-rouge">B</code>, then <code class="language-plaintext highlighter-rouge">A⊂B</code>; however, this can be simplified if <code class="language-plaintext highlighter-rouge">A</code> and <code class="language-plaintext highlighter-rouge">B</code> are sorted lists, which is the case for ranges defined solely by their boundaries. So, if I had an input line of <code class="language-plaintext highlighter-rouge">6-6,4-6</code> we can verify quite quickly that the left range is fully contained in the right range, not because we imagined if all elements of the left range is in the right range, but because of the lower bounds: <code class="language-plaintext highlighter-rouge">6 &gt; 4</code>, and the upper bounds: <code class="language-plaintext highlighter-rouge">6 == 6</code>, so therefore <code class="language-plaintext highlighter-rouge">6-6</code> is in <code class="language-plaintext highlighter-rouge">4-6</code>.</p>
+
+<p>Similarly, for <code class="language-plaintext highlighter-rouge">2-8,3-7</code>, we see that <code class="language-plaintext highlighter-rouge">3 &gt; 2</code> and <code class="language-plaintext highlighter-rouge">7 &lt; 8</code>, so this means <code class="language-plaintext highlighter-rouge">3-7</code> must be in <code class="language-plaintext highlighter-rouge">2-8</code>.</p>
+
+<p>With that context, the sub-problems can be solve like so in Python:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># read input line by line e.g. "2-8,3-7"
+</span><span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">).</span><span class="n">readlines</span><span class="p">()</span>
+
+<span class="c1"># split line by ',', so we get ["2-8", "3-7"]
+</span><span class="n">segments</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+
+<span class="c1"># split a single segment by '-' so we get fragment = ["2", "8"]
+</span><span class="n">fragment</span> <span class="o">=</span> <span class="n">segment</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'-'</span><span class="p">)</span>
+<span class="c1"># note that all fragments = [["2", "8"], ["3", "7"]]
+</span>
+<span class="c1"># convert to int [2, 8]
+</span><span class="n">fragment_prime</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">fragment</span><span class="p">)</span>
+
+<span class="c1"># compare the ranges
+</span><span class="n">possibility_1</span> <span class="o">=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">possibility_2</span> <span class="o">=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">possibility_1</span> <span class="ow">or</span> <span class="n">possibility_2</span>
+</code></pre></div></div>
+
+<p>The way I used to combine all of the sub-problems together is to use an unholy concoction of maps:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">xys</span><span class="p">:</span> <span class="p">(</span><span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">segments</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">segment</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">segment</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'-'</span><span class="p">))),</span> <span class="n">segments</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">),</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">).</span><span class="n">readlines</span><span class="p">()))))))))</span>
+</code></pre></div></div>
+
+<h2 id="part-2-3">Part 2</h2>
+
+<p>Part 2 changes the so-called “set operation” we are performing. Instead of “fully contains”, we are looking for overlaps, or in set terms we are looking for, “A∩B≠Ø”.</p>
+
+<p>Let’s consider the few possible cases, if we have a string in the format <code class="language-plaintext highlighter-rouge">a-b,x-y</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>case 1
+......a###########b...
+.x#y..................
+
+case 2
+..a######b...
+.x###y....
+
+case 3
+..a###b....
+....x###y..
+
+case 4
+.a####b.......
+.........x##y.
+
+case 5
+....a####b....
+......x#y.....
+</code></pre></div></div>
+
+<p>The cases imply the following:</p>
+
+<ol>
+  <li>No intersect: <code class="language-plaintext highlighter-rouge">a &gt; x</code>, <code class="language-plaintext highlighter-rouge">b &gt; x</code>, <code class="language-plaintext highlighter-rouge">x &lt; a</code>, <code class="language-plaintext highlighter-rouge">y &lt; a</code>;</li>
+  <li>Intersect: <code class="language-plaintext highlighter-rouge">a &gt; x</code>, <code class="language-plaintext highlighter-rouge">b &gt; x</code>, <strong><code class="language-plaintext highlighter-rouge">x &lt; a</code>, <code class="language-plaintext highlighter-rouge">y &gt; a</code></strong>;</li>
+  <li>Intersect: <strong><code class="language-plaintext highlighter-rouge">a &lt; x</code>, <code class="language-plaintext highlighter-rouge">b &gt; x</code></strong>, <code class="language-plaintext highlighter-rouge">x &gt; a</code>, <code class="language-plaintext highlighter-rouge">y &gt; a</code>;</li>
+  <li>No intersect: <code class="language-plaintext highlighter-rouge">a &lt; x</code>, <code class="language-plaintext highlighter-rouge">b &lt; x</code>, <code class="language-plaintext highlighter-rouge">x &gt; a</code>, <code class="language-plaintext highlighter-rouge">y &gt; a</code>;</li>
+  <li>Intersect: <strong><code class="language-plaintext highlighter-rouge">a &lt; x</code>, <code class="language-plaintext highlighter-rouge">b &gt; x</code></strong>, <code class="language-plaintext highlighter-rouge">x &gt; a</code>, <code class="language-plaintext highlighter-rouge">y &gt; a</code>.</li>
+</ol>
+
+<p>The relations in bold matter the most; we see that for any two ranges to intersect, the lower bound of the first range must be less than the lower bound of the second range, and the upper bound of the first range must be greater than the lower bound of the second range, <em>or</em> vice-versa.</p>
+
+<p>Writing that in code, the testing statement becomes:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">possibility_1</span> <span class="o">=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">possibility_2</span> <span class="o">=</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">fragment_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">fragment_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">possibility_1</span> <span class="ow">or</span> <span class="n">possibility_2</span>
+</code></pre></div></div>
+
+<p>So, our resulting code looks very similar to part 1, with a minor change of index in our comparison lambda:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">xys</span><span class="p">:</span> <span class="p">(</span><span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="ow">or</span> <span class="p">(</span><span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">xys</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">xys</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">segments</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">segment</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">segment</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'-'</span><span class="p">))),</span> <span class="n">segments</span><span class="p">)),</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">),</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">).</span><span class="n">readlines</span><span class="p">()))))))))</span>
+</code></pre></div></div>
+
+<h1 id="analysis---week-1">Analysis - Week 1</h1>
+
+<blockquote>
+  <p>TODO: I’ll populate this later</p>
+</blockquote>
+
+<h1 id="day-5">Day 5</h1>
+
+<p>Deadlines are looming, so I’ve haven’t got the time to compact this. However, a streak is a streak!</p>
+
+<h2 id="part-1-4">Part 1</h2>
+
+<p>Immediately after reading the question, I immediately thought of stacks. The sub-problems are as follows:</p>
+
+<ol>
+  <li>Split the input into two, the visual representation and the instructions;</li>
+  <li>Break down the visual representation into stacks;</li>
+  <li>Break down the instructions into something we can use;</li>
+  <li>Use the instructions to identify:
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">from</code> queue;</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">to</code> queue;</li>
+      <li>how many items to move.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Not being in the headspace to do function composition, I left the code separated in their respective chunks:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>                                                                              
+                                                                                              
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()</span>                                                     
+                                                                                              
+<span class="c1"># \n here is the divider                                                                      
+</span><span class="n">segments</span> <span class="o">=</span> <span class="n">functools</span><span class="p">.</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span> <span class="k">else</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[[]],</span> <span class="n">data</span><span class="p">,</span> <span class="p">[[]])</span>
+
+<span class="c1"># all characters are +4 away from one another, first one at pos 1. reparse accordingly        
+</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># flatten segments[0] into a queue-like structure                                             
+</span><span class="n">stacks</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))]</span>                                             
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>                                                               
+    <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s">' '</span><span class="p">:</span>
+      <span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>                                                                   
+<span class="n">stacks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">stack</span><span class="p">))</span> <span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="n">stacks</span><span class="p">]</span>                                          
+
+<span class="c1"># flatten segments[1] into a list of tuple instructions                                       
+</span><span class="n">digit_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()]</span>                               
+<span class="n">instructions</span> <span class="o">=</span> <span class="p">[</span><span class="n">digit_fn</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+<span class="c1"># do the movements                                                                            
+</span><span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="n">instructions</span><span class="p">:</span>                                                              
+  <span class="n">stack_from</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>                                                             
+  <span class="n">stack_to</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> 
+  <span class="n">number</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  
+  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>                                                                     
+    <span class="n">stacks</span><span class="p">[</span><span class="n">stack_to</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">stacks</span><span class="p">[</span><span class="n">stack_from</span><span class="p">].</span><span class="n">pop</span><span class="p">())</span> 
+  
+<span class="c1"># get the top of all                                                                          
+</span><span class="k">print</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stacks</span><span class="p">]))</span>
+</code></pre></div></div>
+
+<h2 id="part-2-4">Part 2</h2>
+
+<p>Part 2 essentially changes the data structure we are working with. Now, we’re breaking off lists at any arbitrary point, and appending it to another list (is there a name for this type of data structure)?</p>
+
+<p>However, since this is a small change, I decided to change two lines and reuse the rest of the code, meaning that the main data structure in use is misnamed. Regardless, here it is:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>                                                                              
+                                                                                              
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()</span>                                                     
+                                                                                              
+<span class="c1"># \n here is the divider                                                                      
+</span><span class="n">segments</span> <span class="o">=</span> <span class="n">functools</span><span class="p">.</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span> <span class="k">else</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[[]],</span> <span class="n">data</span><span class="p">,</span> <span class="p">[[]])</span>
+
+<span class="c1"># all characters are +4 away from one another, first one at pos 1. reparse accordingly        
+</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">4</span><span class="p">)],</span> <span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># flatten segments[0] into a queue-like structure                                             
+</span><span class="n">stacks</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))]</span>                                             
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>                                                               
+    <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s">' '</span><span class="p">:</span>
+      <span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>                                                                   
+<span class="n">stacks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">stack</span><span class="p">))</span> <span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="n">stacks</span><span class="p">]</span>                                          
+
+<span class="c1"># flatten segments[1] into a list of tuple instructions                                       
+</span><span class="n">digit_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">x</span><span class="p">.</span><span class="n">isdigit</span><span class="p">()]</span>                               
+<span class="n">instructions</span> <span class="o">=</span> <span class="p">[</span><span class="n">digit_fn</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+<span class="c1"># do the movements                                                                            
+</span><span class="k">for</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="n">instructions</span><span class="p">:</span>                                                              
+  <span class="n">stack_from</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>                                                             
+  <span class="n">stack_to</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> 
+  <span class="n">number</span> <span class="o">=</span> <span class="n">instruction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  
+  <span class="n">stacks</span><span class="p">[</span><span class="n">stack_to</span><span class="p">].</span><span class="n">extend</span><span class="p">(</span><span class="n">stacks</span><span class="p">[</span><span class="n">stack_from</span><span class="p">][</span><span class="o">-</span><span class="n">number</span><span class="p">:])</span>                                       
+  <span class="n">stacks</span><span class="p">[</span><span class="n">stack_from</span><span class="p">]</span> <span class="o">=</span> <span class="n">stacks</span><span class="p">[</span><span class="n">stack_from</span><span class="p">][:</span><span class="o">-</span><span class="n">number</span><span class="p">]</span>
+  
+<span class="c1"># get the top of all                                                                          
+</span><span class="k">print</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stacks</span><span class="p">]))</span>
+</code></pre></div></div>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2022</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
