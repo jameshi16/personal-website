@@ -1,6 +1,6 @@
 ---
 title: Advent of Code 22
-date: 2022-12-05 23:50 +0000
+date: 2022-12-06 19:30 +0000
 published: true
 ---
 
@@ -230,7 +230,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221205_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221206_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -493,3 +493,111 @@ for instruction in instructions:
 # get the top of all                                                                          
 print(''.join([s[-1] for s in stacks]))
 ```
+
+# Day 6
+
+Oh no I can feel the deadlines! I've decided to take a crack at implementing another thing in C. Since I was also feeling lazy, I decided to use C.
+
+
+## Part 1
+
+Today's puzzle involves us picking out the position of the first unique character in a sliding frame of 4. The most obvious algorithm is generally as follows:
+
+1. Load the first 4 characters into a set
+2. If the set has a length of 4, then you are done, position 4 is the answer
+3. Otherwise, go on to the next position, load the previous 3 characters and itself into a set, and check length of set
+4. If length is 4, current position is the answer, otherwise, repeat step 3
+
+The above algorithm is probably also the fastest I know, since the set operations involved is `O(4)`. Iterating through the string, that's `O(n)`, so the total runtime of this solution would be `O(4n)`.
+
+In C, however, we don't have sets, and I don't really feel like implementing one. Instead, I employed a technique known as dynamic programming to implement something like a queue, which memorizes 4 values at once. Whenever a new character is read from the input stream, the head of the queue is popped, and the new character is pushed into the queue.
+
+To speed up figuring out if there are any duplicate elements, I created a map of 26 characters and maintain a reference count of each alphabet in the queue. In theory, the function will simply need to iterate through the queue, lookup the alphabet in the map, look at the reference count, and if it's all 1, we've found our character.
+
+This method has a rough time complexity of: `O(n)` for going through the string, `O(4)` for the dynamic programming implementation, `O(4)` for checking the queue. If 4 is an unknown, this'll be `O(k^2 * n)`. Damn.
+
+So:
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+
+int main() {
+  FILE *f = fopen("input.txt", "r");
+  char exist_map[26] = {0};
+  char *a = NULL, *b = NULL, *c = NULL, *d = NULL;
+  size_t n_processed = 0;
+  char buf = 0;
+
+  while ((buf = fgetc(f)) != EOF) {
+    ++n_processed;
+
+    if (exist_map[buf - 'a'] == 0 && a != NULL && *a == 1 && *b == 1 && *c == 1) {
+      printf("delimiter found at %lu\n", n_processed);
+      break;
+    }
+    if (a) *a -= 1;
+    d = exist_map + (buf - 'a');
+    *d += 1;
+    a = b; b = c; c = d; d = NULL;
+  }
+  fclose(f);
+  return 0;
+}
+
+```
+
+The dynamic programming implementation can be improved, but oh well.
+
+## Part 2
+
+Increasing the required unique characters from 4 to 14 would have been much easier on Python, but in C, this means I had to abstract my functions, and use an array of `char*` instead of defining each position in the queue on my own.
+
+The two functions to abstract are:
+
+- the one that figures out if all the reference counts relevant to the queue is 1
+- the one that shifts the queue to the left by 1, and adding the new value into the queue
+
+Improving the "queue" can be easily seen in this example, which involves introducing variables to keep a pointer of where the head and tail is. However, I was lazy. So:
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+
+char areOnes(char** pointers, size_t size) {
+  for (size_t i = 0; i < size - 1; i++)
+    if (*(pointers[i]) != 1) return 0;
+  return 1; 
+} 
+  
+void leftShiftExistMap(char* map, char** pointers, char newVal, size_t size) {
+  if (pointers[0]) *(pointers[0]) -= 1;
+  pointers[size - 1] = map + (newVal - 'a');
+  *(pointers[size - 1]) += 1;
+  for (size_t i = 0; i < size - 1; i++)
+    pointers[i] = pointers[i + 1];
+  pointers[size - 1] = NULL;
+}   
+    
+int main() {
+  FILE *f = fopen("input.txt", "r");
+  char exist_map[26] = {0};
+  char *pointers[14] = {NULL};
+  size_t n_processed = 0;
+  char buf = 0;
+
+  while ((buf = fgetc(f)) != EOF) {
+    ++n_processed;
+
+    if (exist_map[buf - 'a'] == 0 && pointers[0] != NULL && areOnes(pointers, 14)) {
+      printf("delimiter found at %lu\n", n_processed);
+      break;
+    }
+    leftShiftExistMap(exist_map, pointers, buf, 14);
+  }
+  fclose(f);
+  return 0;
+}
+```
+
+The time complexity is still the same, which is `O(k^2*n)` where `k = 14`. Use the right tools (i.e. Python) for the right job!
