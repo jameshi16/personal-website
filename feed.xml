@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-05T23:55:18+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/05/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-05T23:50:00+00:00</published><updated>2022-12-05T23:50:00+00:00</updated><id>https://codingindex.xyz/2022/12/05/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/05/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-08T22:37:12+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/06/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-06T19:30:00+00:00</published><updated>2022-12-06T19:30:00+00:00</updated><id>https://codingindex.xyz/2022/12/06/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/06/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
 
 <p>After having absolutely <em>zero</em> blog posts for the past 11 months, including my treasured <a href="/anime">anime</a> page, here I am declaring that I will be participating in the <a href="https://adventofcode.com/">Advent of Code</a> (AOC).</p>
 
@@ -370,7 +370,7 @@
 
 <p>I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
 
-<p><img src="/images/20221205_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
+<p><img src="/images/20221206_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 <p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
@@ -636,7 +636,116 @@ case 5
   
 <span class="c1"># get the top of all                                                                          
 </span><span class="k">print</span><span class="p">(</span><span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stacks</span><span class="p">]))</span>
-</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+</code></pre></div></div>
+
+<h1 id="day-6">Day 6</h1>
+
+<p>Oh no I can feel the deadlines! I’ve decided to take a crack at implementing another thing in C. Since I was also feeling lazy, I decided to use C.</p>
+
+<h2 id="part-1-5">Part 1</h2>
+
+<p>Today’s puzzle involves us picking out the position of the first unique character in a sliding frame of 4. The most obvious algorithm is generally as follows:</p>
+
+<ol>
+  <li>Load the first 4 characters into a set</li>
+  <li>If the set has a length of 4, then you are done, position 4 is the answer</li>
+  <li>Otherwise, go on to the next position, load the previous 3 characters and itself into a set, and check length of set</li>
+  <li>If length is 4, current position is the answer, otherwise, repeat step 3</li>
+</ol>
+
+<p>The above algorithm is probably also the fastest I know, since the set operations involved is <code class="language-plaintext highlighter-rouge">O(4)</code>. Iterating through the string, that’s <code class="language-plaintext highlighter-rouge">O(n)</code>, so the total runtime of this solution would be <code class="language-plaintext highlighter-rouge">O(4n)</code>.</p>
+
+<p>In C, however, we don’t have sets, and I don’t really feel like implementing one. Instead, I employed a technique known as dynamic programming to implement something like a queue, which memorizes 4 values at once. Whenever a new character is read from the input stream, the head of the queue is popped, and the new character is pushed into the queue.</p>
+
+<p>To speed up figuring out if there are any duplicate elements, I created a map of 26 characters and maintain a reference count of each alphabet in the queue. In theory, the function will simply need to iterate through the queue, lookup the alphabet in the map, look at the reference count, and if it’s all 1, we’ve found our character.</p>
+
+<p>This method has a rough time complexity of: <code class="language-plaintext highlighter-rouge">O(n)</code> for going through the string, <code class="language-plaintext highlighter-rouge">O(4)</code> for the dynamic programming implementation, <code class="language-plaintext highlighter-rouge">O(4)</code> for checking the queue. If 4 is an unknown, this’ll be <code class="language-plaintext highlighter-rouge">O(k^2 * n)</code>. Damn.</p>
+
+<p>So:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="n">exist_map</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">b</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">d</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+  <span class="kt">size_t</span> <span class="n">n_processed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buf</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">((</span><span class="n">buf</span> <span class="o">=</span> <span class="n">fgetc</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">++</span><span class="n">n_processed</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">exist_map</span><span class="p">[</span><span class="n">buf</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">c</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">"delimiter found at %lu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">n_processed</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span><span class="n">a</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">exist_map</span> <span class="o">+</span> <span class="p">(</span><span class="n">buf</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">);</span>
+    <span class="o">*</span><span class="n">d</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span> <span class="n">d</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>The dynamic programming implementation can be improved, but oh well.</p>
+
+<h2 id="part-2-5">Part 2</h2>
+
+<p>Increasing the required unique characters from 4 to 14 would have been much easier on Python, but in C, this means I had to abstract my functions, and use an array of <code class="language-plaintext highlighter-rouge">char*</code> instead of defining each position in the queue on my own.</p>
+
+<p>The two functions to abstract are:</p>
+
+<ul>
+  <li>the one that figures out if all the reference counts relevant to the queue is 1</li>
+  <li>the one that shifts the queue to the left by 1, and adding the new value into the queue</li>
+</ul>
+
+<p>Improving the “queue” can be easily seen in this example, which involves introducing variables to keep a pointer of where the head and tail is. However, I was lazy. So:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">char</span> <span class="nf">areOnes</span><span class="p">(</span><span class="kt">char</span><span class="o">**</span> <span class="n">pointers</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">pointers</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span> 
+<span class="p">}</span> 
+  
+<span class="kt">void</span> <span class="nf">leftShiftExistMap</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">map</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">pointers</span><span class="p">,</span> <span class="kt">char</span> <span class="n">newVal</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span><span class="p">(</span><span class="n">pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">pointers</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">map</span> <span class="o">+</span> <span class="p">(</span><span class="n">newVal</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">);</span>
+  <span class="o">*</span><span class="p">(</span><span class="n">pointers</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="n">pointers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pointers</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+  <span class="n">pointers</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>   
+    
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="n">exist_map</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">pointers</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nb">NULL</span><span class="p">};</span>
+  <span class="kt">size_t</span> <span class="n">n_processed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buf</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">((</span><span class="n">buf</span> <span class="o">=</span> <span class="n">fgetc</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">++</span><span class="n">n_processed</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">exist_map</span><span class="p">[</span><span class="n">buf</span> <span class="o">-</span> <span class="sc">'a'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">areOnes</span><span class="p">(</span><span class="n">pointers</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">"delimiter found at %lu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">n_processed</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">leftShiftExistMap</span><span class="p">(</span><span class="n">exist_map</span><span class="p">,</span> <span class="n">pointers</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mi">14</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The time complexity is still the same, which is <code class="language-plaintext highlighter-rouge">O(k^2*n)</code> where <code class="language-plaintext highlighter-rouge">k = 14</code>. Use the right tools (i.e. Python) for the right job!</p>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
