@@ -1,6 +1,6 @@
 ---
 title: Advent of Code 22
-date: 2022-12-06 19:30 +0000
+date: 2022-12-08 23:06 +0000
 published: true
 ---
 
@@ -230,7 +230,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221206_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221208_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -601,3 +601,263 @@ int main() {
 ```
 
 The time complexity is still the same, which is `O(k^2*n)` where `k = 14`. Use the right tools (i.e. Python) for the right job!
+
+# Day 7
+
+After a mere 4 hours of sleep, I continued to rush deadlines fueled by nothing but coffee in my stomach. Suffice to say, I'm not entirely satisfied with the work I've turned in, but what's done is done, am I right?
+
+Day 7 was done together with Day 8, because time was just simply not on my side. But hey, I've done both, cut me some slack!
+
+## Part 1
+
+An interesting use case is presented in day 7, where we essentially had to rebuild the folder structure based on the output of a few commands, and figure out the sum of the set of folders (including subdirectories) that exceeds 100000.
+
+My very tired and uncaffeinated (half-life of coffee was out) brain immediately thought "trees" and jumped straight into the code. We also have to write a simple parser to figure out what each line in the output did / displayed, so that we can use the information meaningfully.
+
+So the sub-problems were:
+
+- Figure out what each line said (parsing);
+- Create a new node if the line enters a directory.
+
+Parsing each line is simple, by using spaces as delimiters and tokenizing each word:
+
+```python
+tokens = x.strip().split(' ')  # x is a line
+if tokens[0] == "$":
+  if tokens[1] == 'ls':
+    # do something
+  elif tokens[2] == '..':
+    # do something
+  elif tokens[2] == '/':
+    # do something
+  else:
+    # do something, is a directory
+elif tokens[0].isdigit():
+    # is size of file
+elif tokens[0] == 'dir':
+    # is telling us directory exist
+```
+
+All we need to do now is to create a `Node` class that represents our tree:
+
+```python
+class Node:
+  def __init__(self, dirname, parent = None):
+    self.dirname = dirname
+    self.value = None
+    self.parent = parent
+    self.nodes = []
+
+  def __eq__(self, other):
+    return self.dirname == other.dirname
+
+  def __hash__(self):
+    return hash(self.dirname)
+
+  def __str__(self):
+    return "{} {}".format(self.dirname, [str(n) for n in self.nodes])
+
+  def getSize(self):
+      return self.value if self.value is not None else sum([x.getSize() for x in self.nodes])
+```
+
+And then combine all the code together. I also add a `getSolutionSize` function in `Node`, which traverses the tree depth-first, gets the space occupied on the diskif it's larger than `100000` (specified in the problem), and accumulates the size.:
+
+```python
+import functools
+import sys
+
+class Node:
+  def __init__(self, dirname, parent = None):
+    self.dirname = dirname
+    self.value = None
+    self.parent = parent
+    self.nodes = []
+
+  def __eq__(self, other):
+    return self.dirname == other.dirname
+
+  def __hash__(self):
+    return hash(self.dirname)
+
+  def __str__(self):
+    return "{} {}".format(self.dirname, [str(n) for n in self.nodes])
+
+  def getSolutionSize(self):
+    if self.value is not None:
+      return 0
+    else:
+      size = self.getSize()
+      return (0 if size > 100000 else size) + sum([x.getSolutionSize() for x in self.nodes])
+
+  def getSize(self):
+      return self.value if self.value is not None else sum([x.getSize() for x in self.nodes])
+
+def parselines(xs, rootNode, node):
+  if xs == []: return
+
+  x = xs[0]
+  tokens = x.strip().split(' ')
+  if tokens[0] == "$":
+    if tokens[1] == 'ls':
+      parselines(xs[1:], rootNode, node)
+    elif tokens[2] == '..':
+      parselines(xs[1:], rootNode, node.parent)
+    elif tokens[2] == '/':
+      parselines(xs[1:], rootNode, rootNode)
+    else:
+      n = Node(tokens[2], node)
+      if n in node.nodes:
+        n = node.nodes[node.nodes.index(n)]
+      parselines(xs[1:], rootNode, n)
+  elif tokens[0].isdigit():
+    n = Node(tokens[1], node)
+    n.value = int(tokens[0])
+    node.nodes.append(n)
+    parselines(xs[1:], rootNode, node)
+  elif tokens[0] == 'dir':
+    n = Node(tokens[1], node)
+    node.nodes.append(n)
+    parselines(xs[1:], rootNode, node)
+
+n = Node('/')
+data = open("input.txt", "r").readlines()[1:]
+sys.setrecursionlimit(len(data) * 2)
+parselines(data, n, n)
+print(n.getSolutionSize())
+```
+
+Because we use recursion extensively, we have to increase our recursion limit to something we can work with.
+
+## Part 2
+
+In Part 2, we find the folder with lowest value that is greater than the free space we need. Luckily, this is a small change (I use tuples, but actually we can just omit the `dirname` to remove that information, as we don't need it for our solution):
+
+```python
+import functools
+import sys
+
+class Node:
+  def __init__(self, dirname, parent = None):
+    self.dirname = dirname
+    self.value = None
+    self.parent = parent
+    self.nodes = []
+
+  def __eq__(self, other):
+    return self.dirname == other.dirname
+
+  def __hash__(self):
+    return hash(self.dirname)
+
+  def __str__(self):
+    return "{} {}".format(self.dirname, [str(n) for n in self.nodes])
+
+  def getSolution(self, target):
+    if self.value is not None:
+      return (self.dirname, 999999)
+    else:
+      bestTuple = (self.dirname, self.getSize())
+      for x in self.nodes:
+        childTuple = x.getSolution(target)
+        if childTuple[1] > target and childTuple[1] < bestTuple[1]:
+          bestTuple = childTuple
+      return bestTuple
+
+  def getSize(self):
+      return self.value if self.value is not None else sum([x.getSize() for x in self.nodes])
+
+def parselines(xs, rootNode, node):
+  if xs == []: return
+
+  x = xs[0]
+  tokens = x.strip().split(' ')
+  if tokens[0] == "$":
+    if tokens[1] == 'ls':
+      parselines(xs[1:], rootNode, node)
+    elif tokens[2] == '..':
+      parselines(xs[1:], rootNode, node.parent)
+    elif tokens[2] == '/':
+      parselines(xs[1:], rootNode, rootNode)
+    else:
+      n = Node(tokens[2], node)
+      if n in node.nodes:
+        n = node.nodes[node.nodes.index(n)]
+      parselines(xs[1:], rootNode, n)
+  elif tokens[0].isdigit():
+    n = Node(tokens[1], node)
+    n.value = int(tokens[0])
+    node.nodes.append(n)
+    parselines(xs[1:], rootNode, node)
+  elif tokens[0] == 'dir':
+    n = Node(tokens[1], node)
+    node.nodes.append(n)
+    parselines(xs[1:], rootNode, node)
+
+n = Node('/')
+data = open("input.txt", "r").readlines()[1:]
+sys.setrecursionlimit(len(data) * 2)
+parselines(data, n, n)
+print(n.getSolution(30000000 - 70000000 + n.getSize()))
+```
+
+`70000000` is the total disk space and `30000000` is the free space we need. The only change was to `getSolutionSize()`, which was changed to `getSolution()`:
+
+```python
+  def getSolution(self, target):
+    if self.value is not None:
+      return (self.dirname, 999999)
+    else:
+      bestTuple = (self.dirname, self.getSize())
+      for x in self.nodes:
+        childTuple = x.getSolution(target)
+        if childTuple[1] > target and childTuple[1] < bestTuple[1]:
+          bestTuple = childTuple
+      return bestTuple
+```
+
+The code block figures out if a child is closer to the target value than itself, done recursively.
+
+# Day 8
+
+Are you tired of human-readable code yet?
+
+## Part 1
+
+This is a classic problem, in the sense that many applications rely on figuring out if adjacent cells are blocking the view of a current cell. An example could be collision detection (blocking view distance = 1). The problem we are trying to solve, in programmer terms, is: given grid of numbers, find out if all the numbers to any of the edges of the grid are less than the value at the current (x,y).
+
+Interestingly, this problem doesn't have sub-problems, since it's quite a well-contained problem. The algorithm to solve this would be:
+
+1. Go through every x and y starting from `(1, 1)`, ending at `(max_x - 1, max_y - 1)`
+2. Iterate from `0 to x - 1`, find out if there are any values that exceed the value at (x,y)
+3. Repeat step 2 for `x + 1` to `max_x - 1`
+4. Repeat step 2 for `0` to `y - 1`
+5. Repeat step 2 for `y + 1` to `max_y - 1`
+6. If any of steps 2 to 5 reports that there are no values that exceed the value at (x,y), then the current (x,y) has met the target condition.
+7. Collect all the results, and count all (x,y)s that met the condition in step 6
+
+The code, is hence:
+
+```python
+import itertools
+trees = [[int(y) for y in x if y != '\n'] for x in open('input.txt', 'r').readlines()]
+result = itertools.starmap(lambda row, r_trees: list(itertools.starmap(lambda col, tree: all([trees[c_u][col + 1] < tree for c_u in range(0, row + 1)]) or all([trees[c_d][col + 1] < tree for c_d in range(row + 2, len(trees))]) or all([trees[row + 1][r_l] < tree for r_l in range(0, col + 1)]) or all([trees[row + 1][r_r] < tree for r_r in range(col + 2, len(r_trees))]), enumerate(r_trees[1:-1]))), enumerate(trees[1:-1]))
+
+print(sum([sum(r) for r in result]) + len(trees) * 2 + len(trees[0]) * 2 - 4)
+```
+
+The most readable thing on the planet, I know.
+
+## Part 2
+
+Instead of figuring out how many (x,y)s have larger values than all the values to any edges of the grid, we now compute a score for each (x,y) based on _how many_ values there is until the current value `<=` a value along the path to the edge of the grid, composited with multiplication.
+
+It's really changing the function `all` to `sum list itertools.takewhile`, which sums the list of True values, while current value is still more than the values it traverses to reach the edge. As the stopping number themselves is counted into the sum (+1), we need to handle the case where all of the numbers were lower than the value at (x,y), which shouldn't have the +1 offset. A `min` function is applied to handle that case. So:
+
+```python
+import itertools
+trees = [[int(y) for y in x if y != '\n'] for x in open('input.txt', 'r').readlines()]
+result = itertools.starmap(lambda row, r_trees: list(itertools.starmap(lambda col, tree: min(sum(list(itertools.takewhile(lambda x: x, [trees[c_u][col + 1] < tree for c_u in range(row, -1, -1)]))) + 1, row + 1) * min(sum(list(itertools.takewhile(lambda x: x, [trees[c_d][col + 1] < tree for c_d in range(row + 2, len(trees))]))) + 1, len(trees) - row - 2) * min(sum(list(itertools.takewhile(lambda x: x, [trees[row + 1][r_l] < tree for r_l in range(col, -1, -1)]))) + 1, col + 1) * min(sum(list(itertools.takewhile(lambda x: x, [trees[row + 1][r_r] < tree for r_r in range(col + 2, len(r_trees))]))) + 1, len(r_trees) - col - 2), enumerate(r_trees[1:-1]))), enumerate(trees[1:-1]))
+
+print(max([max(r) for r in result]))
+```
