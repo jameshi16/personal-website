@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-08T22:37:12+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/06/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-06T19:30:00+00:00</published><updated>2022-12-06T19:30:00+00:00</updated><id>https://codingindex.xyz/2022/12/06/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/06/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-08T23:09:55+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/08/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-08T23:06:00+00:00</published><updated>2022-12-08T23:06:00+00:00</updated><id>https://codingindex.xyz/2022/12/08/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/08/advent-of-code-22/"><![CDATA[<p>:coffee: Hi!</p>
 
 <p>After having absolutely <em>zero</em> blog posts for the past 11 months, including my treasured <a href="/anime">anime</a> page, here I am declaring that I will be participating in the <a href="https://adventofcode.com/">Advent of Code</a> (AOC).</p>
 
@@ -370,7 +370,7 @@
 
 <p>I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
 
-<p><img src="/images/20221206_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
+<p><img src="/images/20221208_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 <p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
@@ -745,7 +745,264 @@ case 5
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>The time complexity is still the same, which is <code class="language-plaintext highlighter-rouge">O(k^2*n)</code> where <code class="language-plaintext highlighter-rouge">k = 14</code>. Use the right tools (i.e. Python) for the right job!</p>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+<p>The time complexity is still the same, which is <code class="language-plaintext highlighter-rouge">O(k^2*n)</code> where <code class="language-plaintext highlighter-rouge">k = 14</code>. Use the right tools (i.e. Python) for the right job!</p>
+
+<h1 id="day-7">Day 7</h1>
+
+<p>After a mere 4 hours of sleep, I continued to rush deadlines fueled by nothing but coffee in my stomach. Suffice to say, I’m not entirely satisfied with the work I’ve turned in, but what’s done is done, am I right?</p>
+
+<p>Day 7 was done together with Day 8, because time was just simply not on my side. But hey, I’ve done both, cut me some slack!</p>
+
+<h2 id="part-1-6">Part 1</h2>
+
+<p>An interesting use case is presented in day 7, where we essentially had to rebuild the folder structure based on the output of a few commands, and figure out the sum of the set of folders (including subdirectories) that exceeds 100000.</p>
+
+<p>My very tired and uncaffeinated (half-life of coffee was out) brain immediately thought “trees” and jumped straight into the code. We also have to write a simple parser to figure out what each line in the output did / displayed, so that we can use the information meaningfully.</p>
+
+<p>So the sub-problems were:</p>
+
+<ul>
+  <li>Figure out what each line said (parsing);</li>
+  <li>Create a new node if the line enters a directory.</li>
+</ul>
+
+<p>Parsing each line is simple, by using spaces as delimiters and tokenizing each word:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tokens</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>  <span class="c1"># x is a line
+</span><span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">"$"</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'ls'</span><span class="p">:</span>
+    <span class="c1"># do something
+</span>  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'..'</span><span class="p">:</span>
+    <span class="c1"># do something
+</span>  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'/'</span><span class="p">:</span>
+    <span class="c1"># do something
+</span>  <span class="k">else</span><span class="p">:</span>
+    <span class="c1"># do something, is a directory
+</span><span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">isdigit</span><span class="p">():</span>
+    <span class="c1"># is size of file
+</span><span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dir'</span><span class="p">:</span>
+    <span class="c1"># is telling us directory exist
+</span></code></pre></div></div>
+
+<p>All we need to do now is to create a <code class="language-plaintext highlighter-rouge">Node</code> class that represents our tree:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">=</span> <span class="n">dirname</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">dirname</span>
+
+  <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"{} {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">getSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span><span class="p">.</span><span class="n">getSize</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>And then combine all the code together. I also add a <code class="language-plaintext highlighter-rouge">getSolutionSize</code> function in <code class="language-plaintext highlighter-rouge">Node</code>, which traverses the tree depth-first, gets the space occupied on the diskif it’s larger than <code class="language-plaintext highlighter-rouge">100000</code> (specified in the problem), and accumulates the size.:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">=</span> <span class="n">dirname</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">dirname</span>
+
+  <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"{} {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">getSolutionSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">getSize</span><span class="p">()</span>
+      <span class="k">return</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">100000</span> <span class="k">else</span> <span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span><span class="p">.</span><span class="n">getSolutionSize</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">getSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span><span class="p">.</span><span class="n">getSize</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">xs</span> <span class="o">==</span> <span class="p">[]:</span> <span class="k">return</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">tokens</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">"$"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'ls'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'..'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'/'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">rootNode</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">isdigit</span><span class="p">():</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">n</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dir'</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">).</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">parselines</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">getSolutionSize</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Because we use recursion extensively, we have to increase our recursion limit to something we can work with.</p>
+
+<h2 id="part-2-6">Part 2</h2>
+
+<p>In Part 2, we find the folder with lowest value that is greater than the free space we need. Luckily, this is a small change (I use tuples, but actually we can just omit the <code class="language-plaintext highlighter-rouge">dirname</code> to remove that information, as we don’t need it for our solution):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">=</span> <span class="n">dirname</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dirname</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">dirname</span>
+
+  <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">"{} {}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">getSolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="mi">999999</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">bestTuple</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">getSize</span><span class="p">())</span>
+      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">childTuple</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">getSolution</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">childTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="ow">and</span> <span class="n">childTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bestTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+          <span class="n">bestTuple</span> <span class="o">=</span> <span class="n">childTuple</span>
+      <span class="k">return</span> <span class="n">bestTuple</span>
+
+  <span class="k">def</span> <span class="nf">getSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">([</span><span class="n">x</span><span class="p">.</span><span class="n">getSize</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">xs</span> <span class="o">==</span> <span class="p">[]:</span> <span class="k">return</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">tokens</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">"$"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'ls'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'..'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s">'/'</span><span class="p">:</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">rootNode</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+      <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">isdigit</span><span class="p">():</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">n</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+  <span class="k">elif</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">'dir'</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">node</span><span class="p">)</span>
+    <span class="n">node</span><span class="p">.</span><span class="n">nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">parselines</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">rootNode</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">).</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">setrecursionlimit</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">parselines</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">getSolution</span><span class="p">(</span><span class="mi">30000000</span> <span class="o">-</span> <span class="mi">70000000</span> <span class="o">+</span> <span class="n">n</span><span class="p">.</span><span class="n">getSize</span><span class="p">()))</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">70000000</code> is the total disk space and <code class="language-plaintext highlighter-rouge">30000000</code> is the free space we need. The only change was to <code class="language-plaintext highlighter-rouge">getSolutionSize()</code>, which was changed to <code class="language-plaintext highlighter-rouge">getSolution()</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">getSolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="mi">999999</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">bestTuple</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">dirname</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">getSize</span><span class="p">())</span>
+      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">childTuple</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">getSolution</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">childTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span> <span class="ow">and</span> <span class="n">childTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bestTuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+          <span class="n">bestTuple</span> <span class="o">=</span> <span class="n">childTuple</span>
+      <span class="k">return</span> <span class="n">bestTuple</span>
+</code></pre></div></div>
+
+<p>The code block figures out if a child is closer to the target value than itself, done recursively.</p>
+
+<h1 id="day-8">Day 8</h1>
+
+<p>Are you tired of human-readable code yet?</p>
+
+<h2 id="part-1-7">Part 1</h2>
+
+<p>This is a classic problem, in the sense that many applications rely on figuring out if adjacent cells are blocking the view of a current cell. An example could be collision detection (blocking view distance = 1). The problem we are trying to solve, in programmer terms, is: given grid of numbers, find out if all the numbers to any of the edges of the grid are less than the value at the current (x,y).</p>
+
+<p>Interestingly, this problem doesn’t have sub-problems, since it’s quite a well-contained problem. The algorithm to solve this would be:</p>
+
+<ol>
+  <li>Go through every x and y starting from <code class="language-plaintext highlighter-rouge">(1, 1)</code>, ending at <code class="language-plaintext highlighter-rouge">(max_x - 1, max_y - 1)</code></li>
+  <li>Iterate from <code class="language-plaintext highlighter-rouge">0 to x - 1</code>, find out if there are any values that exceed the value at (x,y)</li>
+  <li>Repeat step 2 for <code class="language-plaintext highlighter-rouge">x + 1</code> to <code class="language-plaintext highlighter-rouge">max_x - 1</code></li>
+  <li>Repeat step 2 for <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">y - 1</code></li>
+  <li>Repeat step 2 for <code class="language-plaintext highlighter-rouge">y + 1</code> to <code class="language-plaintext highlighter-rouge">max_y - 1</code></li>
+  <li>If any of steps 2 to 5 reports that there are no values that exceed the value at (x,y), then the current (x,y) has met the target condition.</li>
+  <li>Collect all the results, and count all (x,y)s that met the condition in step 6</li>
+</ol>
+
+<p>The code, is hence:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="n">trees</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">itertools</span><span class="p">.</span><span class="n">starmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">r_trees</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">starmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="nb">all</span><span class="p">([</span><span class="n">trees</span><span class="p">[</span><span class="n">c_u</span><span class="p">][</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">c_u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">([</span><span class="n">trees</span><span class="p">[</span><span class="n">c_d</span><span class="p">][</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">c_d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">))])</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">([</span><span class="n">trees</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">r_l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">r_l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">([</span><span class="n">trees</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">r_r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">r_r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">col</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_trees</span><span class="p">))]),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">r_trees</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="nb">sum</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The most readable thing on the planet, I know.</p>
+
+<h2 id="part-2-7">Part 2</h2>
+
+<p>Instead of figuring out how many (x,y)s have larger values than all the values to any edges of the grid, we now compute a score for each (x,y) based on <em>how many</em> values there is until the current value <code class="language-plaintext highlighter-rouge">&lt;=</code> a value along the path to the edge of the grid, composited with multiplication.</p>
+
+<p>It’s really changing the function <code class="language-plaintext highlighter-rouge">all</code> to <code class="language-plaintext highlighter-rouge">sum list itertools.takewhile</code>, which sums the list of True values, while current value is still more than the values it traverses to reach the edge. As the stopping number themselves is counted into the sum (+1), we need to handle the case where all of the numbers were lower than the value at (x,y), which shouldn’t have the +1 offset. A <code class="language-plaintext highlighter-rouge">min</code> function is applied to handle that case. So:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="n">trees</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">itertools</span><span class="p">.</span><span class="n">starmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">,</span> <span class="n">r_trees</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">starmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">,</span> <span class="n">tree</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">takewhile</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">trees</span><span class="p">[</span><span class="n">c_u</span><span class="p">][</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">c_u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)])))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">takewhile</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">trees</span><span class="p">[</span><span class="n">c_d</span><span class="p">][</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">c_d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">))])))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span> <span class="o">-</span> <span class="n">row</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">takewhile</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">trees</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">r_l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">r_l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)])))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="p">.</span><span class="n">takewhile</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">trees</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">r_r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tree</span> <span class="k">for</span> <span class="n">r_r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">col</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_trees</span><span class="p">))])))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_trees</span><span class="p">)</span> <span class="o">-</span> <span class="n">col</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">r_trees</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]))</span>
+</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[:coffee: Hi!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
