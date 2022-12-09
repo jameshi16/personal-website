@@ -1,8 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-08 23:06 +0000
+date: 2022-12-09 20:20 +0000
 published: true
 ---
+
+**EDIT**: [Day 9](#day-9) is up!
 
 :coffee: Hi!
 
@@ -230,7 +232,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221208_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221209_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -860,4 +862,94 @@ trees = [[int(y) for y in x if y != '\n'] for x in open('input.txt', 'r').readli
 result = itertools.starmap(lambda row, r_trees: list(itertools.starmap(lambda col, tree: min(sum(list(itertools.takewhile(lambda x: x, [trees[c_u][col + 1] < tree for c_u in range(row, -1, -1)]))) + 1, row + 1) * min(sum(list(itertools.takewhile(lambda x: x, [trees[c_d][col + 1] < tree for c_d in range(row + 2, len(trees))]))) + 1, len(trees) - row - 2) * min(sum(list(itertools.takewhile(lambda x: x, [trees[row + 1][r_l] < tree for r_l in range(col, -1, -1)]))) + 1, col + 1) * min(sum(list(itertools.takewhile(lambda x: x, [trees[row + 1][r_r] < tree for r_r in range(col + 2, len(r_trees))]))) + 1, len(r_trees) - col - 2), enumerate(r_trees[1:-1]))), enumerate(trees[1:-1]))
 
 print(max([max(r) for r in result]))
+```
+
+# Day 9
+
+Ah yes, nothing like simulating ropes innit?
+
+## Part 1
+
+Our adventures today bring us to simulating a head and tail, where tail has well-defined behaviour, which the prompt has kindly provided:
+
+- if the head and tail are on different rows and columns, move towards the head diagonally
+- else, move towards the head laterally / vertically.
+
+The head is given a list of directions and number of squares to move. So, the sub-problems are:
+
+- parse instruction and number of squares to move
+- every time the head moves, check if the tail needs to move
+    - if the tail is within 1 square of the head, then it doesn't need to move
+    - otherwise, move based on the behaviour given by the prompt
+- once the next position of the tail is decided, put it in the set
+- at the end of the procedure, count the number of elements in the set
+
+My code today is a lot more readable, so it's quite obvious how the sub-problems are defined:
+
+```python
+head_instructions = [(direction, int(value.strip())) for direction, value in [x.split(' ') for x in open('input.txt', 'r').readlines()]]
+
+tail_positions = {(0, 0)}
+last_head_pos = (0, 0)
+last_tail_pos = (0, 0)
+for instruction in head_instructions:
+  dir, val = instruction
+  h_x,h_y = last_head_pos
+  t_x,t_y = last_tail_pos
+
+  step = -1 if dir in 'LD' else 1
+
+  for incr in [step] * val:
+    h_y += step if dir in 'UD' else 0
+    h_x += step if dir in 'LR' else 0
+
+    if abs(h_x - t_x) <= 1 and abs(h_y - t_y) <= 1:
+      continue
+    else:
+      t_x += int(0 if h_x == t_x else (h_x - t_x) / abs(h_x - t_x))
+      t_y += int(0 if h_y == t_y else (h_y - t_y) / abs(h_y - t_y))
+      tail_positions.add((t_x, t_y))
+
+  last_head_pos = (h_x, h_y)
+  last_tail_pos = (t_x, t_y)
+
+print(len(tail_positions))
+```
+
+## Part 2
+
+Part 2 gives us more points to control (i.e. the tail follows a point which follows another point, etc until the head). This means we have to maintain the positions of all the points, and compare the positions pairwise. Luckily for us, the behaviour is the same. So, for each step in our instructions, we go through the positions pairwise and to update positions. Since we are interested in how the tail moves, we only store all the co-ordinates visited by the tail in our set.
+
+So:
+
+```python
+head_instructions = [(direction, int(value.strip())) for direction, value in [x.split(' ') for x in open('input.txt', 'r').readlines()]]
+
+tail_positions = {(0, 0)}
+last_positions = 10 * [(0, 0)]
+for instruction in head_instructions:
+  dir, val = instruction
+  step = -1 if dir in 'LD' else 1
+
+  for incr in [step] * val:
+    g_x, g_y = last_positions[0]
+    g_y += step if dir in 'UD' else 0
+    g_x += step if dir in 'LR' else 0
+    last_positions[0] = (g_x, g_y)
+    for i in range(len(last_positions) - 1):
+      h_x,h_y = last_positions[i]
+      t_x,t_y = last_positions[i + 1]
+
+      if abs(h_x - t_x) <= 1 and abs(h_y - t_y) <= 1:
+        continue
+      else:
+        t_x += int(0 if h_x == t_x else (h_x - t_x) / abs(h_x - t_x))
+        t_y += int(0 if h_y == t_y else (h_y - t_y) / abs(h_y - t_y))
+        if i + 1 == 9:
+          tail_positions.add((t_x, t_y))
+
+      last_positions[i] = (h_x, h_y)
+      last_positions[i + 1] = (t_x, t_y)
+
+print(len(tail_positions))
 ```
