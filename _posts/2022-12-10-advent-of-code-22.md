@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-09 20:20 +0000
+date: 2022-12-10 19:36 +0000
 published: true
 ---
 
-**EDIT**: [Day 9](#day-9) is up!
+**EDIT**: [Day 10](#day-10) is up!
 
 :coffee: Hi!
 
@@ -232,7 +232,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221209_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221210_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -953,3 +953,71 @@ for instruction in head_instructions:
 
 print(len(tail_positions))
 ```
+
+# Day 10
+
+CPU instructions!
+
+## Part 1
+
+This problem is what I would classify as a parser-type problem; it usually involves the programmer writing some sort of basic parser.
+
+The sub-problems are:
+
+- For each line, split the line by the space character
+- Based on the instruction:
+    - `addx` increment cycles by two, figure out if within the two increments if we've crossed `20` or `- 20 mod 40`, and modify the signal strength accordingly
+    - `noop` increment cycles by one, figure out if we've crossed `20` or `- 20 mod 40`, and modify the signal strength accordingly
+
+Thinking that this would be easy to do in Haskell, I gave it a go:
+
+```haskell
+inputStr = ""
+
+solution :: String -> Integer
+solution input = (\(_,_,z) -> z) $ foldr (\accum (x:xs) -> step x (if null xs then 0 else (read $ head xs)) accum) (1,1,0) $ map words $ lines input
+  where  
+        stepAddX x accum@(cycles,sums,sigstr) y = if ((cycles + y) == 20) || ((cycles + y - 20) `mod` 40 == 0) then (cycles + 2, sums + x, sigstr + if y == 1 then sums * (cycles + y) else (sums + x) * (cycles + y)) else (cycles + 2, sums + x, sigstr)
+        step "noop" _ accum@(cycles,sums,sigstr) = if ((cycles + 1) == 20) || ((cycles + 1 - 20) `mod` 40 == 0) then (cycles + 1, sums, sigstr + sums * (cycles + 1)) else (cycles + 1, sums, sigstr)
+        step "addx" x accum@(cycles,_,_) = stepAddX x accum (if odd cycles then 1 else 2)
+```
+
+Compiles fine, but gives nonsensical values. I'll give you some time, figure out what may have went wrong here.
+
+Have you thought about it yet?
+
+Right, the reason why this doesn't work, is because we're talking about `20` and `-20 mod 40`, which is a step function. The key to this error is `foldr`, which **processes elements starting from the last element**. This costed me 3 hours, no joke.
+
+So, the final code works once I changed `foldr` to `foldl`, which processes lists starting from the first element.
+
+```haskell
+inputStr = ""
+
+solution :: String -> Integer
+solution input = (\(_,_,z) -> z) $ foldl (\accum (x:xs) -> step x (if null xs then 0 else (read $ head xs)) accum) (1,1,0) $ map words $ lines input
+  where
+        stepAddX x accum@(cycles,sums,sigstr) y = if ((cycles + y) == 20) || ((cycles + y - 20) `mod` 40 == 0) then (cycles + 2, sums + x, sigstr + if y == 1 then sums * (cycles + y) else (sums + x) * (cycles + y)) else (cycles + 2, sums + x, sigstr)
+        step "noop" _ accum@(cycles,sums,sigstr) = if ((cycles + 1) == 20) || ((cycles + 1 - 20) `mod` 40 == 0) then (cycles + 1, sums, sigstr + sums * (cycles + 1)) else (cycles + 1, sums, sigstr)
+        step "addx" x accum@(cycles,_,_) = stepAddX x accum (if odd cycles then 1 else 2)
+```
+
+## Part 2
+
+Each day's part 2 is typically a quick edit of each day's part 1. However, not for this particular sub-problem. By changing the purpose of the CPU instructions, I had to pretty much change my entire function definition.
+
+Luckily for me, for the most part, `cycles` and `sums` still have the same concepts. Hence, the only thing I really needed to modify was `sigstr`, and how I render the output:
+
+```haskell
+import Data.List.Split (chunksOf)
+
+inputStr = ""
+
+solution :: String -> [String]
+solution input = (\(_,_,z) -> chunksOf 40 $ reverse z) $ foldl (\accum (x:xs) -> step x (if null xs then 0 else (read $ head xs)) accum) (1,1,"#") $ map words $ lines input
+  where
+        isWithin cycles x = (cycles `mod` 40) < x + 3 && (cycles `mod` 40) >= x
+        step "noop" _ (cycles,lastx,result) = (cycles + 1, lastx, (if (isWithin (cycles + 1) lastx) then '#' else '.') : result)
+        step "addx" x (cycles,lastx,result) = (cycles + 2, lastx + x, (if isWithin (cycles + 2) (lastx + x) then '#' else '.') : (if isWithin (cycles + 1) lastx then '#' else '.') : result)
+```
+
+The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.
