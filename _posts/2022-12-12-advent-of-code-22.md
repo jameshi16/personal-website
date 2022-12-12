@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-12 01:19 +0000
+date: 2022-12-12 23:06 +0000
 published: true
 ---
 
-**EDIT**: [Day 11](#day-11), the hardest part 2 is up!
+**EDIT**: [Day 12](#day-12) is up!
 
 :coffee: Hi!
 
@@ -1215,3 +1215,95 @@ Hence,
 ```
 
 must work (the prime numbers are the terms I'm too lazy to evaluate).
+
+# Day 12
+
+Today is quite obviously a path-finding challenge.
+
+## Part 1
+
+Admittedly, I spend an embarrassing amount of time figuring out that while I can only go up by one altitude unit at a time, I can actually descend more than 1 level at a time. I decided to use Breadth First Search to perform path-finding, since it's good enough for the use case.
+
+For every node I've visited, I replace it's position with `#`, which denotes a visited node. So:
+
+```python
+grid = [[y for y in x.strip()] for x in open('input.txt', 'r').readlines()]   
+grid[0][20] = 'a'
+                                                                              
+def bfs(pos):
+  q = Queue()                                                                 
+  p = Queue()                                                                 
+  q.put(pos)
+  
+  count = 0
+  while True:                                                                 
+    while not q.empty():                                                      
+      x, y = q.get()                                                          
+      elevation = 'a' if grid[y][x] == 'S' else grid[y][x]                    
+      grid[y][x] = '#'                                                        
+      moves = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]                
+      
+      if elevation == 'E': 
+        return count                                                          
+      
+      for new_x, new_y in moves:                                              
+        if 0 <= new_x < len(grid[0]) and 0 <= new_y < len(grid) \             
+          and grid[new_y][new_x] != '#' \                                     
+          and (-999 <= ord(grid[new_y][new_x]) - ord(elevation) <= 1 \        
+          or (elevation == 'z' and grid[new_y][new_x] == 'E')):               
+            p.put((new_x, new_y))
+          
+    count += 1
+    q = p 
+    p = Queue()                                                               
+    
+print(bfs((0, 20)))
+```
+
+It might be worth it to mention that `-999` is too large of a magnitude. `-2` would have been good enough; this means that I would be able to descend a maximum of `-2`. Experimental results for the win.
+
+Also, if you think hard-coding the starting position is hacky, then you can look away.
+
+## Part 2
+
+Part 2 requires us to find a better starting position, so that we minimize the amount of steps it takes to reach the peak, denoted by `E`. So, I first approached the problem the dumb way, which was to iterate through all positions of `a`, the lowest altitude, and accumulate the minimum.
+
+Obviously, that was slow, so I thought about using another algorithm, like Dijkstra's Shortest Path algorithm; however, there would be no benefit whatsoever over BFS since the weights of each nodes are the same.
+
+Hence, I decided to perform a reverse BFS; instead of checking for `E`, I check for the closest `a`, given that we can instead ascend 2 levels and descend only 1 level (inverse of our ascending constraints).
+
+So:
+
+```python
+from queue import Queue                                                       
+
+grid = [[y for y in x.strip()] for x in open('input.txt', 'r').readlines()]
+
+def bfs(pos):
+  q = Queue()
+  p = Queue() 
+  q.put(pos) 
+      
+  count = 0
+  while True: 
+    while not q.empty():
+      x, y = q.get()
+      elevation = 'z' if grid[y][x] == 'E' else grid[y][x]
+      grid[y][x] = '#'
+      moves = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+        
+      if elevation == 'a':
+        return count
+          
+      for new_x, new_y in moves:
+        if 0 <= new_x < len(grid[0]) and 0 <= new_y < len(grid) \
+          and grid[new_y][new_x] != '#' \
+          and (-1 <= ord(grid[new_y][new_x]) - ord(elevation) <= 2 \
+          or (elevation == 'a' and grid[new_y][new_x] == 'S')):
+            p.put((new_x, new_y))
+    count += 1
+    q = p
+    p = Queue()
+
+print(bfs((len(grid[0]) - 22, 20)))
+```
