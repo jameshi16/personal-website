@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-10 19:36 +0000
+date: 2022-12-12 01:19 +0000
 published: true
 ---
 
-**EDIT**: [Day 10](#day-10) is up!
+**EDIT**: [Day 11](#day-11), the hardest part 2 is up!
 
 :coffee: Hi!
 
@@ -232,7 +232,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221210_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221212_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -1021,3 +1021,197 @@ solution input = (\(_,_,z) -> chunksOf 40 $ reverse z) $ foldl (\accum (x:xs) ->
 ```
 
 The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.
+
+# Day 11
+
+I'll be honest; this is the hardest part 2 yet. I solved part 2 instinctual, but it took a long time for me to figure out _why_ my solution worked.
+
+## Part 1
+
+Part 1 is quite simple; in simple programmer terms, we have some queues of items, and move the items around based on conditions that have its parameters changed based on the input.
+
+Let's deconstruct the problem a little bit more:
+
+- The condition parameters are:
+    - the operator, which is either `+` or `*`
+    - the operand, which is either a fixed integer, or `old`, which refers to the value of the item
+- Based on the condition being true/false, the item is redirected to another queue also defined by the input. e.g. If condition is true, send to queue 2. Else, send to queue 3.
+
+So, the sub-problems are:
+
+- Parse the input into blocks
+- Extract the necessary information from each block: starting items, the operation, the operand, the test parameter, and the queues to send the item to depending on the condition
+- For each round, for each block, send items to their new queues based on the condition
+- Get the top two queues that processed the most items
+
+I decided to write my code with some level of structure this time round, because the implementation is slightly complicated compared to the past days.
+
+```python
+from itertools import islice
+from functools import reduce
+
+class Monkey:
+  def __init__(self, block):
+    self.items_inspected = 0
+    self.parse_block(block)
+  
+  def parse_block(self, block):
+    self.id = int(block[0].split(' ')[1][:-1])
+    self.items = Queue()
+    [self.items.put(int(x.rstrip(' ,'))) for x in block[1].split(' ')[2:]]
+    self.operation = (lambda x,y: x*y) if block[2].split(' ')[4] == '*' else (lambda x,y: x+y)
+    self.is_mult = block[2].split(' ')[4] == '*'
+    self.operand = block[2].split(' ')[5]
+    self.test = int(block[3].split(' ')[3])
+    self.true_result = int(block[4].split(' ')[5])
+    self.false_result = int(block[5].split(' ')[5])
+  
+  def throw_items(self, monkeys):
+    while not self.items.empty():
+      item = self.items.get()
+      worry = self.operation(item, item if self.operand == 'old' else int(self.operand)) // 3 
+      monkeys[self.true_result if worry % self.test == 0 else self.false_result].items.put(worry)
+      self.items_inspected += 1
+
+def processor(monkeys, target_rounds):
+  for n_rounds in range(target_rounds):
+    for monkey in monkeys:
+      monkey.throw_items(monkeys)
+  
+  best_two = list(islice(sorted(monkeys, key=lambda x: x.items_inspected, reverse=True), 2))
+  return best_two[0].items_inspected * best_two[1].items_inspected
+
+if __name__ == '__main__':
+  lines = open('input.txt', 'r').readlines()
+  blocks = reduce(lambda accum, line: accum + [[]] if line == '\n' else accum[:-1] + [accum[-1] + [line.strip()]], lines, [[]])
+  monkeys = [Monkey(block) for block in blocks]
+
+  print(processor(monkeys, 20))
+```
+
+## Part 2
+
+In this part, the condition was changed to no longer include the `// 3`, meaning that the numbers grew out of proportion, especially when we want 10000 rounds. In Python, large integers, although take time to function, and hence, the program will take too long to complete.
+
+Hence, part 2's prompt suggested that we find a better way to represent the `worry` variable. I went to inspect the counts of the queue at the end of 10, 20 and 30 rounds; even though there is some correlation in the rate of change of counts, it is not strictly linear. This is because the operations are different; inspect the input:
+
+```
+Monkey 0:
+  Starting items: 79, 98
+  Operation: new = old * 19
+  Test: divisible by 23
+    If true: throw to monkey 2
+    If false: throw to monkey 3
+
+Monkey 1:
+  Starting items: 54, 65, 75, 74
+  Operation: new = old + 6
+  Test: divisible by 19
+    If true: throw to monkey 2
+    If false: throw to monkey 0
+
+Monkey 2:
+  Starting items: 79, 60, 97
+  Operation: new = old * old
+  Test: divisible by 13
+    If true: throw to monkey 1
+    If false: throw to monkey 3
+
+Monkey 3:
+  Starting items: 74
+  Operation: new = old + 3
+  Test: divisible by 17
+    If true: throw to monkey 0
+    If false: throw to monkey 1
+```
+
+There is a high probability that a value will go through queues 0, 3, and 1, but a probability still exists that it will go through queue 2, which affects the final queue count. Hence, attempting to map the queue count linearly is not viable.
+
+The next thing I looked at was the input. I tried to think about how the operations will affect the divisibility of the items and concluded (after 30 minutes of thinking) that there is no fixed pattern, due addition. If all operations were multiplications, then the story would be different; we would be able to definitively tell if a number will be divisible by the condition the first time we look at the item, or the operand.
+
+The next observation I made was that each test was relatively constant; they are always in the format: `divisible by <prime number>`. For a moment, I thought of some math, like "how would I know if 2^x + 3^y = 7n, where x, y, n are natural numbers?" -> the answer is I have no idea.
+
+Then, my instincts took over and I just replaced `// 3` with `mod (sum of all test prime numbers in the input)` and ran the script on the input without blinking twice. To my surprise, it worked; it was one of those situations where my instincts completed its processes far ahead of the capabilities of my logical thinking.
+
+The code change was one of those that looks insignificant (it literally replaces 4 characters with a modulo), but had a few hours of effort put into it.
+
+```python
+from queue import Queue
+from itertools import islice
+from functools import reduce
+
+class Monkey:
+  def __init__(self, block):
+    self.items_inspected = 0
+    self.parse_block(block)
+
+  def parse_block(self, block):
+    self.id = int(block[0].split(' ')[1][:-1])
+    self.items = Queue()
+    [self.items.put(int(x.rstrip(' ,'))) for x in block[1].split(' ')[2:]]
+    self.operation = (lambda x,y: x*y) if block[2].split(' ')[4] == '*' else (lambda x,y: x+y)
+    self.is_mult = block[2].split(' ')[4] == '*'
+    self.operand = block[2].split(' ')[5]
+    self.test = int(block[3].split(' ')[3])
+    self.true_result = int(block[4].split(' ')[5])
+    self.false_result = int(block[5].split(' ')[5])
+
+  def throw_items(self, monkeys):
+    while not self.items.empty():
+      item = self.items.get()
+      worry = self.operation(item, item if self.operand == 'old' else int(self.operand)) % (2 * 17 * 7 * 11 * 19 * 5 * 13 * 3)
+      monkeys[self.true_result if worry % self.test == 0 else self.false_result].items.put(worry)
+      self.items_inspected += 1
+
+def processor(monkeys, target_rounds):
+  for n_rounds in range(target_rounds):
+    for monkey in monkeys:
+      monkey.throw_items(monkeys)
+
+  best_two = list(islice(sorted(monkeys, key=lambda x: x.items_inspected, reverse=True), 2))
+  return best_two[0].items_inspected * best_two[1].items_inspected
+
+if __name__ == '__main__':
+  lines = open('input.txt', 'r').readlines()
+  blocks = reduce(lambda accum, line: accum + [[]] if line == '\n' else accum[:-1] + [accum[-1] + [line.strip()]], lines, [[]])
+  monkeys = [Monkey(block) for block in blocks]
+
+  print(processor(monkeys, 1000))
+```
+
+After taking a shower, my logical thinking finally reached a conclusion.
+
+Let's break this down into a much simpler problem. Let's say we have two test prime numbers, 2 and 3. There are 4 things that could possibly happen after applying the operation to our item's value:
+
+1. It's divisible by 2 and not divisible by 3;
+2. It's not divisible by 2 and divisible by 3;
+3. It's divisible by 2 and divisible by 3;
+4. It's not divisible by 2 and not divisible by 3.
+
+So, if we were to talk about the possible values of each of the bullet points:
+
+1. [2, 4, 8, 10, etc]
+2. [3, 6, 9, 15, etc]
+3. [6, 12, 18, 24, etc]
+4. [1, 5, 7, 11, etc]
+
+Let's think about all the numbers in their prime factors:
+
+1. [2, 4, 2 * 3 + 2, 2 * 3 + 4, etc]
+2. [3, 6 + 0, 2 * 3 + 3, 2^2 * 3 + 3, etc]
+3. [2 * 3, 2^2 * 3, 2 * 3^2, 2^3 * 3^2, etc]
+4. [1, 5, 2 * 3 + 1, 2 * 3 + 5, etc]
+
+If we link this to our question, we realise that our these numbers are a combination of multiplication and addition. A further observation suggests that all numbers more than 6 can be broken down into `n = q * 6 + r`, where `n` is the original number, `q` is some number, and `r` is a number less than 6. We then realize that `r` is the remainder, and we also know that `n % 6 == r`.
+
+We then realize that if we add a number, `m`, such that `n` is still not divisible by 6, and `r + m < 6` then: `n + m = q * 6 + r + m`. Since `n + m` is not divisible by 6, then surely `r + m` is not divisible by 6. Likewise, for 2: `r + m < 6`, then: `n + m = q * 6 + r + m`, since `n + m` is not divisible by 2, then surely `r + m` is not divisible by 2, and so on. This wouldn't work if we try to test for divisibility by 7: `r + m < 6` then: `n + m =/= q * 6 + r + m`, `r + m` not divisible by 7 (which is the case for all possible values of `r + m`, since `r + m` is within 0 to 6) does not necessarily mean `n + m` is not divisible by 7.
+
+So, what this means is that any addition that does not make the expression immediately divisible by **`6` is added to the remainder**, and we know that the **modulo of the remainder is equal to the modulo of the original number**. Since `6` can be broken down into the primes `2` and `3`, which are our test prime numbers, therefore, by performing modulo on all the test prime numbers within our input, we can fully express the divisibility of our number with any one of the primes just by maintaining the remainder.
+
+Hence, 
+
+```python
+      worry = self.operation(item, item if self.operand == 'old' else int(self.operand)) % (2 * 17 * 7 * 11 * 19 * 5 * 13 * 3)
+```
+
+must work (the prime numbers are the terms I'm too lazy to evaluate).
