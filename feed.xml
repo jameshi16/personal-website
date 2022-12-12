@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-10T19:50:12+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/10/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-10T19:36:00+00:00</published><updated>2022-12-10T19:36:00+00:00</updated><id>https://codingindex.xyz/2022/12/10/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/10/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-10">Day 10</a> is up!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-12T01:22:04+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/12/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-12T01:19:00+00:00</published><updated>2022-12-12T01:19:00+00:00</updated><id>https://codingindex.xyz/2022/12/12/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/12/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-11">Day 11</a>, the hardest part 2 is up!</p>
 
 <p>:coffee: Hi!</p>
 
@@ -372,7 +372,7 @@
 
 <p>I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
 
-<p><img src="/images/20221210_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
+<p><img src="/images/20221212_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 <p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
@@ -1169,7 +1169,210 @@ case 5
         <span class="n">step</span> <span class="s">"addx"</span> <span class="n">x</span> <span class="p">(</span><span class="n">cycles</span><span class="p">,</span><span class="n">lastx</span><span class="p">,</span><span class="n">result</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">cycles</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">lastx</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="kr">if</span> <span class="n">isWithin</span> <span class="p">(</span><span class="n">cycles</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="n">lastx</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="kr">then</span> <span class="sc">'#'</span> <span class="kr">else</span> <span class="sc">'.'</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="kr">if</span> <span class="n">isWithin</span> <span class="p">(</span><span class="n">cycles</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="n">lastx</span> <span class="kr">then</span> <span class="sc">'#'</span> <span class="kr">else</span> <span class="sc">'.'</span><span class="p">)</span> <span class="o">:</span> <span class="n">result</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.</p>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 10 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+<p>The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.</p>
+
+<h1 id="day-11">Day 11</h1>
+
+<p>I’ll be honest; this is the hardest part 2 yet. I solved part 2 instinctual, but it took a long time for me to figure out <em>why</em> my solution worked.</p>
+
+<h2 id="part-1-10">Part 1</h2>
+
+<p>Part 1 is quite simple; in simple programmer terms, we have some queues of items, and move the items around based on conditions that have its parameters changed based on the input.</p>
+
+<p>Let’s deconstruct the problem a little bit more:</p>
+
+<ul>
+  <li>The condition parameters are:
+    <ul>
+      <li>the operator, which is either <code class="language-plaintext highlighter-rouge">+</code> or <code class="language-plaintext highlighter-rouge">*</code></li>
+      <li>the operand, which is either a fixed integer, or <code class="language-plaintext highlighter-rouge">old</code>, which refers to the value of the item</li>
+    </ul>
+  </li>
+  <li>Based on the condition being true/false, the item is redirected to another queue also defined by the input. e.g. If condition is true, send to queue 2. Else, send to queue 3.</li>
+</ul>
+
+<p>So, the sub-problems are:</p>
+
+<ul>
+  <li>Parse the input into blocks</li>
+  <li>Extract the necessary information from each block: starting items, the operation, the operand, the test parameter, and the queues to send the item to depending on the condition</li>
+  <li>For each round, for each block, send items to their new queues based on the condition</li>
+  <li>Get the top two queues that processed the most items</li>
+</ul>
+
+<p>I decided to write my code with some level of structure this time round, because the implementation is slightly complicated compared to the past days.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="k">class</span> <span class="nc">Monkey</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">items_inspected</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parse_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+  
+  <span class="k">def</span> <span class="nf">parse_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="nb">id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">' ,'</span><span class="p">)))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">block</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">operation</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s">'*'</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">is_mult</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s">'*'</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">operand</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">test</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">true_result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">4</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">false_result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">5</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">])</span>
+  
+  <span class="k">def</span> <span class="nf">throw_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monkeys</span><span class="p">):</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">empty</span><span class="p">():</span>
+      <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="n">worry</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">operation</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">operand</span> <span class="o">==</span> <span class="s">'old'</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">operand</span><span class="p">))</span> <span class="o">//</span> <span class="mi">3</span> 
+      <span class="n">monkeys</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">true_result</span> <span class="k">if</span> <span class="n">worry</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">test</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="p">.</span><span class="n">false_result</span><span class="p">].</span><span class="n">items</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">worry</span><span class="p">)</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">items_inspected</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">processor</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="n">target_rounds</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">n_rounds</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">target_rounds</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">monkey</span> <span class="ow">in</span> <span class="n">monkeys</span><span class="p">:</span>
+      <span class="n">monkey</span><span class="p">.</span><span class="n">throw_items</span><span class="p">(</span><span class="n">monkeys</span><span class="p">)</span>
+  
+  <span class="n">best_two</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">.</span><span class="n">items_inspected</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">best_two</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">items_inspected</span> <span class="o">*</span> <span class="n">best_two</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">items_inspected</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+  <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()</span>
+  <span class="n">blocks</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[[]]</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span> <span class="k">else</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()]],</span> <span class="n">lines</span><span class="p">,</span> <span class="p">[[]])</span>
+  <span class="n">monkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">Monkey</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">]</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="n">processor</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="part-2-10">Part 2</h2>
+
+<p>In this part, the condition was changed to no longer include the <code class="language-plaintext highlighter-rouge">// 3</code>, meaning that the numbers grew out of proportion, especially when we want 10000 rounds. In Python, large integers, although take time to function, and hence, the program will take too long to complete.</p>
+
+<p>Hence, part 2’s prompt suggested that we find a better way to represent the <code class="language-plaintext highlighter-rouge">worry</code> variable. I went to inspect the counts of the queue at the end of 10, 20 and 30 rounds; even though there is some correlation in the rate of change of counts, it is not strictly linear. This is because the operations are different; inspect the input:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Monkey 0:
+  Starting items: 79, 98
+  Operation: new = old * 19
+  Test: divisible by 23
+    If true: throw to monkey 2
+    If false: throw to monkey 3
+
+Monkey 1:
+  Starting items: 54, 65, 75, 74
+  Operation: new = old + 6
+  Test: divisible by 19
+    If true: throw to monkey 2
+    If false: throw to monkey 0
+
+Monkey 2:
+  Starting items: 79, 60, 97
+  Operation: new = old * old
+  Test: divisible by 13
+    If true: throw to monkey 1
+    If false: throw to monkey 3
+
+Monkey 3:
+  Starting items: 74
+  Operation: new = old + 3
+  Test: divisible by 17
+    If true: throw to monkey 0
+    If false: throw to monkey 1
+</code></pre></div></div>
+
+<p>There is a high probability that a value will go through queues 0, 3, and 1, but a probability still exists that it will go through queue 2, which affects the final queue count. Hence, attempting to map the queue count linearly is not viable.</p>
+
+<p>The next thing I looked at was the input. I tried to think about how the operations will affect the divisibility of the items and concluded (after 30 minutes of thinking) that there is no fixed pattern, due addition. If all operations were multiplications, then the story would be different; we would be able to definitively tell if a number will be divisible by the condition the first time we look at the item, or the operand.</p>
+
+<p>The next observation I made was that each test was relatively constant; they are always in the format: <code class="language-plaintext highlighter-rouge">divisible by &lt;prime number&gt;</code>. For a moment, I thought of some math, like “how would I know if 2^x + 3^y = 7n, where x, y, n are natural numbers?” -&gt; the answer is I have no idea.</p>
+
+<p>Then, my instincts took over and I just replaced <code class="language-plaintext highlighter-rouge">// 3</code> with <code class="language-plaintext highlighter-rouge">mod (sum of all test prime numbers in the input)</code> and ran the script on the input without blinking twice. To my surprise, it worked; it was one of those situations where my instincts completed its processes far ahead of the capabilities of my logical thinking.</p>
+
+<p>The code change was one of those that looks insignificant (it literally replaces 4 characters with a modulo), but had a few hours of effort put into it.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="k">class</span> <span class="nc">Monkey</span><span class="p">:</span>
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">items_inspected</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">parse_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">parse_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">):</span>
+    <span class="bp">self</span><span class="p">.</span><span class="nb">id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">' ,'</span><span class="p">)))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">block</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">operation</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s">'*'</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">is_mult</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s">'*'</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">operand</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">]</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">test</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">true_result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">4</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="bp">self</span><span class="p">.</span><span class="n">false_result</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="mi">5</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="mi">5</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">throw_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">monkeys</span><span class="p">):</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">empty</span><span class="p">():</span>
+      <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="n">worry</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">operation</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">operand</span> <span class="o">==</span> <span class="s">'old'</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">operand</span><span class="p">))</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">17</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">11</span> <span class="o">*</span> <span class="mi">19</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="n">monkeys</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">true_result</span> <span class="k">if</span> <span class="n">worry</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">test</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="p">.</span><span class="n">false_result</span><span class="p">].</span><span class="n">items</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">worry</span><span class="p">)</span>
+      <span class="bp">self</span><span class="p">.</span><span class="n">items_inspected</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">processor</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="n">target_rounds</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">n_rounds</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">target_rounds</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">monkey</span> <span class="ow">in</span> <span class="n">monkeys</span><span class="p">:</span>
+      <span class="n">monkey</span><span class="p">.</span><span class="n">throw_items</span><span class="p">(</span><span class="n">monkeys</span><span class="p">)</span>
+
+  <span class="n">best_two</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">.</span><span class="n">items_inspected</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">best_two</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">items_inspected</span> <span class="o">*</span> <span class="n">best_two</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">items_inspected</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+  <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()</span>
+  <span class="n">blocks</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">accum</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="n">accum</span> <span class="o">+</span> <span class="p">[[]]</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span> <span class="k">else</span> <span class="n">accum</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">accum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">()]],</span> <span class="n">lines</span><span class="p">,</span> <span class="p">[[]])</span>
+  <span class="n">monkeys</span> <span class="o">=</span> <span class="p">[</span><span class="n">Monkey</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">]</span>
+
+  <span class="k">print</span><span class="p">(</span><span class="n">processor</span><span class="p">(</span><span class="n">monkeys</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>After taking a shower, my logical thinking finally reached a conclusion.</p>
+
+<p>Let’s break this down into a much simpler problem. Let’s say we have two test prime numbers, 2 and 3. There are 4 things that could possibly happen after applying the operation to our item’s value:</p>
+
+<ol>
+  <li>It’s divisible by 2 and not divisible by 3;</li>
+  <li>It’s not divisible by 2 and divisible by 3;</li>
+  <li>It’s divisible by 2 and divisible by 3;</li>
+  <li>It’s not divisible by 2 and not divisible by 3.</li>
+</ol>
+
+<p>So, if we were to talk about the possible values of each of the bullet points:</p>
+
+<ol>
+  <li>[2, 4, 8, 10, etc]</li>
+  <li>[3, 6, 9, 15, etc]</li>
+  <li>[6, 12, 18, 24, etc]</li>
+  <li>[1, 5, 7, 11, etc]</li>
+</ol>
+
+<p>Let’s think about all the numbers in their prime factors:</p>
+
+<ol>
+  <li>[2, 4, 2 * 3 + 2, 2 * 3 + 4, etc]</li>
+  <li>[3, 6 + 0, 2 * 3 + 3, 2^2 * 3 + 3, etc]</li>
+  <li>[2 * 3, 2^2 * 3, 2 * 3^2, 2^3 * 3^2, etc]</li>
+  <li>[1, 5, 2 * 3 + 1, 2 * 3 + 5, etc]</li>
+</ol>
+
+<p>If we link this to our question, we realise that our these numbers are a combination of multiplication and addition. A further observation suggests that all numbers more than 6 can be broken down into <code class="language-plaintext highlighter-rouge">n = q * 6 + r</code>, where <code class="language-plaintext highlighter-rouge">n</code> is the original number, <code class="language-plaintext highlighter-rouge">q</code> is some number, and <code class="language-plaintext highlighter-rouge">r</code> is a number less than 6. We then realize that <code class="language-plaintext highlighter-rouge">r</code> is the remainder, and we also know that <code class="language-plaintext highlighter-rouge">n % 6 == r</code>.</p>
+
+<p>We then realize that if we add a number, <code class="language-plaintext highlighter-rouge">m</code>, such that <code class="language-plaintext highlighter-rouge">n</code> is still not divisible by 6, and <code class="language-plaintext highlighter-rouge">r + m &lt; 6</code> then: <code class="language-plaintext highlighter-rouge">n + m = q * 6 + r + m</code>. Since <code class="language-plaintext highlighter-rouge">n + m</code> is not divisible by 6, then surely <code class="language-plaintext highlighter-rouge">r + m</code> is not divisible by 6. Likewise, for 2: <code class="language-plaintext highlighter-rouge">r + m &lt; 6</code>, then: <code class="language-plaintext highlighter-rouge">n + m = q * 6 + r + m</code>, since <code class="language-plaintext highlighter-rouge">n + m</code> is not divisible by 2, then surely <code class="language-plaintext highlighter-rouge">r + m</code> is not divisible by 2, and so on. This wouldn’t work if we try to test for divisibility by 7: <code class="language-plaintext highlighter-rouge">r + m &lt; 6</code> then: <code class="language-plaintext highlighter-rouge">n + m =/= q * 6 + r + m</code>, <code class="language-plaintext highlighter-rouge">r + m</code> not divisible by 7 (which is the case for all possible values of <code class="language-plaintext highlighter-rouge">r + m</code>, since <code class="language-plaintext highlighter-rouge">r + m</code> is within 0 to 6) does not necessarily mean <code class="language-plaintext highlighter-rouge">n + m</code> is not divisible by 7.</p>
+
+<p>So, what this means is that any addition that does not make the expression immediately divisible by <strong><code class="language-plaintext highlighter-rouge">6</code> is added to the remainder</strong>, and we know that the <strong>modulo of the remainder is equal to the modulo of the original number</strong>. Since <code class="language-plaintext highlighter-rouge">6</code> can be broken down into the primes <code class="language-plaintext highlighter-rouge">2</code> and <code class="language-plaintext highlighter-rouge">3</code>, which are our test prime numbers, therefore, by performing modulo on all the test prime numbers within our input, we can fully express the divisibility of our number with any one of the primes just by maintaining the remainder.</p>
+
+<p>Hence,</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="n">worry</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">operation</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">operand</span> <span class="o">==</span> <span class="s">'old'</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">operand</span><span class="p">))</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">17</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">11</span> <span class="o">*</span> <span class="mi">19</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>must work (the prime numbers are the terms I’m too lazy to evaluate).</p>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 11, the hardest part 2 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
