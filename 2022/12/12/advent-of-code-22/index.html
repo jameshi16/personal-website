@@ -10,7 +10,7 @@
 <html class="height-full">
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="EDIT: Day 11, the hardest part 2 is up!:coffee: Hi!After having absolutely zero blog posts for the past 11 months, including my treasured anime page, here I am declaring that I will be participating in the Advent of Code (AOC).I’ve never completed an AOC before, so it’ll be a nice challenge to br..." />
+    <meta name="description" content="EDIT: Day 12 is up!:coffee: Hi!After having absolutely zero blog posts for the past 11 months, including my treasured anime page, here I am declaring that I will be participating in the Advent of Code (AOC).I’ve never completed an AOC before, so it’ll be a nice challenge to breathe vitality into ..." />
     <title>CodingIndex's Random Shenanigans</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
@@ -41,10 +41,10 @@
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
       <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">Advent of Code 22</h1>
-      <p class="text-gray mb-5">Published Dec 12, 2022 01:19</p>
+      <p class="text-gray mb-5">Published Dec 12, 2022 23:06</p>
       
   <div class="article">
-    <p><strong>EDIT</strong>: <a href="#day-11">Day 11</a>, the hardest part 2 is up!</p>
+    <p><strong>EDIT</strong>: <a href="#day-12">Day 12</a> is up!</p>
 
 <p><img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"> Hi!</p>
 
@@ -1431,6 +1431,96 @@ Monkey 3:
 </code></pre></div></div>
 
 <p>must work (the prime numbers are the terms I’m too lazy to evaluate).</p>
+
+<h1 id="day-12">Day 12</h1>
+
+<p>Today is quite obviously a path-finding challenge.</p>
+
+<h2 id="part-1-11">Part 1</h2>
+
+<p>Admittedly, I spend an embarrassing amount of time figuring out that while I can only go up by one altitude unit at a time, I can actually descend more than 1 level at a time. I decided to use Breadth First Search to perform path-finding, since it’s good enough for the use case.</p>
+
+<p>For every node I’ve visited, I replace it’s position with <code class="language-plaintext highlighter-rouge">#</code>, which denotes a visited node. So:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">.</span><span class="n">strip</span><span class="p">()]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()]</span>   
+<span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="s">'a'</span>
+                                                                              
+<span class="k">def</span> <span class="nf">bfs</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+  <span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>                                                                 
+  <span class="n">p</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>                                                                 
+  <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+  
+  <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>                                                                 
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">():</span>                                                      
+      <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>                                                          
+      <span class="n">elevation</span> <span class="o">=</span> <span class="s">'a'</span> <span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s">'S'</span> <span class="k">else</span> <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>                    
+      <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>                                                        
+      <span class="n">moves</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>                
+      
+      <span class="k">if</span> <span class="n">elevation</span> <span class="o">==</span> <span class="s">'E'</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">count</span>                                                          
+      
+      <span class="k">for</span> <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span> <span class="ow">in</span> <span class="n">moves</span><span class="p">:</span>                                              
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">new_x</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">new_y</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> \             
+          <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'#'</span> \                                     
+          <span class="ow">and</span> <span class="p">(</span><span class="o">-</span><span class="mi">999</span> <span class="o">&lt;=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="n">elevation</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> \        
+          <span class="ow">or</span> <span class="p">(</span><span class="n">elevation</span> <span class="o">==</span> <span class="s">'z'</span> <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">]</span> <span class="o">==</span> <span class="s">'E'</span><span class="p">)):</span>               
+            <span class="n">p</span><span class="p">.</span><span class="n">put</span><span class="p">((</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">))</span>
+          
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> 
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>                                                               
+    
+<span class="k">print</span><span class="p">(</span><span class="n">bfs</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>It might be worth it to mention that <code class="language-plaintext highlighter-rouge">-999</code> is too large of a magnitude. <code class="language-plaintext highlighter-rouge">-2</code> would have been good enough; this means that I would be able to descend a maximum of <code class="language-plaintext highlighter-rouge">-2</code>. Experimental results for the win.</p>
+
+<p>Also, if you think hard-coding the starting position is hacky, then you can look away.</p>
+
+<h2 id="part-2-11">Part 2</h2>
+
+<p>Part 2 requires us to find a better starting position, so that we minimize the amount of steps it takes to reach the peak, denoted by <code class="language-plaintext highlighter-rouge">E</code>. So, I first approached the problem the dumb way, which was to iterate through all positions of <code class="language-plaintext highlighter-rouge">a</code>, the lowest altitude, and accumulate the minimum.</p>
+
+<p>Obviously, that was slow, so I thought about using another algorithm, like Dijkstra’s Shortest Path algorithm; however, there would be no benefit whatsoever over BFS since the weights of each nodes are the same.</p>
+
+<p>Hence, I decided to perform a reverse BFS; instead of checking for <code class="language-plaintext highlighter-rouge">E</code>, I check for the closest <code class="language-plaintext highlighter-rouge">a</code>, given that we can instead ascend 2 levels and descend only 1 level (inverse of our ascending constraints).</p>
+
+<p>So:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>                                                       
+
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">.</span><span class="n">strip</span><span class="p">()]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">).</span><span class="n">readlines</span><span class="p">()]</span>
+
+<span class="k">def</span> <span class="nf">bfs</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+  <span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+  <span class="n">p</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span> 
+  <span class="n">q</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> 
+      
+  <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span> 
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">():</span>
+      <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
+      <span class="n">elevation</span> <span class="o">=</span> <span class="s">'z'</span> <span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="s">'E'</span> <span class="k">else</span> <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span>
+      <span class="n">grid</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+      <span class="n">moves</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        
+      <span class="k">if</span> <span class="n">elevation</span> <span class="o">==</span> <span class="s">'a'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">count</span>
+          
+      <span class="k">for</span> <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span> <span class="ow">in</span> <span class="n">moves</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">new_x</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">new_y</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> \
+          <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'#'</span> \
+          <span class="ow">and</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="n">elevation</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span> \
+          <span class="ow">or</span> <span class="p">(</span><span class="n">elevation</span> <span class="o">==</span> <span class="s">'a'</span> <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">new_y</span><span class="p">][</span><span class="n">new_x</span><span class="p">]</span> <span class="o">==</span> <span class="s">'S'</span><span class="p">)):</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">put</span><span class="p">((</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">))</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">bfs</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">20</span><span class="p">)))</span>
+</code></pre></div></div>
 
   </div>
 
