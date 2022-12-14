@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-14T01:08:47+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/14/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-14T01:06:00+00:00</published><updated>2022-12-14T01:06:00+00:00</updated><id>https://codingindex.xyz/2022/12/14/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/14/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-13">Day 13</a> is up!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-14T17:13:50+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/14/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-14T17:10:00+00:00</published><updated>2022-12-14T17:10:00+00:00</updated><id>https://codingindex.xyz/2022/12/14/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/14/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-14">Day 14</a> is up!</p>
 
 <p>:coffee: Hi!</p>
 
@@ -1771,7 +1771,225 @@ Monkey 3:
 
   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 13 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+</code></pre></div></div>
+
+<h1 id="day-14">Day 14</h1>
+
+<p>Bury me in sand, please.</p>
+
+<h2 id="part-1-13">Part 1</h2>
+
+<p>Today’s problem involved the following sub-problems:</p>
+
+<ol>
+  <li>Drawing lines on a grid;</li>
+  <li>Simulating the behaviour of sand particles, where:
+    <ol>
+      <li>If it can go down, it goes down</li>
+      <li>If it can’t go down, but can go bottom left, do that</li>
+      <li>If it can’t go down, but can go bottom right, do that</li>
+      <li>If it can’t go anywhere, settle the sand and move on to the next sand</li>
+    </ol>
+  </li>
+</ol>
+
+<p>What about the size of the grid? Well, since our input is fixed, we really don’t have to figure that out; just guess a large enough size, I’m sure that won’t come back to bite me in the future :new_moon_with_face:. The first sub-problem was easily solved like so:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="s">'.'</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">600</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+  <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+      <span class="n">xys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s">'-&gt;'</span><span class="p">]</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">x1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">x2</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">y1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y2</span> <span class="k">else</span> <span class="mi">1</span>
+      
+        <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The input looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>498,4 -&gt; 498,6 -&gt; 496,6
+503,4 -&gt; 502,4 -&gt; 502,9 -&gt; 494,9
+</code></pre></div></div>
+
+<p>So, when parsing each line, we need to strip spaces, filter out <code class="language-plaintext highlighter-rouge">-&gt;</code>, and split the resultant string by <code class="language-plaintext highlighter-rouge">,</code>. We also want to convert each list of strings into a tuple of integers, so we also do that in the same line.</p>
+
+<p>For each adjacent <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code>, we attempt to draw the walls that will affect sand interactions.</p>
+
+<p>To solve the next sub-problem, we convert the behavior in to a bunch of if statements, and keep looping until one grain of sand enters the void, defined by anything falling out of <code class="language-plaintext highlighter-rouge">y = 200</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">voided</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">settled_grains</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">voided</span><span class="p">:</span>
+  <span class="n">grain_x</span><span class="p">,</span> <span class="n">grain_y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">is_occupied</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'#'</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'+'</span>
+  <span class="n">settled</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="k">while</span> <span class="ow">not</span> <span class="n">settled</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">:</span>
+      <span class="n">voided</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="k">break</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]):</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]):</span>
+      <span class="n">grain_x</span> <span class="o">-=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">600</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+      <span class="n">grain_x</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">settled</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'+'</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">voided</span><span class="p">:</span>
+    <span class="n">settled_grains</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p>Piecing it all together:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="s">'.'</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">600</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+  <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+      <span class="n">xys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s">'-&gt;'</span><span class="p">]</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">x1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">x2</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">y1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y2</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+
+<span class="n">voided</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">settled_grains</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">voided</span><span class="p">:</span>
+  <span class="n">grain_x</span><span class="p">,</span> <span class="n">grain_y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">is_occupied</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'#'</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'+'</span>
+  <span class="n">settled</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="k">while</span> <span class="ow">not</span> <span class="n">settled</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">:</span>
+      <span class="n">voided</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="k">break</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]):</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]):</span>
+      <span class="n">grain_x</span> <span class="o">-=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">600</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+      <span class="n">grain_x</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">settled</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'+'</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">voided</span><span class="p">:</span>
+    <span class="n">settled_grains</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">settled_grains</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="part-2-13">Part 2</h2>
+
+<p>In this part, we realize that the void doesn’t exist (damn it, there goes one option). Instead, there is an infinite floor at <code class="language-plaintext highlighter-rouge">max_y + 2</code>, where <code class="language-plaintext highlighter-rouge">max_y</code> is the largest <code class="language-plaintext highlighter-rouge">y</code> found while parsing the lines.</p>
+
+<p>Luckily for me, that was simple to do; we just store the maximum <code class="language-plaintext highlighter-rouge">y</code> every time we see one:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">highest_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">highest_y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then, after reading the entire input, we just fill that <code class="language-plaintext highlighter-rouge">y</code> with the floor symbol:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid</span><span class="p">[</span><span class="n">highest_y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">'#'</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">600</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<p>Next, our stop condition has changed to sand particles settling at <code class="language-plaintext highlighter-rouge">(500, 0)</code>, meaning that the generator of sand particles will subsequently be blocked.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">else</span><span class="p">:</span>
+      <span class="n">settled</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'o'</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">grain_x</span><span class="p">,</span> <span class="n">grain_y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">settled_grains</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">break</span>
+</code></pre></div></div>
+
+<p>However, all these changes weren’t enough, as I was greeted by the “wrong answer” prompt on AOC. Turns out, due to the floor, the sand particles tend to create large pyramids. This means that there is a large base, which can’t fit into our grid. Incidentally, I decided to re-assign settled grains as <code class="language-plaintext highlighter-rouge">'o'</code>, to differentiate between falling grains and settled grains.</p>
+
+<p>Luckily, since we know our sand particles are generated from <code class="language-plaintext highlighter-rouge">(500, 0)</code>, we know for sure that the maximum <code class="language-plaintext highlighter-rouge">x</code> is somewhere around <code class="language-plaintext highlighter-rouge">750</code> due to how equilateral triangles work. To be safe, we increase the grid size all the way to <code class="language-plaintext highlighter-rouge">1000</code>. So, the final code looks like this.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="s">'.'</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+  <span class="n">highest_y</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+      <span class="n">xys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s">'-&gt;'</span><span class="p">]</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xys</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">xys</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">highest_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">highest_y</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">x1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">x1</span> <span class="o">&gt;</span> <span class="n">x2</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+          <span class="n">y1</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y1</span> <span class="o">&gt;</span> <span class="n">y2</span> <span class="k">else</span> <span class="mi">1</span>
+
+        <span class="n">grid</span><span class="p">[</span><span class="n">y1</span><span class="p">][</span><span class="n">x1</span><span class="p">]</span> <span class="o">=</span> <span class="s">'#'</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="n">grid</span><span class="p">[</span><span class="n">highest_y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">'#'</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>
+
+<span class="n">stop</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">settled_grains</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="ow">not</span> <span class="n">stop</span><span class="p">:</span>
+  <span class="n">grain_x</span><span class="p">,</span> <span class="n">grain_y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">is_occupied</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'#'</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'o'</span>
+  <span class="n">settled</span> <span class="o">=</span> <span class="bp">False</span>
+  <span class="k">while</span> <span class="ow">not</span> <span class="n">settled</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">:</span>
+      <span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="k">break</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]):</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]):</span>
+      <span class="n">grain_x</span> <span class="o">-=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">1000</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">grain_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span> <span class="c1">#and not is_occupied(grid[grain_y][grain_x + 1]):
+</span>      <span class="n">grain_x</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">grain_y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">settled</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="n">grid</span><span class="p">[</span><span class="n">grain_y</span><span class="p">][</span><span class="n">grain_x</span><span class="p">]</span> <span class="o">=</span> <span class="s">'o'</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">grain_x</span><span class="p">,</span> <span class="n">grain_y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">settled_grains</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">break</span>
+
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">stop</span><span class="p">:</span>
+    <span class="n">settled_grains</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">settled_grains</span><span class="p">)</span>
+</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 14 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
