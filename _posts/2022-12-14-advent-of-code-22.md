@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-12 23:06 +0000
+date: 2022-12-14 01:06 +0000
 published: true
 ---
 
-**EDIT**: [Day 12](#day-12) is up!
+**EDIT**: [Day 13](#day-13) is up!
 
 :coffee: Hi!
 
@@ -232,7 +232,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221212_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221214_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -1306,4 +1306,306 @@ def bfs(pos):
     p = Queue()
 
 print(bfs((len(grid[0]) - 22, 20)))
+```
+
+# Day 13
+
+Nothing like spending 5 hours on Advent of Code, eh?
+
+Felt a little down, so I decided to use good old C to do this. Little did I know, that was going to be a huge ordeal.
+
+## Part 1
+
+This part was essentially about parsing. I may be able to summarize what I've essentially did here, but the process to get there is error-prone; I had to painstakingly debug the corner cases that occurred during my parsing.
+
+In hindsight, it might have been a better idea to list all the possible corner cases before attempting the problem. 
+
+The input we are to parse can come in the following format:
+
+```
+[[[[3],[]],5],[[],[7,[3,3,3],2,[1],[6,7,9]],[],8,1],[9,[0,0,[5,3,5,1],[2],2],3],[2,[0,4]]]
+[[[]],[[[],10,[8,0,5,5],[5,4,8,10,1],[6,8,0,3,5]],2,[9,[5],[9,2],[]],[8,[]]]]
+```
+
+Defining the first list as 'a', and the second list as 'b', if:
+
+- We are comparing two lists, then we compare elements in the two lists
+    - If list 'a' terminates early (less elements than 'b'), then the two lists are in order
+    - If list 'b' terminates early (less elements than 'a'), then the two lists are not in order
+- We are comparing two values, then we just take the integers and directly compare them
+- We are comparing a list and a value, in which we re-package the value as a singleton list, and attempt to compare them again.
+
+Sounds easy, but it was actually much more difficult than I imagined. I converted each comparison method above into their own function, and wrapped all three functions around a main function called "think" that decides which comparison method to choose based on the current tokens. I then confirmed that the list pairs are either greater, or less than one another. Hence, I was able to discard all thoughts related to equality.
+
+Now, time to think about each case step by step, which I only thought was a good idea in hindsight. Let's say the current character in 'a' and 'b' are 'x' and 'y':
+
+1. If 'x' and 'y' are '[' then we use the list comparison method
+2. If 'x' and 'y' does not have any list-related symbols ('[' and ']'), then we use the value comparison method
+3. Else:
+    1. If 'x' denotes the end of the list and 'y' is a value, we compare the number of lists open in 'a' and 'b' at the moment, and return 1 or -1 if they are not the same. Otherwise, we get the successor of x, and start from step 1 again. This allows us to reach a point where we can compare two values, or return early if the list sizes assert that they're unequal.
+    2. If 'x' is a value and 'y' denotes the end of the list, we compare the number of lists open in 'a' and 'b' at the moment, and return 1 or -1 if they are not the same value. Otherwise, we get the successor of y, and start from step 1 again.
+    3. If both 'x' and 'y' denotes the end of the list, we compare the number of lists open in 'a' and 'b' just in case, and gets the successor of both 'x' and 'y', repeating step 1.
+4. Else, if we can tell that 'x' is a value while 'y' is a list, we use the re-packaging comparison method
+5. Else, if we can tell that 'x' is a list while 'y' is a value, we use the re-packaging comparison method, but we negate the value we acquire from the method.
+
+Embarrasingly enough, it took me a long time to figure out that two digit numbers exist within our problem-space; I've been comparing ASCII for a few hours not knowing why my solution didn't work.
+
+With the steps described above, it becomes possible to define a recursive function that steps through the list, building kinda like a syntax tree on the stack:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int comparevaluethenlist(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int comparevalue(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int comparelist(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int think(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+
+int comparevaluethenlist(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  return think(a, b + 1, l_levels + 1, r_levels + 1, c + 1);
+}
+
+int think(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  if (*a == '[' && *b == '[') {
+    int res = comparelist(a, b, l_levels, r_levels, c);
+    if (res == -1 || res == 1) return res;
+  } else if (*a != '[' && *a != ']' && *b != '[' && *b != ']')
+    return comparevalue(a, b, l_levels, r_levels, c);
+  else if (*a == ']' && *b != ']') {
+    l_levels--;
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    a++;
+    if (*a == ',') a++;
+    return think(a + 1, b, l_levels, r_levels, c);
+  } else if (*a != ']' && *b == ']') {
+    r_levels--;
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    b++;
+    if (*b == ',') b++;
+    return think(a, b + 1, l_levels, r_levels, c);
+  } else if (*a == ']' && *b == ']') {
+    l_levels--;
+    r_levels--;
+
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    a++;
+    b++;
+    if (*a == ',') a++;
+    if (*b == ',') b++;
+    return think(a, b, l_levels, r_levels, c);
+  } else {
+    if (*a != '[' && *a != ']')
+      return comparevaluethenlist(a, b, l_levels, r_levels, c);
+    else if (*b != '[' && *b != ']')
+      return -comparevaluethenlist(b, a, r_levels, l_levels, c);
+  }
+}
+
+int comparevalue(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+
+  char numBufA[20];
+  char numBufB[20];
+  char *tokA_com = strchr(a, ','), *tokA_brac = strchr(a, ']'), 
+    *tokB_com = strchr(b, ','), *tokB_brac = strchr(b, ']');
+  char *tokA = (tokA_com < tokA_brac && tokA_com != NULL) ? tokA_com : tokA_brac;
+  char *tokB = (tokB_com < tokB_brac && tokB_com != NULL) ? tokB_com : tokB_brac;
+  strncpy(numBufA, a, tokA - a);
+  numBufA[tokA - a] = '\0';
+
+  strncpy(numBufB, b, tokB - b);
+  numBufB[tokB - b] = '\0';
+
+  int a_i = 0, b_i = 0;
+  a_i = atoi(numBufA);
+  b_i = atoi(numBufB);
+
+  if (a_i > b_i) return 1;
+  if (a_i < b_i) return -1;
+  a += tokA - a;
+  b += tokB - b;
+
+  if (c && *b == ',') return -1;
+  if (c && *b != ',' && *a == ',') return 1;
+
+  if (*a == ',') a++;
+  if (*b == ',') b++;
+
+  return think(a, b, l_levels, r_levels, c);
+}
+
+int comparelist(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  l_levels++;
+  r_levels++;
+  a++; b++;
+
+  if (*a == ',') a++;
+  if (*b == ',') b++;
+
+  return think(a, b, l_levels, r_levels, c);
+}
+
+
+int parse(char* line1, char* line2) {
+  return comparelist(line1, line2, 0, 0, 0);
+}
+
+int main() {
+  unsigned long accum = 0, count = 0;;
+  char line1[1000], line2[1000];
+  FILE *f = fopen("input.txt", "r");
+  do {
+    count++;
+    fscanf(f, "%s\n", line1);
+    fscanf(f, "%s\n", line2);
+    int val = parse(line1, line2);
+    if (val == -1) {
+      accum += count;
+    }
+  } while (!feof(f));
+  fclose(f);
+
+  printf("Result: %ld\n", accum);
+
+  return 0;
+}
+```
+
+After some hours of debugging, I also had to introduce `c` to maintain information that we are currently within a list that has been _upgraded_ from a value for the sake of comparison, so that we can return early upon encountering a `,`. This has by far the most corner cases in this problem.
+
+## Part 2
+
+Part 2 repurposes the `think` function into a binary comparison function. Luckily, I have already defined `think` to return values required by the `qsort` standard library function, so I simply used that, and appended `[[2]]` and `[[6]]` into the `input.txt` file, and multiplied their indices after sorting to acquire the final solution:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int comparevaluethenlist(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int comparevalue(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int comparelist(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+int think(char* a, char* b, size_t l_levels, size_t r_levels, int c);
+
+int comparevaluethenlist(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  return think(a, b + 1, l_levels + 1, r_levels + 1, c + 1);
+}
+
+int think(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  if (*a == '[' && *b == '[') {
+    int res = comparelist(a, b, l_levels, r_levels, c);
+    if (res == -1 || res == 1) return res;
+  } else if (*a != '[' && *a != ']' && *b != '[' && *b != ']')
+    return comparevalue(a, b, l_levels, r_levels, c);
+  else if (*a == ']' && *b != ']') {
+    l_levels--;
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    a++;
+    if (*a == ',') a++;
+    return think(a + 1, b, l_levels, r_levels, c);
+  } else if (*a != ']' && *b == ']') {
+    r_levels--;
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    b++;
+    if (*b == ',') b++;
+    return think(a, b + 1, l_levels, r_levels, c);
+  } else if (*a == ']' && *b == ']') {
+    l_levels--;
+    r_levels--;
+
+    if (l_levels < r_levels) return -1;
+    if (l_levels > r_levels) return 1;
+
+    a++;
+    b++;
+    if (*a == ',') a++;
+    if (*b == ',') b++;
+    return think(a, b, l_levels, r_levels, c);
+  } else {
+    if (*a != '[' && *a != ']')
+      return comparevaluethenlist(a, b, l_levels, r_levels, c);
+    else if (*b != '[' && *b != ']')
+      return -comparevaluethenlist(b, a, r_levels, l_levels, c);
+  }
+}
+
+int comparevalue(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  char numBufA[20];
+  char numBufB[20];
+  char *tokA_com = strchr(a, ','), *tokA_brac = strchr(a, ']'), 
+    *tokB_com = strchr(b, ','), *tokB_brac = strchr(b, ']');
+  char *tokA = (tokA_com < tokA_brac && tokA_com != NULL) ? tokA_com : tokA_brac;
+  char *tokB = (tokB_com < tokB_brac && tokB_com != NULL) ? tokB_com : tokB_brac;
+  strncpy(numBufA, a, tokA - a);
+  numBufA[tokA - a] = '\0';
+
+  strncpy(numBufB, b, tokB - b);
+  numBufB[tokB - b] = '\0';
+
+  int a_i = 0, b_i = 0;
+  a_i = atoi(numBufA);
+  b_i = atoi(numBufB);
+
+  if (a_i > b_i) return 1;
+  if (a_i < b_i) return -1;
+  a += tokA - a;
+  b += tokB - b;
+
+  if (c && *b == ',') return -1;
+  if (c && *b != ',' && *a == ',') return 1;
+
+  if (*a == ',') a++;
+  if (*b == ',') b++;
+
+  return think(a, b, l_levels, r_levels, c);
+}
+
+int comparelist(char* a, char* b, size_t l_levels, size_t r_levels, int c) {
+  l_levels++;
+  r_levels++;
+  a++; b++;
+
+  if (*a == ',') a++;
+  if (*b == ',') b++;
+
+  return think(a, b, l_levels, r_levels, c);
+}
+
+int comparison(const void* line1, const void* line2) {
+  return comparelist((char*) line1, (char*) line2, 0, 0, 0);
+}
+
+int main() {
+  unsigned long count = 0;
+  unsigned long result = 0;
+  char lines[1000][1000];
+  FILE *f = fopen("input.txt", "r");
+  while (!feof(f))
+    fscanf(f, "%s\n", lines[count++]);
+  fclose(f);
+
+  qsort(lines, count, 1000 * sizeof(char), comparison);
+
+  for (int i = 0; i < count; i++) {
+    if (strcmp(lines[i], "[[2]]") == 0)
+      result = i + 1;
+    
+    if (strcmp(lines[i], "[[6]]") == 0)
+      result *= i + 1;
+  }
+
+  printf("Result: %ld\n", result);
+
+  return 0;
+}
 ```
