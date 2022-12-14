@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-14 01:06 +0000
+date: 2022-12-14 17:10 +0000
 published: true
 ---
 
-**EDIT**: [Day 13](#day-13) is up!
+**EDIT**: [Day 14](#day-14) is up!
 
 :coffee: Hi!
 
@@ -1608,4 +1608,225 @@ int main() {
 
   return 0;
 }
+```
+
+# Day 14
+
+Bury me in sand, please.
+
+## Part 1
+
+Today's problem involved the following sub-problems:
+
+1. Drawing lines on a grid;
+2. Simulating the behaviour of sand particles, where:
+    1. If it can go down, it goes down
+    2. If it can't go down, but can go bottom left, do that
+    3. If it can't go down, but can go bottom right, do that
+    4. If it can't go anywhere, settle the sand and move on to the next sand
+
+What about the size of the grid? Well, since our input is fixed, we really don't have to figure that out; just guess a large enough size, I'm sure that won't come back to bite me in the future :new_moon_with_face:. The first sub-problem was easily solved like so:
+
+```python
+grid = [['.' for _ in range(600)] for _ in range(200)]
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  while line:
+    if line:
+      xys = [tuple(map(lambda y: int(y), x.split(','))) for x in line.split(' ') if x != '->']
+      for i in range(len(xys) - 1):
+        x1, y1 = xys[i]
+        x2, y2 = xys[i + 1]
+        while abs(x1 - x2) > 0:
+          grid[y1][x1] = '#'
+          x1 += -1 if x1 > x2 else 1
+
+        while abs(y1 - y2) > 0:
+          grid[y1][x1] = '#'
+          y1 += -1 if y1 > y2 else 1
+      
+        grid[y1][x1] = '#'
+    line = f.readline()
+```
+
+The input looks like this:
+
+```
+498,4 -> 498,6 -> 496,6
+503,4 -> 502,4 -> 502,9 -> 494,9
+```
+
+So, when parsing each line, we need to strip spaces, filter out `->`, and split the resultant string by `,`. We also want to convert each list of strings into a tuple of integers, so we also do that in the same line.
+
+For each adjacent `x` and `y`, we attempt to draw the walls that will affect sand interactions.
+
+To solve the next sub-problem, we convert the behavior in to a bunch of if statements, and keep looping until one grain of sand enters the void, defined by anything falling out of `y = 200`:
+
+```python
+voided = False
+settled_grains = 0
+while not voided:
+  grain_x, grain_y = (500, 0)
+  is_occupied = lambda x: x == '#' or x == '+'
+  settled = False
+  while not settled:
+    if grain_y + 1 >= 200:
+      voided = True
+      break
+    elif not is_occupied(grid[grain_y + 1][grain_x]):
+      grain_y += 1
+    elif grain_x - 1 >= 0 and not is_occupied(grid[grain_y + 1][grain_x - 1]):
+      grain_x -= 1
+      grain_y += 1
+    elif grain_x + 1 < 600 and not is_occupied(grid[grain_y + 1][grain_x + 1]):
+      grain_x += 1
+      grain_y += 1
+    else:
+      settled = True
+      grid[grain_y][grain_x] = '+'
+
+  if not voided:
+    settled_grains += 1
+```
+
+Piecing it all together:
+
+```python
+grid = [['.' for _ in range(600)] for _ in range(200)]
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  while line:
+    if line:
+      xys = [tuple(map(lambda y: int(y), x.split(','))) for x in line.split(' ') if x != '->']
+      for i in range(len(xys) - 1):
+        x1, y1 = xys[i]
+        x2, y2 = xys[i + 1]
+        while abs(x1 - x2) > 0:
+          grid[y1][x1] = '#'
+          x1 += -1 if x1 > x2 else 1
+
+        while abs(y1 - y2) > 0:
+          grid[y1][x1] = '#'
+          y1 += -1 if y1 > y2 else 1
+
+        grid[y1][x1] = '#'
+    line = f.readline()
+
+voided = False
+settled_grains = 0
+while not voided:
+  grain_x, grain_y = (500, 0)
+  is_occupied = lambda x: x == '#' or x == '+'
+  settled = False
+  while not settled:
+    if grain_y + 1 >= 200:
+      voided = True
+      break
+    elif not is_occupied(grid[grain_y + 1][grain_x]):
+      grain_y += 1
+    elif grain_x - 1 >= 0 and not is_occupied(grid[grain_y + 1][grain_x - 1]):
+      grain_x -= 1
+      grain_y += 1
+    elif grain_x + 1 < 600 and not is_occupied(grid[grain_y + 1][grain_x + 1]):
+      grain_x += 1
+      grain_y += 1
+    else:
+      settled = True
+      grid[grain_y][grain_x] = '+'
+
+  if not voided:
+    settled_grains += 1
+
+print(settled_grains)
+```
+
+## Part 2
+
+In this part, we realize that the void doesn't exist (damn it, there goes one option). Instead, there is an infinite floor at `max_y + 2`, where `max_y` is the largest `y` found while parsing the lines.
+
+Luckily for me, that was simple to do; we just store the maximum `y` every time we see one:
+
+```python
+        highest_y = max(y1, y2, highest_y)
+```
+
+Then, after reading the entire input, we just fill that `y` with the floor symbol:
+
+```python
+grid[highest_y + 2] = ['#' for _ in range(600)]
+```
+
+Next, our stop condition has changed to sand particles settling at `(500, 0)`, meaning that the generator of sand particles will subsequently be blocked.
+
+```python
+    else:
+      settled = True
+      grid[grain_y][grain_x] = 'o'
+      if (grain_x, grain_y) == (500, 0):
+        settled_grains += 1
+        stop = True
+        break
+```
+
+However, all these changes weren't enough, as I was greeted by the "wrong answer" prompt on AOC. Turns out, due to the floor, the sand particles tend to create large pyramids. This means that there is a large base, which can't fit into our grid. Incidentally, I decided to re-assign settled grains as `'o'`, to differentiate between falling grains and settled grains.
+
+Luckily, since we know our sand particles are generated from `(500, 0)`, we know for sure that the maximum `x` is somewhere around `750` due to how equilateral triangles work. To be safe, we increase the grid size all the way to `1000`. So, the final code looks like this.
+
+```python
+grid = [['.' for _ in range(1000)] for _ in range(200)]
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  highest_y = 0
+  while line:
+    if line:
+      xys = [tuple(map(lambda y: int(y), x.split(','))) for x in line.split(' ') if x != '->']
+      for i in range(len(xys) - 1):
+        x1, y1 = xys[i]
+        x2, y2 = xys[i + 1]
+        highest_y = max(y1, y2, highest_y)
+        while abs(x1 - x2) > 0:
+          grid[y1][x1] = '#'
+          x1 += -1 if x1 > x2 else 1
+
+        while abs(y1 - y2) > 0:
+          grid[y1][x1] = '#'
+          y1 += -1 if y1 > y2 else 1
+
+        grid[y1][x1] = '#'
+    line = f.readline()
+grid[highest_y + 2] = ['#' for _ in range(1000)]
+
+stop = False
+settled_grains = 0
+while not stop:
+  grain_x, grain_y = (500, 0)
+  is_occupied = lambda x: x == '#' or x == 'o'
+  settled = False
+  while not settled:
+    if grain_y + 1 >= 200:
+      stop = True
+      break
+    elif not is_occupied(grid[grain_y + 1][grain_x]):
+      grain_y += 1
+    elif grain_x - 1 >= 0 and not is_occupied(grid[grain_y + 1][grain_x - 1]):
+      grain_x -= 1
+      grain_y += 1
+    elif grain_x + 1 < 1000 and not is_occupied(grid[grain_y + 1][grain_x + 1]): #and not is_occupied(grid[grain_y][grain_x + 1]):
+      grain_x += 1
+      grain_y += 1
+    else:
+      settled = True
+      grid[grain_y][grain_x] = 'o'
+      if (grain_x, grain_y) == (500, 0):
+        settled_grains += 1
+        stop = True
+        break
+
+  if not stop:
+    settled_grains += 1
+
+print(settled_grains)
 ```
