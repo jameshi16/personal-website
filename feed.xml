@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-12T23:09:13+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/12/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-12T23:06:00+00:00</published><updated>2022-12-12T23:06:00+00:00</updated><id>https://codingindex.xyz/2022/12/12/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/12/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-12">Day 12</a> is up!</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2022-12-14T01:08:47+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Advent of Code 22</title><link href="https://codingindex.xyz/2022/12/14/advent-of-code-22/" rel="alternate" type="text/html" title="Advent of Code 22" /><published>2022-12-14T01:06:00+00:00</published><updated>2022-12-14T01:06:00+00:00</updated><id>https://codingindex.xyz/2022/12/14/advent-of-code-22</id><content type="html" xml:base="https://codingindex.xyz/2022/12/14/advent-of-code-22/"><![CDATA[<p><strong>EDIT</strong>: <a href="#day-13">Day 13</a> is up!</p>
 
 <p>:coffee: Hi!</p>
 
@@ -372,7 +372,7 @@
 
 <p>I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser’s JavaScript engine to convert multi-line strings to normal strings delimited by <code class="language-plaintext highlighter-rouge">\n</code>, like this:</p>
 
-<p><img src="/images/20221212_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
+<p><img src="/images/20221214_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript" /></p>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 <p>Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.</p>
@@ -1462,7 +1462,316 @@ Monkey 3:
     <span class="n">p</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">bfs</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">20</span><span class="p">)))</span>
-</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 12 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
+</code></pre></div></div>
+
+<h1 id="day-13">Day 13</h1>
+
+<p>Nothing like spending 5 hours on Advent of Code, eh?</p>
+
+<p>Felt a little down, so I decided to use good old C to do this. Little did I know, that was going to be a huge ordeal.</p>
+
+<h2 id="part-1-12">Part 1</h2>
+
+<p>This part was essentially about parsing. I may be able to summarize what I’ve essentially did here, but the process to get there is error-prone; I had to painstakingly debug the corner cases that occurred during my parsing.</p>
+
+<p>In hindsight, it might have been a better idea to list all the possible corner cases before attempting the problem.</p>
+
+<p>The input we are to parse can come in the following format:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[[[3],[]],5],[[],[7,[3,3,3],2,[1],[6,7,9]],[],8,1],[9,[0,0,[5,3,5,1],[2],2],3],[2,[0,4]]]
+[[[]],[[[],10,[8,0,5,5],[5,4,8,10,1],[6,8,0,3,5]],2,[9,[5],[9,2],[]],[8,[]]]]
+</code></pre></div></div>
+
+<p>Defining the first list as ‘a’, and the second list as ‘b’, if:</p>
+
+<ul>
+  <li>We are comparing two lists, then we compare elements in the two lists
+    <ul>
+      <li>If list ‘a’ terminates early (less elements than ‘b’), then the two lists are in order</li>
+      <li>If list ‘b’ terminates early (less elements than ‘a’), then the two lists are not in order</li>
+    </ul>
+  </li>
+  <li>We are comparing two values, then we just take the integers and directly compare them</li>
+  <li>We are comparing a list and a value, in which we re-package the value as a singleton list, and attempt to compare them again.</li>
+</ul>
+
+<p>Sounds easy, but it was actually much more difficult than I imagined. I converted each comparison method above into their own function, and wrapped all three functions around a main function called “think” that decides which comparison method to choose based on the current tokens. I then confirmed that the list pairs are either greater, or less than one another. Hence, I was able to discard all thoughts related to equality.</p>
+
+<p>Now, time to think about each case step by step, which I only thought was a good idea in hindsight. Let’s say the current character in ‘a’ and ‘b’ are ‘x’ and ‘y’:</p>
+
+<ol>
+  <li>If ‘x’ and ‘y’ are ‘[’ then we use the list comparison method</li>
+  <li>If ‘x’ and ‘y’ does not have any list-related symbols (‘[’ and ‘]’), then we use the value comparison method</li>
+  <li>Else:
+    <ol>
+      <li>If ‘x’ denotes the end of the list and ‘y’ is a value, we compare the number of lists open in ‘a’ and ‘b’ at the moment, and return 1 or -1 if they are not the same. Otherwise, we get the successor of x, and start from step 1 again. This allows us to reach a point where we can compare two values, or return early if the list sizes assert that they’re unequal.</li>
+      <li>If ‘x’ is a value and ‘y’ denotes the end of the list, we compare the number of lists open in ‘a’ and ‘b’ at the moment, and return 1 or -1 if they are not the same value. Otherwise, we get the successor of y, and start from step 1 again.</li>
+      <li>If both ‘x’ and ‘y’ denotes the end of the list, we compare the number of lists open in ‘a’ and ‘b’ just in case, and gets the successor of both ‘x’ and ‘y’, repeating step 1.</li>
+    </ol>
+  </li>
+  <li>Else, if we can tell that ‘x’ is a value while ‘y’ is a list, we use the re-packaging comparison method</li>
+  <li>Else, if we can tell that ‘x’ is a list while ‘y’ is a value, we use the re-packaging comparison method, but we negate the value we acquire from the method.</li>
+</ol>
+
+<p>Embarrasingly enough, it took me a long time to figure out that two digit numbers exist within our problem-space; I’ve been comparing ASCII for a few hours not knowing why my solution didn’t work.</p>
+
+<p>With the steps described above, it becomes possible to define a recursive function that steps through the list, building kinda like a syntax tree on the stack:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">comparevaluethenlist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">comparevalue</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">comparelist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">think</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">comparevaluethenlist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l_levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r_levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">think</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">'['</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">comparelist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">comparevalue</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">l_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">r_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">l_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="n">r_levels</span><span class="o">--</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">comparevaluethenlist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+      <span class="k">return</span> <span class="o">-</span><span class="n">comparevaluethenlist</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">comparevalue</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kt">char</span> <span class="n">numBufA</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="n">numBufB</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokA_com</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="sc">','</span><span class="p">),</span> <span class="o">*</span><span class="n">tokA_brac</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="sc">']'</span><span class="p">),</span> 
+    <span class="o">*</span><span class="n">tokB_com</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sc">','</span><span class="p">),</span> <span class="o">*</span><span class="n">tokB_brac</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sc">']'</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokA</span> <span class="o">=</span> <span class="p">(</span><span class="n">tokA_com</span> <span class="o">&lt;</span> <span class="n">tokA_brac</span> <span class="o">&amp;&amp;</span> <span class="n">tokA_com</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">?</span> <span class="n">tokA_com</span> <span class="o">:</span> <span class="n">tokA_brac</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokB</span> <span class="o">=</span> <span class="p">(</span><span class="n">tokB_com</span> <span class="o">&lt;</span> <span class="n">tokB_brac</span> <span class="o">&amp;&amp;</span> <span class="n">tokB_com</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">?</span> <span class="n">tokB_com</span> <span class="o">:</span> <span class="n">tokB_brac</span><span class="p">;</span>
+  <span class="n">strncpy</span><span class="p">(</span><span class="n">numBufA</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">);</span>
+  <span class="n">numBufA</span><span class="p">[</span><span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+
+  <span class="n">strncpy</span><span class="p">(</span><span class="n">numBufB</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">);</span>
+  <span class="n">numBufB</span><span class="p">[</span><span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">a_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">a_i</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">numBufA</span><span class="p">);</span>
+  <span class="n">b_i</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">numBufB</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">a_i</span> <span class="o">&gt;</span> <span class="n">b_i</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">a_i</span> <span class="o">&lt;</span> <span class="n">b_i</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="n">a</span> <span class="o">+=</span> <span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">;</span>
+  <span class="n">b</span> <span class="o">+=</span> <span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">','</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">comparelist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">l_levels</span><span class="o">++</span><span class="p">;</span>
+  <span class="n">r_levels</span><span class="o">++</span><span class="p">;</span>
+  <span class="n">a</span><span class="o">++</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">parse</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">line1</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">line2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">comparelist</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">line2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">accum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;;</span>
+  <span class="kt">char</span> <span class="n">line1</span><span class="p">[</span><span class="mi">1000</span><span class="p">],</span> <span class="n">line2</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+  <span class="k">do</span> <span class="p">{</span>
+    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">line1</span><span class="p">);</span>
+    <span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">line2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">line1</span><span class="p">,</span> <span class="n">line2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">accum</span> <span class="o">+=</span> <span class="n">count</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">feof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Result: %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">accum</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>After some hours of debugging, I also had to introduce <code class="language-plaintext highlighter-rouge">c</code> to maintain information that we are currently within a list that has been <em>upgraded</em> from a value for the sake of comparison, so that we can return early upon encountering a <code class="language-plaintext highlighter-rouge">,</code>. This has by far the most corner cases in this problem.</p>
+
+<h2 id="part-2-12">Part 2</h2>
+
+<p>Part 2 repurposes the <code class="language-plaintext highlighter-rouge">think</code> function into a binary comparison function. Luckily, I have already defined <code class="language-plaintext highlighter-rouge">think</code> to return values required by the <code class="language-plaintext highlighter-rouge">qsort</code> standard library function, so I simply used that, and appended <code class="language-plaintext highlighter-rouge">[[2]]</code> and <code class="language-plaintext highlighter-rouge">[[6]]</code> into the <code class="language-plaintext highlighter-rouge">input.txt</code> file, and multiplied their indices after sorting to acquire the final solution:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">comparevaluethenlist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">comparevalue</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">comparelist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">think</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">comparevaluethenlist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l_levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r_levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">think</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">'['</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">comparelist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">comparevalue</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">l_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">r_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">']'</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">']'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">l_levels</span><span class="o">--</span><span class="p">;</span>
+    <span class="n">r_levels</span><span class="o">--</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&lt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l_levels</span> <span class="o">&gt;</span> <span class="n">r_levels</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">comparevaluethenlist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">'['</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">']'</span><span class="p">)</span>
+      <span class="k">return</span> <span class="o">-</span><span class="n">comparevaluethenlist</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">comparevalue</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">char</span> <span class="n">numBufA</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="n">numBufB</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokA_com</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="sc">','</span><span class="p">),</span> <span class="o">*</span><span class="n">tokA_brac</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="sc">']'</span><span class="p">),</span> 
+    <span class="o">*</span><span class="n">tokB_com</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sc">','</span><span class="p">),</span> <span class="o">*</span><span class="n">tokB_brac</span> <span class="o">=</span> <span class="n">strchr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="sc">']'</span><span class="p">);</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokA</span> <span class="o">=</span> <span class="p">(</span><span class="n">tokA_com</span> <span class="o">&lt;</span> <span class="n">tokA_brac</span> <span class="o">&amp;&amp;</span> <span class="n">tokA_com</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">?</span> <span class="n">tokA_com</span> <span class="o">:</span> <span class="n">tokA_brac</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">tokB</span> <span class="o">=</span> <span class="p">(</span><span class="n">tokB_com</span> <span class="o">&lt;</span> <span class="n">tokB_brac</span> <span class="o">&amp;&amp;</span> <span class="n">tokB_com</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">?</span> <span class="n">tokB_com</span> <span class="o">:</span> <span class="n">tokB_brac</span><span class="p">;</span>
+  <span class="n">strncpy</span><span class="p">(</span><span class="n">numBufA</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">);</span>
+  <span class="n">numBufA</span><span class="p">[</span><span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+
+  <span class="n">strncpy</span><span class="p">(</span><span class="n">numBufB</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">);</span>
+  <span class="n">numBufB</span><span class="p">[</span><span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">a_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">a_i</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">numBufA</span><span class="p">);</span>
+  <span class="n">b_i</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">numBufB</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">a_i</span> <span class="o">&gt;</span> <span class="n">b_i</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">a_i</span> <span class="o">&lt;</span> <span class="n">b_i</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="n">a</span> <span class="o">+=</span> <span class="n">tokA</span> <span class="o">-</span> <span class="n">a</span><span class="p">;</span>
+  <span class="n">b</span> <span class="o">+=</span> <span class="n">tokB</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">b</span> <span class="o">!=</span> <span class="sc">','</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">comparelist</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">l_levels</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">r_levels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">l_levels</span><span class="o">++</span><span class="p">;</span>
+  <span class="n">r_levels</span><span class="o">++</span><span class="p">;</span>
+  <span class="n">a</span><span class="o">++</span><span class="p">;</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">a</span><span class="o">++</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span> <span class="o">==</span> <span class="sc">','</span><span class="p">)</span> <span class="n">b</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">think</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">l_levels</span><span class="p">,</span> <span class="n">r_levels</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">comparison</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">line1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">line2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">comparelist</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span> <span class="n">line1</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span> <span class="n">line2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1000</span><span class="p">][</span><span class="mi">1000</span><span class="p">];</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"input.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">feof</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">lines</span><span class="p">[</span><span class="n">count</span><span class="o">++</span><span class="p">]);</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+  <span class="n">qsort</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">),</span> <span class="n">comparison</span><span class="p">);</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"[[2]]"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">"[[6]]"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="n">result</span> <span class="o">*=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Result: %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>James</name></author><summary type="html"><![CDATA[EDIT: Day 13 is up!]]></summary></entry><entry><title type="html">Duty Planning with Linear Programming</title><link href="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/" rel="alternate" type="text/html" title="Duty Planning with Linear Programming" /><published>2022-01-25T09:13:00+00:00</published><updated>2022-01-25T09:13:00+00:00</updated><id>https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming</id><content type="html" xml:base="https://codingindex.xyz/2022/01/25/duty-planning-with-linear-programming/"><![CDATA[<p>Hello! It sure has been a while, huh? Here, have a coffee :coffee:.</p>
 
 <p>Today, I’ll be writing about the hidden magical gem that is Linear Programming, available in your nearest spreadsheet program, be it <a href="https://www.libreoffice.org/discover/calc/">LibreOffice Calc</a>, Excel, or Google Sheets.</p>
 
