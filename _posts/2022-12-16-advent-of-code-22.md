@@ -1,10 +1,10 @@
 ---
 title: Advent of Code 22
-date: 2022-12-14 17:10 +0000
+date: 2022-12-16 01:10 +0000
 published: true
 ---
 
-**EDIT**: [Day 14](#day-14) is up!
+**EDIT**: [Day 15](#day-15) is up!
 
 :coffee: Hi!
 
@@ -232,7 +232,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221214_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221216_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -1830,3 +1830,159 @@ while not stop:
 
 print(settled_grains)
 ```
+
+# Day 15
+
+Today was an excellent lesson in how time & space can grow into sizes that would be noticeable.
+
+## Part 1
+
+In pure logical terms, there are two entities in question: the sensor, and the beacon. Both of these entities have a position, and can be mapped with the relation: `sensor -> beacon`.
+
+The problem constraints that the position are integers, and each relation `sensor -> beacon` represents the sensor to its closest beacon in Manhattan distance.
+
+> Manhattan distance is the distance in the x-axis + the distance in the y-axis, which is different from typical distance that is typically the hypotenuse of x and y.
+
+With the constraints out of the way, behold the question: get the number of positions that is not within the Manhattan distance of any `sensor -> beacon` relation. The position is constraint by y, so we essentially get a row of positions that fulfils the condition.
+
+At first, I thought about performing a BFS on every source, and then marking visited nodes. Then, I just count the number of unmarked nodes, and we'd be done. Of course, this works, but subsequently, the puzzle input looks like this:
+
+```
+Sensor at x=2832148, y=322979: closest beacon is at x=3015667, y=-141020
+Sensor at x=1449180, y=3883502: closest beacon is at x=2656952, y=4188971
+```
+
+which I interpreted as "aw crap, I'd need like a hundred gigabytes of memory to store a grid that size". Instead, let's approach the problem from another angle: we take the possible positions, which is defined by the minimum `x` and `y` seen in the input minus the largest distance we know, to the maximum `x` and `y` plus the largest distance. Luckily for us, since `y` is constrained to a single row, we only need to process one row, and `x` columns.
+
+Then, calculate the Manhattan distance from the possible positions to every sensor, and check if they are less than the distance within the `sensor -> beacon` relation. If they are, then those positions are considered visited; otherwise, those positions are unvisited. Finally, just count the number of unvisited positions, as required of us.
+
+The above text is summarized as:
+
+1. Parse input
+2. For each unvisited position, for each sensor, check if distance from sensor to position is less than relation distance
+3. If all distances are more than relation distance, count it as unvisited
+4. Repeat 2 until all possible positions have been tested
+5. Return number of unvisited position
+
+Code:
+
+```python
+min_x, min_y = 0, 0
+max_x, max_y = 0, 0
+max_dist = 0
+coordinate_map = dict()
+beacons = set()
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  while line:
+    tokens = line.strip().split(' ')
+    s_x = int(tokens[2].rstrip(',').split('=')[1])
+    s_y = int(tokens[3].rstrip(':').split('=')[1])
+    b_x = int(tokens[8].rstrip(',').split('=')[1])
+    b_y = int(tokens[9].rstrip(',').split('=')[1])
+    min_x = min(s_x, b_x, min_y)
+    min_y = min(s_y, b_y, min_y)
+    max_x = max(s_x, b_x, max_x)
+    max_y = max(s_y, b_y, max_y)
+    dist = abs(b_x - s_x) + abs(b_y - s_y)
+    max_dist = max(max_dist, dist)
+
+    coordinate_map[(s_x, s_y)] = dist
+    beacons.add((b_x, b_y))
+    line = f.readline()
+
+target_y = 2000000
+count = 0
+for x in range(min_x - max_dist, max_x + max_dist + 1):
+  for k, v in coordinate_map.items():
+    s_x, s_y = k
+    dist = abs(x - s_x) + abs(target_y - s_y)
+    if (x, target_y) not in beacons and (x, target_y) not in coordinate_map and dist <= v:
+      count += 1
+      break
+
+print(count)
+```
+
+## Part 2
+
+Part 2 requires us to limit our search space and find one position that all beacons cannot reach; the problem guarantees that there is only 1 such position within the x and y constraints. Our y-constraint is released, which creates a huge problem for us; now, our constraints are x between 0 to 4000000 and y between 0 to 4000000.
+
+If I were to draw a grid, and assuming each unit of data we talk about here is 1 byte, that's like 16 terabytes of data. 'Tis but a small issue, let's just buy more RAM.
+
+Luckily, part 1 doesn't really store anything in a grid; we have great space complexity, so why not just use it? Turns out, we will experience time issues; even though the algorithm is O(x * n) in time-complexity, where `x` is the column size of the theoretical grid and `n` is the number of sensors, the algorithm in this new context is now O(y * x * n), since `y` is no longer just a constant. `n` is a small number, so it basically doesn't matter, but `x` and `y` _multiplied_ together is _huge_. Suffice to say, the code doesn't finish with a few hours.
+
+Instead, let's slightly change how we approach the problem; instead of finding unreachable locations line by line, we make the following observations instead:
+
+- The unreachable location _must_ exist outside the boundary of the Manhattan distance in the `sensor -> beacon` relation.
+- Since there is only _one_ unreachable location, the unreachable location _must_ be within Manhattan distance + 1, but not within Manhattan distance.
+- The unreachable location is, well, unreachable from all the sensors.
+
+Hence, we can generate all the points between Manhattan distance and Manhattan distance + 1.
+
+However, this presents a problem; if the Manhattan distance is some absurd size, like 100000, and we have 16 sensors, then we have an absurd number of generated points, which should be 16 * 4 * 100000 = 6400000 points. If each point takes 16 bytes to store, as each number is an Int, then we get 102,400,000 bytes, which is 102.4GB of RAM. No biggie, just buy more RAM, amirite?
+
+Well ok, we've reduced the storage our solution requires from 16TB to 102.4GB, which is 0.64% of the original size we needed, which is **an improvement** :tada:. However, that's not good enough. So what do we do instead?
+
+We make sacrifices in time. Now, for _every_ `sensor` position, we generate all the unreachable locations from that one sensor position, and check if the unreachable locations is also unreachable from every _other_ `sensor` position. Rinse and repeat until we find that one bloody point.
+
+Originally, if we burned 102.4GB of RAM, then our time complexity would be O(m * n), where `m` is the number of points generated, `n` is the number of `sensor` positions. Now, we burn a cool 100MB of RAM, and have a time complexity of O(m * n^2). In this particular case, I feel that this is a perfectly reasonable trade-off for our problem.
+
+Hence, the Python code:
+
+```python
+coordinate_map = dict()
+beacons = set()
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  while line:
+    tokens = line.strip().split(' ')
+    s_x = int(tokens[2].rstrip(',').split('=')[1])
+    s_y = int(tokens[3].rstrip(':').split('=')[1])
+    b_x = int(tokens[8].rstrip(',').split('=')[1])
+    b_y = int(tokens[9].rstrip(',').split('=')[1])
+    dist = abs(b_x - s_x) + abs(b_y - s_y)
+
+    coordinate_map[(s_x, s_y)] = dist
+    beacons.add((b_x, b_y))
+    line = f.readline()
+
+def sensor_barrier_coords(sensor_pos):
+  s_x, s_y = sensor_pos
+  dist = coordinate_map[sensor_pos] + 1
+  res = set()
+
+  for i in range(dist + 1):
+      res.add((s_x + i, s_y + (dist - i)))
+      res.add((s_x - i, s_y - (dist - i)))
+      res.add((s_x + i, s_y - (dist - i)))
+      res.add((s_x - i, s_y + (dist - i)))
+
+  return res
+
+for k, _ in coordinate_map.items():
+  for pos in sensor_barrier_coords(k):
+    exclusive = True
+    x, y = pos
+    if pos in beacons or pos in coordinate_map:
+      continue
+
+    if x < 0 or x > 4000000 or y < 0 or y > 4000000:
+      continue
+
+    for k1, v in coordinate_map.items():
+      s_x, s_y = k1
+
+      dist = abs(x - s_x) + abs(y - s_y)
+      if dist <= v:
+        exclusive = False
+        break
+
+    if exclusive:
+      print(x * 4000000 + y)
+      exit()
+```
+
+> `x * 4000000 + y` is just the problem statement's instruction on how to encode the answer for AOC to check if the result is valid.
