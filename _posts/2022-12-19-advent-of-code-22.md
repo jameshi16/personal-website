@@ -1,10 +1,17 @@
 ---
 title: Advent of Code 22
-date: 2022-12-16 01:10 +0000
+date: 2022-12-19 10:29 +0000
 published: true
+feed:
+  excerpt_only: true
+excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 15](#day-15) is up!
+> **NOTE**: If you're viewing this over email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data over email. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
+
+**EDIT**: Sorry for the delay, I got caught up trying to do [Day 16](#day-16), which I felt was fairly challenging.
+
+<!--more-->
 
 :coffee: Hi!
 
@@ -15,6 +22,23 @@ I've never completed an AOC before, so it'll be a nice challenge to breathe vita
 Each of us will attempt each AOC, and discuss our solutions at the end of each week to judge each solution with its time-space complexity, and elegance. We will use any language we have at our disposal.
 
 Throughout AOC, I will update this blog post in a rolling manner to discuss my thought processes from ideation to solution. Do check back every day!
+
+**EDIT**: Handy dandy checkbox to hide old days, until a full blog post comes out!
+
+<div>
+<input type="checkbox" type="checkbox" id="olddays"/>
+<b>Expand Old Days (Implemented based on <a href="https://www.digitalocean.com/community/tutorials/css-collapsible">this DigitalOcean post</a> with no JavaScript)</b>
+
+<style>
+#olddays:checked ~ .olddays-collapsable {
+  max-height: 100%;
+}
+#olddays-collapsable {
+  max-height: 0px;
+  overflow: hidden;
+}
+</style>
+<div class="olddays-collapsable" id="olddays-collapsable" markdown="1">
 
 # Day 1
 
@@ -232,7 +256,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221216_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221219_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -1986,3 +2010,472 @@ for k, _ in coordinate_map.items():
 ```
 
 > `x * 4000000 + y` is just the problem statement's instruction on how to encode the answer for AOC to check if the result is valid.
+
+</div></div>
+
+----
+
+# Day 16
+
+This day was, for lack of a better phrase, really difficult. Part 1 was relatively simple, although I did struggle for a day to get it working, while I needed some hints for part 2.
+
+## Part 1
+
+Part 1 presents an input that looks something like this:
+
+```
+Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
+Valve BB has flow rate=13; tunnels lead to valves CC, AA
+Valve CC has flow rate=2; tunnels lead to valves DD, BB
+Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE
+Valve EE has flow rate=3; tunnels lead to valves FF, DD
+Valve FF has flow rate=0; tunnels lead to valves EE, GG
+Valve GG has flow rate=0; tunnels lead to valves FF, HH
+Valve HH has flow rate=22; tunnel leads to valve GG
+Valve II has flow rate=0; tunnels lead to valves AA, JJ
+Valve JJ has flow rate=21; tunnel leads to valve II
+```
+
+To understand this problem, there are a few pieces of important information that we need to extract from the context:
+
+- Valve `XX` denotes a node;
+- `flow rate=xx;` denotes a weight to the node;
+- `... DD, II, BB` denotes what the node is connected to.
+
+Each of the valves must be "turned on" to have an impact on the context. The highest sum over a period of 30 units of time will be the solution to the problem.
+
+If we were to directly translate the input to a graph without much thought, we will end up with a undirected cyclic graph, which for lack of a better term, is a pain to work with.
+
+Hence, I decided to boil it down using Dijkstra's Algorithm - before that, I got myself a refresher on how to properly implement priority queues with a flat array, which is possible because it is a complete binary tree.
+
+```python
+heap_rep = []
+
+def queue_add(val):
+  global heap_rep
+  heap_rep.append(val)
+  curr_ind = len(heap_rep) - 1
+
+  # => odd number = left child, even number = right child
+  parent = (curr_ind - 2) // 2 if curr_ind % 2 == 0 else (curr_ind - 1) // 2
+  while parent >= 0 and heap_rep[parent] < heap_rep[curr_ind]:
+    heap_rep[parent], heap_rep[curr_ind] = heap_rep[curr_ind], heap_rep[parent]
+    curr_ind = parent
+    parent = (curr_ind - 2) // 2 if curr_ind % 2 == 0 else (curr_ind - 1) // 2
+
+def queue_pop():
+  global heap_rep
+  retval = heap_rep[0]
+  heap_rep[0], heap_rep[-1] = heap_rep[-1], heap_rep[0]
+  ueap_rep = heap_rep[:-1]
+
+  indx = 0
+  left_child = indx * 2 + 1
+  right_child = indx * 2 + 2
+
+  while (left_child < len(heap_rep) and heap_rep[indx] < heap_rep[left_child]) or (right_child < len(heap_rep) and heap_rep[indx] < heap_rep[right_child]):
+    if right_child < len(heap_rep) and heap_rep[left_child] < heap_rep[right_child]:
+      heap_rep[indx], heap_rep[right_child] = heap_rep[right_child], heap_rep[indx]
+      indx = right_child
+    else:
+      heap_rep[indx], heap_rep[left_child] = heap_rep[left_child], heap_rep[indx]
+      indx = left_child
+
+    left_child = indx * 2 + 1
+    right_child = indx * 2 + 2
+  return retval
+
+queue_add(14)
+queue_add(7)
+queue_add(12)
+queue_add(18)
+queue_add(7)
+queue_add(11)
+queue_add(20)
+queue_add(31)
+queue_add(45)
+
+print(heap_rep)
+while len(heap_rep) != 0:
+  print(queue_pop())
+```
+
+> NOTE: Yes, the code looks ugly. It was meant to be a refresher after all!
+
+Then, I used [GeeksForGeeks's](https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/) picture of their graph as reference to test my Dijkstra's algorithm:
+
+```python
+# testing implementation of d algo
+
+list_of_distances = []
+association_list = []
+
+# add some values
+association_list.append([(1, 4), (7, 8)])
+association_list.append([(0, 4), (7, 11), (2, 8)])
+association_list.append([(1, 8), (8, 2), (5, 4), (3, 7)])
+association_list.append([(2, 7), (4, 9), (5, 14)])
+association_list.append([(3, 9), (5, 10)])
+association_list.append([(4, 10), (3, 14), (2, 4), (6, 2)])
+association_list.append([(5, 2), (8, 6), (7, 1)])
+association_list.append([(0, 8), (8, 7), (1, 11), (6, 1)])
+association_list.append([(2, 2), (7, 7), (6, 6)])
+
+# calculate distances
+list_of_distances = [999999 for i in range(len(association_list))]
+list_of_distances[0] = 0
+
+# non-priority queue implementation
+spt_set = set()
+while len(spt_set) != len(list_of_distances):
+  min_index = 0
+  min_distance = 999999
+  for k, v in enumerate(list_of_distances):
+    if k in spt_set:
+      continue
+
+    if v < min_distance:
+      min_index = k
+      min_distance = v
+
+  spt_set.add(min_index)
+
+  for association in association_list[min_index]:
+    list_of_distances[association[0]] = min(min_distance + association[1], list_of_distances[association[0]])
+
+# get path from one to another
+print(list_of_distances)
+for i in range(1, 9):
+  target = i
+  path = [i]
+  while target != 0:
+    min_dist = 999999
+    min_ind = 0
+    for association in association_list[target]:
+      dist = list_of_distances[association[0]] + association[1]
+      if dist < min_dist:
+        min_ind = association[0]
+        min_dist = dist
+    path.append(min_ind)
+    target = min_ind
+
+  print('->'.join([str(x) for x in reversed(path)]))
+```
+
+Great, warm-up done. Let's talk about the problem now.
+
+The distance between each node (that is connected anyway), is actually just 1 unit; so, we boil down those 1-unit nodes into edges. When those nodes become edges, we realize that **information about how we traverse from one node to another is lost**. In other words, we could be doing crazy things like walking back and forth a node but not actually turning on the valve at that node _gasp_. Thankfully, that is **exactly what we want**. The conversion process looks something like this:
+
+```python
+def get_distances(source, associations):
+  to_visit = PriorityQueue()
+  distances = dict()
+  for k in associations.keys():
+    distances[k] = 999999
+
+  distances[source] = 0
+  to_visit.put((0, source))
+
+  while not to_visit.empty():
+    _, node = to_visit.get()
+    association = associations[node]
+    for neighbor in association[1]:
+      if distances[neighbor] > distances[node] + 1:
+        distances[neighbor] = distances[node] + 1
+        to_visit.put((distances[neighbor], neighbor))
+
+  return distances
+```
+
+Let's talk about the structure we get from this. If we were to pass `source` the root node, we'll get the minimum spanning tree (i.e. the minimum distance from the current node to any other node in the graph). So, if we were to iterate through a list of _all of the nodes with a valve that has a flow rate_, then we'll get a map of minimum spanning trees from all nodes. Some questions you may now have is:
+
+1. Wouldn't the minimum spanning tree from every other node simply be an adjustment of the distance traveled from the starting node, to the ending node?
+
+
+    Me: No, because remember that we lost information about how to actually traverse from one node to another; we only know the distance. Imagine a cyclic graph, `A <-> B <-> C <-> D <-> A`, and only `A`, `B` and `D` are nodes with valves, which means a minimum spanning tree that looks like this: `A <-1-> B, A <-3-> D`. If I was at `A`, and I first go to `D`, I travel a distance of `3`. How would I then travel to `B`? We know that the distance from `A` to `D` is `3`, and the distance from `A` to `B` is `1`. So is the answer `4`? Of course not, there is a shorter path that connected `B` to `D` through `C`, which means the answer is actually `2`. but we wouldn't have known that with just the minimum spanning tree of `A`. So, we necessarily must generate the spanning tree of all the node with valves.
+
+2. What is the resulting structure?
+
+
+   Me: Before I answer this question, let me go through what went through my head for over half a day. "This structure must be a web, because each node has it's own minimum spanning tree!" Naturally, I thought that I ended up with a 3D fully connected web. It took me a while before I was able to re-interpret the graph as a directed acyclic graph, a.k.a a tree. Realizing it is a tree has many benefits, which includes: being able to actually solve the problem. To see how it is a tree, remember that the graph has lost all information about paths through the actual nodes. Then, each node is now represented as actually _turning on_ the nodes, because remember, with information lost about paths, it also suggests that someone could navigate the through the nodes with valves to reach a more important valve before coming back later. Since you are unable to turn on a valve twice, this means that in a graph, the arrow always points outwards, and there will never be a situation where a path will point back to itself. Hence, it is directed and acyclic, which makes the resulting structure a tree.
+
+3. How does this new structure solve the problem?
+
+Now that it's represented as a tree, we can use a variety of ways (like I tried to do) to solve the problem. However, there is one extremely important thing about the problem that makes it challenging to use conventional graph search algorithms: we are _maximizing_ our sum.
+
+All pathfinding algorithm _minimizes_ paths. In a nutshell, this means we have to either look for fantastic heuristics that can turn our maximizing problem into minimizing problems, or figure out another way.
+
+Heuristics are hard, particularly because approximate ones may not yield an accurate result, while an accurate one will either take too long to compute, or is very challenging to define. For instance, A\* Search and Dijkstra both require heuristics to make decisions on what to explore next; if we had heuristics that kept on increasing in value, the pathfinding algorithm will be stuck on a single path, and **we end up with an inaccurate result**. Even if we were to solve that problem by inversing the heuristic, we still find that our reliance on the accumulated pressure, which is always increasing, causes the heuristics to produce inaccurate results. Heuristics work the best if it is calculated between two nodes, and does not have any context-wide variables, such as time, which is required to calculate the total pressure amassed between any two nodes.
+
+Then, you may ask. What about using a slightly inaccurate heuristic, such as `time / pressure`? The larger the time, the more unideal that path. The lower the pressure amassed, the more unideal the path. Perfect!
+
+Perfect?
+
+Well, I tried it out, and it somehow worked for the example, but not the actual input. The rationale is simple: it's actually `(w1 * time) / (w2 * pressure)`, where `w1` and `w2` are arbitrary weights dictating how important time and pressure is. This is the nature of approximation - we need to declare how important something is to the other. However, for our use-case, we need precise answers; hence, even approximate heuristics are not suitable.
+
+There is likely a proper heuristic that can be used for this particular problem, but I decided that it is no longer worth the effort. Instead, I explored BFS and DFS.
+
+I didn't think too much about BFS, because I had a gut feeling that it wouldn't be suitable for the rest of the puzzle; turns out, in part 2, where I actually implement BFS because I ran out of options, I was actually right. The space complexity of BFS is `|V|`, which is synonymous with every node in existence. When we reach part 2, we can see why storing `|V|` is a terrible idea. Meanwhile, for DFS, the space complexity is however many edges we have for the node we are currently processing, which is `|E|`. In a nutshell, for our problem in particular, the storage complexity of DFS is beneficial.
+
+DFS is great because we can do anything with it; even a problem like maximizing accumulated sums. Although there are better ways to do it, like [linear programming](/2022/01/25/duty-planning-with-linear-programming/), the nature of the problem probably disallows us to express the problem as a linear equation (I tried boiling it down to a linear equation, but after spending a fair bit of time, I decided not to).
+
+So, after figuring out that it's a tree, and DFS is the way forward, and attempting to implement the other searches as an experiment, I ended up with a simple implementation like so:
+
+```python
+from queue import PriorityQueue
+
+def get_distances(source, associations):
+  to_visit = PriorityQueue()
+  distances = dict()
+  for k in associations.keys():
+    distances[k] = 999999
+
+  distances[source] = 0
+  to_visit.put((0, source))
+
+  while not to_visit.empty():
+    _, node = to_visit.get()
+    association = associations[node]
+    for neighbor in association[1]:
+      if distances[neighbor] > distances[node] + 1:
+        distances[neighbor] = distances[node] + 1
+        to_visit.put((distances[neighbor], neighbor))
+
+  return distances
+
+def dfs(source, time, pressure, visited, important_nodes):
+  if time >= 30:
+    return pressure
+
+  distances = get_distances(source, associations)
+  best_pressure = pressure
+
+  for impt_node in important_nodes:
+    node, (point_pressure, _) = impt_node
+    if node in visited:
+      continue
+
+    new_time = time + distances[node] + 1
+    new_pressure = pressure + point_pressure * (30 - new_time)
+    new_visited = visited.copy()
+    new_visited.add(node)
+    res = dfs(node, new_time, new_pressure, new_visited, important_nodes)
+    if res > best_pressure:
+      best_pressure = res
+
+  return best_pressure
+
+associations = dict()
+with open('input.txt', 'r') as f:
+  line = f.readline().strip().split(' ')
+  while line[0] != '':
+    associations[line[1]] = (int(line[4].rstrip(';').split('=')[1]),
+      [valve.strip(',') for valve in line[9:]])
+    line = f.readline().strip().split(' ')
+
+print(dfs('AA', 0, 0, set(), [(k,v) for k, v in associations.items() if v[0] > 0]))
+```
+
+And wouldn't you know, it worked!
+
+## Part 2
+
+This part is the main reason why I spent 4 days to write the blog post from Day 16 to Day 19. The problem introduces a new entity that can explore the graph, which is affectionately chosen to be an elephant, and cuts the amount of time we have to explore the nodes to 26 units of time.
+
+To save you the trouble from thinking about it: no, a double for-loop in DFS doesn't work. Well, it would, if you run the program for 16 hours (actual calculations), but it is definitely not the intended solution.
+
+Of course, it didn't stop me from trying:
+
+```python
+def dfs(info_source_1, info_source_2, pressure, visited, important_nodes, distances_map, depth=0):
+  source_1, time_1 = info_source_1
+  source_2, time_2 = info_source_2
+
+  if time_2 >= 26 and time_1 < 26:
+    return dfs(info_source_2, info_source_1, pressure, visited, important_nodes, distances_map, depth+1)
+
+  if time_1 >= 26 and time_2 >= 26:
+    return pressure
+
+  distances_1 = distances_map[source_1]
+  distances_2 = distances_map[source_2]
+  best_pressure = pressure
+
+  for impt_node_1 in important_nodes:
+    node_1, (point_pressure_1, _) = impt_node_1
+    if node_1 in visited:
+      continue
+
+    new_time_1 = time_1 + distances_1[node_1] + 1
+    new_visited = visited.copy()
+    new_visited.add(node_1)
+
+    if time_2 >= 26:
+      new_pressure = pressure + point_pressure_1 * (26 - new_time_1)
+      res = dfs((node_1, new_time_1), info_source_2, new_pressure, new_visited, important_nodes, distances_map, depth+1)
+      if res > best_pressure:
+        best_pressure = res
+      continue
+
+    for impt_node_2 in important_nodes:
+      node_2, (point_pressure_2, _) = impt_node_2
+      if node_2 in visited or node_1 is node_2:
+        continue
+
+      new_time_2 = time_2 + distances_2[node_2] + 1
+      new_pressure = pressure + point_pressure_1 * (26 - new_time_1) + point_pressure_2 * (26 - new_time_2)
+      new_visited_inner = new_visited.copy()
+      new_visited_inner.add(node_2)
+      res = dfs((node_1, new_time_1), (node_2, new_time_2), new_pressure, new_visited_inner, important_nodes, distances_map, depth+1)
+      if res > best_pressure:
+        best_pressure = res
+
+  return best_pressure
+```
+
+While it worked for the example input, it doesn't work (i.e. doesn't finish within acceptable time) for the real input. This is because there are `15! * 14! = 114,000,816,848,279,961,600,000` possible combinations for the algorithm to run through.
+
+So, what next? I tried BFS as well:
+
+```python
+def bfs(info_source_1, info_source_2, important_nodes, distances_map):
+  q = Queue()
+  p = Queue()
+
+  q.put((info_source_1, info_source_2, 0, set(), 0, []))
+  set_of_all_important_nodes = set([k for k, _ in important_nodes])
+  found_pressure = 0
+  found_depth = 999999
+
+  while not q.empty():
+    info_source_1, info_source_2, pressure, visited, depth, path = q.get()
+
+    if depth > found_depth:
+      break
+
+    source_1, time_1 = info_source_1
+    source_2, time_2 = info_source_2
+
+    if time_2 >= 26 and time_1 < 26:
+      source_1, source_2 = source_2, source_1
+      time_1, time_2 = time_2, time_1
+    elif time_1 >= 26 and time_2 >= 26:
+      continue
+    elif len(visited & set_of_all_important_nodes) == len(important_nodes):
+      if pressure > found_pressure:
+        found_pressure = pressure
+        found_depth = depth
+
+    distances_1 = distances_map[source_1]
+    distances_2 = distances_map[source_2]
+    best_pressure = pressure
+
+    for impt_node_1 in important_nodes:
+      node_1, (point_pressure_1, _) = impt_node_1
+      if node_1 in visited:
+        continue
+
+      new_time_1 = time_1 + distances_1[node_1] + 1
+      new_visited = visited.copy()
+      new_visited.add(node_1)
+
+      if time_2 >= 26:
+        new_pressure = pressure + point_pressure_1 * (26 - new_time_1)
+        q.put(((node_1, new_time_1), info_source_2, new_pressure, new_visited, depth+1, path))
+
+      for impt_node_2 in important_nodes:
+        node_2, (point_pressure_2, _) = impt_node_2
+        if node_2 in visited or node_1 is node_2:
+          continue
+
+        new_time_2 = time_2 + distances_2[node_2] + 1
+        new_pressure = pressure + point_pressure_1 * (26 - new_time_1) + point_pressure_2 * (26 - new_time_2)
+        new_visited_inner = new_visited.copy()
+        new_visited_inner.add(node_2)
+        q.put(((node_1, new_time_1), (node_2, new_time_2), new_pressure, new_visited_inner, depth+1, path + [(node_1, node_2)]))
+
+  return found_pressure
+```
+
+The BFS mechanism uses a gimmick to break out early, because I reasoned that beyond a certain depth, we approach diminishing returns. Needless to say, BFS worked on the example input, but not on the actual input, due to space complexity.
+
+I went berserk and also implemented Dijkstra's to find the minimum spanning tree, but in hindsight, I have no idea what I was trying to accomplish with it.
+
+Eventually, I gave up and went to bed. On and off, I would try my hand again, including attempting to use permutations to shuffle the order of valves to open, but again, due to space complexity, this was infeasible.
+
+Finally, I decided to look for inspiration. Without looking at the solutions, I looked through the Reddit post, and found a post by [betaveros](https://www.reddit.com/r/adventofcode/comments/zn6k1l/comment/j0ffso8/?utm_source=share&utm_medium=web2x&context=3) (at time of writing, the top on the leaderboard), which contained a sentence that gave me the inspiration to settle on the answer: "one person first, then the same DFS for the other over all unopened valves".
+
+If I may: "god damn it"! I've thought about this at one point, but my implementation was naive: I simply made one explorer explore half the list, and the other explorer explore the other half of the list. However, this failed because obviously, not _all_ possibilities were considered.
+
+However, let's think about it another way. Assume I have 6 valves to open. If I were to open the valves alone, I may not be able to finish within the 26 measly minutes given to me. So, the whole point of teamwork is to split up the work. Hence, two explorers should open roughly 3 valves each. However, recall that once a valve has been opened, **it cannot be opened again**. Hence, all I need to do is to perform DFS on 3 valves, then change the actor to the other explorer, and perform DFS on the remaining 3 valves. Hence, instead of searching through `6! * 5!` possibilities, I am now at `6!` possibilities, which is definitely doable within human time.
+
+Supersizing to the current problem, we now have an opportunity to restrict the problem to `15!` possibilities, which may be a huge number, but definitely much smaller than `15! * 14!` possibilities. Hence, the new DFS is implemented as such:
+
+```python
+def dfs(info_source_1, info_source_2, pressure, visited, important_nodes, distances_map):
+  source_1, time_1 = info_source_1
+  source_2, time_2 = info_source_2
+
+  if time_1 >= 26 and time_2 >= 26:
+    return pressure, path
+  elif time_1 >= 26 or (len(visited) + 1 > len(important_nodes) // 2 and time_2 != 9999):
+    return dfs(info_source_2, (source_1, 9999), pressure, visited, important_nodes, distances_map)
+
+  distances = distances_map[source_1]
+  best_pressure = pressure
+
+  for impt_node in important_nodes:
+    node, (point_pressure, _) = impt_node
+    if node in visited:
+      continue
+
+    new_time = time_1 + distances[node] + 1
+    new_visited = visited.copy()
+    new_visited.add(node)
+
+    new_pressure = pressure + point_pressure * (26 - new_time)
+    res = dfs((node, new_time), info_source_2, new_pressure, new_visited, important_nodes, distances_map)
+    if res > best_pressure:
+      best_pressure = res
+
+  return best_pressure
+```
+
+So, applying this diff (`<` is part 1, `>` part 2) to the part 1 solution, and running the program for roughly 20 minutes will give us the final result.
+
+```diff
+22,24c22,29
+< def dfs(source, time, pressure, visited, important_nodes):
+<   if time >= 30:
+<     return pressure
+---
+> def dfs(info_source_1, info_source_2, pressure, visited, important_nodes, distances_map):
+>   source_1, time_1 = info_source_1
+>   source_2, time_2 = info_source_2
+>
+>   if time_1 >= 26 and time_2 >= 26:
+>     return pressure, path
+>   elif time_1 >= 26 or (len(visited) + 1 > len(important_nodes) // 2 and time_2 != 9999):
+>     return dfs(info_source_2, (source_1, 9999), pressure, visited, important_nodes, distances_map)
+26c31
+<   distances = get_distances(source, associations)
+---
+>   distances = distances_map[source_1]
+34,35c39
+<     new_time = time + distances[node] + 1
+<     new_pressure = pressure + point_pressure * (30 - new_time)
+---
+>     new_time = time_1 + distances[node] + 1
+38c42,44
+<     res = dfs(node, new_time, new_pressure, new_visited, important_nodes)
+---
+>
+>     new_pressure = pressure + point_pressure * (26 - new_time)
+>     res = dfs((node, new_time), info_source_2, new_pressure, new_visited, important_nodes, distances_map)
+52c58,60
+< print(dfs('AA', 0, 0, set(), [(k,v) for k, v in associations.items() if v[0] > 0]))
+---
+> important_elements = [(k,v) for k, v in associations.items() if v[0] > 0]
+> distances_map = {k: get_distances(k, associations) for k in associations.keys()}
+> print(dfs(('AA', 0), ('AA', 0), 0, set(), important_elements, distances_map))
+```
