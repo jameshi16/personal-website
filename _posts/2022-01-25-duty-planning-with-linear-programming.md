@@ -28,12 +28,12 @@ However, in optimization, instead of figuring out if an equation should be minim
 
 Linear relationships are essentially either equalities, or inequalities (`=`, `>`, `<` and so on):
 
-<img src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px;" alt="An example of a linear inequality"/>
+<img class="matheqn" src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px;" alt="An example of a linear inequality"/>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
 
 Since the relationships must be _linear_, it implies that equations like the following cannot be solved with Linear Programming:
 
-<img src="/images/20220125_3.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a non-linear inequality"/>
+<img class="matheqn" src="/images/20220125_3.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a non-linear inequality"/>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a non-linear inequality | Source: Me</p>
 
 If inequalities like the above presents itself, the best course of action would be to use another kind of solver, like a nonlinear programming solver, or a Constraint Problem (CP) solver [like this one by Google](https://developers.google.com/optimization/cp#tools). However, chances are, that with a touch of creativity, most problems can be expressed as a linear programming problem.
@@ -42,20 +42,20 @@ If inequalities like the above presents itself, the best course of action would 
 
 In a nutshell, given a bunch of inputs, lets say:
 
-<img src="/images/20220125_2.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="A bunch of x"/>
+<img class="matheqn" src="/images/20220125_2.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="A bunch of x"/>
 <p class="text-center text-gray lh-condensed-ultra f6">A bunch of inputs | Source: Me</p>
 
 We can define a bunch of constraints represented via **linear** relationships, like:
 
-<img src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a linear inequality"/>
+<img class="matheqn" src="/images/20220125_1.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="An example of a linear inequality"/>
 <p class="text-center text-gray lh-condensed-ultra f6">An example of a linear inequality | Source: Me</p>
 
 For Linear Programming involving only two variables, we can visualize how it works with graphs. Let's say our two variables are `x` and `y`, and our constraints are:
 
-<img src="/images/20220125_4.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="First Constraint"/>
+<img class="matheqn" src="/images/20220125_4.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="First Constraint"/>
 <p class="text-center text-gray lh-condensed-ultra f6">First Constraint | Source: Me</p>
 
-<img src="/images/20220125_5.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Second Constraint"/>
+<img class="matheqn" src="/images/20220125_5.svg" style="max-width: 100px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Second Constraint"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Second Constraint | Source: Me</p>
 
 We will find that the graph on [Desmos](https://www.desmos.com/calculator) will look like this:
@@ -65,7 +65,7 @@ We will find that the graph on [Desmos](https://www.desmos.com/calculator) will 
 
 The intersected area (i.e. areas where both blue and green) are the solutions to the inequality (note that the intersection itself is not a solution, since both of our inequalities are not inclusive). Now, if we were to define an objective function, which is the function we want to minimize or maximize:
 
-<img src="/images/20220125_7.svg" style="max-width: 50px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"/>
+<img class="matheqn" src="/images/20220125_7.svg" style="max-width: 50px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Objective Function, 2x + y | Source: Me</p>
 
 And then plot it on the graph:
@@ -123,7 +123,7 @@ As this is considered an "innovation" rather than an "invention", it is meant to
 
 Every single day should have 1 personnel performing duties, while another personnel will be the backup. This is achieved simply by summing for all `i`, in the same `j`, for all duties / backups.
 
-<img src="/images/20220125_9.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum"/>
+<img class="matheqn" src="/images/20220125_9.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every `j` | Source: Me</p>
 
 ## No consecutive days
@@ -136,7 +136,7 @@ If we were to generate a duty timetable now without some specific constraints, t
 
 For a single slot (i.e. the status of duty for a particular person on a particular day), consecutive days are prevented by using this clever little equation, iterating `x_ij` over all possible values of `j` for `a` number of days, where `a` is the limit to the number of days someone is allowed to serve.
 
-<img src="/images/20220125_10.svg" style="max-width: 150px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum over all possible values of j for a number of days"/>
+<img class="matheqn" src="/images/20220125_10.svg" style="max-width: 150px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Sum over all possible values of j for a number of days"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Clever Sum | Source: Me</p>
 
 In effect, this ensures that `a` days after a duty / backup (not shown) slot, there will not be any more duties.
@@ -148,7 +148,7 @@ Without delving too deep into the point system details (as this is subjected to 
 As one of the pivotal factors to eliminate model bias, the points must be allocated fairly to each person. This is done quite simply by taking the projected amount of points (calculated by summing the possible points earned throughout the entire period, dividing by the number of days in the period), introducing a deviation variable, which dictates how many points can each person differ from one another, and then summing the points for each person, ensuring that it is between `point_avg -
 deviation` to `point_avg + deviation`.
 
-<img src="/images/20220125_11.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Approximate equation"/>
+<img class="matheqn" src="/images/20220125_11.svg" style="max-width: 200px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Approximate equation"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Repeat this for every i | Source: Me</p>
 
 In effect, this means that the model itself would determine the value of `deviation`, which means that we want to minimize this as much as possible.
@@ -187,7 +187,7 @@ Combined together, the objective of our function is to prioritize & maximize pre
 
 In a nutshell we are _maximizing_:
 
-<img src="/images/20220125_13.svg" style="max-width: 350px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"/>
+<img class="matheqn" src="/images/20220125_13.svg" style="max-width: 350px; width: 100%; margin: 0 auto; display: block; border-radius: 0px" alt="Objective Function"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Objective Function | Source: Me</p>
 
 where `deviation` and `x` is as expected, while `s` is a matrix containing values that are either `0`, `1` or `2`. `1` represents a normal day, while `2` represents a preferred day; `0` is essentially `nil` - since there is already a _constraint_ that prevents duty slots from being filled if personnel is unavailable.

@@ -48,40 +48,40 @@ Let's understand some terminology.
 |Round Key|The key used for a specific round. The first round key will always be the user-supplied key.|
 |State|The block of data that we are working with. At first, the state will be your plaintext; as we go through the rounds, the state changes and eventually becomes the ciphertext.|
 
-I poked around the Wikipedia article, clicking into links to understand more about the [AES Key Schedule](https://en.wikipedia.org/wiki/AES_key_schedule), and how the mathematics worked. This led me to learn about the [finite field](https://en.wikipedia.org/wiki/Finite_field), or more fancifully known as the Galois field. In a nutshell, a finite field contains a finite number of elements, which will always be a prime or a power of a prime. A finite field of 2 will contain the elements 0 and 1, i.e. <img src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>, while a finite field of 3 will contain the elements 0, 1 and 2, i.e. <img src="/images/20201205_4.png" alt="GF(3)=\{0,1,2\}" style="border-radius: 0px; max-height: 1em"/>. What we are particularly interested in is finite fields defined by <img src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/>, because all extension fields (i.e. any `k` that satisfies the condition in the equation) have the _same_ rules of arithmetic (i.e. addition, division, multiplication and subtraction). Before we dive into why having the _same_ rules of arithmetic is important to AES, it is worth it to mention that if <img src="/images/20201205_5.png" style="border-radius: 0px; max-height: 1em" alt="n>1,GF(p^n)"/> for any prime `p`, then the finite field can be expressed as a polynomial, where the coefficients are in the <img src="/images/20201205_6.png" style="border-radius: 0px; max-height: 1em" alt="GF(p)"/> field, which will be used like free flowing cash in AES. You can read more about finite fields [through this Wolfram article](https://mathworld.wolfram.com/FiniteField.html).
+I poked around the Wikipedia article, clicking into links to understand more about the [AES Key Schedule](https://en.wikipedia.org/wiki/AES_key_schedule), and how the mathematics worked. This led me to learn about the [finite field](https://en.wikipedia.org/wiki/Finite_field), or more fancifully known as the Galois field. In a nutshell, a finite field contains a finite number of elements, which will always be a prime or a power of a prime. A finite field of 2 will contain the elements 0 and 1, i.e. <img class="matheqn" src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>, while a finite field of 3 will contain the elements 0, 1 and 2, i.e. <img class="matheqn" src="/images/20201205_4.png" alt="GF(3)=\{0,1,2\}" style="border-radius: 0px; max-height: 1em"/>. What we are particularly interested in is finite fields defined by <img class="matheqn" src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/>, because all extension fields (i.e. any `k` that satisfies the condition in the equation) have the _same_ rules of arithmetic (i.e. addition, division, multiplication and subtraction). Before we dive into why having the _same_ rules of arithmetic is important to AES, it is worth it to mention that if <img class="matheqn" src="/images/20201205_5.png" style="border-radius: 0px; max-height: 1em" alt="n>1,GF(p^n)"/> for any prime `p`, then the finite field can be expressed as a polynomial, where the coefficients are in the <img class="matheqn" src="/images/20201205_6.png" style="border-radius: 0px; max-height: 1em" alt="GF(p)"/> field, which will be used like free flowing cash in AES. You can read more about finite fields [through this Wolfram article](https://mathworld.wolfram.com/FiniteField.html).
 
 ### Why same rules of arithmetic is important to AES
 
 XOR gates. They're great, fast, efficient, and easy to implement. So, wouldn't it be great to encryption performance if it's used to heck and back in AES?
 
-That is what living within the <img src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/> finite field allows us to do. In this particular field, which you recall, can be expressed as a polynomial with co-efficients in the <img src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/> field. Here is a polynomial in <img src="/images/20201205_7.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^4)"/>:
+That is what living within the <img class="matheqn" src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/> finite field allows us to do. In this particular field, which you recall, can be expressed as a polynomial with co-efficients in the <img class="matheqn" src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/> field. Here is a polynomial in <img class="matheqn" src="/images/20201205_7.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^4)"/>:
 
-<img src="/images/20201205_8.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="x^3 + x^1 + 1"/>
+<img class="matheqn" src="/images/20201205_8.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="x^3 + x^1 + 1"/>
 
-The co-efficients cannot be anything else but 0 and 1. This means that we can represent the co-efficients of this polynomial with binary: `1011`. Let's try adding two polynomials together across the <img src="/images/20201205_7.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^4)"/> field:
+The co-efficients cannot be anything else but 0 and 1. This means that we can represent the co-efficients of this polynomial with binary: `1011`. Let's try adding two polynomials together across the <img class="matheqn" src="/images/20201205_7.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^4)"/> field:
 
-<img src="/images/20201205_9.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) + (x^2 + x^1) = x^3 + x^2 + x^1 + x^1 + 1"/>
+<img class="matheqn" src="/images/20201205_9.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) + (x^2 + x^1) = x^3 + x^2 + x^1 + x^1 + 1"/>
 
-Ah, what do we do now? We are trying to add two <img src="/images/20201205_11.png" style="border-radius: 0px; max-height: 1em" alt="x^1"/> together. Recall that the co-efficients can only be 0 and 1; in the rules of normal mathematics, we would have been able to just add the two co-efficients together: <img src="/images/20201205_10.png" style="border-radius: 0px; max-height: 1em" alt="x^1+x^1=2x^1" />. However, this is not normal mathematics; we have to give our answer in terms of the finite field <img src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>. So, we take the would-be-co-efficient, and modulo it by 2 (formally, <img src="/images/20201205_12.png" style="border-radius: 0px; max-height: 1em" alt="2\equiv0\ (mod\ 2)"/>).
+Ah, what do we do now? We are trying to add two <img class="matheqn" src="/images/20201205_11.png" style="border-radius: 0px; max-height: 1em" alt="x^1"/> together. Recall that the co-efficients can only be 0 and 1; in the rules of normal mathematics, we would have been able to just add the two co-efficients together: <img class="matheqn" src="/images/20201205_10.png" style="border-radius: 0px; max-height: 1em" alt="x^1+x^1=2x^1" />. However, this is not normal mathematics; we have to give our answer in terms of the finite field <img class="matheqn" src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>. So, we take the would-be-co-efficient, and modulo it by 2 (formally, <img class="matheqn" src="/images/20201205_12.png" style="border-radius: 0px; max-height: 1em" alt="2\equiv0\ (mod\ 2)"/>).
 
-<img src="/images/20201205_13.png" style="border-radius: 0px; max-height: 6em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) + (x^2 + x^1)\\ = x^3 + x^2 + x^1 + x^1 + 1\\ = x^3 + x^2 + 1"/>
+<img class="matheqn" src="/images/20201205_13.png" style="border-radius: 0px; max-height: 6em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) + (x^2 + x^1)\\ = x^3 + x^2 + x^1 + x^1 + 1\\ = x^3 + x^2 + 1"/>
 
 If you turn the co-efficients of the operands into binary and squint your eyes _ever_ so slightly, you'll realize that adding the two polynomials it's basically just XORing two binary numbers: `1011 ^ 0110 = 1101`! And so, modifying our math equations one last time with the XOR operator:
 
-<img src="/images/20201205_14.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) \oplus (x^2 + x^1) = x^3 + x^2 + 1"/>
+<img class="matheqn" src="/images/20201205_14.png" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="(x^3 + x^1 + 1) \oplus (x^2 + x^1) = x^3 + x^2 + 1"/>
 
-Beautiful. We now know that adding two polynomials within <img src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/> fields is essentially just XORing the coefficients in binary form.
+Beautiful. We now know that adding two polynomials within <img class="matheqn" src="/images/20201205_2.png" style="border-radius: 0px; max-height: 1em" alt="GF(2^k), k\in\mathbb{N}\setminus\{0\}"/> fields is essentially just XORing the coefficients in binary form.
 
 What about multiplication between two polynomials? Let's take a look at the multiplication between these two polynomials in same finite field.
 
-<img src="/images/20201205_16.png" style="border-radius: 0px; max-height: 6em; margin: 0 auto; display: block;" alt="(x^1+1)\bullet(x^1+1)\\=x^2+x^1+x^1+1\\=x^2+1"/>
+<img class="matheqn" src="/images/20201205_16.png" style="border-radius: 0px; max-height: 6em; margin: 0 auto; display: block;" alt="(x^1+1)\bullet(x^1+1)\\=x^2+x^1+x^1+1\\=x^2+1"/>
 
 Converting it to binary, we see: `0011 * 0011 = 0101` which, when converted to decimal numbers, means that `3 * 3 = 5`. Math is broken, I'm retiring, good night forever.
 
 <img src="/images/20201205_15.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="faint"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Retiring forever | Source: <a href="https://giphy.com/gifs/filmeditor-movie-dead-3otPoFEwqMCHVf3R72">Giphy</a></p>
 
-Turns out, this kind of multiplication is known as [carry-less product](https://en.wikipedia.org/wiki/Carry-less_product#Definition). The technique detailed in the link allows us to perform our multiplication with our best friend, XOR, within any extension field of <img src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>.
+Turns out, this kind of multiplication is known as [carry-less product](https://en.wikipedia.org/wiki/Carry-less_product#Definition). The technique detailed in the link allows us to perform our multiplication with our best friend, XOR, within any extension field of <img class="matheqn" src="/images/20201205_3.png" alt="GF(2)=\{0,1\}" style="border-radius: 0px; max-height: 1em"/>.
 
 Apart from a tiny bit of matrix multiplication, that is all of the mathematics we need to know to work with AES.
 
@@ -108,9 +108,9 @@ In this line, we are (carry-less) multiplying by 3, in efforts to iterate throug
 2. Without modifying `p` (i.e. make a copy), shift `p` left by those amount of positions for each bit `1`. This means shifting two copies of `p`, one time once to the left, the other 0 times to the left.
 3. XOR all copies of `p` and assign it back into `p`. In other words: `p = p ^ (p << 1)`.
 
-That explains the front portion. What about the `(p & 0x80 ? 0x1B : 0)` part? The mathematical notation of our field is <img src="/images/20201205_18.png" alt="GF(2^8) = GF(2)[x]/(x^8 + x^4 + x^3 + x + 1)" style="max-height: 1em; border-radius: 0px"/>, where <img src="/images/20201205_19.png" alt="x^8 + x^4 + x^3 + x + 1" style="max-height: 1em; border-radius: 0px"/> is the irreducible polynomial. An irreducible polynomial is something that cannot be reduced further to multiplications of two elements within the finite field, and is absolutely magical, because it can also generate all possible polynomials within a field. Remember that we shifted `p` 1 position to the left? If the most significant bit was a `1` and it was shifted away, we need to account for it somehow, right? However, since that bit represents a co-efficient of <img src="/images/20201205_21.png" alt="x^8" style="max-height: 1em; border-radius: 0px"/>, which is too large to fit within our finite field, we must reduce it with the irreducible polynomial (i.e. generate the equivalent within our field) by modulo. Turns out:
+That explains the front portion. What about the `(p & 0x80 ? 0x1B : 0)` part? The mathematical notation of our field is <img class="matheqn" src="/images/20201205_18.png" alt="GF(2^8) = GF(2)[x]/(x^8 + x^4 + x^3 + x + 1)" style="max-height: 1em; border-radius: 0px"/>, where <img class="matheqn" src="/images/20201205_19.png" alt="x^8 + x^4 + x^3 + x + 1" style="max-height: 1em; border-radius: 0px"/> is the irreducible polynomial. An irreducible polynomial is something that cannot be reduced further to multiplications of two elements within the finite field, and is absolutely magical, because it can also generate all possible polynomials within a field. Remember that we shifted `p` 1 position to the left? If the most significant bit was a `1` and it was shifted away, we need to account for it somehow, right? However, since that bit represents a co-efficient of <img class="matheqn" src="/images/20201205_21.png" alt="x^8" style="max-height: 1em; border-radius: 0px"/>, which is too large to fit within our finite field, we must reduce it with the irreducible polynomial (i.e. generate the equivalent within our field) by modulo. Turns out:
 
-<img src="/images/20201205_20.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 4em; margin: 0 auto; display: block;"/>
+<img class="matheqn" src="/images/20201205_20.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 4em; margin: 0 auto; display: block;"/>
 
 The multiplication of `1` on the right hand side of the first line is a guess. You _can_ get this number without guessing by using the [Extended Euclidean Algorithm](https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm), but to be honest I have no idea how and I can't be bothered to find out. Regardless, the above equations matches with our `0x1B` binary representation perfectly!
 
@@ -125,13 +125,13 @@ The multiplication of `1` on the right hand side of the first line is a guess. Y
 
 Here, we are dividing by 3, which is the same as multiplying by the inverse of 3. Using the power of mathematics, we see that:
 
-<img src="/images/20201205_22.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 10em; margin: 0 auto; display: block;"/>
+<img class="matheqn" src="/images/20201205_22.png" alt="x^8=1*(x^8+x^4+x^3+x+1)+x^4+x^3+x+1\\\implies x^8=x^4+x^3+x+1\ (mod\ x^8+x^4+x^3+x+1)" style="border-radius: 0px; max-height: 10em; margin: 0 auto; display: block;"/>
 
 Which means that `0xf6` is an inverse of `0x03` (remember that `p * q == 1` Galois Invariant?)! When performing the arcane art of carry-less multiplication, we find that there is no point shifting after 4. This is because the next shift, 8, would just shift the entirety of `q` out of existence (i.e. becomes `0x00` after shifting), wasting CPU cycles for calculation. The missing co-efficients as a result of ignoring shifts after 4 is fixed later on with the line `q ^= (q) ^ 0x80 ? 0x09 : 0`. The author of a StackOverflow answer explains how the mystery number, `0x09` is derived better than I can, so [do check out his answer](https://math.stackexchange.com/a/1231243).
 
 Now that we have calculated `p` and `q`, we can continue following the instructions on deriving the `SBox`. In essence, we use the multiplicative inverse of `p` to perform the transformation:
 
-<img src="/images/20201205_23.svg" style="border-radius: 0px; max-height: 10em; margin: 0 auto; display: block;"/>
+<img class="matheqn" src="/images/20201205_23.svg" style="border-radius: 0px; max-height: 10em; margin: 0 auto; display: block;"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Transformation | Source: <a href="https://en.wikipedia.org/wiki/Rijndael_S-box">Wikipedia</a></p>
 
 Which is reflected in these lines of code:
@@ -322,19 +322,19 @@ function shiftRows(state) {
 }
 ```
 
-Next, we mix the columns; this is a linear transformation, and provides diffusion in the cipher. In essence, we're multiplying each column, which is treated as a polynomial with co-efficients in the finite field <img src="/images/20201205_26.png" alt="GF(2^8)" style="max-height: 1em; border-radius: 0px"/>, with:
+Next, we mix the columns; this is a linear transformation, and provides diffusion in the cipher. In essence, we're multiplying each column, which is treated as a polynomial with co-efficients in the finite field <img class="matheqn" src="/images/20201205_26.png" alt="GF(2^8)" style="max-height: 1em; border-radius: 0px"/>, with:
 
-<img src="/images/20201205_27.svg" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="0x03z^3+0x01*z^2+0x01*x+0x02"/>
+<img class="matheqn" src="/images/20201205_27.svg" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="0x03z^3+0x01*z^2+0x01*x+0x02"/>
 <p class="text-center text-gray lh-condensed-ultra f6">The fixed polynomial to multiply with | Source: <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">Wikipedia</a></p>
 
 And then we modulo the result with:
 
-<img src="/images/20201205_28.svg" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="0x01*z^4+0x01"/>
+<img class="matheqn" src="/images/20201205_28.svg" style="border-radius: 0px; max-height: 2em; margin: 0 auto; display: block;" alt="0x01*z^4+0x01"/>
 <p class="text-center text-gray lh-condensed-ultra f6">The fixed polynomial to modulo with | Source: <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">Wikipedia</a></p>
 
 On further calculation as denoted in [the relevant Wikipedia article](https://en.wikipedia.org/wiki/Rijndael_MixColumns#Demonstration), the final calculation can be denoted as a matrix calculation:
 
-<img src="/images/20201205_29.svg" style="border-radius: 0px; max-height: 8em; margin: 0 auto; display: block;" alt="matrix multiplication equiv"/>
+<img class="matheqn" src="/images/20201205_29.svg" style="border-radius: 0px; max-height: 8em; margin: 0 auto; display: block;" alt="matrix multiplication equiv"/>
 <p class="text-center text-gray lh-condensed-ultra f6">The equivalent matrix multiplication | Source: <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">Wikipedia</a></p>
 
 Which means that we can finally convert it into code. First, we need a generic way to perform XOR multiplication:

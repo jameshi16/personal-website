@@ -148,6 +148,14 @@ tr:nth-child(even) {
     background: #36454f !important;
   }
 
+  .matheqn {
+    filter: invert(100%);
+  }
+
+  tr:nth-child(even) {
+    background-color: darkgrey;
+  }
+
   code {
     background: #191970;
   }
@@ -160,6 +168,11 @@ tr:nth-child(even) {
 
     a:hover, a:focus, span:hover, span:focus {
       background: #36454f;
+    }
+  }
+  .article {
+    blockquote {
+      color: #bfbfbf;
     }
   }
 }
