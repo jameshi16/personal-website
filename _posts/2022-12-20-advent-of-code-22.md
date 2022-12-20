@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-20 12:43 +0000
+date: 2022-12-20 19:40 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 17](#day-17), [Day 18](#day-18) is out!
+**EDIT**: [Day 17](#day-17), [Day 18](#day-18), [Day 19](#day-19) is out!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -88,7 +88,7 @@ print(sum(sorted((reduce(lambda accum, y: accum + [0] if y == "" else accum[:-1]
 
 All I did here was to replace `max` with a composition of `sum` and `sorted`.
 
----
+----
 
 # Day 2
 
@@ -245,7 +245,7 @@ inputStr.split('\n').reduce((acc, curr) =>
 
 Notice the change at `raw[1].charCodeAt() - 89`, which essentially absorbed an offset of `-1`.
 
----
+----
 
 # Day 3
 
@@ -328,7 +328,7 @@ import Data.List
 solution' input = sum $ map ((\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) . (!! 0)) $ map (foldr1 intersect) $ foldr (\x acc@(y:ys) -> if length y == 3 then [x]:acc else (x:y):ys) [[]] $ lines input
 ```
 
----
+----
 
 # Day 4
 
@@ -426,7 +426,7 @@ So, our resulting code looks very similar to part 1, with a minor change of inde
 print(sum(list(map(lambda xys: (xys[0][0] <= xys[1][0] and xys[0][1] >= xys[1][0]) or (xys[1][0] <= xys[0][0] and xys[1][1] >= xys[0][0]), list(map(lambda segments: list(map(lambda segment: list(map(int, segment.split('-'))), segments)), list(map(lambda line: line.split(','), open("input.txt", "r").readlines()))))))))
 ```
 
----
+----
 
 # Day 5
 
@@ -524,7 +524,7 @@ for instruction in instructions:
 print(''.join([s[-1] for s in stacks]))
 ```
 
----
+----
 
 # Day 6
 
@@ -634,7 +634,7 @@ int main() {
 
 The time complexity is still the same, which is `O(k^2*n)` where `k = 14`. Use the right tools (i.e. Python) for the right job!
 
----
+----
 
 # Day 7
 
@@ -852,7 +852,7 @@ print(n.getSolution(30000000 - 70000000 + n.getSize()))
 
 The code block figures out if a child is closer to the target value than itself, done recursively.
 
----
+----
 
 # Day 8
 
@@ -898,7 +898,7 @@ result = itertools.starmap(lambda row, r_trees: list(itertools.starmap(lambda co
 print(max([max(r) for r in result]))
 ```
 
----
+----
 
 # Day 9
 
@@ -990,7 +990,7 @@ for instruction in head_instructions:
 print(len(tail_positions))
 ```
 
----
+----
 
 # Day 10
 
@@ -1060,7 +1060,7 @@ solution input = (\(_,_,z) -> chunksOf 40 $ reverse z) $ foldl (\accum (x:xs) ->
 
 The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.
 
----
+----
 
 # Day 11
 
@@ -1256,7 +1256,7 @@ Hence,
 
 must work (the prime numbers are the terms I'm too lazy to evaluate).
 
----
+----
 
 # Day 12
 
@@ -1350,7 +1350,7 @@ def bfs(pos):
 print(bfs((len(grid[0]) - 22, 20)))
 ```
 
----
+----
 
 # Day 13
 
@@ -1654,7 +1654,7 @@ int main() {
 }
 ```
 
----
+----
 
 # Day 14
 
@@ -1877,7 +1877,7 @@ while not stop:
 print(settled_grains)
 ```
 
----
+----
 
 # Day 15
 
@@ -2035,7 +2035,7 @@ for k, _ in coordinate_map.items():
 
 > `x * 4000000 + y` is just the problem statement's instruction on how to encode the answer for AOC to check if the result is valid.
 
----
+----
 
 # Day 16
 
@@ -2742,7 +2742,7 @@ Hence, the code diff to get the final answer is as follows:
 > print(height)
 ```
 
----
+----
 
 # Day 18
 
@@ -2850,3 +2850,147 @@ So the diff to implement part 2 is:
 >   if isOutside:
 >     area += areaInContact
 ```
+
+----
+
+# Day 19
+
+Right, another entry down for the count. This day was quite similar to Day 16, because it involves doing a search on a space that is too large for comfort.
+
+## Part 1
+
+So, we have a blueprint, which are defined like so:
+
+```
+Blueprint 1:
+  Each ore robot costs 4 ore.
+  Each clay robot costs 2 ore.
+  Each obsidian robot costs 3 ore and 14 clay.
+  Each geode robot costs 2 ore and 7 obsidian.
+
+Blueprint 2:
+  Each ore robot costs 2 ore.
+  Each clay robot costs 3 ore.
+  Each obsidian robot costs 3 ore and 8 clay.
+  Each geode robot costs 3 ore and 12 obsidian.
+```
+
+That allows us to build robots that gather resources to build even more robots to gather even more resources and so on. We start with 1 ore robot, and each robot will take 1 time unit to build, before it can contribute to our resource pool. Our goal is to calculate a score for each of the blueprint, and print out a linear combination of the score. The score is defined as the number of geodes the blueprint can possibly generate within 24 units of time.
+
+Following the pattern I saw in Day 16, I quickly eliminated the typical graph search algorithms, and decided that DFS was the way to go. So, let's think about _when_ we want to call DFS.
+
+A direct approach would be to, for every time unit, call DFS in an attempt to expend resources build every type of robot. Instinctively, I knew that this search space was too huge to consider.
+
+Instead, we have to do a _good enough_ approximation of what _may_ happen. Here are some considerations:
+
+- If I'm being optimal about my robot-building, which I must be due to time unit limitation, I _should_ only have enough resources to build a maximum of one robot per time unit. This eliminates the assumption that I could potentially concurrently build multiple robots in one go, as doing so would imply saving up for resources, which reduces contributions from the robots that could already have been built over the 24 time units.
+- If, at any point of time, I am able to build a geode robot, I **must** do so, since I'm trying to maximize the number of geodes. I don't even have to consider building any other robot in that minute.
+- If, at any point of time, I am able to build a obsidian robot, I _should_ do so, and ignore every other possibility. This assumption very rarely is false, as it is possible to save the resources for a greater benefit down the road. For this part, I assume the latter.
+- If I am able to build a clay or ore robot, I should also consider saving resources for a greater benefit down the road.
+- If, at any point of time, I have too much ore (which happens because DFS may keep choosing to save resources / build ore robots), I can completely prune the branch, because I am definitely getting further away from the objective.
+
+The considerations help to reduce the search space into something that is completes within reasonable time (~10 minutes), and doesn't waste the CPU cycle looking at graphs that don't matter in the grand scheme of things. Putting together all the considerations, and some trial and error later, I end up with the following implementation:
+```python
+blueprints = list()
+with open('input.txt', 'r') as f:
+  line = f.readline().strip()
+  while line:
+    data = line.split(' ')
+    blueprints.append((int(data[6]), int(data[12]), (int(data[18]), int(data[21])), (int(data[27]), int(data[30]))))
+    line = f.readline().strip()
+
+def dfs(blueprint, resources=(0, 0, 0, 0), bot_count=(1, 0, 0, 0), new_bot_count=(0, 0, 0, 0), minutes=0):
+  best_quality = (resources[-1], resources, bot_count)
+  if minutes > 24:
+    return best_quality
+
+  ores, clays, obsidians, geodes = resources
+  ore_bots, clay_bots, obsidian_bots, geode_bots = bot_count
+
+  ores += ore_bots
+  clays += clay_bots
+  obsidians += obsidian_bots
+  geodes += geode_bots
+
+  bot_count = tuple(map(lambda x: x[0] + x[1], zip(bot_count, new_bot_count)))
+
+  minutes += 1
+  if minutes == 24:
+    return (geodes, (ores, clays, obsidians, geodes), bot_count)
+
+  maximum_ores_required = max(blueprint[0], blueprint[1], blueprint[2][0], blueprint[3][0])
+  if ores >= blueprint[3][0] and obsidians >= blueprint[3][1]:
+    quality = dfs(blueprint, (ores - blueprint[3][0], clays, obsidians - blueprint[3][1], geodes),
+      bot_count, (0, 0, 0, 1), minutes)
+    if quality[0] > best_quality[0]:
+      best_quality = quality
+  elif ores >= blueprint[2][0] and clays >= blueprint[2][1]:
+    quality = dfs(blueprint, (ores - blueprint[2][0], clays - blueprint[2][1], obsidians, geodes),
+      bot_count, (0, 0, 1, 0), minutes)
+    if quality[0] > best_quality[0]:
+      best_quality = quality
+
+    quality = dfs(blueprint, (ores, clays, obsidians, geodes), bot_count, (0, 0, 0, 0), minutes)
+    if quality[0] > best_quality[0]:
+      best_quality = quality
+  else:
+    if ores >= blueprint[1]:
+      quality = dfs(blueprint, (ores - blueprint[1], clays, obsidians, geodes),
+        bot_count, (0, 1, 0, 0), minutes)
+      if quality[0] > best_quality[0]:
+        best_quality = quality
+
+    # snapback pruning: don't accumulate just ores
+    if ores >= blueprint[0] and ores < 2 * maximum_ores_required:
+      quality = dfs(blueprint, (ores - blueprint[0], clays, obsidians, geodes),
+        bot_count, (1, 0, 0, 0), minutes)
+      if quality[0] > best_quality[0]:
+        best_quality = quality
+
+    quality = dfs(blueprint, (ores, clays, obsidians, geodes), bot_count, (0, 0, 0, 0), minutes)
+    if quality[0] > best_quality[0]:
+      best_quality = quality
+
+  return best_quality
+
+accum_quality = 0
+for i, blueprint in enumerate(blueprints):
+  quality = dfs(blueprint)
+  print(i, quality)
+  accum_quality += (i + 1) * quality[0]
+print(accum_quality)
+```
+
+## Part 2
+
+The question increased the depth of the tree by adjusting the time unit from 24 to 32, and cutting down the number of blueprints to search to 3. This is a significant adjustment, as increasing tree depth exponentially increases the number of nodes to traverse. Hence, to create an algorithm that completes within reasonable time, we need to make even more assumptions of what _may_ happen.
+
+Based on observations, there are only a _few_ blueprints with its highest number of geodes actually depending on saving resources whenever it could build an obsidian robot instead. Furthermore, by adjusting the time unit to 32, time can be wisely spent to build an obsidian robot, then providing resources to build a geode robot. Hence, the probability to save for resources when it could build an obsidian robot is decreased drastically.
+
+As it turns out, the assumptions are true in our particular case, and removing just that one possibility from the previous algorithm allowed my solution to complete within human time (also, the scoring function changed as required by the question):
+
+```diff
+11c11
+<   if minutes > 24:
+---
+>   if minutes > 32:
+25c25
+<   if minutes == 24:
+---
+>   if minutes == 32:
+39,42d38
+<
+<     quality = dfs(blueprint, (ores, clays, obsidians, geodes), bot_count, (0, 0, 0, 0), minutes)
+<     if quality[0] > best_quality[0]:
+<       best_quality = quality
+63c59
+< accum_quality = 0
+---
+> accum_quality = 1
+67c63
+<   accum_quality += (i + 1) * quality[0]
+---
+>   accum_quality *= quality[0]
+```
+
+Is there a faster way? Probably, using heuristics and the other search algorithms. Do I want to implement it? Not this year!
