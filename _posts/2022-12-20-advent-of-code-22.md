@@ -1,15 +1,15 @@
 ---
 title: Advent of Code 22
-date: 2022-12-19 10:29 +0000
+date: 2022-12-20 10:26 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-> **NOTE**: If you're viewing this over email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data over email. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
+**EDIT**: [Day 17](#day-17) is out!
 
-**EDIT**: Sorry for the delay, I got caught up trying to do [Day 16](#day-16), which I felt was fairly challenging.
+**NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
 <!--more-->
 
@@ -256,7 +256,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221219_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221220_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -2011,10 +2011,6 @@ for k, _ in coordinate_map.items():
 
 > `x * 4000000 + y` is just the problem statement's instruction on how to encode the answer for AOC to check if the result is valid.
 
-</div></div>
-
-----
-
 # Day 16
 
 This day was, for lack of a better phrase, really difficult. Part 1 was relatively simple, although I did struggle for a day to get it working, while I needed some hints for part 2.
@@ -2478,4 +2474,244 @@ So, applying this diff (`<` is part 1, `>` part 2) to the part 1 solution, and r
 > important_elements = [(k,v) for k, v in associations.items() if v[0] > 0]
 > distances_map = {k: get_distances(k, associations) for k in associations.keys()}
 > print(dfs(('AA', 0), ('AA', 0), 0, set(), important_elements, distances_map))
+```
+</div></div>
+
+----
+
+# Day 17
+
+Wha...? Is this Tetris?
+
+## Part 1
+
+Yeah, this is almost like tetris. Given a bunch of blocks, which are the horizontal line, cross, L-shape, vertical line and square, we are tasked to get the height of the tetris board after 2022 tetrominos sets on the board. The tetrominos follow a sequence of movements, which is our input; it looks something like this:
+
+```
+>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>
+```
+
+`>` stands for right, and `<` stands for left. The sequence of movements repeats. The tetrominos themselves follow the standard set of rules, which are:
+
+1. The tetrinome cannot hit the boundaries of the board (which is defined as width of 7 and height of infinity)
+2. If the bottom of the tetrinome collides with any other settled tetrinomes, or the bottom of the board, settle the tetrinomes.
+
+So, the sub-problems are:
+
+1. Represent the tetrinomes, define procedures for movement;
+    1. Moving left & right based on sequence
+    2. Moving down after left & right
+2. Figure out if the tetrinome has landed
+3. Figure out maximum height of the board at the end of 2022 block landings
+
+I decided to represent the tetrinome positions as a set of positions, and adjust the positions based on how the block is falling. So, the code is as follows:
+
+```python
+shapes = [[(0, 0), (1, 0), (2, 0), (3, 0)],
+  [(1, 0), (0, 1), (1, 1), (2, 1), (1, 2)],
+  [(2, 2), (2, 1), (0, 0), (1, 0), (2, 0)],
+  [(0, 0), (0, 1), (0, 2), (0, 3)],
+  [(0, 0), (1, 0), (0, 1), (1, 1)]]
+offset = {
+  '<': (-1, 0),
+  '>': (1, 0)
+}
+shape_offset = 2
+width = 7
+
+sequence = open('input.txt', 'r').read().strip()
+positions = set()
+
+shape_i = 1
+dropped = 0
+current_block = [(x + shape_offset, y + 3) for x, y in shapes[0]]
+board_max_y = 0
+while dropped < 2022:
+  for s in sequence:
+    current_block = [(x + offset[s][0], y + offset[s][1]) for x, y in current_block]
+    xs = sorted(current_block, key=lambda b: b[0])
+    ys = sorted(current_block, key=lambda b: b[1])
+    min_x, max_x = xs[0][0], xs[-1][0]
+    min_y, max_y = ys[0][1], ys[-1][1]
+
+    if min_x < 0 or max_x >= width or len(set(current_block) & positions):
+      current_block = [(x - offset[s][0], y - offset[s][1]) for x, y in current_block]
+    before_down_block = current_block.copy()
+    current_block = [(x, y - 1) for x, y in current_block]
+
+    if min_y <= 0 or len(set(current_block) & positions):
+      dropped += 1
+      positions |= set(before_down_block)
+      board_max_y = max(positions, key=lambda x: x[1])[1]
+      current_block = [(x + shape_offset, y + board_max_y + 4) for x, y in shapes[shape_i]]
+      shape_i = shape_i + 1 if shape_i < len(shapes) - 1 else 0
+
+    if dropped >= 2022:
+      break
+
+print(board_max_y + 1)
+```
+
+## Part 2
+
+Ah yes, following the pattern we've seen in Day 16, we experience another expansion of the problem statement beyond what is reasonable to do with our original algorithm. Our goal now is simple: instead of getting the height at 2022 blocks, we want 1000000000000 (that's 12 zeros, which means this is 1 trillion). Obviously, not feasible.
+
+Turns out, this problem can be boiled down into a simple sequencing problem. I began by hypothesizing that at _some_ point, there must be a pattern for height increments; there are a limited number of blocks, and a limited number of sequences. In logical hindsight, this is likely due to the pigeonhole principle - I'll reach a point where I'm going through the exact same blocks for the exact same sequences.
+
+To confirm this experimentally, I inserted a print statement to figure out if this was true:
+
+```python
+  stats = dict()
+...
+    if board_max_y - new_max_y not in stats:
+      stats[new_max_y - board_max_y] = 1
+    else:
+      stats[new_max_y - board_max_y] += 1
+
+    if s_i % len(sequence) == 0: # on the actual input, this is (s_i + 1) % ...
+      print(stats)
+...
+  print(stats)
+```
+
+where `s_i` is the index in the sequence.
+
+I quickly realised that the pattern holds beyond the first statement; this implies that after a certain starting sequence, the sequence **started to repeat**, implying a predictable increase in height for a fixed increase in block drops.
+
+In the code, I added a cheeky little comment that says the actual input would require me to change the condition to `s_i + 1`. Why?
+
+Let's use the actual numbers: the sequence given in the example has 40 tokens, while the sequence given in the actual input has 10091 tokens. `s_i` is bounded from 0 to 39 in the example, while `s_i` is bounded from 0 to 10090 in the actual input. Hence, `s_i % len(sequence) == 0` is only true when `s_i` is any multiple of 40 in the example, while `(s_i + 1) % len(sequence) == 0` is true when `s_i` is only true when `s_i` is a multiple of 10090. This is not a co-incidence, because 40 and 10090 are divisible by the number of possible blocks in the context, 5 (also each number's greatest common factor).
+
+Intuitively, this means that at `40` and `10090` sequences respectively, it encapsulates a multiple of block drops for all 5 bocks perfectly. Remember the pigeonhole principle? Let's say I have 20 pigeons and 10 holes. If we dictate each pigeon to always fly into adjacent holes, then necessarily, each hole must have 2 pigeons (without dictating the behaviour of the pigeon, we could have 1 hole with 19 pigeons). The same applies for this context; 40 sequences and 5 blocks, where each sequence will always apply to the next block in order, then necessarily, each block must have 8 sequences associated to it, always.
+
+So, with sequences repeating every `40` or `10090` sequences, we can **bypass the need to simulate falling tetromines**, and just simulate height differences instead.
+
+Okay, so we now have the theory. How do we translate this to practice?
+
+Turns out, we are able to "shortcut" most of 1000000000000 block drops, by estimating as much as we can with just pure mathematics.
+
+```python
+estimated_height = int((1000000000000 - blocks_1) / blocks_difference) * repeat_height_difference
+```
+
+Where `blocks_difference` is the number of blocks dropped from a sequence of `40` to `80`, or `10090` to `20181`, and `repeat_height_difference` is the height difference between two repeating sequences. I will discuss how to get this later.
+
+Then, we process the rest of the blocks using the sequences we derived:
+
+```python
+remaining_blocks = (1000000000000 - blocks_1) % blocks_difference
+
+remaining_height = 0
+height_epoch_x_i = 0
+while remaining_blocks >= 0:
+  remaining_height += height_epoch_x[height_epoch_x_i]
+  remaining_blocks -= 1
+  if height_epoch_x_i >= len(height_epoch_x) - 1:
+    height_epoch_x_i = 0
+  else:
+    height_epoch_x_i += 1
+```
+
+where `height_epoch_x` is the height difference per sequence.
+
+Now, how do we get `blocks_difference`, `height_epoch_x`, and `repeat_height_difference`? We know from experimental data that starting from a _certain number of blocks_, the sequence holds. Hence, we need to acquire this _certain number of blocks_, which is tied to the number of sequences processed (they need to be multiples of `40` or `10090`) and then continue simulating metronomes until we get the sequences from one multiple of `40` / `10090` to the next.
+
+Hence, the code diff to get the final answer is as follows:
+
+```diff
+15a16
+> # Figuring out the pattern
+16a18
+> s_i = 0
+20,38c22,35
+< while dropped < 2022:
+<   for s in sequence:
+<     current_block = [(x + offset[s][0], y + offset[s][1]) for x, y in current_block]
+<     xs = sorted(current_block, key=lambda b: b[0])
+<     ys = sorted(current_block, key=lambda b: b[1])
+<     min_x, max_x = xs[0][0], xs[-1][0]
+<     min_y, max_y = ys[0][1], ys[-1][1]
+<
+<     if min_x < 0 or max_x >= width or len(set(current_block) & positions):
+<       current_block = [(x - offset[s][0], y - offset[s][1]) for x, y in current_block]
+<     before_down_block = current_block.copy()
+<     current_block = [(x, y - 1) for x, y in current_block]
+<
+<     if min_y <= 0 or len(set(current_block) & positions):
+<       dropped += 1
+<       positions |= set(before_down_block)
+<       board_max_y = max(positions, key=lambda x: x[1])[1]
+<       current_block = [(x + shape_offset, y + board_max_y + 4) for x, y in shapes[shape_i]]
+<       shape_i = shape_i + 1 if shape_i < len(shapes) - 1 else 0
+---
+> runs = 2
+> height_epoch_1 = []
+> height_epoch_x = []
+> si_1 = 0
+> si_difference = 0
+> blocks_1 = 0
+> blocks_difference = 0
+> while runs > 0:
+>   s = sequence[s_i % len(sequence)]
+>   current_block = [(x + offset[s][0], y + offset[s][1]) for x, y in current_block]
+>   xs = sorted(current_block, key=lambda b: b[0])
+>   ys = sorted(current_block, key=lambda b: b[1])
+>   min_x, max_x = xs[0][0], xs[-1][0]
+>   min_y, max_y = ys[0][1], ys[-1][1]
+40,41c37,45
+<     if dropped >= 2022:
+<       break
+---
+>   if min_x < 0 or max_x >= width or len(set(current_block) & positions):
+>     current_block = [(x - offset[s][0], y - offset[s][1]) for x, y in current_block]
+>   before_down_block = current_block.copy()
+>   current_block = [(x, y - 1) for x, y in current_block]
+>
+>   if min_y <= 0 or len(set(current_block) & positions):
+>     dropped += 1
+>     positions |= set(before_down_block)
+>     new_max_y = max(positions, key=lambda x: x[1])[1]
+43c47,86
+< print(board_max_y + 1)
+---
+>     if runs == 2:
+>       height_epoch_1.append(new_max_y - board_max_y)
+>     else:
+>       height_epoch_x.append(new_max_y - board_max_y)
+>
+>     if (s_i + 1) % len(sequence) == 0:
+>       if runs == 2:
+>         si_1 = s_i
+>         blocks_1 = dropped
+>       else:
+>         si_difference = s_i - si_1
+>         blocks_difference = dropped - blocks_1
+>       runs -= 1
+>     board_max_y = max(positions, key=lambda x: x[1])[1]
+>     current_block = [(x + shape_offset, y + board_max_y + 4) for x, y in shapes[shape_i]]
+>     shape_i = shape_i + 1 if shape_i < len(shapes) - 1 else 0
+>
+>   s_i += 1
+>   if runs <= 0:
+>     break
+>
+> # Use the pattern to engineer the simulation
+> repeat_start_height = len(height_epoch_1)
+> repeat_height_difference = sum(height_epoch_x)
+>
+> estimated_height = int((1000000000000 - blocks_1) / blocks_difference) * repeat_height_difference
+> remaining_blocks = (1000000000000 - blocks_1) % blocks_difference
+>
+> remaining_height = 0
+> height_epoch_x_i = 0
+> while remaining_blocks >= 0:
+>   remaining_height += height_epoch_x[height_epoch_x_i]
+>   remaining_blocks -= 1
+>   if height_epoch_x_i >= len(height_epoch_x) - 1:
+>     height_epoch_x_i = 0
+>   else:
+>     height_epoch_x_i += 1
+>
+> height = int(estimated_height) + remaining_height + sum(height_epoch_1)
+> print(height)
 ```
