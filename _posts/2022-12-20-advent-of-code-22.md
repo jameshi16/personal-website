@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-20 19:40 +0000
+date: 2022-12-20 21:51 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 17](#day-17), [Day 18](#day-18), [Day 19](#day-19) is out!
+**EDIT**: [Day 17](#day-17), [Day 18](#day-18), [Day 19](#day-19) and [Day 20](#day-20) is out (yes, they were done in one day)!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -2994,3 +2994,90 @@ As it turns out, the assumptions are true in our particular case, and removing j
 ```
 
 Is there a faster way? Probably, using heuristics and the other search algorithms. Do I want to implement it? Not this year!
+
+----
+
+# Day 20
+
+This puzzle highlights the power of Python, because I don't have to think about huge numbers at all. Having done Days 17, 18and 20 in a row, I didn't bother trying to make the code run faster in Day 20; it's plenty fast compared to all the graph traversal I've done!
+
+## Part 1
+
+This problem is one of the easier ones among all of the challenges in AOC 2022 so far. Essentially, given a list of numbers, we need to rearrange the numbers such that each of the numbers are moved according to the value they represent. So, I solved it by:
+
+1. Adding an identifier to every number (since the numbers provided are not unique)
+2. Duplicating that list, calling it `mutable`
+3. Referencing the original list, remove and insert the numbers in `mutable` based on the value of the int
+4. Access the elements in the array based on procedure described by the solution as required, and calculate the answer
+
+Here is code:
+
+```python
+movements = [(i, int(line.strip())) for i, line in enumerate(open('input.txt', 'r').readlines())]
+mutable = movements.copy()
+zero_tuple = tuple()
+for i, m in movements:
+  ind = mutable.index((i, m))
+  mutable.pop(ind)
+
+  new_ind = ind + m
+  if new_ind > len(movements):
+    new_ind %= len(movements) - 1
+  elif new_ind <= 0:
+    new_ind += len(movements) - 1
+  mutable.insert(new_ind, (i, m))
+
+  if m == 0:
+    zero_tuple = (i, m)
+zero_ind = mutable.index(zero_tuple)
+
+print(mutable[(zero_ind + 1000) % len(movements)][1] +
+  mutable[(zero_ind + 2000) % len(movements)][1] +
+  mutable[(zero_ind + 3000) % len(movements)][1])
+```
+
+## Part 2
+
+The only thing that changed were the input numbers. In Python, integers have no bounds. Then, we just perform the mixing operation 10 times, so the code is almost the same, but indented to fit the new for loop:
+
+```diff
+1c1
+< movements = [(i, int(line.strip())) for i, line in enumerate(open('input.txt', 'r').readlines())]
+---
+> movements = [(i, 811589153 * int(line.strip())) for i, line in enumerate(open('input.txt', 'r').readlines())]
+4,6c4,7
+< for i, m in movements:
+<   ind = mutable.index((i, m))
+<   mutable.pop(ind)
+---
+> for _ in range(10):
+>   for i, m in movements:
+>     ind = mutable.index((i, m))
+>     mutable.pop(ind)
+8,13c9,16
+<   new_ind = ind + m
+<   if new_ind > len(movements):
+<     new_ind %= len(movements) - 1
+<   elif new_ind <= 0:
+<     new_ind += len(movements) - 1
+<   mutable.insert(new_ind, (i, m))
+---
+>     new_ind = ind + m
+>     if new_ind > len(movements):
+>       new_ind %= len(movements) - 1
+>     elif new_ind <= 0:
+>       new_ind += len(movements) - 1
+>       factor = ((-new_ind) // (len(movements) - 1)) + 1
+>       new_ind += (factor * (len(movements) - 1))
+>     mutable.insert(new_ind, (i, m))
+15,16c18,19
+<   if m == 0:
+<     zero_tuple = (i, m)
+---
+>     if m == 0:
+>       zero_tuple = (i, m)
+```
+
+## Note on optimization
+
+If I were to optimize this, it'll probably be similar to Day 17; since finite sequences are involved, repeats are bound to happen. However, the effort-to-result ratio is probably not worth it.
