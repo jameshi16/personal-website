@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-20 10:26 +0000
+date: 2022-12-20 12:43 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 17](#day-17) is out!
+**EDIT**: [Day 17](#day-17), [Day 18](#day-18) is out!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -87,6 +87,8 @@ print(sum(sorted((reduce(lambda accum, y: accum + [0] if y == "" else accum[:-1]
 ```
 
 All I did here was to replace `max` with a composition of `sum` and `sorted`.
+
+---
 
 # Day 2
 
@@ -243,6 +245,8 @@ inputStr.split('\n').reduce((acc, curr) =>
 
 Notice the change at `raw[1].charCodeAt() - 89`, which essentially absorbed an offset of `-1`.
 
+---
+
 # Day 3
 
 ## Part 1
@@ -323,6 +327,8 @@ import Data.List
 
 solution' input = sum $ map ((\x -> if x `elem` ['a'..'z'] then ord x - 96 else ord x - 65 + 27) . (!! 0)) $ map (foldr1 intersect) $ foldr (\x acc@(y:ys) -> if length y == 3 then [x]:acc else (x:y):ys) [[]] $ lines input
 ```
+
+---
 
 # Day 4
 
@@ -420,9 +426,7 @@ So, our resulting code looks very similar to part 1, with a minor change of inde
 print(sum(list(map(lambda xys: (xys[0][0] <= xys[1][0] and xys[0][1] >= xys[1][0]) or (xys[1][0] <= xys[0][0] and xys[1][1] >= xys[0][0]), list(map(lambda segments: list(map(lambda segment: list(map(int, segment.split('-'))), segments)), list(map(lambda line: line.split(','), open("input.txt", "r").readlines()))))))))
 ```
 
-# Analysis - Week 1
-
-> TODO: I'll populate this later
+---
 
 # Day 5
 
@@ -519,6 +523,8 @@ for instruction in instructions:
 # get the top of all                                                                          
 print(''.join([s[-1] for s in stacks]))
 ```
+
+---
 
 # Day 6
 
@@ -627,6 +633,8 @@ int main() {
 ```
 
 The time complexity is still the same, which is `O(k^2*n)` where `k = 14`. Use the right tools (i.e. Python) for the right job!
+
+---
 
 # Day 7
 
@@ -844,6 +852,8 @@ print(n.getSolution(30000000 - 70000000 + n.getSize()))
 
 The code block figures out if a child is closer to the target value than itself, done recursively.
 
+---
+
 # Day 8
 
 Are you tired of human-readable code yet?
@@ -887,6 +897,8 @@ result = itertools.starmap(lambda row, r_trees: list(itertools.starmap(lambda co
 
 print(max([max(r) for r in result]))
 ```
+
+---
 
 # Day 9
 
@@ -978,6 +990,8 @@ for instruction in head_instructions:
 print(len(tail_positions))
 ```
 
+---
+
 # Day 10
 
 CPU instructions!
@@ -1045,6 +1059,8 @@ solution input = (\(_,_,z) -> chunksOf 40 $ reverse z) $ foldl (\accum (x:xs) ->
 ```
 
 The answer would be a list of Strings, which I then manually copy and paste into a text editor to reformat into text that had any meaning to me.
+
+---
 
 # Day 11
 
@@ -1240,6 +1256,8 @@ Hence,
 
 must work (the prime numbers are the terms I'm too lazy to evaluate).
 
+---
+
 # Day 12
 
 Today is quite obviously a path-finding challenge.
@@ -1331,6 +1349,8 @@ def bfs(pos):
 
 print(bfs((len(grid[0]) - 22, 20)))
 ```
+
+---
 
 # Day 13
 
@@ -1634,6 +1654,8 @@ int main() {
 }
 ```
 
+---
+
 # Day 14
 
 Bury me in sand, please.
@@ -1855,6 +1877,8 @@ while not stop:
 print(settled_grains)
 ```
 
+---
+
 # Day 15
 
 Today was an excellent lesson in how time & space can grow into sizes that would be noticeable.
@@ -2010,6 +2034,8 @@ for k, _ in coordinate_map.items():
 ```
 
 > `x * 4000000 + y` is just the problem statement's instruction on how to encode the answer for AOC to check if the result is valid.
+
+---
 
 # Day 16
 
@@ -2714,4 +2740,113 @@ Hence, the code diff to get the final answer is as follows:
 >
 > height = int(estimated_height) + remaining_height + sum(height_epoch_1)
 > print(height)
+```
+
+---
+
+# Day 18
+
+Lava and whatnot, oh my!
+
+## Part 1
+
+So, we have a bunch of positions that represent whether it contains lava particles. We want to find the surface area of the lava particles that make up the water droplets.
+
+The problem, in programmer terms, is to accumulate (6 - number of edges) in all possible vertices of a graph.
+
+This straight-forward problem is broken down into a graph problem, which can be traversed using any of the graph traversal algorithms. Each missing edge (i.e. 6 - number of edges) count towards a global variable, which represents the solution.
+
+So, the solution is as follows:
+
+```python
+from queue import Queue
+positions = set([tuple(map(lambda x: int(x), line.strip().split(','))) for line in open('input.txt', 'r').readlines()])
+
+possibilities = [
+  (1, 0, 0), (0, 1, 0), (0, 0, 1),
+  (-1, 0, 0), (0, -1, 0), (0, 0, -1)
+]
+area = 0
+visited = set()
+q = Queue()
+
+while len(visited & positions) != len(positions):
+  d = (positions - visited).pop()
+  visited.add(d)
+  q.put(d)
+
+  while not q.empty():
+    x, y, z = q.get()
+
+    for (dx, dy, dz) in possibilities:
+      nx, ny, nz = x + dx, y + dy, z + dz
+      if (nx, ny, nz) not in positions:
+        area += 1
+      elif (nx, ny, nz) not in visited:
+        visited.add((nx, ny, nz))
+        q.put((nx, ny, nz))
+
+print(area)
+```
+
+## Part 2
+
+Now, we want to only find the external surface area; meaning, any surface area that is surrounded by lava should not be considered. There were two main ways I could approach this:
+
+1. From each of the positions of the nodes, if the node can reach `0` in any dimension, or the maximum of any dimension, then accumulate the area. Otherwise, don't accumulate the area.
+2. I perform BFS on everything outside the positions of the nodes instead. If the node is touching a position, then count that into our area. As BFS can only explore connected nodes, this means that each time `q` is empty, we have explored one connected body. A connected body that touches `0` in any dimension or maximum in any dimension must be a liquid / water vapour. Otherwise, it is trapped gas between all the positions.
+
+I decided to do step 2. So, I broke down the problem as:
+
+1. Get complement of the set of lava-filled positions
+2. Add padding of at least 1 in all dimensions
+3. Run through DFS, add extra condition that if the node is touching a position, count into area.
+
+So the diff to implement part 2 is:
+
+```diff
+2c2,16
+< positions = set([tuple(map(lambda x: int(x), line.strip().split(','))) for line in open('input.txt', 'r').readlines()])
+---
+> from itertools import product
+> positions = set()
+> max_x, max_y, max_z = 0, 0, 0
+> with open('input.txt', 'r') as f:
+>   line = f.readline().strip()
+>   while line:
+>     pos = tuple(map(lambda x: int(x), line.split(',')))
+>     max_x = max(max_x, pos[0])
+>     max_y = max(max_y, pos[1])
+>     max_z = max(max_z, pos[2])
+>
+>     positions.add(pos)
+>     line = f.readline().strip()
+>
+> positions_prime = {(x, y, z) for x, y, z in product(range(-1, max_x + 2), range(-1, max_y + 2), range(-1, max_z + 2)) if (x, y, z) not in positions}
+12,13c26,27
+< while len(visited & positions) != len(positions):
+<   d = (positions - visited).pop()
+---
+> while len(visited & positions_prime) != len(positions_prime):
+>   d = (positions_prime - visited).pop()
+16a31,32
+>   isOutside = False
+>   areaInContact = 0
+19a36,38
+>     if not (0 < x < max_x and 0 < y < max_y and 0 < z < max_z):
+>       isOutside = True
+>
+22,24c41,44
+<       if (nx, ny, nz) not in positions:
+<         area += 1
+<       elif (nx, ny, nz) not in visited:
+---
+>       if (nx, ny, nz) in positions:
+>         areaInContact += 1
+>
+>       if (nx, ny, nz) not in visited and (nx, ny, nz) in positions_prime:
+26a47,49
+>
+>   if isOutside:
+>     area += areaInContact
 ```
