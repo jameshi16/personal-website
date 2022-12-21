@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-20 21:51 +0000
+date: 2022-12-21 12:38 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 17](#day-17), [Day 18](#day-18), [Day 19](#day-19) and [Day 20](#day-20) is out (yes, they were done in one day)!
+**EDIT**: [Day 21](#day-21) is up!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -260,7 +260,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221220_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221221_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -2501,7 +2501,6 @@ So, applying this diff (`<` is part 1, `>` part 2) to the part 1 solution, and r
 > distances_map = {k: get_distances(k, associations) for k in associations.keys()}
 > print(dfs(('AA', 0), ('AA', 0), 0, set(), important_elements, distances_map))
 ```
-</div></div>
 
 ----
 
@@ -3081,3 +3080,151 @@ The only thing that changed were the input numbers. In Python, integers have no 
 ## Note on optimization
 
 If I were to optimize this, it'll probably be similar to Day 17; since finite sequences are involved, repeats are bound to happen. However, the effort-to-result ratio is probably not worth it.
+
+</div></div>
+
+----
+
+# Day 21
+
+Today we have expression evaluations. It's quite a simple day, although I spent an embarrassing amount of time trying to figure out why my part 2 solution didn't work. More below.
+
+## Part 1
+
+We have a bunch of expressions that uses a bunch of symbols, like so:
+
+```
+root: pppw + sjmn
+dbpl: 5
+cczh: sllz + lgvd
+zczc: 2
+ptdq: humn - dvpt
+dvpt: 3
+lfqf: 4
+humn: 5
+ljgn: 2
+sjmn: drzm * dbpl
+sllz: 4
+pppw: cczh / lfqf
+lgvd: ljgn * ptdq
+drzm: hmdt - zczc
+hmdt: 32
+```
+
+All we have to do is to evaluate the value at `root`. Quite immediately, I got reminded of Prolog, which is a logic programming language that work on constraints. From what I know, Prolog does a depth-first search to obtain the results based on the constraints defined just like our input.
+
+So, I thought about using trees to express the expression. However, I quickly realised that it would take too much effort; instead, a much faster way is probably to use a hash table, where the key is the symbol to be evaluated, and the value is the expression to evaluate.
+
+Then, I jump to the root symbol, and recursively evaluate the constituent symbols until I figure out the final answer. Seems simple enough!
+
+```python
+operation_map = {
+  '+': lambda x, y: x + y,
+  '-': lambda x, y: x - y,
+  '/': lambda x, y: x / y,
+  '*': lambda x, y: x * y
+}
+
+expressions = {expr[0].rstrip(':'): expr[1:] for expr in [line.strip().split(' ') for line in open('input.txt').readlines()]}
+def evaluate(expr):
+  if expr[0].isdigit():
+    return int(expr[0])
+  else:
+    return operation_map[expr[1]](evaluate(expressions[expr[0]]),
+      evaluate(expressions[expr[2]]))
+
+print(int(evaluate(expressions['root'])))
+```
+
+## Part 2
+
+Part 2 redefines the problem:
+
+- We now have an unknown within the symbols, which is `humn` (the original value of `humn` is now discarded)
+- `root` is now `a = b`.
+
+I decided to approach the problem mathematically, by performing inverse operations. Suppose we have an equation, `a = b op c`, where `a`, `b`, and `c` are unknowns. If we want to find the value of `b`, then we can rearrange the equation as: `b = a 'op c`. Then, we see how the new `root` fits into the picture; since `root` is essentially `lhs = rhs`, this implies that if:
+
+```
+root: a = c
+a: x + y
+c: b + z
+```
+
+If, again, we want to find `b`, then `b = c - z`, and since `root: a = c`, so `b = a - z`, therefore `b = x + y - z`. So this means we need to consider the following to change our equation:
+
+1. Store associations in three different variants: `symbol = left op right`, `left = symbol op' right` and `right = symbol op' left`;
+2. Figure out the rules for how to get `op'`;
+3. For a target node, i.e. the variable `humn` in our case, find it within the associations `left = ...` or `right = ...`
+4. Then, recursively evaluate `symbol` within the associations `left = ...` and `right = ...`. This will inverse our operators. For `right`, use the normal association `symbol = ...` to evaluate it.
+5. If we find that `symbol` is root, we evaluate the other operand with the normal association `symbol = ...`. This essentially does the operation `left = right` within our evaluation.
+6. Finally, once all the functions return, we end up with what `humn` must be.
+
+The main assumption being made here is that the input cannot repeat a symbol twice (specifically, not the target symbol we are finding). Otherwise, the inverse operation approach here probably wouldn't work.
+
+Next, let's figure out the rules to get `op`:
+
+- If it's `+`, then transmute it to `symbol - operand`
+- If it's `*`, then transmute it to `symbol / operand`
+- If it's `-`, then transmute it to `symbol + right_operand` and `symbol _ left_operand`, where `_` effectively performs `left_operand - symbol`. I forgot to this, which caused me an hour or so to discover, as this does not affect the example input :sweat_smile:
+- If it's `/`, then transmute it to `symbol * right_operand` and `symbol \ left_operand` where `\` effectively performs `left_operand / symbol`. I remembered this, but unluckily for me it wasn't used at all
+
+With that out of the way, we can finally implement it:
+
+```python
+operation_map = {
+  '+': lambda x, y: x + y,
+  '-': lambda x, y: x - y,
+  '_': lambda x, y: y - x,
+  '/': lambda x, y: x / y,
+  '*': lambda x, y: x * y,
+  '\\': lambda x, y: y / x
+}
+
+expressions = dict()
+left_expressions = dict()
+right_expressions = dict()
+
+with open('input.txt', 'r') as f:
+  line = f.readline()
+  while line:
+    tokens = line.strip().split(' ')
+    symbol = tokens[0].rstrip(':')
+    expressions[symbol] = tokens[1:]
+    
+    if not tokens[1].isdigit():
+      left, right = tokens[1], tokens[3]
+      op = tokens[2]
+
+      if op == '+':
+        left_expressions[left] = [symbol, '-', right]
+        right_expressions[right] = [symbol, '-', left]
+      elif op == '-':
+        left_expressions[left] = [symbol, '+', right]
+        right_expressions[right] = [symbol, '_', left]
+      elif op == '/':
+        left_expressions[left] = [symbol, '*', right]
+        right_expressions[right] = [symbol, '\\', left]
+      else:
+        left_expressions[left] = [symbol, '/', right]
+        right_expressions[right] = [symbol, '/', left]
+    line = f.readline()
+
+def evaluate(expr):
+  if expr[0].isdigit():
+    return int(expr[0])
+  else:
+    return operation_map[expr[1]](evaluate(expressions[expr[0]]),
+      evaluate(expressions[expr[2]]))
+
+def evaluate_unknown(expr):
+  if expr in left_expressions:
+    (symbol, op, operand) = left_expressions[expr]
+  else:
+    (symbol, op, operand) = right_expressions[expr]
+  if symbol == 'root':
+    return evaluate(expressions[operand])
+  return operation_map[op](evaluate_unknown(symbol), evaluate(expressions[operand]))
+
+print(int(evaluate_unknown('humn')))
+```
