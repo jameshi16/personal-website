@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-21 12:38 +0000
+date: 2022-12-23 00:44 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 21](#day-21) is up!
+**EDIT**: [Day 22](#day-21) is live!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -260,7 +260,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221221_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221223_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -3081,8 +3081,6 @@ The only thing that changed were the input numbers. In Python, integers have no 
 
 If I were to optimize this, it'll probably be similar to Day 17; since finite sequences are involved, repeats are bound to happen. However, the effort-to-result ratio is probably not worth it.
 
-</div></div>
-
 ----
 
 # Day 21
@@ -3228,3 +3226,267 @@ def evaluate_unknown(expr):
 
 print(int(evaluate_unknown('humn')))
 ```
+
+</div></div>
+
+----
+
+# Day 22
+
+I'm embarrassed to say this, but I spent _way_ too long on this day, even though it should be fundamentally simple.
+
+## Part 1
+
+Part 1's context is actually quite simple; given a maze-like structure, navigate it with the instructions given in the input. If, during any point of navigation, the navigator falls off, then we warp the navigator to the other side of the map.
+
+So, we just need to consider the min x, max x, min y and max y to do the problem. Here is a helpful snippet to print the boards being traversed:
+
+```python
+def print_board(x, y, direction, instruction):
+  print('\033[2J')
+  print('\033[H')
+  print(x, y, direction, instruction)
+  y_output = (y // 50) * 50
+  for row in range(y_output, y_output + 50):
+    for col in range(0, max(boundary_xs, key=lambda t: t[1])[1] + 1):
+      if (col, row) == (x, y):
+        if direction == 0:
+          print('>', end='')
+        elif direction == 1:
+          print('v', end='')
+        elif direction == 2:
+          print('<', end='')
+        elif direction == 3:
+          print('^', end='')
+      elif (col, row) in tiles:
+        print(tiles[(col, row)], end='')
+      else:
+        print(' ', end='')
+    print()
+  print()
+  print()
+  sleep(0.1)
+```
+
+With some level of consideration to speed, I've decided to sacrifice my otherwise very free RAM to store way more dictionaries and lists than I really needed to. Here is how I solved it in the end:
+
+```python
+from functools import reduce
+
+tiles = dict()
+boundary_xs = list()
+boundary_ys = list()
+instructions = ''
+start_pos = (-1, -1)
+movement_map = [
+  (1, 0),
+  (0, 1),
+  (-1, 0),
+  (0, -1)
+]
+with open('input.txt', 'r') as f:
+  line = f.readline().rstrip()
+  y = 0
+  while line:
+    min_x, max_x = 999, -1
+    for x, c in enumerate(line):
+      if c != ' ':
+        tiles[(x, y)] = c
+        min_x = min(x, min_x)
+        max_x = max(x, max_x)
+
+        if x > len(boundary_ys) - 1:
+          boundary_ys += (x - len(boundary_ys) + 1) * [(999, -1)]
+        boundary_ys[x] = (min(boundary_ys[x][0], y),
+          max(boundary_ys[x][1], y))
+
+        if start_pos == (-1, -1):
+          start_pos = (x, y)
+
+    line = f.readline().rstrip()
+    boundary_xs.append((min_x, max_x))
+    y += 1
+  instructions = reduce(lambda a, y: a[:-1] + [a[-1] + y] if y != 'L' and y != 'R' else  a[:-1] + [a[-1] + y] + [''], f.readline().strip(), [''])
+
+direction = 0
+x, y = start_pos
+for i, instruction in enumerate(instructions):
+  steps = int(instruction[0:-1] if i != len(instructions) - 1 else instruction)
+  min_x, max_x = boundary_xs[y]
+  min_y, max_y = boundary_ys[x]
+  while steps:
+    diff = movement_map[direction]
+    new_x, new_y = x + diff[0], y + diff[1]
+    while (x, y) in tiles and (new_x, new_y) not in tiles:
+      if new_x > max_x:
+        new_x = min_x
+        continue
+      elif new_x > min_x:
+        new_x = new_x + diff[0]
+      elif new_x < min_x:
+        new_x = max_x
+        continue
+
+      if new_y > max_y:
+        new_y = min_y
+        continue
+      elif new_y > min_y:
+        new_y = new_y + diff[1]
+      elif new_y < min_y:
+        new_y = max_y
+        continue
+
+    if tiles[(new_x, new_y)] == '#':
+      break
+    else:
+      x, y = new_x, new_y
+      steps -= 1
+
+  dirchange = instruction[-1] if i != len(instructions) - 1 else None
+  if dirchange == 'L':
+    direction -= 1
+    if direction < 0:
+      direction += len(movement_map)
+  elif dirchange == 'R':
+    direction += 1
+    direction %= len(movement_map)
+
+print(1000 * (y + 1) + 4 * (x + 1) + direction)
+```
+
+## Part 2
+
+Now the maze becomes a cube. I first tried to map the co-ordinates to 3D, which was fine, until I realised I needed to find a way to fold the cube. After hours of thinking, drawing stuff till I went insane, I decided it was not worth the hassle.
+
+So I decided to hard-code the relationship between each side in the cube. However, because there is no generalization, debugging exactly _what_ went wrong was ungodly. Thankfully, someone who has solved this beforehand provided a great cube visualizer that I used to debug my script, written by [nanot1m](https://nanot1m.github.io/adventofcode2022/day22/index.html). I also ran my script against another solution to check the output per instruction, only to find out that one of my functions that mapped the sides have the wrong offset.
+
+So after roughly 5 hours, here is the final code:
+
+```python
+from functools import reduce
+face_width = 50
+tiles = dict()
+boundary_xs = list()
+boundary_ys = list()
+instructions = ''
+start_pos = (-1, -1)
+movement_map = [
+  (1, 0),
+  (0, 1),
+  (-1, 0),
+  (0, -1)
+]
+
+cube_connection_operations = {
+  1: [
+    lambda x, y: (x + 1, y, 0), # 2
+    lambda x, y: (x, y + 1, 1), # 3
+    lambda x, y: (x - 50, 2 * 50 + (49 - y), 0), # 4
+    lambda x, y: (0, (x % 50) + 3 * 50, 0) # 6
+  ],
+  2: [
+    lambda x, y: (x - 50, 2 * 50 + (49 - y), 2), # 5
+    lambda x, y: (99, 50 + (x % 50), 2), # 3
+    lambda x, y: (x - 1, y, 2), # 1
+    lambda x, y: (x % 50, 4 * 50 - 1, 3), # 6
+  ],
+  3: [
+    lambda x, y: (2 * 50 + (y % 50), 49, 3), # 2
+    lambda x, y: (x, y + 1, 1), # 5
+    lambda x, y: (y % 50, 2 * 50, 1), # 4
+    lambda x, y: (x, y - 1, 3), # 1
+  ],
+  4: [
+    lambda x, y: (x + 1, y, 0), # 5
+    lambda x, y: (x, y + 1, 1), # 6
+    lambda x, y: (50, (49 - (y % 50)), 0), # 1
+    lambda x, y: (50, 50 + x, 0), # 3
+  ],
+  5: [
+    lambda x, y: (149, (49 - (y % 50)), 2), # 2
+    lambda x, y: (49, 3 * 50 + (x % 50), 2), # 6
+    lambda x, y: (x - 1, y, 2), # 4
+    lambda x, y: (x, y - 1, 3), # 3
+  ],
+  6: [
+    lambda x, y: (50 + (y % 50), 149, 3), # 5
+    lambda x, y: (x + 100, 0, 1), # 2
+    lambda x, y: (50 + (y % 50), 0, 1), # 1
+    lambda x, y: (x, y - 1, 3) # 4
+  ]
+}
+
+cube_toplefts = 6 * [None]
+with open('input.txt', 'r') as f:
+  line = f.readline().rstrip()
+  y = 0
+  while line:
+    min_x, max_x = 999, -1
+    for x, c in enumerate(line):
+      if c != ' ':
+        tiles[(x, y)] = c
+        min_x = min(x, min_x)
+        max_x = max(x, max_x)
+
+        side_exist = False
+        for topleft in cube_toplefts:
+          if topleft is not None:
+            tx, ty = topleft
+            if tx <= x < tx + face_width and ty <= y < ty + face_width:
+              side_exist = True
+
+        if not side_exist:
+          cube_toplefts[cube_toplefts.index(None)] = (x, y)
+
+        if x > len(boundary_ys) - 1:
+          boundary_ys += (x - len(boundary_ys) + 1) * [(999, -1)]
+        boundary_ys[x] = (min(boundary_ys[x][0], y),
+          max(boundary_ys[x][1], y))
+
+        if start_pos == (-1, -1):
+          start_pos = (x, y)
+
+    line = f.readline().rstrip()
+    boundary_xs.append((min_x, max_x))
+    y += 1
+  instructions = reduce(lambda a, y: a[:-1] + [a[-1] + y] if y != 'L' and y != 'R' else  a[:-1] + [a[-1] + y] + [''], f.readline().strip(), [''])
+
+direction = 0
+x, y = start_pos
+for i, instruction in enumerate(instructions):
+  steps = int(instruction[0:-1] if i != len(instructions) - 1 else instruction)
+  min_x, max_x = boundary_xs[y]
+  min_y, max_y = boundary_ys[x]
+
+  cube_side = cube_toplefts.index(next(filter(lambda topleft: topleft[0] <= x < topleft[0] + face_width and topleft[1] <= y < topleft[1] + face_width, cube_toplefts)))
+
+  while steps:
+    diff = movement_map[direction]
+    new_x, new_y = x + diff[0], y + diff[1]
+    new_direction = direction
+    topleft = cube_toplefts[cube_side]
+    fell_out = not (topleft[0] <= new_x < topleft[0] + face_width and topleft[1] <= new_y < topleft[1] + face_width)
+
+    if fell_out:
+      new_x, new_y, new_direction = cube_connection_operations[cube_side + 1][direction](x, y)
+
+    if tiles[(new_x, new_y)] == '#':
+      break
+    else:
+      x, y, direction = new_x, new_y, new_direction
+      cube_side = cube_toplefts.index(next(filter(lambda topleft: topleft[0] <= x < topleft[0] + face_width and topleft[1] <= y < topleft[1] + face_width, cube_toplefts)))
+      steps -= 1
+
+  dirchange = instruction[-1] if i != len(instructions) - 1 else None
+  if dirchange == 'L':
+    direction -= 1
+    if direction < 0:
+      direction += len(movement_map)
+  elif dirchange == 'R':
+    direction += 1
+    direction %= len(movement_map)
+
+print(1000 * (y + 1) + 4 * (x + 1) + direction)
+```
+
+It's ugly, the process is error-prone, I'm tired, this'll do. I've put off plans for this man!
