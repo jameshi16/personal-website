@@ -10,7 +10,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="EDIT: Day 22 is live!NOTE: If you’re viewing this over feed / email, you won’t be able to see the new days, because the feed is too long and I don’t want to send you unnecessary data. Head over to the website to see what’s crackin’ for today (https://codingindex.xyz/2022/12/23/advent-of-code-22/)..." />
+    <meta name="description" content="EDIT: Day 23 is out!NOTE: If you’re viewing this over feed / email, you won’t be able to see the new days, because the feed is too long and I don’t want to send you unnecessary data. Head over to the website to see what’s crackin’ for today (https://codingindex.xyz/2022/12/23/advent-of-code-22/)!..." />
     <title>CodingIndex's Random Shenanigans</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
@@ -405,10 +405,10 @@
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
       <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">Advent of Code 22</h1>
-      <p class="text-gray mb-5">Published Dec 23, 2022 00:44</p>
+      <p class="text-gray mb-5">Published Dec 23, 2022 10:50</p>
       
   <div class="article">
-    <p><strong>EDIT</strong>: <a href="#day-21">Day 22</a> is live!</p>
+    <p><strong>EDIT</strong>: <a href="#day-23">Day 23</a> is out!</p>
 
 <p><strong>NOTE</strong>: If you’re viewing this over feed / email, you won’t be able to see the new days, because the feed is too long and I don’t want to send you unnecessary data. Head over to the website to see what’s crackin’ for today (<a href="https://codingindex.xyz/2022/12/23/advent-of-code-22/">https://codingindex.xyz/2022/12/23/advent-of-code-22/</a>)!</p>
 
@@ -3900,22 +3900,20 @@ c: b + z
 <span class="k">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">evaluate_unknown</span><span class="p">(</span><span class="s">'humn'</span><span class="p">)))</span>
 </code></pre></div>    </div>
 
-  </div>
-</div>
+    <hr>
 
-<hr>
+    <h1 id="day-22">Day 22</h1>
 
-<h1 id="day-22">Day 22</h1>
+    <p>I’m embarrassed to say this, but I spent <em>way</em> too long on this day, even though it should be fundamentally simple.</p>
 
-<p>I’m embarrassed to say this, but I spent <em>way</em> too long on this day, even though it should be fundamentally simple.</p>
+    <h2 id="part-1-21">Part 1</h2>
 
-<h2 id="part-1">Part 1</h2>
+    <p>Part 1’s context is actually quite simple; given a maze-like structure, navigate it with the instructions given in the input. If, during any point of navigation, the navigator falls off, then we warp the navigator to the other side of the map.</p>
 
-<p>Part 1’s context is actually quite simple; given a maze-like structure, navigate it with the instructions given in the input. If, during any point of navigation, the navigator falls off, then we warp the navigator to the other side of the map.</p>
+    <p>So, we just need to consider the min x, max x, min y and max y to do the problem. Here is a helpful snippet to print the boards being traversed:</p>
 
-<p>So, we just need to consider the min x, max x, min y and max y to do the problem. Here is a helpful snippet to print the boards being traversed:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">print_board</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">instruction</span><span class="p">):</span>
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">print_board</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">instruction</span><span class="p">):</span>
   <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\033</span><span class="s">[2J'</span><span class="p">)</span>
   <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\033</span><span class="s">[H'</span><span class="p">)</span>
   <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">instruction</span><span class="p">)</span>
@@ -3939,11 +3937,12 @@ c: b + z
   <span class="k">print</span><span class="p">()</span>
   <span class="k">print</span><span class="p">()</span>
   <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>    </div>
 
-<p>With some level of consideration to speed, I’ve decided to sacrifice my otherwise very free RAM to store way more dictionaries and lists than I really needed to. Here is how I solved it in the end:</p>
+    <p>With some level of consideration to speed, I’ve decided to sacrifice my otherwise very free RAM to store way more dictionaries and lists than I really needed to. Here is how I solved it in the end:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
 
 <span class="n">tiles</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">boundary_xs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -4024,17 +4023,18 @@ c: b + z
     <span class="n">direction</span> <span class="o">%=</span> <span class="nb">len</span><span class="p">(</span><span class="n">movement_map</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">direction</span><span class="p">)</span>
-</code></pre></div></div>
+</code></pre></div>    </div>
 
-<h2 id="part-2">Part 2</h2>
+    <h2 id="part-2-21">Part 2</h2>
 
-<p>Now the maze becomes a cube. I first tried to map the co-ordinates to 3D, which was fine, until I realised I needed to find a way to fold the cube. After hours of thinking, drawing stuff till I went insane, I decided it was not worth the hassle.</p>
+    <p>Now the maze becomes a cube. I first tried to map the co-ordinates to 3D, which was fine, until I realised I needed to find a way to fold the cube. After hours of thinking, drawing stuff till I went insane, I decided it was not worth the hassle.</p>
 
-<p>So I decided to hard-code the relationship between each side in the cube. However, because there is no generalization, debugging exactly <em>what</em> went wrong was ungodly. Thankfully, someone who has solved this beforehand provided a great cube visualizer that I used to debug my script, written by <a href="https://nanot1m.github.io/adventofcode2022/day22/index.html" target="_blank" rel="noopener noreferrer">nanot1m</a>. I also ran my script against another solution to check the output per instruction, only to find out that one of my functions that mapped the sides have the wrong offset.</p>
+    <p>So I decided to hard-code the relationship between each side in the cube. However, because there is no generalization, debugging exactly <em>what</em> went wrong was ungodly. Thankfully, someone who has solved this beforehand provided a great cube visualizer that I used to debug my script, written by <a href="https://nanot1m.github.io/adventofcode2022/day22/index.html" target="_blank" rel="noopener noreferrer">nanot1m</a>. I also ran my script against another solution to check the output per instruction, only to find out that one of my functions that mapped the sides have the wrong offset.</p>
 
-<p>So after roughly 5 hours, here is the final code:</p>
+    <p>So after roughly 5 hours, here is the final code:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+    <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
 <span class="n">face_width</span> <span class="o">=</span> <span class="mi">50</span>
 <span class="n">tiles</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">boundary_xs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -4158,9 +4158,174 @@ c: b + z
     <span class="n">direction</span> <span class="o">%=</span> <span class="nb">len</span><span class="p">(</span><span class="n">movement_map</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">direction</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <p>It’s ugly, the process is error-prone, I’m tired, this’ll do. I’ve put off plans for this man!</p>
+
+  </div>
+</div>
+
+<hr>
+
+<h1 id="day-23">Day 23</h1>
+
+<p>Today’s puzzle was much more manageable than the previous days! TGIF &amp; Merry Christmas, amirite?</p>
+
+<h2 id="part-1">Part 1</h2>
+
+<p>We follow our hero’s journey as we now have to scatter elves in a fixed way. I spent roughly 30 minutes debugging why my code didn’t work, only to realise that I haven’t fully digested the specifications. Lesson learnt!</p>
+
+<p>Okay so, we have an input like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>....#..
+..###.#
+#...#.#
+.#...##
+#.###..
+##.#.##
+.#..#..
 </code></pre></div></div>
 
-<p>It’s ugly, the process is error-prone, I’m tired, this’ll do. I’ve put off plans for this man!</p>
+<p>Each little hashtag moves according to a certain set of rules, which varies by the round number. The rules are:</p>
+
+<ol>
+  <li>Check all 8 positions to the side of hashtag. If no hashtag, do not move.</li>
+  <li>Check north, north-east, north-west. If there is another hashtag there, move on. Otherwise, attempt to move north.</li>
+  <li>Check south, south-east, south-west. Attempt to move south if no hashtag.</li>
+  <li>Check west, north-west, south-west. Attempt to move west if no hashtag.</li>
+  <li>Check east, north-east, south-east. Attempt to move east if no hashtag.</li>
+  <li>Otherwise, do not move.</li>
+</ol>
+
+<p>“Attempt” to move can become “actually” moved if all hashtags end up having unique positions.</p>
+
+<p>After every round of movement, steps 2 to 5 are rearranged to 3, 4, 5, 2. Essentially the first considered position is now the last considered position, and the second becomes the first, and so on.</p>
+
+<p>With that, here’s a helpful little function to print the board:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">print_board</span><span class="p">():</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\033</span><span class="s">[0J'</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\033</span><span class="s">[H'</span><span class="p">)</span>
+  <span class="n">pos_sorted_x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+  <span class="n">pos_sorted_y</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span> <span class="o">=</span> <span class="n">pos_sorted_x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos_sorted_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">pos_sorted_y</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos_sorted_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'#'</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'.'</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>And here is the solution:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">positions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'input.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="k">while</span> <span class="n">line</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s">'#'</span><span class="p">:</span>
+        <span class="n">positions</span><span class="p">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">readline</span><span class="p">().</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">generate_decisions</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
+  <span class="n">decisions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
+    <span class="n">intersect_results</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="nb">len</span><span class="p">({(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)}</span> <span class="o">&amp;</span> <span class="n">positions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nb">len</span><span class="p">({(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span> <span class="o">&amp;</span> <span class="n">positions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nb">len</span><span class="p">({(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span> <span class="o">&amp;</span> <span class="n">positions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nb">len</span><span class="p">({(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span> <span class="o">&amp;</span> <span class="n">positions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">intersect_results</span><span class="p">):</span>
+      <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+      <span class="k">continue</span>
+
+    <span class="k">for</span> <span class="n">iterator</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">intersect_results</span><span class="p">)):</span>
+      <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">rounds</span> <span class="o">+</span> <span class="n">iterator</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersect_results</span><span class="p">)</span>
+
+      <span class="n">match</span> <span class="n">i</span><span class="p">:</span>
+        <span class="n">case</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">intersect_results</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="n">case</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">intersect_results</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="n">case</span> <span class="mi">2</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">intersect_results</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="n">case</span> <span class="mi">3</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">intersect_results</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">decisions</span><span class="p">:</span>
+      <span class="n">decisions</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">decisions</span>
+
+<span class="k">def</span> <span class="nf">count_empty</span><span class="p">():</span>
+  <span class="n">pos_sorted_x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+  <span class="n">pos_sorted_y</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span> <span class="o">=</span> <span class="n">pos_sorted_x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos_sorted_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+  <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">pos_sorted_y</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">pos_sorted_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+  <span class="k">return</span> <span class="p">((</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+
+<span class="n">rounds</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">rounds</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+  <span class="n">decisions</span> <span class="o">=</span> <span class="n">generate_decisions</span><span class="p">(</span><span class="n">rounds</span><span class="p">)</span>
+  <span class="n">hits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+  <span class="n">new_positions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">result_pos</span> <span class="ow">in</span> <span class="n">decisions</span><span class="p">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">result_pos</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+      <span class="n">hits</span><span class="p">[</span><span class="n">result_pos</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">hits</span><span class="p">[</span><span class="n">result_pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+  <span class="k">for</span> <span class="n">original_pos</span><span class="p">,</span> <span class="n">result_pos</span> <span class="ow">in</span> <span class="n">decisions</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">hits</span><span class="p">[</span><span class="n">result_pos</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="n">new_positions</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">original_pos</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">new_positions</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">result_pos</span><span class="p">)</span>
+  
+  <span class="n">positions</span> <span class="o">=</span> <span class="n">new_positions</span>
+  <span class="n">rounds</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">count_empty</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="part-2">Part 2</h2>
+
+<p>Today’s part two is the most natural out of all the part twos I have attempted in this year’s AOC. Simply, we remove the boundaries of rounds, and figure out when all the hashtags run out of moves. So, basically, we just keep running until <code class="language-plaintext highlighter-rouge">positions == new_positions</code>. Hence, our diff would be:</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">61c61
+</span><span class="gd">&lt; while rounds &lt; 10:
+</span><span class="p">---
+</span><span class="gi">&gt; while True:
+</span><span class="p">78d77
+</span><span class="gd">&lt;   positions = new_positions
+</span><span class="p">79a79,81
+</span><span class="gi">&gt;   if positions == new_positions:
+&gt;     break
+&gt;   positions = new_positions
+</span><span class="p">81c83
+</span><span class="gd">&lt; print(count_empty())
+</span><span class="p">---
+</span><span class="gi">&gt; print(rounds)
+</span></code></pre></div></div>
+
+<p>It’s not the fastest piece of code ever, but for the amount of effort I put in, being able to get the answer in five seconds is reasonable enough.</p>
 
   </div>
 
