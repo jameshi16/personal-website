@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-23 00:44 +0000
+date: 2022-12-23 10:50 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 22](#day-21) is live!
+**EDIT**: [Day 23](#day-23) is out!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -3227,8 +3227,6 @@ def evaluate_unknown(expr):
 print(int(evaluate_unknown('humn')))
 ```
 
-</div></div>
-
 ----
 
 # Day 22
@@ -3490,3 +3488,169 @@ print(1000 * (y + 1) + 4 * (x + 1) + direction)
 ```
 
 It's ugly, the process is error-prone, I'm tired, this'll do. I've put off plans for this man!
+
+</div></div>
+
+----
+
+# Day 23
+
+Today's puzzle was much more manageable than the previous days! TGIF & Merry Christmas, amirite?
+
+## Part 1
+
+We follow our hero's journey as we now have to scatter elves in a fixed way. I spent roughly 30 minutes debugging why my code didn't work, only to realise that I haven't fully digested the specifications. Lesson learnt!
+
+Okay so, we have an input like this:
+
+```
+....#..
+..###.#
+#...#.#
+.#...##
+#.###..
+##.#.##
+.#..#..
+```
+
+Each little hashtag moves according to a certain set of rules, which varies by the round number. The rules are:
+
+1. Check all 8 positions to the side of hashtag. If no hashtag, do not move.
+2. Check north, north-east, north-west. If there is another hashtag there, move on. Otherwise, attempt to move north.
+3. Check south, south-east, south-west. Attempt to move south if no hashtag.
+4. Check west, north-west, south-west. Attempt to move west if no hashtag.
+5. Check east, north-east, south-east. Attempt to move east if no hashtag.
+6. Otherwise, do not move.
+
+"Attempt" to move can become "actually" moved if all hashtags end up having unique positions.
+
+After every round of movement, steps 2 to 5 are rearranged to 3, 4, 5, 2. Essentially the first considered position is now the last considered position, and the second becomes the first, and so on.
+
+With that, here's a helpful little function to print the board:
+
+```python
+def print_board():
+  print('\033[0J')
+  print('\033[H')
+  pos_sorted_x = sorted(list(positions), key=lambda p: p[0])
+  pos_sorted_y = sorted(list(positions), key=lambda p: p[1])
+
+  min_x, max_x = pos_sorted_x[0][0], pos_sorted_x[-1][0]
+  min_y, max_y = pos_sorted_y[0][1], pos_sorted_y[-1][1]
+  for y in range(min_y, max_y + 1):
+    for x in range(min_x, max_x + 1):
+      if (x, y) in positions:
+        print('#', end='')
+      else:
+        print('.', end='')
+    print()
+```
+
+And here is the solution:
+
+```python
+positions = set()
+with open('input.txt', 'r') as f:
+  line = f.readline().strip()
+  y = 0
+
+  while line:
+    for x, c in enumerate(line):
+      if c == '#':
+        positions.add((x, y))
+    y += 1
+    line = f.readline().strip()
+
+def generate_decisions(rounds):
+  decisions = dict()
+  for (x, y) in positions:
+    intersect_results = [
+      len({(x - 1, y - 1), (x, y - 1), (x + 1, y - 1)} & positions) == 0,
+      len({(x - 1, y + 1), (x, y + 1), (x + 1, y + 1)} & positions) == 0,
+      len({(x - 1, y - 1), (x - 1, y), (x - 1, y + 1)} & positions) == 0,
+      len({(x + 1, y - 1), (x + 1, y), (x + 1, y + 1)} & positions) == 0,
+    ]
+    if all(intersect_results):
+      decisions[(x, y)] = (x, y)
+      continue
+
+    for iterator in range(len(intersect_results)):
+      i = (rounds + iterator) % len(intersect_results)
+
+      match i:
+        case 0:
+          if intersect_results[0]:
+            decisions[(x, y)] = (x, y - 1)
+            break
+        case 1:
+          if intersect_results[1]:
+            decisions[(x, y)] = (x, y + 1)
+            break
+        case 2:
+          if intersect_results[2]:
+            decisions[(x, y)] = (x - 1, y)
+            break
+        case 3:
+          if intersect_results[3]:
+            decisions[(x, y)] = (x + 1, y)
+            break
+
+    if (x, y) not in decisions:
+      decisions[(x, y)] = (x, y)
+  return decisions
+
+def count_empty():
+  pos_sorted_x = sorted(list(positions), key=lambda p: p[0])
+  pos_sorted_y = sorted(list(positions), key=lambda p: p[1])
+
+  min_x, max_x = pos_sorted_x[0][0], pos_sorted_x[-1][0]
+  min_y, max_y = pos_sorted_y[0][1], pos_sorted_y[-1][1]
+
+  return ((max_x - min_x + 1) * (max_y - min_y + 1)) - len(positions)
+
+rounds = 0
+while rounds < 10:
+  decisions = generate_decisions(rounds)
+  hits = dict()
+  new_positions = set()
+
+  for result_pos in decisions.values():
+    if result_pos in hits:
+      hits[result_pos] += 1
+    else:
+      hits[result_pos] = 1
+
+  for original_pos, result_pos in decisions.items():
+    if hits[result_pos] > 1:
+      new_positions.add(original_pos)
+    else:
+      new_positions.add(result_pos)
+  
+  positions = new_positions
+  rounds += 1
+
+print(count_empty())
+```
+
+## Part 2
+
+Today's part two is the most natural out of all the part twos I have attempted in this year's AOC. Simply, we remove the boundaries of rounds, and figure out when all the hashtags run out of moves. So, basically, we just keep running until `positions == new_positions`. Hence, our diff would be:
+
+```diff
+61c61
+< while rounds < 10:
+---
+> while True:
+78d77
+<   positions = new_positions
+79a79,81
+>   if positions == new_positions:
+>     break
+>   positions = new_positions
+81c83
+< print(count_empty())
+---
+> print(rounds)
+```
+
+It's not the fastest piece of code ever, but for the amount of effort I put in, being able to get the answer in five seconds is reasonable enough.
