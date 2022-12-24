@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-23 10:50 +0000
+date: 2022-12-24 15:23 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 23](#day-23) is out!
+**EDIT**: [Day 24](#day-24) is out!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -260,7 +260,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221223_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221224_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -3489,8 +3489,6 @@ print(1000 * (y + 1) + 4 * (x + 1) + direction)
 
 It's ugly, the process is error-prone, I'm tired, this'll do. I've put off plans for this man!
 
-</div></div>
-
 ----
 
 # Day 23
@@ -3654,3 +3652,278 @@ Today's part two is the most natural out of all the part twos I have attempted i
 ```
 
 It's not the fastest piece of code ever, but for the amount of effort I put in, being able to get the answer in five seconds is reasonable enough.
+
+----
+
+</div></div>
+
+# Day 24
+
+Today's puzzle is about path-finding, but on crack.
+
+## Part 1
+
+Let's examine an example:
+
+```
+#.######
+#>>.<^<#
+#.<..<<#
+#>v.><>#
+#<^v^^>#
+######.#
+```
+
+The arrows, which are `>v<^` are moving obstacles in the board, moving towards the direction suggested by the arrows. These arrows can overlap, and warp around the board. Our goal is to perform path-finding through this board, and output the **shortest possible path**.
+
+Okay, what's the best method? The first method I immediately thought of is to implement a path searching algorithm, and find the shortest path at every step. _However_, this is largely inefficient, because when there are as many obstacles as shown in the board above, then too much effort is put into re-calculating the path at every step due to obstacles to the path.
+
+Instead, let's include the moving obstacles into our path search algorithm; at every step, we clone the board, move the obstacles, figure out the best next step, and repeat the process ad-infinitum until we reach the target position. To effectively do this, we must invent an algorithm that quickly converges to the target position, without searching unnecessary paths.
+
+For this, I chose to use A\* search.
+
+As usual, here is a useful function to print the board:
+
+```python
+def print_board(p, hs, steps):
+  print('\033[2J')
+  print('\033[H')
+  print('Steps:', steps)
+  px, py = p
+  for y in range(0, height):
+    for x in range(0, width):
+      if ((x, y) == start_position) or ((x, y) == end_position):
+        if (px, py) == (x, y):
+          print('E', end='')
+        else:
+          print(' ', end='')
+        continue
+
+      if x % (width - 1) == 0:
+        print('#', end='')
+      elif y % (height - 1) == 0:
+        print('#', end='')
+      elif (x, y) == p:
+        print('E', end='')
+      else:
+        hasDir = 0
+        lastDir = '^'
+        for c, _ in enumerate(directions):
+          if (x, y, c) in hs:
+            lastDir = directions[c]
+            hasDir += 1
+        if not hasDir:
+          print('.', end='')
+        elif hasDir > 1:
+          print(hasDir, end='')
+        else:
+          print(lastDir, end='')
+    print()
+  print()
+  sleep(0.1)
+```
+
+And here is the search implemented:
+
+```python
+from queue import PriorityQueue
+
+directions = '>v<^'
+directions_movement = [
+  (1, 0),
+  (0, 1),
+  (-1, 0),
+  (0, -1),
+  (0, 0)
+]
+hurricanes = list()
+width, height = -1, -1
+
+with open('input.txt', 'r') as f:
+  line = f.readline().strip()
+  y = 0
+  width = len(line)
+  while line:
+    for x, c in enumerate(line):
+      if c in directions:
+         hurricanes.append((x, y, directions.index(c)))
+    line = f.readline().strip()
+    y += 1
+  height = y
+
+def move(pos, isPlayer):
+  x, y, c  = pos
+  diff = directions_movement[c]
+  x += diff[0]
+  y += diff[1]
+
+  if isPlayer:
+    return (x, y, c)
+
+  if x > width - 2:
+    x = 1
+  elif x < 1:
+    x = width - 2
+
+  if y > height - 2:
+    y = 1
+  elif y < 1:
+    y = height - 2
+  return (x, y, c)
+
+start_position = (1, 0)
+end_position = (width - 2, height - 1)
+visited = set()
+p = PriorityQueue()
+
+p.put((0, start_position, hurricanes, 0))
+found = False
+
+while not p.empty():
+  old_heuristic, (px, py), current_hurricanes, steps = p.get()
+  steps += 1
+
+  # move hurricanes
+  new_hurricanes = list()
+  for pos in current_hurricanes:
+    new_hurricanes.append(move(pos, False))
+
+  # attempt to move
+  for c, direction in enumerate(directions_movement):
+    x, y, _ = move((px, py, c), True)
+    if (x, y) == end_position:
+      found = True
+      break
+
+    if not (0 < x < width - 1 and 0 < y < height - 1):
+      continue
+
+    collides = False
+    for (hx, hy, _) in new_hurricanes:
+      if (x, y) == (hx, hy):
+        collides = True
+        break
+    if collides:
+      continue
+
+    new_heuristic = steps + abs(end_position[0] - x) + abs(end_position[1] - y)
+    if (x, y, steps) not in visited:
+      p.put((new_heuristic, (x, y), new_hurricanes, steps))
+      visited.add((x, y, steps))
+
+  if found:
+    print(steps)
+    break
+```
+
+## Part 2
+
+In part 2, I found a bug in my original code. If, right out of the gate, there is a hurricane blocking the path of the starting position, then the A\* search will return prematurely with no results:
+
+```python
+    if (x, y) == end_position:
+      found = True
+      break
+```
+
+To fix this, I simply check if the current position is the starting position; if it is, the subsequent block of code is executed, which has "stay still" as one of the possible actions to take.
+
+Hence, after fixing the bug, I just move all of the path finding code to its own function, which will return the number of steps taken and the state of the board, and call it three times; once from start -> end, end -> start and start -> end again.
+
+Here is the final diff:
+
+```diff
+46,49c46,67
+< start_position = (1, 0)
+< end_position = (width - 2, height - 1)
+< visited = set()
+< p = PriorityQueue()
+---
+> def astar(start_position, end_position, hurricanes):
+>   visited = set()
+>   p = PriorityQueue()
+>
+>   p.put((0, start_position, hurricanes, 0))
+>   found = False
+>
+>   while not p.empty():
+>     old_heuristic, (px, py), current_hurricanes, steps = p.get()
+>     steps += 1
+>
+>     # move hurricanes
+>     new_hurricanes = list()
+>     for pos in current_hurricanes:
+>       new_hurricanes.append(move(pos, False))
+>
+>     # attempt to move
+>     for c, direction in enumerate(directions_movement):
+>       x, y, _ = move((px, py, c), True)
+>       if (x, y) == end_position:
+>         found = True
+>         break
+51,52c69,84
+< p.put((0, start_position, hurricanes, 0))
+< found = False
+---
+>       if not (0 < x < width - 1 and 0 < y < height - 1) \
+>         and (x, y) != start_position:
+>         continue
+>
+>       collides = False
+>       for (hx, hy, _) in new_hurricanes:
+>         if (x, y) == (hx, hy):
+>           collides = True
+>           break
+>       if collides:
+>         continue
+>
+>       new_heuristic = steps + abs(end_position[0] - x) + abs(end_position[1] - y)
+>       if (x, y, steps) not in visited:
+>         p.put((new_heuristic, (x, y), new_hurricanes, steps))
+>         visited.add((x, y, steps))
+54,67c86,87
+< while not p.empty():
+<   old_heuristic, (px, py), current_hurricanes, steps = p.get()
+<   steps += 1
+<
+<   # move hurricanes
+<   new_hurricanes = list()
+<   for pos in current_hurricanes:
+<     new_hurricanes.append(move(pos, False))
+<
+<   # attempt to move
+<   for c, direction in enumerate(directions_movement):
+<     x, y, _ = move((px, py, c), True)
+<     if (x, y) == end_position:
+<       found = True
+---
+>     if found:
+>       return current_hurricanes, steps
+70,88c90,95
+<     if not (0 < x < width - 1 and 0 < y < height - 1):
+<       continue
+<
+<     collides = False
+<     for (hx, hy, _) in new_hurricanes:
+<       if (x, y) == (hx, hy):
+<         collides = True
+<         break
+<     if collides:
+<       continue
+<
+<     new_heuristic = steps + abs(end_position[0] - x) + abs(end_position[1] - y)
+<     if (x, y, steps) not in visited:
+<       p.put((new_heuristic, (x, y), new_hurricanes, steps))
+<       visited.add((x, y, steps))
+<
+<   if found:
+<     print(steps)
+<     break
+---
+> start_position = (1, 0)
+> end_position = (width - 2, height - 1)
+> hurricanes, steps = astar(start_position, end_position, hurricanes)
+> hurricanes, backsteps = astar(end_position, start_position, hurricanes)
+> hurricanes, backbacksteps = astar(start_position, end_position, hurricanes)
+> print(backbacksteps + backsteps + steps - 2)
+```
