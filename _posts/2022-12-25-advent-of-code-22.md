@@ -1,13 +1,13 @@
 ---
 title: Advent of Code 22
-date: 2022-12-24 15:23 +0000
+date: 2022-12-25 12:05 +0000
 published: true
 feed:
   excerpt_only: true
 excerpt_separator: <!--more-->
 ---
 
-**EDIT**: [Day 24](#day-24) is out!
+**EDIT**: Merry Christmas, folks! The final day, [Day 25](#day-25) is out!
 
 **NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
 
@@ -260,7 +260,7 @@ Today's part 1 problem can be broken down into the following sub-problems:
 
 I decided to use Haskell, because :shrug:. Inputs in Haskell is notoriously complex, so I decided to bypass that by utilizing my browser's JavaScript engine to convert multi-line strings to normal strings delimited by `\n`, like this:
 
-<img src="/images/20221224_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
+<img src="/images/20221225_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Interpreting multi-string with JavaScript"/>
 <p class="text-center text-gray lh-condensed-ultra f6">Converting to a single-line string with JavaScript</p>
 
 Doing so, I will be able to bypass all input-related processing in Haskell by assigning the string to the variable.
@@ -3655,8 +3655,6 @@ It's not the fastest piece of code ever, but for the amount of effort I put in, 
 
 ----
 
-</div></div>
-
 # Day 24
 
 Today's puzzle is about path-finding, but on crack.
@@ -3927,3 +3925,158 @@ Here is the final diff:
 > hurricanes, backbacksteps = astar(start_position, end_position, hurricanes)
 > print(backbacksteps + backsteps + steps - 2)
 ```
+----
+
+</div></div>
+
+# Day 25
+
+There's only one part to this puzzle; and it's probably the most fun I had in a puzzle thus far!
+
+Nothing like alternate number representations to end of the advent eh? In this puzzle, we have a bunch of alien-looking numbers, like so:
+
+```
+1=-0-2
+12111
+2=0=
+21
+2=01
+111
+20012
+112
+1=-1=
+1-12
+12
+1=
+122
+```
+
+We eventually find out that each of these numbers are in base 5, but with a twist (as there usually is); `-` and `=` represent -1 and -2 respectively, and the maximum digit that can be represented is 2. From a list of these integers, we need to sum it out, and return our sum in the same format.
+
+Okay, so there are two subproblems:
+
+1. Converting this integer representation to base 10;
+2. Converting base 10 integers to this integer representation.
+
+The first sub-problem is really simple. All we have to do is to sum the value represented by each digit position, negative and all that: so, for example, `1=-0-2` can converted to an integer by this method: `2 + (-1) * 5 + 0 * 5^2 + (-1) ^ 5^3 + (-2) ^ 5^4 + 1 * 5^5 = 1747`. In Haskell, this is a `foldr` zipped with the position of each digit, something like that:
+
+```haskell
+snafuToInt :: SNAFU -> Int
+snafuToInt = foldr convert 0 . enumerate
+  where
+    convert (i, digit) acc = acc + (5 ^ i) * (snafuDigitToInt digit)
+    enumerate xs = zip[(length xs) - 1, (length xs) - 2 .. -1] xs
+```
+
+where `SNAFU` is just a `String`, `snafuDigitToInt` converts `-=012` to an integer, like `-1, -2, 0, 1, 2`.
+
+
+To approach the second sub-problem, we must understand that we are in a situation where we need to perform _differences_ to convert a normal base 10 integer to this strange version of an integer. Okay, what if it was to a normal base 5 integer? Normally, we would need to perform the following:
+
+```
+1747 % 5 = 2 (last digit is 2)
+
+1747 / 5 = 349
+349 % 5 = 4 (fourth digit is 4)
+
+349 / 5 = 69
+69 % 5 = 4 (third digit is 4)
+
+69 / 5 = 13
+13 % 5 = 3 (second digit is 3)
+
+13 / 5 = 2
+2 % 5 = 2 (first digit is 2)
+```
+
+As such, our base 5 reprsentation of 1747 is 23442. Now, let's think about how our number system changes things. If we now want to represent, say, 8, in normal base 5, that would be `1 * 5^1 + 3`. In our unique representation, it's `2 * 5^1 - 2`, whch means `2=`. We discover that the difference is actually just `1 * 5^1 + (3 - 5) + 5 = 2 * 5^1 - 2`, which is `2=`. Okay, what a bout a smaller number, like 6? That's `1 * 5^1 + 1` for both normal base 5, and our unique base 5 (`11`).
+
+Hence, we find out that should our normal base 5 digit exceed `2`, we need to perform `(5 - digit)` on it, to get the correct representation at that point. But doing so will offset our answer by 5; how do we intend to fix that? Let's think about a larger number, say `74`. This is `2 * 5^2 + 4 * 5^1 + 4 * 5^0` in normal base 5. Using our logic above, to represent this in our unique number, we see that: `2 * 5^2 + (4 - 5) * 5^1 + (4 - 5) * 5^0` which is offset by `+ 5 * 5^1 + 5 * 5^0`, missing from the expression. Wait, isn't that just `5^2 + 5^1`? If we apply this back to the unique number expression, then: `3 * 5^2 + (4 - 5 + 1) * 5^1 - 1 * 5^0`, which is just `3 * 5^2 - 1` which is `5*5^2 + (5 - 3) * 5 ^ 2 - 1`, which is `5^3 - 2*5^2 - 1` which finally translates to `1=0-` in our special integer representation.
+
+What this whole shtick implies is that we need to _carry over_ a 1 to the next significant digit, as long as our base 5 representation exceeds the maximum digit, 2.
+
+With that finally out of the way, we can implement our logic:
+
+```haskell
+intToSnafu :: Int -> SNAFU
+intToSnafu x = reverse $ convertDigits x 0 []
+  where
+    convertDigits num carry xs
+      | num == 0 && carry == 0 = []
+      | num' + carry > 2 = intToSnafuDigit (num' + carry - 5) : convertDigits num'' 1 xs
+      | otherwise = intToSnafuDigit (num' + carry) : convertDigits num'' 0 xs
+      where
+        num' = num `mod` 5
+        num'' = floor $ ((fromIntegral num) / 5)
+```
+
+I'm reversing the list because I don't want to do `++ []`, which increases my time complexity, however much that matters. Now that we have both of our conversion functions, we can finally do the problem, which is to sum all the numbers together in our special base 5 representation. The full code is as follows:
+
+```haskell
+import System.IO
+
+type SNAFUDigit = Char
+type SNAFU = String
+
+snafuDigitToInt :: SNAFUDigit -> Int
+snafuDigitToInt '=' = -2
+snafuDigitToInt '-' = -1
+snafuDigitToInt '0' = 0
+snafuDigitToInt '1' = 1
+snafuDigitToInt '2' = 2
+
+intToSnafuDigit :: Int -> SNAFUDigit
+intToSnafuDigit (-2) = '='
+intToSnafuDigit (-1) = '-'
+intToSnafuDigit 0 = '0'
+intToSnafuDigit 1 = '1'
+intToSnafuDigit 2 = '2'
+
+snafuToInt :: SNAFU -> Int
+snafuToInt = foldr convert 0 . enumerate
+  where
+    convert (i, digit) acc = acc + (5 ^ i) * (snafuDigitToInt digit)
+    enumerate xs = zip[(length xs) - 1, (length xs) - 2 .. -1] xs
+
+intToSnafu :: Int -> SNAFU
+intToSnafu x = reverse $ convertDigits x 0 []
+  where
+    convertDigits num carry xs
+      | num == 0 && carry == 0 = []
+      | num' + carry > 2 = intToSnafuDigit (num' + carry - 5) : convertDigits num'' 1 xs
+      | otherwise = intToSnafuDigit (num' + carry) : convertDigits num'' 0 xs
+      where
+        num' = num `mod` 5
+        num'' = floor $ ((fromIntegral num) / 5)
+
+main = do
+  contents <- readFile "input.txt"
+  let result = intToSnafu . sum . map snafuToInt $ lines contents
+  print result
+```
+
+And with that, we've completed Advent of Code 2022, the first time ever I've done so!
+
+<img src="/images/20221225_2.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Advent of Code 2022 Diagram"/>
+<p class="text-center text-gray lh-condensed-ultra f6">Advent of Code Calendar 2022</p>
+
+----
+
+# Conclusion
+
+I'll probably update this blog post for formatting, English and clearer explanations after Christmas, but I will not change the published date.
+
+AOC has been a fun experience for me to hone my skills in a way that did not feel too overbearing, yet fun and engaging. The puzzles taught me a lot, highlighting things that I should improve on. In a nutshell, the lessons were:
+
+- Fully understand the problem statement first
+- Trust gut instinct on what _kind_ of data structure is needed
+- Using gut instinct, pen down how the algorithm will be like. Don't try to fit everything in your head
+- Test code regularly. If possible, test automatically
+
+I hope to do AOC next year too, hopefully with less mistakes!
+
+Merry Christmas and Happy 2023, folks.
+
+Happy Coding,
+
+CodingIndex
