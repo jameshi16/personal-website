@@ -2,43 +2,17 @@
 title: Advent of Code 22
 date: 2022-12-25 12:05 +0000
 published: true
-feed:
-  excerpt_only: true
-excerpt_separator: <!--more-->
+tags: [advent, of, code, 2022]
+categories: [code, algorithms]
 ---
-
-**EDIT**: Merry Christmas, folks! The final day, [Day 25](#day-25) is out!
-
-**NOTE**: If you're viewing this over feed / email, you won't be able to see the new days, because the feed is too long and I don't want to send you unnecessary data. Head over to the website to see what's crackin' for today ([{{site.url}}{{page.url}}]({{site.url}}{{page.url}}))!
-
-<!--more-->
 
 :coffee: Hi!
 
-After having absolutely _zero_ blog posts for the past 11 months, including my treasured [anime](/anime) page, here I am declaring that I will be participating in the [Advent of Code](https://adventofcode.com/) (AOC).
+After having absolutely _zero_ blog posts for the past 11 months, including on my treasured [anime](/anime) page, here I am declaring that I will be participating in the [Advent of Code](https://adventofcode.com/) (AOC).
 
 I've never completed an AOC before, so it'll be a nice challenge to breathe vitality into this blog before the New Years. To motivate me, I have invited my buddies over at [modelconverge](https://modelconverge.xyz) and [nikhilr](https://nikhilr.io) to join me.
 
-Each of us will attempt each AOC, and discuss our solutions at the end of each week to judge each solution with its time-space complexity, and elegance. We will use any language we have at our disposal.
-
 Throughout AOC, I will update this blog post in a rolling manner to discuss my thought processes from ideation to solution. Do check back every day!
-
-**EDIT**: Handy dandy checkbox to hide old days, until a full blog post comes out!
-
-<div>
-<input type="checkbox" type="checkbox" id="olddays"/>
-<b>Expand Old Days (Implemented based on <a href="https://www.digitalocean.com/community/tutorials/css-collapsible">this DigitalOcean post</a> with no JavaScript)</b>
-
-<style>
-#olddays:checked ~ .olddays-collapsable {
-  max-height: 100%;
-}
-#olddays-collapsable {
-  max-height: 0px;
-  overflow: hidden;
-}
-</style>
-<div class="olddays-collapsable" id="olddays-collapsable" markdown="1">
 
 # Day 1
 
@@ -78,7 +52,7 @@ Where the contents of `input.txt` are given by the puzzle input.
 
 ## Part 2
 
-The second part essentially want us to get the three highest elements in the list. So, just a small tweak to part 1:
+The second part wants us to get the three highest elements in the list. So, just a small tweak to part 1:
 
 ```python
 from functools import reduce
@@ -3926,8 +3900,6 @@ Here is the final diff:
 > print(backbacksteps + backsteps + steps - 2)
 ```
 ----
-
-</div></div>
 
 # Day 25
 
