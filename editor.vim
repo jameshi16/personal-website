@@ -42,6 +42,11 @@ syntax include @BASH syntax/sh.vim
 syntax region bashSnippet start='```bash' end='```' contains=@BASH keepend
 syntax region shSnippet start='```sh' end='```' contains=@BASH keepend
 
+" Highlight Haskell
+unlet b:current_syntax
+syntax include @HASKELL syntax/haskell.vim
+syntax region haskellSnippet start='```haskell' end='```' contains=@HASKELL keepend
+
 " Blog Header Syntax (it's YAML, but I wanted to limit / customize it)
 syn keyword blogHeaderKeywords title japTitle published nextgroup=blogHeaderStringDelimitter contained
 syn keyword blogHeaderKeywords date nextgroup=blogHeaderDateDelimitter contained
