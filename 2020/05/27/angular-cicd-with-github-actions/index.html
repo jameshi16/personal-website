@@ -39,7 +39,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">Angular CI/CD with GitHub Actions</h1>
       <p class="text-gray mb-5">Published May 27, 2020 09:00</p>
       
@@ -150,7 +150,7 @@
 
 <p>Running Angular tests implies some level of interaction with the browser - since I don’t have GUI access to the browser when a GitHub action is running, I configured the tests to run on a headless browser. Firstly there’s <code class="language-plaintext highlighter-rouge">karma.conf.js</code>, the configuration file for Angular’s unit testing framework:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nf">function </span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
     <span class="nl">browsers</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ChromeHeadless</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">ChromeHeadlessCI</span><span class="dl">'</span><span class="p">],</span>
     <span class="p">...,</span>
     <span class="nx">customLaunchers</span><span class="p">:</span> <span class="p">{</span>
@@ -215,16 +215,16 @@
 <span class="na">inputs</span><span class="pi">:</span>
   <span class="na">sshkey</span><span class="pi">:</span>
     <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">SSH</span><span class="nv"> </span><span class="s">Key</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">access</span><span class="nv"> </span><span class="s">production</span><span class="nv"> </span><span class="s">server'</span>
-    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="kc">true</span>
   <span class="na">user</span><span class="pi">:</span>
     <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Username</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">production</span><span class="nv"> </span><span class="s">server'</span>
-    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="kc">true</span>
   <span class="na">host</span><span class="pi">:</span>
     <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Production</span><span class="nv"> </span><span class="s">Server</span><span class="nv"> </span><span class="s">address'</span>
-    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="kc">true</span>
   <span class="na">knownhosts</span><span class="pi">:</span>
     <span class="na">description</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Host</span><span class="nv"> </span><span class="s">keys</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">identify</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">production</span><span class="nv"> </span><span class="s">server'</span>
-    <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">required</span><span class="pi">:</span> <span class="kc">true</span>
 <span class="na">runs</span><span class="pi">:</span>
   <span class="na">using</span><span class="pi">:</span> <span class="s1">'</span><span class="s">docker'</span>
   <span class="na">image</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Dockerfile'</span>

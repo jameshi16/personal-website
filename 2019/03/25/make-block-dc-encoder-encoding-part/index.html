@@ -39,7 +39,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">MakeBlock DC Encoder Motors - The Encoding Part</h1>
       <p class="text-gray mb-5">Published Mar 25, 2019 09:30</p>
       
@@ -68,7 +68,7 @@
     <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">interruptPin</span><span class="p">),</span> <span class="n">blink</span><span class="p">,</span><span class="n">RISING</span><span class="p">);</span>   
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>   
 <span class="p">}</span>
-<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">motor1</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">motorSpeed</span><span class="p">);</span>       <span class="c1">// value: between -255 and 255</span>
     <span class="n">time</span> <span class="o">=</span><span class="n">millis</span><span class="p">();</span> 
@@ -78,7 +78,7 @@
           <span class="n">last_time</span><span class="o">=</span><span class="n">time</span><span class="p">;</span>
    <span class="p">}</span>
 <span class="p">}</span>
-<span class="kt">void</span> <span class="n">blink</span><span class="p">()</span>
+<span class="kt">void</span> <span class="nf">blink</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">NE1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>   
     <span class="n">count</span><span class="o">++</span><span class="p">;</span>
@@ -137,7 +137,7 @@ Here is what I know:</p>
     <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">interruptPin</span><span class="p">),</span> <span class="n">blink</span><span class="p">,</span><span class="n">RISING</span><span class="p">);</span>   
     <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>   
 <span class="p">}</span>
-<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="n">motor1</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">motorSpeed</span><span class="p">);</span>       <span class="c1">// value: between -255 and 255</span>
     <span class="n">time</span> <span class="o">=</span><span class="n">millis</span><span class="p">();</span> 
@@ -147,7 +147,7 @@ Here is what I know:</p>
           <span class="n">last_time</span><span class="o">=</span><span class="n">time</span><span class="p">;</span>
    <span class="p">}</span>
 <span class="p">}</span>
-<span class="kt">void</span> <span class="n">blink</span><span class="p">()</span>
+<span class="kt">void</span> <span class="nf">blink</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">NE1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>   
     <span class="n">count</span><span class="o">++</span><span class="p">;</span>

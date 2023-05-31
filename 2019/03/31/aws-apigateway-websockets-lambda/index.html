@@ -39,7 +39,7 @@
 
 
     <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
-      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z"></path></svg>Home</a></p>
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>Home</a></p>
       <h1 class="f00-light lh-condensed">AWS API Gateway Websockets with AWS Lambda</h1>
       <p class="text-gray mb-5">Published Mar 31, 2019 12:00</p>
       
@@ -87,39 +87,39 @@
 <h1 id="what-worked">What worked</h1>
 <p>On the <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python" target="_blank" rel="noopener noreferrer">StackOverflow post</a> that (3) and (4) came from, there was one very underrated solution by <code class="language-plaintext highlighter-rouge">b.b3rn4rd</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">import</span> <span class="nn">botocore.credentials</span>
-<span class="kn">from</span> <span class="nn">botocore.awsrequest</span> <span class="kn">import</span> <span class="n">AWSRequest</span>
-<span class="kn">from</span> <span class="nn">botocore.endpoint</span> <span class="kn">import</span> <span class="n">BotocoreHTTPSession</span>
-<span class="kn">from</span> <span class="nn">botocore.auth</span> <span class="kn">import</span> <span class="n">SigV4Auth</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">boto3</span>
+<span class="kn">import</span> <span class="n">botocore.credentials</span>
+<span class="kn">from</span> <span class="n">botocore.awsrequest</span> <span class="kn">import</span> <span class="n">AWSRequest</span>
+<span class="kn">from</span> <span class="n">botocore.endpoint</span> <span class="kn">import</span> <span class="n">BotocoreHTTPSession</span>
+<span class="kn">from</span> <span class="n">botocore.auth</span> <span class="kn">import</span> <span class="n">SigV4Auth</span>
 
-<span class="n">params</span> <span class="o">=</span> <span class="s">'{"name": "hello"}'</span>
+<span class="n">params</span> <span class="o">=</span> <span class="sh">'</span><span class="s">{</span><span class="sh">"</span><span class="s">name</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">hello</span><span class="sh">"</span><span class="s">}</span><span class="sh">'</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s">'Host'</span><span class="p">:</span> <span class="s">'ram.ap-southeast-2.amazonaws.com'</span><span class="p">,</span>
+  <span class="sh">'</span><span class="s">Host</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">ram.ap-southeast-2.amazonaws.com</span><span class="sh">'</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">AWSRequest</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://ram.ap-southeast-2.amazonaws.com/createresourceshare"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-<span class="n">SigV4Auth</span><span class="p">(</span><span class="n">boto3</span><span class="p">.</span><span class="n">Session</span><span class="p">().</span><span class="n">get_credentials</span><span class="p">(),</span> <span class="s">"ram"</span><span class="p">,</span> <span class="s">"ap-southeast-2"</span><span class="p">).</span><span class="n">add_auth</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>    
+<span class="n">request</span> <span class="o">=</span> <span class="nc">AWSRequest</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="sh">"</span><span class="s">POST</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://ram.ap-southeast-2.amazonaws.com/createresourceshare</span><span class="sh">"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="nc">SigV4Auth</span><span class="p">(</span><span class="n">boto3</span><span class="p">.</span><span class="nc">Session</span><span class="p">().</span><span class="nf">get_credentials</span><span class="p">(),</span> <span class="sh">"</span><span class="s">ram</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">ap-southeast-2</span><span class="sh">"</span><span class="p">).</span><span class="nf">add_auth</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>    
 
 
-<span class="n">session</span> <span class="o">=</span> <span class="n">BotocoreHTTPSession</span><span class="p">()</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">prepare</span><span class="p">())</span>
+<span class="n">session</span> <span class="o">=</span> <span class="nc">BotocoreHTTPSession</span><span class="p">()</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">session</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="nf">prepare</span><span class="p">())</span>
 </code></pre></div></div>
 <p class="text-center text-gray lh-condensed-ultra f6">Credit: <code>b.b3rn4rd</code> from <a href="https://stackoverflow.com/questions/38144273/making-a-signed-http-request-to-aws-elasticsearch-in-python" target="_blank" rel="noopener noreferrer">StackOverflow</a></p>
 
 <p>The problem with the above code is that <code class="language-plaintext highlighter-rouge">BotocoreHTTPSession</code> no longer exists in newer versions of Botocore (and by extension, Boto3), and so I dived into the source code of Boto3 and botocore to find a drop-in replacement: <code class="language-plaintext highlighter-rouge">URLLib3Session</code>,</p>
 
 <p>Changing the code to work with API Gateway’s WebSockets Connection URL, this is what I’ve got:</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">from</span> <span class="nn">botocore.awsrequest</span> <span class="kn">import</span> <span class="n">AWSRequest</span>
-<span class="kn">from</span> <span class="nn">botocore.httpsession</span> <span class="kn">import</span> <span class="n">URLLib3Session</span>
-<span class="kn">from</span> <span class="nn">botocore.auth</span> <span class="kn">import</span> <span class="n">SigV4Auth</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">boto3</span>
+<span class="kn">from</span> <span class="n">botocore.awsrequest</span> <span class="kn">import</span> <span class="n">AWSRequest</span>
+<span class="kn">from</span> <span class="n">botocore.httpsession</span> <span class="kn">import</span> <span class="n">URLLib3Session</span>
+<span class="kn">from</span> <span class="n">botocore.auth</span> <span class="kn">import</span> <span class="n">SigV4Auth</span>
 
-<span class="n">session</span> <span class="o">=</span> <span class="n">URLLib3Session</span><span class="p">()</span>
+<span class="n">session</span> <span class="o">=</span> <span class="nc">URLLib3Session</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="c1"># insert your data here
 </span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">AWSRequest</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">"https://&lt;api gateway id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage&gt;/@connections/&lt;connection id&gt;"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">'Host'</span><span class="p">:</span> <span class="s">'&lt;api gateway id&gt;.execute-api.&lt;region&gt;.amazonaws.com'</span><span class="p">},</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-<span class="n">SigV4Auth</span><span class="p">(</span><span class="n">boto3</span><span class="p">.</span><span class="n">Session</span><span class="p">().</span><span class="n">get_credentials</span><span class="p">(),</span> <span class="s">"execute-api"</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">region</span><span class="o">&gt;</span><span class="p">).</span><span class="n">add_auth</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-<span class="n">session</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">prepare</span><span class="p">())</span>
+<span class="n">request</span> <span class="o">=</span> <span class="nc">AWSRequest</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="sh">"</span><span class="s">POST</span><span class="sh">"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="sh">"</span><span class="s">https://&lt;api gateway id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage&gt;/@connections/&lt;connection id&gt;</span><span class="sh">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">Host</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">&lt;api gateway id&gt;.execute-api.&lt;region&gt;.amazonaws.com</span><span class="sh">'</span><span class="p">},</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="nc">SigV4Auth</span><span class="p">(</span><span class="n">boto3</span><span class="p">.</span><span class="nc">Session</span><span class="p">().</span><span class="nf">get_credentials</span><span class="p">(),</span> <span class="sh">"</span><span class="s">execute-api</span><span class="sh">"</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">region</span><span class="o">&gt;</span><span class="p">).</span><span class="nf">add_auth</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">session</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="nf">prepare</span><span class="p">())</span>
 
 </code></pre></div></div>
 
