@@ -1,0 +1,449 @@
+
+
+
+
+
+
+
+
+<!doctype html>
+<html class="height-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Hey there, good morning. Sit yourself down, and enjoy some :coffee:.Recently, I’ve worked heavily on GitLab CI/CD pipelines. In my line of work, these pipelines mustincorporate security requirements, such as Static Application Security Testing (SAST), DynamicApplication Security Testing (DAST), C..." />
+    <title>CodingIndex's Random Shenanigans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Blog posts (last 10, atom feed)">
+    <link href="/feed/anime.xml" type="application/atom+xml" rel="alternate" title="Weaboo Corner (last 10, atom feed)">
+    <link href="/assets/styles.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.png" rel="icon" type="image/png" sizes="128x128">
+  </head>
+  <body class="height-full" style="width: 100vw; overflow-x: hidden">
+
+
+
+
+  <div class="container-xl pt-6 p-responsive text-center">
+    
+
+<img src="/CodingIndex.png" class="mb-3" style="max-width: 150px;" alt="CodingIndex Logo">
+<p class="mb-3 f4 text-gray">A (human) index that likes to code<br><span class="f5">Also drinks way too much coffee <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></span></p>
+<nav class="UnderlineNavi container-md"> 
+  <div class="UnderlineNav-body" style="display: block">
+    <a href="/" role="tab" title="Home" class="UnderlineNav-item selected">Home</a>
+    <a href="/anime" role="tab" title="Anime" class="UnderlineNav-item ">Anime</a>
+    <a href="/about" role="tab" title="About" class="UnderlineNav-item ">About</a>
+  </div>
+</nav>
+
+
+
+    <div class="container-xl f4 text-left border rounded-2 bg-white p-3 p-sm-5 mt-6">
+      <p class="f5"><a href="/" class="d-flex flex-items-center"><svg height="16" class="octicon octicon-chevron-left mr-2 v-align-middle" fill="#0366d6" aria-label="Home" viewbox="0 0 16 16" version="1.1" width="16" role="img"><path d="M9.78 12.78a.75.75 0 0 1-1.06 0L4.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L6.06 8l3.72 3.72a.75.75 0 0 1 0 1.06Z"></path></svg>Home</a></p>
+      <h1 class="f00-light lh-condensed">Developing GitLab CI pipelines locally</h1>
+      <p class="text-gray mb-5">Published Aug 29, 2023 06:55</p>
+      
+  <div class="article">
+    <p>Hey there, good morning. Sit yourself down, and enjoy some <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20">.</p>
+
+<p>Recently, I’ve worked heavily on GitLab CI/CD pipelines. In my line of work, these pipelines must
+incorporate security requirements, such as Static Application Security Testing (SAST), Dynamic
+Application Security Testing (DAST), Code Scanning, Dependency Scanning, and so on. Furthermore, the
+pipelines themselves should be templated to support several deployment variants, e.g. managed cloud
+services, and Kubernetes.</p>
+
+<p>As with all things, if you’ve dedicated 60% of your time on something for 3 months, you’re sure to
+develop a love-hate relationship with that particular thing. For example, here is one gripe I have
+for GitLab CI/CD:</p>
+
+<blockquote>
+  <p>According to <a href="https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence" target="_blank" rel="noopener noreferrer">Variable
+Precedence</a>, Project Variables
+have higher precedence compared to <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> variables. Hence, <em>why in the world</em> are
+<code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> variables passed down to child pipelines spawned via <code class="language-plaintext highlighter-rouge">trigger</code>? That overrides
+the settings I’ve set in Project Variables, and it just doesn’t make any sense.</p>
+</blockquote>
+
+<p>Moreover, there are so many issues open on <a href="https://gitlab.com/gitlab-org/gitlab/-/issues/?label_name%5B%5D=section%3A%3Aci" target="_blank" rel="noopener noreferrer">GitLab’s own
+repository</a>
+regarding CI that I sometimes find myself wondering if the tool is actually production-ready.
+Luckily (for you), this blog post is not about <strong>all</strong> the 789 problems I have with GitLab CI;
+instead, it is about the biggest painpoint I had when developing pipelines: not being able to
+develop them locally.</p>
+
+<h1 id="why-is-this-a-problem">Why is this a problem?</h1>
+
+<p>Typically, if you were to develop a pipeline, you’d really only know if it worked when you push the
+commit to a branch somewhere. On a good day, the pipeline would fail because of some
+misconfigured variables; for example, wrong SonarQube credentials. In that scenario, you’d just have to
+modify the CI/CD variable from your settings, and invoke the reincarnation of our lord and savior:
+the retry button.</p>
+
+<p><img src="/images/20230829_1.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="the retry button"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">The Retry Button</p>
+
+<p>What if the problem arises from your script? Unfortunately, this would mean you’d have to <code class="language-plaintext highlighter-rouge">vim</code> into
+your YAML config, change the offending script, create a commit, push, and wait for the entire
+pipeline to go through before you’d get feedback on whether your job is successful.</p>
+
+<p>As a pipeline author, my job is to architect pipelines that will fail quickly so that developers get
+feedback as soon as something is wrong. Why, as the pipeline author, do I have to wait for an
+entire pipeline to figure out if I’ve fixed a job 4 stages later?</p>
+
+<p>Being unable to test a pipeline locally would also pollute the commit logs with unnecessary commits; of course, I can simply
+squash them prior to merging the <code class="language-plaintext highlighter-rouge">gitlab-ci.yml</code> file into the default branch, but I still find it
+clunky and inelegant. The worst I’ve done is pushing 70 CI-related commits in a single afternoon,
+debugging GitLab CI services. For some reason, services networking wasn’t functioning properly for
+an in-runner DAST scan.</p>
+
+<blockquote>
+  <p>By the way, <code class="language-plaintext highlighter-rouge">$CI_DEBUG_SERVICES</code> is not an omnipotent flag that forces applications to produce logs; in some
+Kubernetes configurations, services simply won’t output logs.</p>
+</blockquote>
+
+<p>In an ideal world, I’d be able to run the entire pipeline locally. Hence, I looked online and found <a href="https://github.com/firecow/gitlab-ci-local" target="_blank" rel="noopener noreferrer">firecow/gitlab-ci-local</a>.</p>
+
+<p>This tool makes use of <code class="language-plaintext highlighter-rouge">docker</code> to emulate the functionality of GitLab CI/CD, and even has
+services support. The feature parity is the most accurate I’ve seen; in fact, I’ve contributed <a href="https://github.com/firecow/gitlab-ci-local/pull/905" target="_blank" rel="noopener noreferrer">PR #905</a>
+which pushes the tool closer to feature parity with actual CI/CD pipelines on GitLab.</p>
+
+<p>The remainder of this blog post will walk through the typical workflow I follow when developing
+pipelines, which is <strong>not</strong> a comprehensive look into the full features provided by
+<code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>. The focus here is <em>feature parity</em>, meaning to change as little as possible in
+<code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> to get a pipeline working on both the runner, and locally on your computer.</p>
+
+<h1 id="typical-usage">Typical Usage</h1>
+
+<p>There are instructions for setting up the tool on various platforms in the tool’s
+<a href="https://github.com/firecow/gitlab-ci-local#installation" target="_blank" rel="noopener noreferrer">README.md</a>, so get Docker and the tool
+installed before continuing.</p>
+
+<p>Let’s suppose we have a simple <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> file, like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">image</span><span class="pi">:</span> <span class="s">debian:latest</span>
+
+<span class="na">stages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">some-stage</span>
+
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "Hello, world"</span>
+</code></pre></div></div>
+
+<p>If you run this with <code class="language-plaintext highlighter-rouge">gitlab-ci-local --list</code>, you should see <code class="language-plaintext highlighter-rouge">some-job</code>:</p>
+
+<p><img src="/images/20230829_2.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="some-job is shown in the output"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">some-job is listed</p>
+
+<p>Let’s quickly run it: <code class="language-plaintext highlighter-rouge">gitlab-ci-local some-job</code>:</p>
+
+<p><img src="/images/20230829_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="some-job output"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">some-job output works locally</p>
+
+<p>This allows us to run fairly simple jobs that takes in no variables. What if we want some variables?
+Let’s update the <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="na">image</span><span class="pi">:</span> <span class="s">debian:latest</span>
+
+<span class="na">stages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">some-stage</span>
+
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "$SOME_TEXT"</span>
+</code></pre></div></div>
+
+<p>If we suppose the variable will be set within GitLab’s CI/CD settings, then surely we need to have our
+“local” version of those settings; this is achieved via the <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> file.
+Let’s create that file, and define <code class="language-plaintext highlighter-rouge">SOME_TEXT</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">SOME_TEXT</span><span class="pi">:</span> <span class="s2">"</span><span class="s">hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">other</span><span class="nv"> </span><span class="s">side!"</span>
+</code></pre></div></div>
+
+<p>Great, let’s make it so that our job creates some sort of artifact. This pattern is commonly found
+in build jobs:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ... just change some-job</span>
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo $SOME_TEXT &gt; some_output</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">some_output</span>
+</code></pre></div></div>
+
+<p>If you were to execute <code class="language-plaintext highlighter-rouge">gitlab-ci-local some-job</code> now, you should observe that <code class="language-plaintext highlighter-rouge">some_output</code> appears
+within your directory. By default, the tool will copy the artifacts to the root of the repository,
+for your inspection. Of course, you can turn this off by running: <code class="language-plaintext highlighter-rouge">gitlab-ci-local
+--artifacts-to-source=false some-job</code>.</p>
+
+<p>Let’s suppose we write another job in the same stage, that depends on that above dependency:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># append this job into your .gitlab-ci.yml file</span>
+<span class="na">another-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "The file outputs"</span>
+    <span class="pi">-</span> <span class="s">cat some_output</span>
+  <span class="na">needs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+</code></pre></div></div>
+
+<p>If we now run <code class="language-plaintext highlighter-rouge">gitlab-ci-local another-job</code>, we should see that this job is able to get the
+artifacts from the dependent job. Caches also work the same way.</p>
+
+<p>You’d have noticed that I specified the job to run: <code class="language-plaintext highlighter-rouge">gitlab-ci-local another-job</code>, and 
+noted that artifacts and caches are propagated correctly. This saves lots of development time - you don’t have to run
+all of the stages prior to the current job to check if your job works. This, to me, is a massive
+improvement from the original cycle of iteration, which required me to commit every change, waiting
+for all pre-requisites stages to run, only to be met with yet another error message to fix.</p>
+
+<p>The whole pipeline can now be run with just simply <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>. If you just want to run a
+single stage, then run <code class="language-plaintext highlighter-rouge">gitlab-ci-local --stage some-stage</code>.</p>
+
+<h1 id="registries">Registries</h1>
+
+<p>Typically, upon a successful build, we would want to upload the artifacts to some registry. For
+example, if I were to build a container, it is likely that I want to push to some sort of
+Docker registry.</p>
+
+<p>GitLab offers a bunch of registries, including a Container Registry; you can read more about the
+supported registry <a href="https://docs.gitlab.com/ee/user/packages/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<blockquote>
+  <p>Note: As a GitLab user, you can authenticate to the Container Registry using your username, and a
+<a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token" target="_blank" rel="noopener noreferrer">Personal Access Token</a> via <code class="language-plaintext highlighter-rouge">docker login</code>. The
+registry URL will typically be: <code class="language-plaintext highlighter-rouge">registry.&lt;gitlab url&gt;.com</code>, where <code class="language-plaintext highlighter-rouge">&lt;gitlab url&gt;</code> is the
+instance URL. You can then use images from the Container Registry, like so:</p>
+  <div class="language-yaml highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="na">images</span><span class="pi">:</span> <span class="s">registry.&lt;gitlab url&gt;.com/some/project/path/image:latest</span>
+</code></pre></div>  </div>
+  <p>By default, GitLab runners will already be authenticated to the registry, so there is no
+additional step to authenticate your jobs.</p>
+</blockquote>
+
+<blockquote>
+  <p>Another Note: To <em>push</em> to the container registry, you need to define the following variables
+within your <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code>:</p>
+  <div class="language-yaml highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="na">CI_REGISTRY_USER</span><span class="pi">:</span> <span class="s">some-username</span>
+  <span class="na">CI_REGISTRY_PASSWORD</span><span class="pi">:</span> <span class="s">some-password</span>
+  <span class="na">CI_REGISTRY_IMAGE</span><span class="pi">:</span> <span class="s">&lt;registry URL&gt;/&lt;namespace&gt;/&lt;project&gt;</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>Let’s say we’re on an esoteric project that doesn’t really use any of the above registries; so
+we’d choose to use the Generic Package Registry.</p>
+
+<p>On GitLab runners, a token known as <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> will be populated automatically, allowing the CI
+job to authenticate to most GitLab services without any additional configuration from the job
+runner. This also bypasses issues related to secrets rotation, which is a huge boon overall for
+everyone involved.</p>
+
+<p>However, <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> will not be populated automatically when running <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>, because
+obviously, there just isn’t a valid job token to use. Hence, the obvious solution is to use a
+<a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token" target="_blank" rel="noopener noreferrer">Project Access
+Token</a>,
+and then change our <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> to reflect the token:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ...whatever variables before</span>
+<span class="na">CI_JOB_TOKEN</span><span class="pi">:</span> <span class="s">&lt;project access token here&gt;</span>
+</code></pre></div></div>
+
+<p>However, upon closer inspection from the <a href="https://docs.gitlab.com/ee/user/packages/generic_packages/#publish-a-package-file" target="_blank" rel="noopener noreferrer">GitLab
+documentation</a>,
+we observe that the <code class="language-plaintext highlighter-rouge">curl</code> command has an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--header</span> <span class="s2">"PRIVATE-TOKEN: &lt;project_access_token&gt;"</span> <span class="se">\</span>
+     <span class="nt">--upload-file</span> path/to/file.txt <span class="se">\</span>
+     <span class="s2">"https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/file.txt?select=package_file"</span>
+</code></pre></div></div>
+
+<p>Here’s the catch: <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> that is populated by the runner has the type of <code class="language-plaintext highlighter-rouge">BOT-TOKEN</code>, which
+means that the correct flag to use in the job would be <code class="language-plaintext highlighter-rouge">--header "JOB-TOKEN: $CI_JOB_TOKEN"</code>.
+However, the Project Access Token we’ve generated earlier requires the flag to be: <code class="language-plaintext highlighter-rouge">--header
+"PRIVATE-TOKEN: $CI_JOB_TOKEN</code> to run locally.</p>
+
+<p>Remember the motto we’ve established earlier: feature parity with GitLab runner. With the motto in
+mind, we simply change the flag to be: <code class="language-plaintext highlighter-rouge">--header "$TOKEN_TYPE: $CI_JOB_TOKEN"</code>.  According to
+variable precedence, since our <code class="language-plaintext highlighter-rouge">.gitlab-ci-variables.yml</code> is considered to be a part of “Project
+Variables”, it has a higher precedence compared to job variables. So, all we need to do now is to set the job
+variable to <code class="language-plaintext highlighter-rouge">TOKEN_TYPE: JOB-TOKEN</code>, and set <code class="language-plaintext highlighter-rouge">TOKEN_TYPE: PRIVATE-TOKEN</code> within
+<code class="language-plaintext highlighter-rouge">gitlab-ci-variables.yml</code>.</p>
+
+<p>Hence, the final <code class="language-plaintext highlighter-rouge">curl</code> command that should be used is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--header</span> <span class="s2">"</span><span class="nv">$TOKEN_TYPE</span><span class="s2">: </span><span class="nv">$CI_JOB_TOKEN</span><span class="s2">"</span> <span class="nt">--upload-file</span> some_output <span class="s2">"https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/some_output?select=package_file"</span>
+</code></pre></div></div>
+
+<p>So, we create a job within our <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code>, like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># append</span>
+<span class="na">upload-job</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">curlimages/curl</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">needs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">variables</span><span class="pi">:</span>
+    <span class="na">TOKEN_TYPE</span><span class="pi">:</span> <span class="s">JOB-TOKEN</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">curl --header "$TOKEN_TYPE</span><span class="err">:</span> <span class="s">$CI_JOB_TOKEN" --upload-file some_output "https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/some_output?select=package_file"</span>
+</code></pre></div></div>
+
+<p>And then amend our <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> like so:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ...whatever variables before</span>
+<span class="na">CI_JOB_TOKEN</span><span class="pi">:</span> <span class="s">&lt;project access token here&gt;</span>
+<span class="na">TOKEN_TYPE</span><span class="pi">:</span> <span class="s">PRIVATE-TOKEN</span>
+</code></pre></div></div>
+
+<p>Running <code class="language-plaintext highlighter-rouge">gitlab-ci-local upload-file</code> should then yield a successful result:</p>
+
+<p><img src="/images/20230829_4.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Successful publish"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A successful publish</p>
+
+<p><img src="/images/20230829_5.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="A file output"></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A file output</p>
+
+<p>Needless to say, this <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> also works when pushed to GitLab.</p>
+
+<h1 id="including">Including</h1>
+
+<p>In large enough enterprises, you may encounter the need to <code class="language-plaintext highlighter-rouge">include</code> other templates, something like
+this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># appears at the top of the gitlab-ci.yml file</span>
+<span class="na">include</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">project</span><span class="pi">:</span> <span class="s2">"</span><span class="s">some-template-project"</span>
+    <span class="na">ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">some-tag"</span>
+    <span class="na">file</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">BUILD.gitlab-ci.yml</span>
+      <span class="pi">-</span> <span class="s">COPY.gitlab-ci.yml</span>
+      <span class="pi">-</span> <span class="s">TEST.gitlab-ci.yml</span>
+</code></pre></div></div>
+
+<p>As long as you have access to <code class="language-plaintext highlighter-rouge">git clone</code> the current repository, the include will work
+transparently with the local tool.</p>
+
+<blockquote>
+  <p>The <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code> tool looks through your Git remote list, picks the first one, and attempts
+to fetch the referenced files.</p>
+</blockquote>
+
+<p>This is useful because you can now do <code class="language-plaintext highlighter-rouge">gitlab-ci-local --preview | less</code>, which will render <em>all</em> of
+the included files into one gigantic file. If you have multiple layers of <code class="language-plaintext highlighter-rouge">include</code>, i.e. the
+included references also includes other references, they will all be flattened and displayed.</p>
+
+<p>This makes debugging templates much easier.</p>
+
+<h2 id="another-file">Another file</h2>
+
+<p>In some pipeline architectures, child pipelines are heavily relied upon. In
+such configurations, you may have two pipeline files, maybe something like:</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> for common CI work,</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">DEPLOYMENT.gitlab-ci.yml</code> for project-specific deployment</li>
+</ul>
+
+<p>Where you have a <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> job that looks something like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spawn-child-pipeline</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">trigger</span><span class="pi">:</span>
+    <span class="na">include</span><span class="pi">:</span> <span class="s">DEPLOYMENT.gitlab-ci.yml</span>
+</code></pre></div></div>
+
+<p>GitLab’s own pipeline editor doesn’t support multiple files; hence, you won’t have the nice features
+to validate rules, checking conditions, etc.</p>
+
+<p>However, that isn’t an issue with <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>; simply add the <code class="language-plaintext highlighter-rouge">--file
+DEPLOYMENT.gitlab-ci.yml</code> file during development. All the suffixes used thus far, such as <code class="language-plaintext highlighter-rouge">--list</code>
+and <code class="language-plaintext highlighter-rouge">--preview</code> work as expected.</p>
+
+<p>Unfortunately, it seems like <code class="language-plaintext highlighter-rouge">trigger</code> is currently not supported by the local tool; you can only
+perform a “close” imitation by running this command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-ci-local <span class="nt">--file</span> <span class="s2">"DEPLOYMENT.gitlab-ci.yml"</span> <span class="nt">--variable</span> <span class="nv">CI_PIPELINE_SOURCE</span><span class="o">=</span>parent_pipeline
+</code></pre></div></div>
+
+<h1 id="pushing-to-registries-without-gitlab">Pushing to registries (without GitLab)</h1>
+
+<p>Sometimes, when testing locally, you may not want to pollute the GitLab registry with unnecessary
+container images. In scenarios like this, it might be useful to create your own local registry for
+testing. Here’s a useful script to create 3 registries at once:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span>docker run <span class="nt">-d</span> <span class="nt">-p</span> 5000:5000 <span class="nt">--name</span> registry <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+    docker run <span class="nt">-d</span> <span class="nt">-p</span> 5001:5000 <span class="nt">--name</span> registry2 <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+    docker run <span class="nt">-d</span> <span class="nt">-p</span> 5002:5000 <span class="nt">--name</span> registry3 <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+<span class="k">fi
+
+if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"stop"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span>docker stop registry
+    docker stop registry2
+    docker stop registry3
+    docker <span class="nb">rm </span>registry
+    docker <span class="nb">rm </span>registry2
+    docker <span class="nb">rm </span>registry3
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>You can then hijack the <code class="language-plaintext highlighter-rouge">$CI_REGISTRY_*</code> variables via <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> to point to your local registry:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">CI_REGISTRY_USER</span><span class="pi">:</span> <span class="s">some-username</span>
+<span class="na">CI_REGISTRY_PASSWORD</span><span class="pi">:</span> <span class="s">some-password</span>
+<span class="na">CI_REGISTRY_IMAGE</span><span class="pi">:</span> <span class="s">172.17.0.2:5000</span> <span class="c1"># use your docker IP here, using docker inspect</span>
+</code></pre></div></div>
+
+<p>To create a user, do the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> auth <span class="se">\</span>
+docker run <span class="nt">--entrypoint</span> htpasswd httpd:2 <span class="nt">-Bbn</span> testuser testpassword <span class="o">&gt;&gt;</span> auth/htpasswd <span class="se">\</span>
+docker run <span class="nt">--entrypoint</span> htpasswd httpd:2 <span class="nt">-Bbn</span> AWS testpassword <span class="o">&gt;&gt;</span> auth/htpasswd
+</code></pre></div></div>
+
+<p>To list the images in the registry:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET <span class="nt">-u</span> testuser:testpassword http://localhost:5000/v2/_catalog
+</code></pre></div></div>
+
+<p>The above spawns registries without TLS verification. If you’re using <code class="language-plaintext highlighter-rouge">skopeo</code>, you may have to set
+<code class="language-plaintext highlighter-rouge">--src-tls-verify=false</code> and <code class="language-plaintext highlighter-rouge">--dest-tls-verify=false</code> in your job scripts, via something akin to <code class="language-plaintext highlighter-rouge">$ADDITIONAL_OPTS</code>.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Generally speaking, developing pipelines can be fairly painful; however, towards DevOps and
+automating the pain of deploying applications, it is a necessary sacrifice. By using supporting
+tools such as <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>, engineers can quickly iterate through pipeline development.</p>
+
+<p>Hopefully, both the tool and this blog post has proved useful for any pipeline work you’ll be doing.</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>
+
+  </div>
+
+    </div>
+  </div>
+
+    <footer>
+      <div class="container-md p-3 text-gray text-center">
+        <p>Copyright © CodingIndex 2023</p>
+      </div>
+    </footer>
+  </body>
+</html>
+

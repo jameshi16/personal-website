@@ -1,4 +1,388 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2023-05-31T22:04:53+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Short Stories</title><link href="https://codingindex.xyz/2023/05/31/short-stories/" rel="alternate" type="text/html" title="Short Stories" /><published>2023-05-31T21:43:00+00:00</published><updated>2023-05-31T21:43:00+00:00</updated><id>https://codingindex.xyz/2023/05/31/short-stories</id><content type="html" xml:base="https://codingindex.xyz/2023/05/31/short-stories/"><![CDATA[<p>Good morning! :coffee:</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2023-08-29T06:57:13+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Developing GitLab CI pipelines locally</title><link href="https://codingindex.xyz/2023/08/29/gitlab-ci-local/" rel="alternate" type="text/html" title="Developing GitLab CI pipelines locally" /><published>2023-08-29T06:55:00+00:00</published><updated>2023-08-29T06:55:00+00:00</updated><id>https://codingindex.xyz/2023/08/29/gitlab-ci-local</id><content type="html" xml:base="https://codingindex.xyz/2023/08/29/gitlab-ci-local/"><![CDATA[<p>Hey there, good morning. Sit yourself down, and enjoy some :coffee:.</p>
+
+<p>Recently, I’ve worked heavily on GitLab CI/CD pipelines. In my line of work, these pipelines must
+incorporate security requirements, such as Static Application Security Testing (SAST), Dynamic
+Application Security Testing (DAST), Code Scanning, Dependency Scanning, and so on. Furthermore, the
+pipelines themselves should be templated to support several deployment variants, e.g. managed cloud
+services, and Kubernetes.</p>
+
+<p>As with all things, if you’ve dedicated 60% of your time on something for 3 months, you’re sure to
+develop a love-hate relationship with that particular thing. For example, here is one gripe I have
+for GitLab CI/CD:</p>
+
+<blockquote>
+  <p>According to <a href="https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence">Variable
+Precedence</a>, Project Variables
+have higher precedence compared to <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> variables. Hence, <em>why in the world</em> are
+<code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> variables passed down to child pipelines spawned via <code class="language-plaintext highlighter-rouge">trigger</code>? That overrides
+the settings I’ve set in Project Variables, and it just doesn’t make any sense.</p>
+</blockquote>
+
+<p>Moreover, there are so many issues open on <a href="https://gitlab.com/gitlab-org/gitlab/-/issues/?label_name%5B%5D=section%3A%3Aci">GitLab’s own
+repository</a>
+regarding CI that I sometimes find myself wondering if the tool is actually production-ready.
+Luckily (for you), this blog post is not about <strong>all</strong> the 789 problems I have with GitLab CI;
+instead, it is about the biggest painpoint I had when developing pipelines: not being able to
+develop them locally.</p>
+
+<h1 id="why-is-this-a-problem">Why is this a problem?</h1>
+
+<p>Typically, if you were to develop a pipeline, you’d really only know if it worked when you push the
+commit to a branch somewhere. On a good day, the pipeline would fail because of some
+misconfigured variables; for example, wrong SonarQube credentials. In that scenario, you’d just have to
+modify the CI/CD variable from your settings, and invoke the reincarnation of our lord and savior:
+the retry button.</p>
+
+<p><img src="/images/20230829_1.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="the retry button" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">The Retry Button</p>
+
+<p>What if the problem arises from your script? Unfortunately, this would mean you’d have to <code class="language-plaintext highlighter-rouge">vim</code> into
+your YAML config, change the offending script, create a commit, push, and wait for the entire
+pipeline to go through before you’d get feedback on whether your job is successful.</p>
+
+<p>As a pipeline author, my job is to architect pipelines that will fail quickly so that developers get
+feedback as soon as something is wrong. Why, as the pipeline author, do I have to wait for an
+entire pipeline to figure out if I’ve fixed a job 4 stages later?</p>
+
+<p>Being unable to test a pipeline locally would also pollute the commit logs with unnecessary commits; of course, I can simply
+squash them prior to merging the <code class="language-plaintext highlighter-rouge">gitlab-ci.yml</code> file into the default branch, but I still find it
+clunky and inelegant. The worst I’ve done is pushing 70 CI-related commits in a single afternoon,
+debugging GitLab CI services. For some reason, services networking wasn’t functioning properly for
+an in-runner DAST scan.</p>
+
+<blockquote>
+  <p>By the way, <code class="language-plaintext highlighter-rouge">$CI_DEBUG_SERVICES</code> is not an omnipotent flag that forces applications to produce logs; in some
+Kubernetes configurations, services simply won’t output logs.</p>
+</blockquote>
+
+<p>In an ideal world, I’d be able to run the entire pipeline locally. Hence, I looked online and found <a href="https://github.com/firecow/gitlab-ci-local">firecow/gitlab-ci-local</a>.</p>
+
+<p>This tool makes use of <code class="language-plaintext highlighter-rouge">docker</code> to emulate the functionality of GitLab CI/CD, and even has
+services support. The feature parity is the most accurate I’ve seen; in fact, I’ve contributed <a href="https://github.com/firecow/gitlab-ci-local/pull/905">PR #905</a>
+which pushes the tool closer to feature parity with actual CI/CD pipelines on GitLab.</p>
+
+<p>The remainder of this blog post will walk through the typical workflow I follow when developing
+pipelines, which is <strong>not</strong> a comprehensive look into the full features provided by
+<code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>. The focus here is <em>feature parity</em>, meaning to change as little as possible in
+<code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> to get a pipeline working on both the runner, and locally on your computer.</p>
+
+<h1 id="typical-usage">Typical Usage</h1>
+
+<p>There are instructions for setting up the tool on various platforms in the tool’s
+<a href="https://github.com/firecow/gitlab-ci-local#installation">README.md</a>, so get Docker and the tool
+installed before continuing.</p>
+
+<p>Let’s suppose we have a simple <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> file, like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">image</span><span class="pi">:</span> <span class="s">debian:latest</span>
+
+<span class="na">stages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">some-stage</span>
+
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "Hello, world"</span>
+</code></pre></div></div>
+
+<p>If you run this with <code class="language-plaintext highlighter-rouge">gitlab-ci-local --list</code>, you should see <code class="language-plaintext highlighter-rouge">some-job</code>:</p>
+
+<p><img src="/images/20230829_2.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="some-job is shown in the output" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">some-job is listed</p>
+
+<p>Let’s quickly run it: <code class="language-plaintext highlighter-rouge">gitlab-ci-local some-job</code>:</p>
+
+<p><img src="/images/20230829_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="some-job output" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">some-job output works locally</p>
+
+<p>This allows us to run fairly simple jobs that takes in no variables. What if we want some variables?
+Let’s update the <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> file:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="na">image</span><span class="pi">:</span> <span class="s">debian:latest</span>
+
+<span class="na">stages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">some-stage</span>
+
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "$SOME_TEXT"</span>
+</code></pre></div></div>
+
+<p>If we suppose the variable will be set within GitLab’s CI/CD settings, then surely we need to have our
+“local” version of those settings; this is achieved via the <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> file.
+Let’s create that file, and define <code class="language-plaintext highlighter-rouge">SOME_TEXT</code>:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">SOME_TEXT</span><span class="pi">:</span> <span class="s2">"</span><span class="s">hello</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">other</span><span class="nv"> </span><span class="s">side!"</span>
+</code></pre></div></div>
+
+<p>Great, let’s make it so that our job creates some sort of artifact. This pattern is commonly found
+in build jobs:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ... just change some-job</span>
+<span class="na">some-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo $SOME_TEXT &gt; some_output</span>
+  <span class="na">artifacts</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">some_output</span>
+</code></pre></div></div>
+
+<p>If you were to execute <code class="language-plaintext highlighter-rouge">gitlab-ci-local some-job</code> now, you should observe that <code class="language-plaintext highlighter-rouge">some_output</code> appears
+within your directory. By default, the tool will copy the artifacts to the root of the repository,
+for your inspection. Of course, you can turn this off by running: <code class="language-plaintext highlighter-rouge">gitlab-ci-local
+--artifacts-to-source=false some-job</code>.</p>
+
+<p>Let’s suppose we write another job in the same stage, that depends on that above dependency:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># append this job into your .gitlab-ci.yml file</span>
+<span class="na">another-job</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">echo "The file outputs"</span>
+    <span class="pi">-</span> <span class="s">cat some_output</span>
+  <span class="na">needs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+</code></pre></div></div>
+
+<p>If we now run <code class="language-plaintext highlighter-rouge">gitlab-ci-local another-job</code>, we should see that this job is able to get the
+artifacts from the dependent job. Caches also work the same way.</p>
+
+<p>You’d have noticed that I specified the job to run: <code class="language-plaintext highlighter-rouge">gitlab-ci-local another-job</code>, and 
+noted that artifacts and caches are propagated correctly. This saves lots of development time - you don’t have to run
+all of the stages prior to the current job to check if your job works. This, to me, is a massive
+improvement from the original cycle of iteration, which required me to commit every change, waiting
+for all pre-requisites stages to run, only to be met with yet another error message to fix.</p>
+
+<p>The whole pipeline can now be run with just simply <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>. If you just want to run a
+single stage, then run <code class="language-plaintext highlighter-rouge">gitlab-ci-local --stage some-stage</code>.</p>
+
+<h1 id="registries">Registries</h1>
+
+<p>Typically, upon a successful build, we would want to upload the artifacts to some registry. For
+example, if I were to build a container, it is likely that I want to push to some sort of
+Docker registry.</p>
+
+<p>GitLab offers a bunch of registries, including a Container Registry; you can read more about the
+supported registry <a href="https://docs.gitlab.com/ee/user/packages/">here</a>.</p>
+
+<blockquote>
+  <p>Note: As a GitLab user, you can authenticate to the Container Registry using your username, and a
+<a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token">Personal Access Token</a> via <code class="language-plaintext highlighter-rouge">docker login</code>. The
+registry URL will typically be: <code class="language-plaintext highlighter-rouge">registry.&lt;gitlab url&gt;.com</code>, where <code class="language-plaintext highlighter-rouge">&lt;gitlab url&gt;</code> is the
+instance URL. You can then use images from the Container Registry, like so:</p>
+  <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="na">images</span><span class="pi">:</span> <span class="s">registry.&lt;gitlab url&gt;.com/some/project/path/image:latest</span>
+</code></pre></div>  </div>
+  <p>By default, GitLab runners will already be authenticated to the registry, so there is no
+additional step to authenticate your jobs.</p>
+</blockquote>
+
+<blockquote>
+  <p>Another Note: To <em>push</em> to the container registry, you need to define the following variables
+within your <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code>:</p>
+  <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="na">CI_REGISTRY_USER</span><span class="pi">:</span> <span class="s">some-username</span>
+  <span class="na">CI_REGISTRY_PASSWORD</span><span class="pi">:</span> <span class="s">some-password</span>
+  <span class="na">CI_REGISTRY_IMAGE</span><span class="pi">:</span> <span class="s">&lt;registry URL&gt;/&lt;namespace&gt;/&lt;project&gt;</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>Let’s say we’re on an esoteric project that doesn’t really use any of the above registries; so
+we’d choose to use the Generic Package Registry.</p>
+
+<p>On GitLab runners, a token known as <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> will be populated automatically, allowing the CI
+job to authenticate to most GitLab services without any additional configuration from the job
+runner. This also bypasses issues related to secrets rotation, which is a huge boon overall for
+everyone involved.</p>
+
+<p>However, <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> will not be populated automatically when running <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>, because
+obviously, there just isn’t a valid job token to use. Hence, the obvious solution is to use a
+<a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token">Project Access
+Token</a>,
+and then change our <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> to reflect the token:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ...whatever variables before</span>
+<span class="na">CI_JOB_TOKEN</span><span class="pi">:</span> <span class="s">&lt;project access token here&gt;</span>
+</code></pre></div></div>
+
+<p>However, upon closer inspection from the <a href="https://docs.gitlab.com/ee/user/packages/generic_packages/#publish-a-package-file">GitLab
+documentation</a>,
+we observe that the <code class="language-plaintext highlighter-rouge">curl</code> command has an issue:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--header</span> <span class="s2">"PRIVATE-TOKEN: &lt;project_access_token&gt;"</span> <span class="se">\</span>
+     <span class="nt">--upload-file</span> path/to/file.txt <span class="se">\</span>
+     <span class="s2">"https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/file.txt?select=package_file"</span>
+</code></pre></div></div>
+
+<p>Here’s the catch: <code class="language-plaintext highlighter-rouge">$CI_JOB_TOKEN</code> that is populated by the runner has the type of <code class="language-plaintext highlighter-rouge">BOT-TOKEN</code>, which
+means that the correct flag to use in the job would be <code class="language-plaintext highlighter-rouge">--header "JOB-TOKEN: $CI_JOB_TOKEN"</code>.
+However, the Project Access Token we’ve generated earlier requires the flag to be: <code class="language-plaintext highlighter-rouge">--header
+"PRIVATE-TOKEN: $CI_JOB_TOKEN</code> to run locally.</p>
+
+<p>Remember the motto we’ve established earlier: feature parity with GitLab runner. With the motto in
+mind, we simply change the flag to be: <code class="language-plaintext highlighter-rouge">--header "$TOKEN_TYPE: $CI_JOB_TOKEN"</code>.  According to
+variable precedence, since our <code class="language-plaintext highlighter-rouge">.gitlab-ci-variables.yml</code> is considered to be a part of “Project
+Variables”, it has a higher precedence compared to job variables. So, all we need to do now is to set the job
+variable to <code class="language-plaintext highlighter-rouge">TOKEN_TYPE: JOB-TOKEN</code>, and set <code class="language-plaintext highlighter-rouge">TOKEN_TYPE: PRIVATE-TOKEN</code> within
+<code class="language-plaintext highlighter-rouge">gitlab-ci-variables.yml</code>.</p>
+
+<p>Hence, the final <code class="language-plaintext highlighter-rouge">curl</code> command that should be used is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">--header</span> <span class="s2">"</span><span class="nv">$TOKEN_TYPE</span><span class="s2">: </span><span class="nv">$CI_JOB_TOKEN</span><span class="s2">"</span> <span class="nt">--upload-file</span> some_output <span class="s2">"https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/some_output?select=package_file"</span>
+</code></pre></div></div>
+
+<p>So, we create a job within our <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code>, like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># append</span>
+<span class="na">upload-job</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">curlimages/curl</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">needs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">dependencies</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">some-job</span>
+  <span class="na">variables</span><span class="pi">:</span>
+    <span class="na">TOKEN_TYPE</span><span class="pi">:</span> <span class="s">JOB-TOKEN</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">curl --header "$TOKEN_TYPE</span><span class="err">:</span> <span class="s">$CI_JOB_TOKEN" --upload-file some_output "https://gitlab.example.com/api/v4/projects/24/packages/generic/my_package/0.0.1/some_output?select=package_file"</span>
+</code></pre></div></div>
+
+<p>And then amend our <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> like so:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ...whatever variables before</span>
+<span class="na">CI_JOB_TOKEN</span><span class="pi">:</span> <span class="s">&lt;project access token here&gt;</span>
+<span class="na">TOKEN_TYPE</span><span class="pi">:</span> <span class="s">PRIVATE-TOKEN</span>
+</code></pre></div></div>
+
+<p>Running <code class="language-plaintext highlighter-rouge">gitlab-ci-local upload-file</code> should then yield a successful result:</p>
+
+<p><img src="/images/20230829_4.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="Successful publish" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A successful publish</p>
+
+<p><img src="/images/20230829_5.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="A file output" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">A file output</p>
+
+<p>Needless to say, this <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> also works when pushed to GitLab.</p>
+
+<h1 id="including">Including</h1>
+
+<p>In large enough enterprises, you may encounter the need to <code class="language-plaintext highlighter-rouge">include</code> other templates, something like
+this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># appears at the top of the gitlab-ci.yml file</span>
+<span class="na">include</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">project</span><span class="pi">:</span> <span class="s2">"</span><span class="s">some-template-project"</span>
+    <span class="na">ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">some-tag"</span>
+    <span class="na">file</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">BUILD.gitlab-ci.yml</span>
+      <span class="pi">-</span> <span class="s">COPY.gitlab-ci.yml</span>
+      <span class="pi">-</span> <span class="s">TEST.gitlab-ci.yml</span>
+</code></pre></div></div>
+
+<p>As long as you have access to <code class="language-plaintext highlighter-rouge">git clone</code> the current repository, the include will work
+transparently with the local tool.</p>
+
+<blockquote>
+  <p>The <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code> tool looks through your Git remote list, picks the first one, and attempts
+to fetch the referenced files.</p>
+</blockquote>
+
+<p>This is useful because you can now do <code class="language-plaintext highlighter-rouge">gitlab-ci-local --preview | less</code>, which will render <em>all</em> of
+the included files into one gigantic file. If you have multiple layers of <code class="language-plaintext highlighter-rouge">include</code>, i.e. the
+included references also includes other references, they will all be flattened and displayed.</p>
+
+<p>This makes debugging templates much easier.</p>
+
+<h2 id="another-file">Another file</h2>
+
+<p>In some pipeline architectures, child pipelines are heavily relied upon. In
+such configurations, you may have two pipeline files, maybe something like:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> for common CI work,</li>
+  <li><code class="language-plaintext highlighter-rouge">DEPLOYMENT.gitlab-ci.yml</code> for project-specific deployment</li>
+</ul>
+
+<p>Where you have a <code class="language-plaintext highlighter-rouge">.gitlab-ci.yml</code> job that looks something like this:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spawn-child-pipeline</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">some-stage</span>
+  <span class="na">trigger</span><span class="pi">:</span>
+    <span class="na">include</span><span class="pi">:</span> <span class="s">DEPLOYMENT.gitlab-ci.yml</span>
+</code></pre></div></div>
+
+<p>GitLab’s own pipeline editor doesn’t support multiple files; hence, you won’t have the nice features
+to validate rules, checking conditions, etc.</p>
+
+<p>However, that isn’t an issue with <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>; simply add the <code class="language-plaintext highlighter-rouge">--file
+DEPLOYMENT.gitlab-ci.yml</code> file during development. All the suffixes used thus far, such as <code class="language-plaintext highlighter-rouge">--list</code>
+and <code class="language-plaintext highlighter-rouge">--preview</code> work as expected.</p>
+
+<p>Unfortunately, it seems like <code class="language-plaintext highlighter-rouge">trigger</code> is currently not supported by the local tool; you can only
+perform a “close” imitation by running this command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gitlab-ci-local <span class="nt">--file</span> <span class="s2">"DEPLOYMENT.gitlab-ci.yml"</span> <span class="nt">--variable</span> <span class="nv">CI_PIPELINE_SOURCE</span><span class="o">=</span>parent_pipeline
+</code></pre></div></div>
+
+<h1 id="pushing-to-registries-without-gitlab">Pushing to registries (without GitLab)</h1>
+
+<p>Sometimes, when testing locally, you may not want to pollute the GitLab registry with unnecessary
+container images. In scenarios like this, it might be useful to create your own local registry for
+testing. Here’s a useful script to create 3 registries at once:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span>docker run <span class="nt">-d</span> <span class="nt">-p</span> 5000:5000 <span class="nt">--name</span> registry <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+    docker run <span class="nt">-d</span> <span class="nt">-p</span> 5001:5000 <span class="nt">--name</span> registry2 <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+    docker run <span class="nt">-d</span> <span class="nt">-p</span> 5002:5000 <span class="nt">--name</span> registry3 <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/auth:/auth <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>/certs:/certs <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH=htpasswd"</span> <span class="nt">-e</span> <span class="s2">"REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"</span> <span class="nt">-e</span> <span class="nv">REGISTRY_AUTH_HTPASSWD_PATH</span><span class="o">=</span>/auth/htpasswd registry:2
+<span class="k">fi
+
+if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"stop"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span>docker stop registry
+    docker stop registry2
+    docker stop registry3
+    docker <span class="nb">rm </span>registry
+    docker <span class="nb">rm </span>registry2
+    docker <span class="nb">rm </span>registry3
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>You can then hijack the <code class="language-plaintext highlighter-rouge">$CI_REGISTRY_*</code> variables via <code class="language-plaintext highlighter-rouge">.gitlab-ci-local-variables.yml</code> to point to your local registry:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">CI_REGISTRY_USER</span><span class="pi">:</span> <span class="s">some-username</span>
+<span class="na">CI_REGISTRY_PASSWORD</span><span class="pi">:</span> <span class="s">some-password</span>
+<span class="na">CI_REGISTRY_IMAGE</span><span class="pi">:</span> <span class="s">172.17.0.2:5000</span> <span class="c1"># use your docker IP here, using docker inspect</span>
+</code></pre></div></div>
+
+<p>To create a user, do the following:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> auth <span class="se">\</span>
+docker run <span class="nt">--entrypoint</span> htpasswd httpd:2 <span class="nt">-Bbn</span> testuser testpassword <span class="o">&gt;&gt;</span> auth/htpasswd <span class="se">\</span>
+docker run <span class="nt">--entrypoint</span> htpasswd httpd:2 <span class="nt">-Bbn</span> AWS testpassword <span class="o">&gt;&gt;</span> auth/htpasswd
+</code></pre></div></div>
+
+<p>To list the images in the registry:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> GET <span class="nt">-u</span> testuser:testpassword http://localhost:5000/v2/_catalog
+</code></pre></div></div>
+
+<p>The above spawns registries without TLS verification. If you’re using <code class="language-plaintext highlighter-rouge">skopeo</code>, you may have to set
+<code class="language-plaintext highlighter-rouge">--src-tls-verify=false</code> and <code class="language-plaintext highlighter-rouge">--dest-tls-verify=false</code> in your job scripts, via something akin to <code class="language-plaintext highlighter-rouge">$ADDITIONAL_OPTS</code>.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Generally speaking, developing pipelines can be fairly painful; however, towards DevOps and
+automating the pain of deploying applications, it is a necessary sacrifice. By using supporting
+tools such as <code class="language-plaintext highlighter-rouge">gitlab-ci-local</code>, engineers can quickly iterate through pipeline development.</p>
+
+<p>Hopefully, both the tool and this blog post has proved useful for any pipeline work you’ll be doing.</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="ci" /><category term="ci" /><category term="gitlab" /><summary type="html"><![CDATA[Hey there, good morning. Sit yourself down, and enjoy some :coffee:.]]></summary></entry><entry><title type="html">Short Stories</title><link href="https://codingindex.xyz/2023/05/31/short-stories/" rel="alternate" type="text/html" title="Short Stories" /><published>2023-05-31T21:43:00+00:00</published><updated>2023-05-31T21:43:00+00:00</updated><id>https://codingindex.xyz/2023/05/31/short-stories</id><content type="html" xml:base="https://codingindex.xyz/2023/05/31/short-stories/"><![CDATA[<p>Good morning! :coffee:</p>
 
 <p>Ever since my last blog post, which was the <a href="/2022/12/25/advent-of-code-22/">Advent of Code 22</a>, it seems like lots of things has happened, and the world is devolving into a discourse.</p>
 
@@ -6343,158 +6727,4 @@ docker-compose config
 
 <p>Happy Coding</p>
 
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><summary type="html"><![CDATA[Happy New Year :fireworks:! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?]]></summary></entry><entry><title type="html">ZeroTier OpenVPN NAT - Part 2</title><link href="https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-2/" rel="alternate" type="text/html" title="ZeroTier OpenVPN NAT - Part 2" /><published>2021-02-14T13:29:00+00:00</published><updated>2021-02-14T13:29:00+00:00</updated><id>https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-2</id><content type="html" xml:base="https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-2/"><![CDATA[<p><img src="/images/20210214_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Architecture" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Uno Architecture</p>
-
-<p><a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">&lt;&lt; Take me back to Part 1</a></p>
-
-<p>In this part, we will be implementing Solution Uno. Solution Uno has the following main design goals:</p>
-
-<ul>
-  <li>Connect from a device that can only have one VPN connection (like an Android device)</li>
-  <li>Connect from a restricted device that only allows VPN configurations (like a ISP home router)</li>
-</ul>
-
-<h1 id="step-0-pre-requisites">Step 0: Pre-requisites</h1>
-
-<p>You will need a low-powered host capable of hosting an OpenVPN Server and maintaining a ZeroTier connection, like a Single Board Computer. Preferably, you will want administrative privileges; this guide will assume that you’ve got your hands on a Raspberry Pi with some flavour of Linux installed, particularly, Debian/Ubuntu.</p>
-
-<p>You will need administrative access to your ZeroTier network through ZeroTier Central or some equivalent (if you run your own controller).</p>
-
-<h1 id="step-1-installing-packages">Step 1: Installing packages</h1>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> https://install.zerotier.com | <span class="nb">sudo </span>bash
-<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>openvpn
-</code></pre></div></div>
-
-<p>After installing ZeroTier, configure it to join your network; a simple <code class="language-plaintext highlighter-rouge">sudo zerotier-cli join &lt;networkID&gt;</code> should do. Run:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>ip <span class="nb">link</span> | <span class="nb">grep</span> <span class="s2">"zt"</span>
-</code></pre></div></div>
-
-<p>Note down the full device name; it should look like this: <code class="language-plaintext highlighter-rouge">ztly52mmwy</code>.</p>
-
-<h1 id="step-2-create-files">Step 2: Create files</h1>
-
-<p>In this step, we are going to create a SystemD unit file, and two scripts that the OpenVPN daemon will call when routes are being setup and torn down. If you are not using a flavour of Linux that uses SystemD, then adapt the files based on your favoured init system.</p>
-
-<p><code class="language-plaintext highlighter-rouge">/etc/systemd/system/zt2ovpn.service</code>:</p>
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
-<span class="py">Description</span><span class="p">=</span><span class="s">Binds ZeroTier tunnel to OpenVPN</span>
-
-<span class="nn">[Service]</span>
-<span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
-<span class="py">ExecStart</span><span class="p">=</span><span class="s">openvpn --cd /etc/openvpn/client --config &lt;insert_vpn_conf_here&gt;.conf --route-noexec --route-up /etc/openvpn/client/up-script.sh --route-pre-down /etc/openvpn/client/down-script.sh</span>
-
-<span class="nn">[Install]</span>
-<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
-</code></pre></div></div>
-
-<p>Remember to replace <code class="language-plaintext highlighter-rouge">&lt;insert_vpn_conf_here&gt;.conf</code> with your VPN provider’s configuration.</p>
-
-<p>The most important part of this service is the command in the <code class="language-plaintext highlighter-rouge">ExecStart</code> directive:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openvpn <span class="nt">--cd</span> /etc/openvpn/client <span class="nt">--config</span> &lt;insert_vpn_conf_here&gt;.conf <span class="nt">--route-noexec</span> <span class="nt">--route-up</span> /etc/openvpn/client/up-script.sh <span class="nt">--route-pre-down</span> /etc/openvpn/client/down-script.sh
-</code></pre></div></div>
-
-<p>As long as there is some variant of this in the init system, the setup should work as expected. One peculiar flag you may notice is the <code class="language-plaintext highlighter-rouge">--route-noexec</code> flag; this flag prevents the VPN from writing to the route table. This is required to fulfill constraint #3, which states that the ZeroTier to OpenVPN tunnel should be otherwise unaffecting.</p>
-
-<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-
-<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
-<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
-
-<span class="nb">set</span> <span class="nt">-e</span>
-
-sysctl <span class="nt">-w</span> net.ipv4.ip_forward<span class="o">=</span>1
-
-<span class="nb">touch</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
-<span class="nb">echo</span> <span class="s2">"42069 zt2ovpn"</span> <span class="o">&gt;</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
-
-ip rule add from <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> table zt2ovpn
-ip route add default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table zt2ovpn
-ip route add <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table zt2ovpn
-
-iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-t</span> nat <span class="nt">-I</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
-</code></pre></div></div>
-<p>Edit <code class="language-plaintext highlighter-rouge">ZT_DEVICE</code> to whatever device name you’ve noted down in step 1, and <code class="language-plaintext highlighter-rouge">ZT_CIDR</code> to whatever you set in ZeroTier Central or equivalent.</p>
-
-<p>This script will be executed by OpenVPN when a connection is up; since we told OpenVPN not to add routes, we have to do it manually in this script. The line <code class="language-plaintext highlighter-rouge">sysctl -w net.ipv4.ip_forward=1</code> enables IP forwarding on the system, which is required to forward packets between the ZeroTier adapter and the VPN tunnel. The next few lines adds a new route table effective only for <code class="language-plaintext highlighter-rouge">${ZT_CIDR}</code>: this is required as we do not want to affect the host system’s routing, dictated by constraint #3. We set the default route to the VPN gateway, and properly route any connections to ZeroTier devices for the new table that we just created. The last few <code class="language-plaintext highlighter-rouge">iptables</code> lines essentially just accepts connections from the ZeroTier adapter, allow forwarding for that device, and allow any exiting connections to the OpenVPN tunnel adapter to be masqueraded.</p>
-
-<p>For some systems, you may need to add a few lines to accept connections from the OpenVPN tunnel adapter:</p>
-
-<p>(Optional addon for <code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>)</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-I</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-I</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
-</code></pre></div></div>
-
-<p>Next, create the down script.</p>
-
-<p><code class="language-plaintext highlighter-rouge">/etc/openvpn/client/down-script.sh</code>:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-
-<span class="nv">ZT_DEVICE</span><span class="o">=</span><span class="s2">"ztly52mmwy"</span>
-<span class="nv">ZT_CIDR</span><span class="o">=</span><span class="s2">"172.25.0.0/16"</span>
-
-ip rule delete from <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> table zt2ovpn
-ip route delete default via <span class="k">${</span><span class="nv">route_vpn_gateway</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> table zt2ovpn
-ip route delete <span class="k">${</span><span class="nv">ZT_CIDR</span><span class="k">}</span> dev <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> table zt2ovpn
-
-<span class="nb">rm</span> <span class="nt">-f</span> /etc/iproute2/rt_tables.d/zt2ovpn.conf
-
-iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-t</span> nat <span class="nt">-D</span> POSTROUTING <span class="nt">-o</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-d</span> 0.0.0.0/0 <span class="nt">-j</span> MASQUERADE
-</code></pre></div></div>
-
-<p>The down script is essentially the opposite of the up script; it deletes the entries created by the up script. If you added the optional addons for <code class="language-plaintext highlighter-rouge">/etc/openvpn/client/up-script.sh</code>, then you may need these lines too:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-D</span> INPUT <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
-iptables <span class="nt">-D</span> FORWARD <span class="nt">-i</span> <span class="k">${</span><span class="nv">dev</span><span class="k">}</span> <span class="nt">-o</span> <span class="k">${</span><span class="nv">ZT_DEVICE</span><span class="k">}</span> <span class="nt">-m</span> state <span class="nt">--state</span> ESTABLISHED,RELATED <span class="nt">-j</span> ACCEPT
-</code></pre></div></div>
-
-<h1 id="step-3-enable--start-the-service">Step 3: Enable &amp; Start the service</h1>
-
-<p>Try starting the service with:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl daemon-reload
-<span class="nb">sudo </span>systemctl start zt2ovpn
-</code></pre></div></div>
-
-<p>Hopefully, there would be no errors. If there are errors, then find out what they are:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl status zt2ovpn
-<span class="nb">sudo </span>journalctl <span class="nt">-u</span> zt2ovpn <span class="nt">-f</span>
-</code></pre></div></div>
-
-<p>If everything is alright, enable the service to start it on system start:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>zt2ovpn
-</code></pre></div></div>
-
-<h1 id="step-4-add-entry-to-zerotier-central-or-equivalent">Step 4: Add entry to ZeroTier Central (or equivalent)</h1>
-
-<p>Navigate to your network on ZeroTier, and add a Managed Route:</p>
-
-<p><img src="/images/20210214_6.png" style="max-width: 600px; width: 100%; margin: 0 auto; display: block;" alt="Adding a Managed Route" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Adding a Managed Route | Source: Me</p>
-
-<p>Under <code class="language-plaintext highlighter-rouge">(Via)</code> should be the IP address of the host (Single Board Computer) you are using; for me, it was <code class="language-plaintext highlighter-rouge">172.25.0.1</code>. Once done, click on Submit.</p>
-
-<h1 id="step-5-testing">Step 5: Testing</h1>
-
-<p>Now, test it on your devices. For any device with <code class="language-plaintext highlighter-rouge">zerotier-cli</code>, run:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>zerotier-cli <span class="nb">set</span> &lt;networkId&gt; <span class="nv">allowDefault</span><span class="o">=</span>1
-</code></pre></div></div>
-
-<p>For Android/iOS devices, find the “Route Via ZeroTier” option:
-<img src="/images/20210214_7.jpg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Route Via ZeroTier" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Route Via ZeroTier option | Source: Me</p>
-
-<p>Check your IP address with your favourite method; if your VPN provider provides a way to check IP addresses, DNS and WebRTC leaks, use that instead.</p>
-
-<h1 id="conclusion">Conclusion</h1>
-
-<p>Congratulations! You’ve successfully set up Solution Uno. <a href="/2021/02/14/zerotier-openvpn-nat-part-1#bookmark">Click here</a> to go back to Part 1; otherwise, if you are satisfied, then we’re done here.</p>
-
-<p>Happy Coding</p>
-
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><summary type="html"><![CDATA[Uno Architecture]]></summary></entry></feed>
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><summary type="html"><![CDATA[Happy New Year :fireworks:! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?]]></summary></entry></feed>
