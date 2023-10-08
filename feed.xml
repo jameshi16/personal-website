@@ -1,4 +1,287 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2023-08-29T06:57:13+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Developing GitLab CI pipelines locally</title><link href="https://codingindex.xyz/2023/08/29/gitlab-ci-local/" rel="alternate" type="text/html" title="Developing GitLab CI pipelines locally" /><published>2023-08-29T06:55:00+00:00</published><updated>2023-08-29T06:55:00+00:00</updated><id>https://codingindex.xyz/2023/08/29/gitlab-ci-local</id><content type="html" xml:base="https://codingindex.xyz/2023/08/29/gitlab-ci-local/"><![CDATA[<p>Hey there, good morning. Sit yourself down, and enjoy some :coffee:.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2023-10-08T21:52:51+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Running an embedded executable in Python</title><link href="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/" rel="alternate" type="text/html" title="Running an embedded executable in Python" /><published>2023-10-08T21:51:00+00:00</published><updated>2023-10-08T21:51:00+00:00</updated><id>https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python</id><content type="html" xml:base="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/"><![CDATA[<p>Good morning! :coffee:</p>
+
+<p>Suppose a hypothetical situation where you gained access to a Python REPL on
+some server, somewhere. The REPL is artificially limited such that you have no
+access to any file or networking.</p>
+
+<p>Given that you are in a REPL, you can theoretically write any program you want;
+however, you are lazy to write such a program, and instead wish to run an
+arbitrary executable. After running some REPL commands, like:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="n">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="p">.</span><span class="n">version</span>
+<span class="sh">'</span><span class="s">3.10.12 (main, Jun 11 2023, 00:00:00) [GCC 11.4.0]</span><span class="sh">'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="p">.</span><span class="n">platform</span>
+<span class="sh">'</span><span class="s">linux</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>You realize the following:</p>
+
+<ul>
+  <li>The system is running &gt; Python 3.3 (more importantly, &gt; Python 3.8); and</li>
+  <li>It’s running on Linux</li>
+</ul>
+
+<p>As someone who knows how to code, surely you can whip up a script that would
+can execute any arbitrary binary file even under these conditions, right?</p>
+
+<hr />
+
+<h1 id="executing-an-arbitrary-executable">Executing an arbitrary executable</h1>
+
+<p>On Unix and Windows, Python supports an executable, as long as a file path is
+specified. This is typically done with the following recipe:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">execv</span><span class="p">(</span><span class="sh">"</span><span class="s">/bin/echo</span><span class="sh">"</span><span class="p">,</span> <span class="p">[</span><span class="sh">"</span><span class="s">-e</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">hello world</span><span class="sh">"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>The code above causes the <code class="language-plaintext highlighter-rouge">/bin/echo</code> to replace the current process
+immediately and prints “hello world”. After <code class="language-plaintext highlighter-rouge">/bin/echo</code> quits, so does Python.</p>
+
+<p>Great, problem solved, right? Unfortunately, the oddly specific constraints
+stated above has explicitly denied access to files, which includes the
+<code class="language-plaintext highlighter-rouge">/bin/echo</code> executable.</p>
+
+<p>Okay, so maybe we include the executable as part of the script instead. Since
+we know that the REPL runs on Linux, we spin up a Docker container, and begin
+experimenting.</p>
+
+<p>First, we get the <code class="language-plaintext highlighter-rouge">/bin/echo</code> program as bytes:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">/bin/echo</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">rb</span><span class="sh">'</span><span class="p">).</span><span class="nf">read</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data</span>
+<span class="sa">b</span><span class="sh">'</span><span class="se">\x7f</span><span class="s">ELF</span><span class="se">\x02\x01\x01\x00</span><span class="s">...</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>Backslashes looks really scary, so lets convert it to a Base64 encoded string:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="n">base64</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data_str</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">data_str</span>
+<span class="sa">b</span><span class="sh">'</span><span class="s">f0VMRgIBAQAAAAAAAAAAAAMA...</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>Great, let’s copy the whole string and keep it in our clipboard for now.</p>
+
+<p>Next, we whip up a script, and write:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">base64</span>
+
+<span class="n">bin_file</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="sa">b</span><span class="sh">'</span><span class="s">f0VMRgIBAQAAAAAAAAAAAAMA...</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">execv</span><span class="p">(</span><span class="n">bin_file</span><span class="p">,</span> <span class="p">[</span><span class="sh">'</span><span class="s">-e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">hello world</span><span class="sh">'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>And the run the program, and oh…</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Traceback (most recent call last):
+  File "your_file_here.py", line 1, in &lt;module&gt;
+ValueError: execv: embedded null character in path
+</code></pre></div></div>
+
+<h1 id="execv-and-paths">execv and paths</h1>
+
+<p>Turns out, even with all the bytes of the executable, you can’t just run it;
+Python’s <code class="language-plaintext highlighter-rouge">os.exec*</code> series of functions only support executables specified as
+paths.</p>
+
+<p><em>Well…</em></p>
+
+<p>That statement is only half-true. As of Python version 3.3, the <code class="language-plaintext highlighter-rouge">os.execve</code>
+<a href="https://docs.python.org/3/library/os.html#os.execl">official Python
+documentation</a> supports a
+<em>file descriptor</em>.</p>
+
+<blockquote>
+  <p>According to <a href="https://stackoverflow.com/a/5256705">this StackOverflow
+answer</a>, a <em>file descriptor</em> is an entry
+created by the OS when a resource (e.g. file or sockets) is opened. This
+entry stores information about the resource, which includes how to access it.
+On Windows, this is also known as a <em>handle</em>.</p>
+</blockquote>
+
+<p>The file descriptors on Unix can be found in <code class="language-plaintext highlighter-rouge">/proc/&lt;pid&gt;/fd</code>, where <code class="language-plaintext highlighter-rouge">&lt;pid&gt;</code> is
+the process ID of the current process. Each file descriptor is represented by
+an integer.</p>
+
+<p>Okay, but why is this important? Because the standard streams, i.e. <em>standard
+input</em>, <em>standard output</em> and <em>standard error</em> all have their own file
+descriptors, which are 0, 1, and 2 respectively.</p>
+
+<p>Notably, those standard streams <em>definitely</em> don’t occupy disk space; the file
+descriptor to these standard streams simply represent the concept of those
+streams (<a href="https://stackoverflow.com/a/3511816">StackOverflow</a>). Even though the
+files <code class="language-plaintext highlighter-rouge">/dev/stdout</code>, <code class="language-plaintext highlighter-rouge">/dev/stdin</code>, and <code class="language-plaintext highlighter-rouge">/dev/stderr</code> exist, they actually point
+to <code class="language-plaintext highlighter-rouge">/proc/self/fd/&lt;0/1/2&gt;</code>, which is basically <code class="language-plaintext highlighter-rouge">/proc/&lt;pid&gt;/fd/&lt;0/1/2&gt;</code>, the
+file descriptors in question.</p>
+
+<p>In some sense, you can say that these streams exist in-memory (they’re
+technically buffered there, according to <a href="https://www.quora.com/What-does-it-mean-to-buffer-or-stdin-stdout-and-stderr">this Quora
+post</a>).</p>
+
+<p>Now, answer me this: what happens if I pass <code class="language-plaintext highlighter-rouge">os.execve</code> a <em>file descriptor</em>
+pointing to a resource that has executable content?</p>
+
+<p>The theoretical answer: we can execute things.</p>
+
+<h1 id="exploring-the-theoretical-answer">Exploring the theoretical answer</h1>
+
+<p>Let’s run an experiment on a computer we have full access to.</p>
+
+<p>We create two files; <code class="language-plaintext highlighter-rouge">redirect.py</code>, which basically redirects the standard
+input to standard output, and <code class="language-plaintext highlighter-rouge">execute.py</code>, which spawns the <code class="language-plaintext highlighter-rouge">redirect.py</code>
+subprocess, then attaches pipes to the standard output of <code class="language-plaintext highlighter-rouge">redirect.py</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">execute.py</code> will write the Base64 string to <code class="language-plaintext highlighter-rouge">redirect.py</code>, and <code class="language-plaintext highlighter-rouge">redirect.py</code>
+will respond with the raw bytes.</p>
+
+<blockquote>
+  <p>We have to do it this way, because <code class="language-plaintext highlighter-rouge">sys.stdin.read()</code> reads <em>strings</em> instead
+of bytes, which causes issues when trying to pass an entire executable. With
+<code class="language-plaintext highlighter-rouge">sys.stdout.buffer.write()</code>, we can write raw bytes into the standard
+output. Since we hijack <code class="language-plaintext highlighter-rouge">execute.py</code> with pipes, we can also receive raw
+bytes from <code class="language-plaintext highlighter-rouge">redirect.py</code>.</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">redirect.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">import</span> <span class="n">sys</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="n">sys</span><span class="p">.</span><span class="n">stdin</span><span class="p">.</span><span class="nf">read</span><span class="p">())</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nb">buffer</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">flush</span><span class="p">()</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>In <code class="language-plaintext highlighter-rouge">execute.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
+
+<span class="n">bin_file</span> <span class="o">=</span> <span class="sa">b</span><span class="sh">'</span><span class="s">f0VMRgIBAQAAAAAAAAAAAAMA...</span><span class="sh">'</span>
+<span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="p">.</span><span class="nc">Popen</span><span class="p">([</span><span class="sh">'</span><span class="s">python</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">redirect.py</span><span class="sh">'</span><span class="p">],</span> <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="p">.</span><span class="n">PIPE</span><span class="p">)</span>
+
+<span class="n">process</span><span class="p">.</span><span class="n">stdin</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">bin_file</span><span class="p">)</span>
+<span class="n">process</span><span class="p">.</span><span class="n">stdin</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="n">os</span><span class="p">.</span><span class="nf">execve</span><span class="p">(</span><span class="n">process</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="nf">fileno</span><span class="p">(),</span> <span class="p">[</span><span class="sh">'</span><span class="s">-e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">hello world</span><span class="sh">'</span><span class="p">],</span> <span class="p">{})</span>
+</code></pre></div></div>
+
+<p>Giving a quick whirl, we see… oh…</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Traceback (most recent call last):
+  File "execute.py", line 10, in &lt;module&gt;
+    os.execve(process.stdout.fileno(), ['-e', 'hello world'], {})
+PermissionError: [Errno 13] Permission denied: 5
+</code></pre></div></div>
+
+<p>Looking at this
+<a href="https://www.askpython.com/python/examples/handling-error-13-permission-denied">AskPython</a>
+article, it seems like this error happens when:</p>
+<ul>
+  <li>File doesn’t exist;</li>
+  <li>Concurrent reads by another program;</li>
+  <li>Permissions error</li>
+</ul>
+
+<p>Given that we’re using one of the standard streams, surely the file descriptor
+points to something that actually exists; and given standard streams are
+exclusive to processes, we couldn’t have concurrent reads.</p>
+
+<p>Hence, the only logical explanation stems from us receiving a permissions
+error. <em>However</em>, that conclusion is relatively ill-conceived - how do we
+assign permissions to a pipe?</p>
+
+<p>After calling <code class="language-plaintext highlighter-rouge">os.stat</code> on both the <code class="language-plaintext highlighter-rouge">process.stdout.fileno()</code> file descriptor
+and a normal executable file descriptor, we discover that there are indeed
+indicators on the file mode that differentiates a stream to an actual file on
+the system.</p>
+
+<p>In fact, it is possible to use <code class="language-plaintext highlighter-rouge">os.chmod</code> to change <code class="language-plaintext highlighter-rouge">process.stdout.fileno()</code>’s
+file mode, but that will <em>still</em> not yield a working result.</p>
+
+<p>So, end of the road? Can’t be done? Not quite.</p>
+
+<h1 id="in-memory-files">In-memory files</h1>
+
+<p>We have just established that we <em>need</em> files; the operating system has to
+understand that the file descriptor points to a resource that is <em>meant</em> to be
+a file.</p>
+
+<p>This would mean that creating a temporary file would work; however, since we
+don’t have write access to the filesystem, as constrained by above, we can’t do
+that. Instead, we simply create a file in memory.</p>
+
+<p>But how?</p>
+
+<p>If we look carefully under the Linux kernel manual, under the <code class="language-plaintext highlighter-rouge">sys/mman.h</code>
+header file, we see that there is an interesting function by the name of
+<code class="language-plaintext highlighter-rouge">memfd_create</code>. Here is a <a href="https://man7.org/linux/man-pages/man2/memfd_create.2.html">link to that
+manpage</a>. The
+manpage describes that:</p>
+
+<ul>
+  <li>An <em>anonymous file</em> is created; this function returns a file descriptor that points to it</li>
+  <li>It <em>behaves</em> like a normal file</li>
+  <li>This file lives on the RAM</li>
+</ul>
+
+<p>And wouldn’t you know it, Python’s <code class="language-plaintext highlighter-rouge">os</code> module has a <code class="language-plaintext highlighter-rouge">memfd_create</code> function!</p>
+
+<p>Here’s the plan:</p>
+
+<ol>
+  <li>We create an in-memory file and obtain a file descriptor</li>
+  <li>We write the bytes of the Base64 string into the in-memory file</li>
+  <li>We seek to the start of the file</li>
+  <li>We send the file descriptor over to <code class="language-plaintext highlighter-rouge">os.execve</code> and we’re off the races!</li>
+</ol>
+
+<p>Here is the final script:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># script.py
+</span><span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">sys</span>
+
+<span class="n">bin_file</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="nf">b64decode</span><span class="p">(</span><span class="sa">b</span><span class="sh">'</span><span class="s">f0VMRgIBAQAAAAAAAAAAAAMA...</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="n">in_mem_fd</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">memfd_create</span><span class="p">(</span><span class="sh">"</span><span class="s">bin_name</span><span class="sh">"</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">MFD_CLOEXEC</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="n">in_mem_fd</span><span class="p">,</span> <span class="n">bin_file</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">lseek</span><span class="p">(</span><span class="n">in_mem_fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="nf">execve</span><span class="p">(</span><span class="n">in_mem_fd</span><span class="p">,</span> <span class="p">[</span><span class="sh">'</span><span class="s">-e</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">hello world</span><span class="sh">'</span><span class="p">],</span> <span class="p">{})</span>
+</code></pre></div></div>
+
+<p>Finally, running the script will net us the result we were expecting:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python3 script.py
+hello world
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>What are the implications of this? For starters, you can embed any kind of
+executable into a Python script. In the case of a malware, the script can
+download any random executable from the internet, and run it without leaving a
+file trace on your computer.</p>
+
+<p>With enough trickery, the script can also hijack standard input and standard
+output of the embedded executable, with the UI being indistinguishable from
+just running the executable directly.</p>
+
+<p>On a lighter note, you can, in theory, package your entire suite of
+applications into a single Python script. It isn’t feasible in production,
+sure, but you can rest well knowing that it is indeed, <em>possible</em>.</p>
+
+<p>Nevertheless, I hope this little fun adventure was entertaining to read. Until
+next time!</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="python" /><category term="fun" /><category term="python" /><category term="fun" /><summary type="html"><![CDATA[Good morning! :coffee:]]></summary></entry><entry><title type="html">Developing GitLab CI pipelines locally</title><link href="https://codingindex.xyz/2023/08/29/gitlab-ci-local/" rel="alternate" type="text/html" title="Developing GitLab CI pipelines locally" /><published>2023-08-29T06:55:00+00:00</published><updated>2023-08-29T06:55:00+00:00</updated><id>https://codingindex.xyz/2023/08/29/gitlab-ci-local</id><content type="html" xml:base="https://codingindex.xyz/2023/08/29/gitlab-ci-local/"><![CDATA[<p>Hey there, good morning. Sit yourself down, and enjoy some :coffee:.</p>
 
 <p>Recently, I’ve worked heavily on GitLab CI/CD pipelines. In my line of work, these pipelines must
 incorporate security requirements, such as Static Application Security Testing (SAST), Dynamic
@@ -6610,121 +6893,4 @@ docker-compose config
 
 <p>Happy Coding</p>
 
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><summary type="html"><![CDATA[“How do One-Time Passwords (OTP) work?” I asked myself, as I fiddled with my digital banking token to check my non-existent wealth online.]]></summary></entry><entry><title type="html">ZeroTier OpenVPN NAT - Part 1</title><link href="https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-1/" rel="alternate" type="text/html" title="ZeroTier OpenVPN NAT - Part 1" /><published>2021-02-14T13:31:00+00:00</published><updated>2021-02-14T13:31:00+00:00</updated><id>https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-1</id><content type="html" xml:base="https://codingindex.xyz/2021/02/14/zerotier-openvpn-nat-part-1/"><![CDATA[<p>Happy New Year :fireworks:! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?</p>
-
-<p>Well, as they (read: <em>I</em>) say, the day doesn’t end until you go to sleep; and I’ve been awake for a really, <em>really</em> long time :coffee:. Regardless of the late and obligatory greeting, my New Year’s resolution is to deliver interesting blog posts every month of the year - let’s hope I don’t run out of unconventional ideas to blog about. Also, January doesn’t count as a month.</p>
-
-<p>Enjoy!</p>
-
-<h1 id="preface-skippable">Preface (Skippable)</h1>
-
-<p><a href="#goal">SKIP: I don’t have the time, bring me to the next section :angry:</a></p>
-
-<p>Decentralized networks are quite interesting. Instead of a star-like topology like in traditional client-server models, decentralized networks are usually peer-to-peer (P2P), meaning they have a spider-web-like topology.</p>
-
-<p><img src="/images/20210214_1.svg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Star Model" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Traditional Client-Server Model | Source: <a href="https://en.wikipedia.org/wiki/Peer-to-peer">Wikipedia</a></p>
-
-<p><img src="/images/20210214_2.svg" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Spider-web Model" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Peer-to-Peer Model | Source: <a href="https://en.wikipedia.org/wiki/Peer-to-peer">Wikipedia</a></p>
-
-<p>There are many arguments online about which model is better than the other in terms of network performance, redundancy and host stability; you can read more about a standardized response to “Client-Server Model vs Peer-to-Peer model” <a href="https://cio-wiki.org/wiki/Client_Server_Architecture#Advantages_and_Disadvantages_of_the_Client_Server_Architecture.5B7.5D">through this link</a>.</p>
-
-<p>In this decade, we saw the rise of Bitcoin, a cryptocurrency that uses Blockchain technology, as a decentralized payment alternative to standard bank transfers / credit card payments. Many began to ride on the bandwagon, inventing new cryptocurrencies, merging Blockchain technology with the supply chain, and applying the idea of decentralization into every nook and cranny of technology.</p>
-
-<p>One such impacted technology is Virtual Private Networks (VPNs). Recently, the consumer definition of VPNs are “a more privacy oriented internet connection that can be used to bypass geological restrictions”; however, this is not the original purpose or definition of VPN. Instead, VPNs, by definition from <a href="https://www.cisco.com/c/en/us/products/security/vpn-endpoint-security-clients/what-is-vpn.html">Cisco</a>, are extensions of another network by making it available on the internet; a user can securely access the resources on a private network via a VPN service.</p>
-
-<p>An advantage of accessing the private network over exposing the services to the internet is the battle-tested authentication &amp; encryption tunnel created for the connection: no matter what protocol the services in the private network use, be it encrypted or not, they can all be securely accessed via a VPN tunnel over the network. Moreover, given a properly configured firewall for each host in the network, creating and hosting new services becomes a simple task, as private networks are implicitly trusted by many applications.</p>
-
-<p>Before 2011, most users or corporates leveraged the power of (true) VPNs either by hosting it themselves, or via a managed decentralized P2P service like <a href="https://en.wikipedia.org/wiki/LogMeIn_Hamachi">LogMeIn Hamachi</a>; as a side-note reminiscing my past, Hamachi was one of the services I used frequently, as it was one of the easier ways to host a Minecraft server without port-forwarding. It is also worth it to note that Hamachi’s selling point was not it’s decentralization, but it’s ability to create a VLAN. In 2011, a lesser-known alternative sprung up, known as <a href="https://www.zerotier.com/">ZeroTier</a>.</p>
-
-<p>Unlike Hamachi, ZeroTier has less restrictions on the number of hosts per network (5 vs 50 at the time of writing), has Software-Defined Networking (i.e. something like kernel IPTables and iproute2), allowed for Full Bridging Mode (i.e. tunnel all internet connection to a host on the Software-Defiend network), and is mostly open-source; this means that the technology behind the core aspects of ZeroTier, such as using <a href="https://en.wikipedia.org/wiki/STUN">STUN</a>, <a href="https://en.wikipedia.org/wiki/UDP_hole_punching">UDP Hole Punching</a>, route discovery and tunnel encryption are under public scrutiny, which helps to create a more secure service. Moreover, ZeroTier is constantly evolving to become more decentralized; with the introduction of <a href="https://www.zerotier.com/manual/#4_4">Moons</a>, it is ZeroTier’s aim to achieve infrastructure federation, i.e. little to no reliance on ZeroTier’s root servers. In a nutshell, the main difference between Hamachi and ZeroTier is their emphasis on decentralization.</p>
-
-<p>Personally, I believe that true decentralization can only occur when the community is heavily involved in the project; barring conspiracy, projects such as the <a href="https://en.wikipedia.org/wiki/Tor_(network)">Tor Project</a> or <a href="https://geti2p.net/en/">I2P</a> can only achieve their “freedom of internet via anonymity” goal through peer-hosted servers or clients. Hence, it makes sense for more users to jump aboard the decentralization train - so that we may ideally achieve a freer internet with less surveillance.</p>
-
-<hr />
-
-<h1 id="goal">Goal</h1>
-
-<p>On almost all of my devices (which includes one Single Board Computer akin to a Raspberry Pi), I have a VPN connection to a provider I trust, and an installation of ZeroTier. The VPN provider connects me to the internet, while ZeroTier gives me access to services on my VLAN; however, there are two main problems with this setup:</p>
-
-<ol>
-  <li>Android devices cannot dual-wield VPN connections; in other words, I cannot connect to my VPN provider and ZeroTier at the same time;</li>
-  <li>For <em>true</em> decentralization &amp; federation, this setup relies too much on UDP connectivity - despite being in 2021, several locations (universities, coffee shops) still block UDP connections.</li>
-</ol>
-
-<p>As my goal is to achieve peak decentralization, <strong>and</strong> retain my VPN connection to my VPN provider, it falls on me to implement a solution that can combine the best of both worlds. Additionally, there are the following constraints:</p>
-
-<ol>
-  <li>I cannot port-forward. My solution must rely on resources most people can access; routers have subjective access levels for each individual. Moreover, dynamic IP addresses are a thing; any solution that requires the exposure of a service to the plain internet is out of the question.</li>
-  <li>One device. The solution must be implementable on a single device; money (and hence, resources) does not grow on trees.</li>
-  <li>Otherwise unaffecting. The solution must not disrupt the default gateways on the implemented devices; in other words, the device can still have plain internet access <em>alongside</em> hosting whatever solution I implement.</li>
-  <li>Free. The solution cannot cost extra money.</li>
-</ol>
-
-<p>These constraints will help make my solutions implementable across a wider audience, irregardless of how complex a given country’s NAT systems or firewalls are. After racking my head for a bit, I came up with two possible solutions, but none of them perfectly mitigates the problems above; if you decide to implement them, read the text carefully.</p>
-
-<blockquote>
-  <p><strong>NOTE</strong>: For all the solutions, I’m assuming that the subnet for ZeroTier is <code class="language-plaintext highlighter-rouge">172.25.0.0/16</code>.</p>
-</blockquote>
-
-<h2 id="solution-uno">Solution Uno</h2>
-
-<p>Solution Uno requires a device on your local LAN; a small Single Board Computer (SBC) is good enough. By some clever masquerade and manipulation of the Kernel IP Tables, it is possible to send all internet-bound connections from the ZeroTier adapter to an OpenVPN <code class="language-plaintext highlighter-rouge">tun</code> adapter. Hence, all one needs to do is to establish an OpenVPN connection to the VPN provider while ensuring it does not affect the route table (constraint #3), and create suitable entries in the route table to facilitate forwarding between ZeroTier and OpenVPN.</p>
-
-<p><img src="/images/20210214_3.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; ZeroTier -&gt; SBC -&gt; OpenVPN -&gt; OpenVPN Provider" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Uno | Source: Me</p>
-
-<p>Solution Uno’s downside occurs when a network restricts UDP connectivity, and hence prevents ZeroTier from achieving P2P connections; the device will instead be using a root server as a relay, which docks some points in federation.</p>
-
-<h2 id="solution-duo">Solution Duo</h2>
-
-<p>Cloud Computing providers fiercely compete with one another, offering unprecedented prices for infinite scalability, fault tolerance and availability. For non-business consumers like us, we benefit from the competition through the free-tier offerings; for Solution Duo, we utilize Oracle Cloud’s “Always Free Tier”, which allows us to have two <code class="language-plaintext highlighter-rouge">VM.Standard.E2.1.Micro</code> VMs for the low price of absolutely free.</p>
-
-<p><img src="/images/20210214_4.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; OpenVPN -&gt; Oracle Cloud VM -&gt; OpenVPN -&gt; OpenVPN Provider" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Duo | Source: Me</p>
-
-<p>By configuring an OpenVPN server and ZeroTier on an Oracle Cloud VM, it becomes possible to set up routes to forward packets to and fro the OpenVPN <code class="language-plaintext highlighter-rouge">tun</code> and ZeroTier adapter. Taking care not to disrupt the default gateway (constraint #3), an OpenVPN client connection can be established from within the VM, connecting to the VPN provider. In essence, an external device will be connecting to a OpenVPN proxy that also happens to route ZeroTier addresses.</p>
-
-<p>The main downside of this approach is the connection speed; Oracle Cloud does not have datacenters in certain parts of the world, which may increase latency of any given VPN connection.</p>
-
-<h2 id="bonus-solution-dinosaur">Bonus: Solution Dinosaur</h2>
-
-<p>As a bonus solution (and if you have time), both Solution Uno and Solution Duo can be implemented together, forming something akin a multi-directional bridge. If the device has an unrestricted internet connection, and is also an Android device, then simply connecting to the ZeroTier network via the official Android app will connect it to both the VPN provider and the ZeroTier network. If you want to maximize federation, and the device has an internet connection that blocks UDP connections, then connecting to the Oracle Cloud VM via an OpenVPN app will also connect the device to both the VPN and the ZeroTier network.</p>
-
-<p><img src="/images/20210214_5.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="Device -&gt; OpenVPN -&gt; Oracle Cloud VM -&gt; ZeroTier -&gt; SBC -&gt; OpenVPN -&gt; OpenVPN Provider" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">Architecture for Solution Dinosaur | Source: Me</p>
-
-<p>While it is an abomination, I personally use this method. A more ideal solution would be to host a ZeroTier moon on Oracle Cloud, and then getting the device to orbit it, but such a feature is unavailable on Android at the time of writing.</p>
-
-<blockquote>
-  <p><strong>NOTE</strong>: There is a rumor that this feature will come in ZeroTier 2.0, according to this <a href="https://www.reddit.com/r/zerotier/comments/d9xuv3/force_zerotier_client_to_only_use_your_own_moons/">Reddit post</a>.</p>
-</blockquote>
-
-<hr />
-
-<h1 id="bookmark">Bookmark</h1>
-
-<p>I will implement all three solutions in different parts:</p>
-
-<ul>
-  <li><a href="/2021/02/14/zerotier-openvpn-nat-part-2">Part 2</a> - Solution Uno</li>
-  <li><a href="/2021/02/14/zerotier-openvpn-nat-part-3">Part 3</a> - Solution Duo</li>
-  <li><a href="/2021/02/14/zerotier-openvpn-nat-part-4">Part 4</a> - Solution Dinosaur</li>
-</ul>
-
-<p>You can bookmark <a href="#bookmark">this link</a> to come back later.</p>
-
-<hr />
-
-<h1 id="conclusion">Conclusion</h1>
-
-<p>While decentralization is an important step forward for the internet, a large part of the world is still resisting those changes; by disrupting UDP connectivity, peer-to-peer connections are difficult, if not, impossible to establish, hindering the progress towards a freer and open internet.</p>
-
-<p>I hope that by coming up with solutions to workaround these disruptions, we can bridge the missing gaps required to get everyone on decentralized networks, private or not.</p>
-
-<p>This was a particularly long series of blog posts - if you find any mistakes in the posts, please tweet <a href="https://twitter.com/jameshi16">@me</a>.</p>
-
-<p>Happy Coding</p>
-
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><category term="openvpn" /><category term="zerotier" /><category term="decentralized" /><summary type="html"><![CDATA[Happy New Year :fireworks:! What, New Year was one month ago, and I’ve henceforth lost all right to celebrate it?]]></summary></entry></feed>
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><summary type="html"><![CDATA[“How do One-Time Passwords (OTP) work?” I asked myself, as I fiddled with my digital banking token to check my non-existent wealth online.]]></summary></entry></feed>
