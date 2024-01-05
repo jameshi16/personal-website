@@ -1,4 +1,363 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2024-01-05T15:48:54+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Running an embedded executable in Python</title><link href="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/" rel="alternate" type="text/html" title="Running an embedded executable in Python" /><published>2023-10-08T21:51:00+00:00</published><updated>2023-10-08T21:51:00+00:00</updated><id>https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python</id><content type="html" xml:base="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/"><![CDATA[<p>Good morning! :coffee:</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2024-01-05T15:54:27+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">I tried to make another game…</title><link href="https://codingindex.xyz/2024/01/05/passable-game/" rel="alternate" type="text/html" title="I tried to make another game…" /><published>2024-01-05T15:49:00+00:00</published><updated>2024-01-05T15:49:00+00:00</updated><id>https://codingindex.xyz/2024/01/05/passable-game</id><content type="html" xml:base="https://codingindex.xyz/2024/01/05/passable-game/"><![CDATA[<p>Happy New Year! :fireworks: How has everyone been?</p>
+
+<p>Ah yes, I can already hear the scorn and disdain of some of you wondering where I’ve been all this time. Short answer: I
+got lazy. Long answer: I have <em>a lot</em> to do, but I’m also procrastinating. Man, I swear, it’s probably a comedic routine
+at this point to start my blog posts with some kind of excuse.</p>
+
+<p>Anyways, you’ve read the title right; I tried to make another game!</p>
+
+<p><img src="/images/20240105_1.gif" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="untitled game" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">untitled game | Source: Me</p>
+
+<blockquote>
+  <p>Note: Skip to <a href="#day-1">Day 1</a> for the actual blog content.</p>
+</blockquote>
+
+<p>Table of contents:</p>
+
+<ol>
+  <li><a href="#prelude---the-story-thus-far">Prelude - The story thus far</a></li>
+  <li><a href="#day-1">Day 1</a></li>
+  <li><a href="#day-2">Day 2</a></li>
+  <li><a href="#day-3">Day 3</a></li>
+  <li><a href="#epilogue">Epilogue</a></li>
+  <li><a href="#conclusion">Conclusion</a></li>
+</ol>
+
+<h1 id="prelude---the-story-thus-far">Prelude - The story thus far</h1>
+
+<p>Now, if you’ve ever read any of my blog posts, you’d know that I’ve <em>tried</em> making a game before, with a deadline to
+boot. It was called <a href="/2020/10/06/failed-game/">Failed Game</a>, and was made for my buddy
+<a href="https://modelconverge.xyz/">ModelConverge</a>. It was a massive failure, with me spending eons trying to get the exact
+movement I wanted, fixing size mismatches, writing a “manager”, etc. Absolutely horrendous time management.</p>
+
+<p>Surely, I have been polishing my skills to create a game that can captivate players for a gamejam, right? I definitely
+should have improved since 2020!</p>
+
+<p>Nope, I’ve not touched game development since then because I was traumatized by how little I got done.</p>
+
+<p>Fast forward a few years (2023, around March), I started watching <a href="https://www.twitch.tv/vedal987">Neuro-sama</a>, and got
+hooked the moment an Alternate Reality Game (ARG) was released. This somehow warmed my cold introverted heart, leading
+me to create my first Twitch account, revive my old Discord account, and chat with random internet strangers about how
+we hold this cute little AI and its creator in eternal reverence.</p>
+
+<p>Here are some clips I hold dear to my hear:</p>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=zkLU3-I0leU">Neuro and Vedal defuse bombs, but she progressively gets less helpful</a></li>
+  <li><a href="https://www.youtube.com/watch?v=mhuQ_-UCbsg">Evil x Neuro V3 sings In Hell We Live, Lament</a></li>
+  <li><a href="https://www.youtube.com/watch?v=-sr8m1L3HZ0">AI Evolved: Neuro-Sama Got A Lot Smarter After Vedal’s Latest Upgrades</a></li>
+</ul>
+
+<p>The ARG is found <a href="https://www.youtube.com/@_neurosama">here</a>.</p>
+
+<p>The Neuro-sama community is one of the most “at-home” I have felt for a while. Even during my lurking phase, I felt
+nothing but awe; people were kind, talented, and helpful. To me, the fact that this community exists at all is nothing
+short of a miracle.</p>
+
+<p>So, out of love for the little AI and her creator, I began contributing by attempting the ARG (badly, I’ve been nothing
+much but dead-weight). I had no other talents to contribute, can’t do art, music, no bright ideas, and worst of all, I’m
+not exactly a superstar programmer, especially compared to the AI’s creator and most people in the
+<a href="https://discord.com/channels/574720535888396288/1071784467036913664">#programming</a> channel. Talk about a failure of
+someone who literally runs a technology-related blog!</p>
+
+<p>When the <a href="https://itch.io/jam/neurosama-birthday-game-jam">Neuro-sama Birthday Game Jam</a> (28/12/2023 - 31/12/2023, 72
+hours) rolled around during the subathon, I knew this was my only chance to get involved and actually do something. A
+recap:</p>
+
+<ol>
+  <li>I have not made a full game before</li>
+  <li>I do not art</li>
+  <li>I do not music</li>
+  <li>I am at most a software engineer</li>
+  <li>Holding a conversation with a cucumber takes 90% of my energy for the day</li>
+</ol>
+
+<p>I was hesitating - on one hand, I knew for a fact that I couldn’t have created anything remotely playable even with
+infinite time, much less in 72 hours. Plus, I actually have real-life work to complete, which I took up because I was
+sure I wouldn’t had any other commitments. On the other, I literally have no other chances to contribute to the
+community. Furthermore, I’ve found myself working amazingly during tight deadlines, which is the case during my serial
+hackathon days with <a href="https://modelconverge.xyz">ModelConverge</a> and <a href="https://nikhilr.io/">nikhilr</a>.</p>
+
+<p>Amidst tormenting myself with hesitation, the theme was announced on-stream by Neuro-sama to be “Lost &amp; Found”.
+Pondering what I could create, I realized that I actually had ideas; more than anything, I had a <strong>story</strong> I wanted to
+tell.</p>
+
+<blockquote>
+  <p>While you’re here, have a look at <a href="/2023/05/31/short-stories/">my short stories</a>. They’re a <del>horrible</del>
+collection of short stories I wrote expressing what I feel about our current world.</p>
+</blockquote>
+
+<p>And so, I joined the Game Jam. Alone (I think I have crippling social anxiety).</p>
+
+<hr />
+
+<h1 id="day-1">Day 1</h1>
+
+<h2 id="concept">Concept</h2>
+
+<p>When I heard the theme “Lost &amp; Found”, my mind wandered to “oh, digging”! The player could dig up for lost items. Sound
+good to me!</p>
+
+<p>What else can you dig?</p>
+
+<p>…</p>
+
+<p>Graves.</p>
+
+<h2 id="story">Story</h2>
+
+<p>I love games that can invoke emotions, because I don’t normally feel them. Happiness is an overrated emotion, so I
+decided to go for the sad route.</p>
+
+<p>Tragedies are pretty difficult to convey; over-exploiting elements will cause the story to become stale, and become a
+case of “oh, the author’s at it again”. For example, if I kept killing important characters left and right, the players
+would become numb to that sensation, and the story may become predictable.</p>
+
+<p>A tragedy is good when it is unexpected from the onset, but makes sense after the fact.</p>
+
+<blockquote>
+  <p>Note: I have no idea what I’m talking about, this is all just personal takes on what makes a tragedy.</p>
+</blockquote>
+
+<p>Digging for items? Digging for graves?</p>
+
+<p>Let’s add a plot twist. Let’s make them dig their own grave.</p>
+
+<p><img src="/images/20240105_2.png" style="image-rendering: pixelated; max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="grave sprite" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Grave Sprite | Source: me</p>
+
+<h2 id="core-mechanics">Core mechanics</h2>
+
+<p>After spying on some streams of people building their games, I set out to code the core mechanics first (this was a good
+idea). The ideas are as such:</p>
+
+<ol>
+  <li>Levels randomly generate, with “landmarks” (things like small mushrooms, etc) scattered around the map</li>
+  <li>When a level begins, an overview map will be displayed with the locations of all the items and enemies.</li>
+  <li>Once the overview map is dismissed, the items will hide themselves.</li>
+  <li>Player goes around defeating enemies and collect items.</li>
+</ol>
+
+<p>At this point, I have not figured out how to progress the story yet.</p>
+
+<p>These set of core mechanics took a good total of 2 days to fully implement, including actually sleeping. Most of the difficulty
+stemmed from me trying to figure out how Godot worked (never used a Game Engine in my life), what the heck nodes are,
+and how they interact.</p>
+
+<blockquote>
+  <p>I had the most trouble figuring out the difference between <code class="language-plaintext highlighter-rouge">Area2D</code>, <code class="language-plaintext highlighter-rouge">CharacterBody2D</code>, and <code class="language-plaintext highlighter-rouge">RigidBody2D</code>, which all
+have different callbacks and different uses. Figuring out the difference between area collision and body collision was
+a huge time sink :sweat_smile:</p>
+</blockquote>
+
+<p>I used a walker for the level generation, which basically uses DFS and some parameters to randomly generate a walkable
+path. This effectively means we have infinite level generation!</p>
+
+<p>I also implemented enemies, with plans to implement different types of enemies (didn’t end up doing it because of time).
+To attack, the player would also use the shovel; hence, you couldn’t dig and attack at the same time. The idea was to
+challenge the player to knock the enemies back far enough before digging for items. Speaking of items, I implemented
+various levels of items to add some variance to the game.</p>
+
+<p><img src="/images/20240105_3.png" style="max-width: 300px; width: 100%; margin: 0 auto; display: block;" alt="Low rarity item" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Amazing green ball with quality indicator | Source: me</p>
+
+<p>The most challenging part of this day was figuring out (for the life of me) how collisions with tilemaps worked;
+because I had no idea. Even after setting the right tiles for collision on a <code class="language-plaintext highlighter-rouge">TileSet</code>, the player character couldn’t
+collide with the <code class="language-plaintext highlighter-rouge">TileMap</code> properly. It took a few hours, but I eventually figured it out and used a <code class="language-plaintext highlighter-rouge">CharacterBody2D</code>
+on <code class="language-plaintext highlighter-rouge">floating</code> mode to introduce tile map collision physics.</p>
+
+<p>HUD was also introduced on this day on another scene, adding HP and Stamina stats. I also eventually added other elements
+to the HUD, like the score, and the timer indicating the amount of time left before the end of the level.</p>
+
+<p>The second most challenging part of the day was navigation; it turns out, navigation only works on one layer (at the
+time of writing) <a href="https://github.com/godotengine/godot/pull/73018">based on this PR</a>, and so I tore out my hair for no
+reason trying to figure what in the world is going on. In the end, I resolved the navigation layer issue by using
+background.</p>
+
+<blockquote>
+  <p>At first, I wrote linear path-finding using the <code class="language-plaintext highlighter-rouge">Behaviour</code> design pattern. But, like, who has time for design
+patterns in a Game Jam?</p>
+</blockquote>
+
+<p>To end the day, I used the path generated by the walker to also randomly place items.</p>
+
+<hr />
+
+<h1 id="day-2">Day 2</h1>
+
+<h2 id="core-mechanics-1">Core Mechanics</h2>
+
+<p>On this day, I implemented real bars to represent HP:</p>
+
+<p><img src="/images/20240105_4.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="bars" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Bars | Source: me</p>
+
+<p>And finally added stamina. When attacking, I figured the player should have some visual feedback that <em>something</em> is
+happening, so I decided to add slashes:</p>
+
+<p><img src="/images/20240105_5.gif" style="max-width: 200px; width: 100%; margin: 0 auto; display: block;" alt="slashes" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Slashes | Source: me</p>
+
+<p>I realized that not many people will understand the digging mechanic upon spawning on a random level, so I decided to
+make a tutorial level:</p>
+
+<p><img src="/images/20240105_6.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="tutorial level" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Tutorial Level | Source: me</p>
+
+<p>Then, I put healthbars on enemies:</p>
+
+<p><img src="/images/20240105_7.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="enemy healthbar" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Enemy HealthBar | Source: me</p>
+<!-- enemy healthbars -->
+
+<p>I also added some more quality-of-life mechanics, such as pressing a button to start a map, restarting a level, 
+and a “level over” screen.</p>
+
+<hr />
+
+<h1 id="day-3">Day 3</h1>
+
+<p>Honestly, at this point, I wasn’t sure if I could complete the game. I saw some people in the community becoming
+disheartened that they may not finish their game and dropping out; but I figured I continued anyway.</p>
+
+<p>So, I sat my butt down on my chair and began working harder.</p>
+
+<h2 id="core-mechanics-2">Core Mechanics</h2>
+
+<p>I implemented “landmarks” - kinda like random small terrain objects that spawn on the foreground layer as memorization
+helpers for the player.</p>
+
+<p><img src="/images/20240105_8.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="landmarks" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Landmarks | Source: me</p>
+
+<p>And… well, I think the core mechanics were done!</p>
+
+<h2 id="art">Art</h2>
+
+<p>I suck at art. Nevertheless, I sat down and drew some sprites:</p>
+
+<p><img src="/images/20240105_9.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="sprites" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Sprites | Source: me</p>
+
+<p>And implemented them into the game.</p>
+
+<h2 id="story--special-levels">Story + Special Levels</h2>
+
+<p>Finally, I decided to actually flesh out the story. In my mind, I wanted to create something that <em>will</em> invoke some
+sort of emotion within the player. The rough idea of the story was “dig to recover memory fragments”, and end off with
+“here’s the whole reason why you’re in this mess”. The rough storyboard was as follows:</p>
+
+<ol>
+  <li>The introduction will be at the tutorial. Make it as vague as possible, but a hint of “this isn’t normal”</li>
+  <li>Players recover fragments of the story as they progress through the game</li>
+  <li>After <code class="language-plaintext highlighter-rouge">x</code> number of fragments, play a special level</li>
+  <li>After <code class="language-plaintext highlighter-rouge">y</code> number of fragments in total, play the ending special level</li>
+</ol>
+
+<p>I ended up with 3 different special levels; I don’t really want to spoil the story, so here is the overview of two
+of the levels (the 3rd one is a story spoiler, so I won’t show it):</p>
+
+<p><img src="/images/20240105_11.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="evil level" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Special Level 1 | Source: me</p>
+
+<p><img src="/images/20240105_10.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="neuro level" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Special Level 2 | Source: me</p>
+
+<p>I would say I did pretty okay with the story. I’m not a professional writer, but I reckon it got the job done.</p>
+
+<h2 id="sound">Sound</h2>
+
+<p>At this point, I only had one hour left. So, I definitely couldn’t be learning how to compose my own music in time;
+instead, I searched online for a suitable track. I wanted a “lost in the forest” kinda vibe, but in the depressing tone,
+which led me to find <a href="https://chillmindscapes.itch.io/free-chiptune-music-pack-4-chillmindscapes">this</a> page, which has
+a very fitting tune called “Goodbye Tales”.</p>
+
+<p>Adding an audio player, whipping out some quick code to play it on a loop, and I shipped it and called it a day.</p>
+
+<hr />
+
+<h1 id="epilogue">Epilogue</h1>
+
+<p>It was not a good game. The core mechanics were “complete”, but definitely not polished. The art-style was absolute
+garbage, and the music wasn’t even mine.</p>
+
+<p>The scoring mechanism to obtain fragments and reach special levels was completely broken, so I had to add a small note
+to guide players towards obtaining them.</p>
+
+<p>Many community members were able to notice the novice attempt at creating something resembling a game and gave me some
+encouragement:</p>
+
+<p><img src="/images/20240105_12.png" style="max-width: 400px; width: 100%; margin: 0 auto; display: block;" alt="encouragement" /></p>
+<p class="text-center text-gray lh-condensed-ultra f6">Community Encouragement | Source: rating page</p>
+
+<p>Once again, my heart is warmed by the thoughtfulness of the community members.</p>
+
+<h2 id="what-could-i-have-done-better">What could I have done better?</h2>
+
+<p>I could have done better on the following aspects:</p>
+
+<ul>
+  <li>The code was horrendous; I could have written everything in the Model-View-Controller pattern; then maybe I wouldn’t
+have spent so much time trying to add functionality</li>
+  <li>Bugfixes (especially scoring)</li>
+  <li>Getting people to play test</li>
+  <li>Getting collaborators</li>
+  <li>Using my own music</li>
+</ul>
+
+<p>If I had collaborators, I would not need to spend so much time creating assets and focus on actually building a fun game. However,
+I am also socially awkward, and have no idea how to properly do game development. Furthermore, I realize that if I
+didn’t work alone, I’d likely never have the chance to write the story I wanted to convey. After all, not everyone wishes
+death upon someone/something they hold dear.</p>
+
+<h2 id="what-i-found-fun">What I found fun?</h2>
+
+<p>To be honest, the reviewing stage. I was given chance to rate other people’s games, and found many gems. Take a look at
+the <a href="https://itch.io/jam/neurosama-birthday-game-jam/entries">submissions page</a> and try some yourself!</p>
+
+<p>I’m a numbers-oriented person, and so I obsess over my analytics. This is partly the reason
+why this website doesn’t have Google Analytics - I’ll probably compulsively obsess over it and get no work done.</p>
+
+<p>However, that wasn’t it. I also enjoyed watching people play my game (when they try their best to avoid the bugs, of
+course). The fact that someone out there is experiencing the thing I’ve crafted, feeling the things I intended for them
+to feel, and generally thinking it wasn’t an abysmally horrible creation is something that keeps me ticking.</p>
+
+<p>It reminded me of why I wanted to do technology in the first place; to create things used by others, creating as large
+of an impact as possible. To this end, I’ve explored being a content creator (if you remember this you’re a real one),
+hosting large services, writing stories, joined companies to work on large stuff, and basically making many of my
+impactful projects open-source. Most of them were misses, but I can at least exclaim that I tried at one point.</p>
+
+<h2 id="will-i-do-it-again">Will I do it again?</h2>
+
+<p>Just like hackathons, the adrenaline really helped me realize I had skills I never thought I possessed. From rapid
+learning via experimentation on Godot, to drawing sprites even though I failed art, to writing stories even though no
+one ever reads mine. All of these (albeit almost non-existent) skills even helped me complete something as complicated
+and scary as a game.</p>
+
+<p>However, unlike hackathons, where I enjoyed working with like-minded individuals to get a product out that could
+potentially solve industry-level problems, Game Jams are an expression of the team/individual’s creativity.</p>
+
+<p>I don’t think I’ll join just any game jam in the future. I <em>do</em> need to care about it. The fact that the game jam was
+centered around Neuro-sama helped a lot, because I already had a desire to give back.</p>
+
+<p>However, I think I’ll participate in the next Neuro-sama game jam, whenever that happens. I have many more stories I
+want to tell with the Neuro-sama-verse characters. They’ll probably not be very happy stories, though!</p>
+
+<hr />
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>You can play the game on <a href="https://vanorsigma.itch.io/neuro-game-jam-untitled-game">itch.io</a>, and the source code can 
+be found <a href="https://github.com/jameshi16/neuro-game-jam">here</a>.</p>
+
+<p>Again, it’s not a very interesting game, so I hope you’ll forgive me for not providing a better experience.</p>
+
+<p>Nevertheless, it was a fun 72-hour game jam! Hopefully you had fun reading about my experience as much as I did
+reminiscing about it.</p>
+
+<p>Happy Coding</p>
+
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="game" /><category term="game" /><category term="godot" /><summary type="html"><![CDATA[Happy New Year! :fireworks: How has everyone been?]]></summary></entry><entry><title type="html">Running an embedded executable in Python</title><link href="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/" rel="alternate" type="text/html" title="Running an embedded executable in Python" /><published>2023-10-08T21:51:00+00:00</published><updated>2023-10-08T21:51:00+00:00</updated><id>https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python</id><content type="html" xml:base="https://codingindex.xyz/2023/10/08/running-an-embedded-program-in-python/"><![CDATA[<p>Good morning! :coffee:</p>
 
 <p>Suppose a hypothetical situation where you gained access to a Python REPL on
 some server, somewhere. The REPL is artificially limited such that you have no
@@ -5886,1011 +6245,4 @@ docker-compose config
 
 <p>Happy Coding</p>
 
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="release" /><category term="android" /><category term="app" /><category term="android" /><summary type="html"><![CDATA[Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.]]></summary></entry><entry><title type="html">TOTP from scratch</title><link href="https://codingindex.xyz/2021/03/07/totp-from-scratch/" rel="alternate" type="text/html" title="TOTP from scratch" /><published>2021-03-07T10:54:00+00:00</published><updated>2021-03-07T10:54:00+00:00</updated><id>https://codingindex.xyz/2021/03/07/totp-from-scratch</id><content type="html" xml:base="https://codingindex.xyz/2021/03/07/totp-from-scratch/"><![CDATA[<p>“How do One-Time Passwords (OTP) work?” I asked myself, as I fiddled with my digital banking token to check my non-existent wealth online.</p>
-
-<p>Is there some kind of magic communicating protocol and hardware that I didn’t know of? Perhaps GSM is being used in these banking tokens, or mobile data is being used in my <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Google Authenticator</a> app?</p>
-
-<p>Well, of course not. Firstly, hardware tokens need to be low-power and durable; radio communication isn’t exactly the best thing to fit those criteria. Secondly, it would be ridiculous to spend mobile data for a 6 to 8 digit pin. Some <a href="https://www.freecodecamp.org/news/how-time-based-one-time-passwords-work-and-why-you-should-use-them-in-your-app-fdd2b9ed43c3/">quick preliminary research</a> shows that OTPs are generated offline, via a pre-shared key known to both the verifier (i.e. the entity that needs to know it’s you) and the generator (i.e. you).</p>
-
-<p>Naturally, the next question to ask is: “How?”</p>
-
-<p>And, as commonsensical as dunking a donut into beer, I decided to understand and implement Time-based OTP (TOTP) and its components from scratch. The aftermath of this disaster can be found <a href="https://github.com/jameshi16/Bad-TOTP">on my GitHub repository</a>, which comes with GitHub Actions powered tests because I like torturing myself.</p>
-
-<h1 id="table-of-contents">Table Of Contents</h1>
-
-<ol>
-<li><a href="#hashes">Hashes</a>
-<ul>
-<li><a href="#sha-1">SHA1</a></li>
-<li><a href="#sha256">SHA256</a></li>
-<li><a href="#sha512">SHA512</a></li>
-</ul>
-</li>
-<li><a href="#hmac">HMAC</a></li>
-<li><a href="#hotp">HOTP</a></li>
-<li><a href="#totp">TOTP</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ol>
-
-<h1 id="hashes">Hashes</h1>
-
-<p>TOTP, or lesser known as <a href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>, is a simple algorithm built on the already existing counter-based OTP algorithm, Hash-Message-Authenticator-Code-based OTP (HOTP). As the name suggests, HOTP uses hashes; in <a href="https://tools.ietf.org/html/rfc4226">RFC 4226</a>, the preferred hashes belong to the SHA family, specifically SHA1.</p>
-
-<p>If you’ve dabbled with hashes, you would know that alongside <a href="/2020/12/05/i-implemented-aes-and-md5/#md5">MD5</a>, SHA-1 is known to be <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision">“broken”</a>; two PDFs of differing content has colliding SHA-1 functions according to <a href="https://duo.com/decipher/sha-1-fully-and-practically-broken-by-new-collision">an article on ComputerWorld</a>. An alternative interpretation is that SHA-1 is no longer cryptographically safe. However, most of the internet still uses SHA-1 to generate OTPs; while practically infeasible to impersonate, it is nevertheless still a concern for the paranoid.</p>
-
-<p>To ease my mind a little, I also decided to implement SHA-256 and SHA-512 as “drop-in” replacements for SHA-1 when it comes to OTP generation. Hence, this blog post will describe the implementation of SHA-1, SHA-256, and SHA-512.</p>
-
-<h2 id="sha-1">SHA-1</h2>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>Implementing SHA-1 was similar to implementing <a href="/2020/12/05/i-implemented-aes-and-md5/#md5">MD5</a>; although, I ran into some problems specific to the width of <code class="language-plaintext highlighter-rouge">uint_fast*_t</code> types. In a nutshell, don’t use those types - they likely have larger widths which may mess up the hash on a careless programmer’s code (i.e. me).</p>
-
-<p>Before we begin, let’s define a few things:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">WORD</code> is a 32-bit string (== 4 bytes) that can be represented as a sequence of 8 hex digits; in C, this is <code class="language-plaintext highlighter-rouge">uint32_t</code>,</li>
-  <li>Everything in SHA-1 is processed in blocks of 512-bits, which is 16 words or 64 bytes,</li>
-  <li>Everything in the SHA family should be expressed in Big Endian byte order; furthermore, platform-agnostic endianness should be enforced.</li>
-</ul>
-
-<p>In <a href="https://tools.ietf.org/html/rfc3174#section-5">RFC 3174 section 5</a>, some functions are defined for use by SHA-1. In C, they are implemented like so:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHA1_WORD</span> <span class="nf">sha1_f</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">t</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">B</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">C</span><span class="p">,</span> <span class="n">SHA1_WORD</span> <span class="n">D</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">19</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">B</span> <span class="o">&amp;</span> <span class="n">C</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="o">~</span><span class="n">B</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">D</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">39</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">B</span> <span class="o">^</span> <span class="n">C</span> <span class="o">^</span> <span class="n">D</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">59</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">B</span> <span class="o">&amp;</span> <span class="n">C</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">B</span> <span class="o">&amp;</span> <span class="n">D</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">C</span> <span class="o">&amp;</span> <span class="n">D</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">79</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">B</span> <span class="o">^</span> <span class="n">C</span> <span class="o">^</span> <span class="n">D</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// impossible case</span>
-<span class="p">}</span>
-
-<span class="n">SHA1_WORD</span> <span class="nf">sha1_K</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">19</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mh">0x5A827999</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">39</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mh">0x6ED9EBA1</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">59</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mh">0x8F1BBCDC</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mh">0xCA62C1D6</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// impossible case</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The hex digits are copied from the RFC, although it is likely that these are fractional components of the square root of some prime number. Another commonly used function, Shift &amp; Rotate Left should also be defined:</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHA1_WORD</span> <span class="nf">sha1_Sn</span><span class="p">(</span><span class="n">SHA1_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&lt;&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span> <span class="o">-</span> <span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>SHA-1 uses a form of metadata encoding to pad blocks; all blocks must be padded with this metadata no matter its size. Should the addition of the padding exceed the block size, a new block is created. Padding in SHA-1 follows these rules:</p>
-
-<ol>
-  <li>Append a bit ‘1’ to the end of the string;</li>
-  <li>Append zeros until the following equation is satisfied: <code class="language-plaintext highlighter-rouge">(bitLengthOfMessage + 1 + X) % 512 == 448</code>, where <code class="language-plaintext highlighter-rouge">bitLengthOfMessage</code> is the bit length of the original message, and <code class="language-plaintext highlighter-rouge">X</code> is the number of zeros to append at the end of the message.</li>
-</ol>
-
-<p>The following code pads the message, assuming that all the data are aligned nicely to their bytes:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">sha1_pad</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">*</span> <span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">size_t</span> <span class="n">toPad</span> <span class="o">=</span> <span class="mi">64</span> <span class="o">-</span> <span class="p">(</span><span class="n">size</span> <span class="o">%</span> <span class="mi">64</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">toPad</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// spillover</span>
-    <span class="n">toPad</span> <span class="o">+=</span> <span class="mi">64</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">newArr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">newArr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
-  <span class="n">memset</span><span class="p">(</span><span class="n">newArr</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">8</span><span class="p">);</span> <span class="c1">// -8 for 2 words at the back</span>
-
-  <span class="cm">/*
-   * This code relies too much on the endianess of the system, so we won't be using it
-   * uint64_t* ref = (uint64_t*) (newArr + size + toPad - 8);
-   * ref = size * 8;
-   */</span>
-
-  <span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">sizeInBits</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span><span class="p">;</span>
-
-  <span class="k">if</span> <span class="p">(</span><span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-    <span class="o">*</span><span class="n">newSize</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">newArr</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Notice that towards the end of the function, a platform-agnostic way of maintaining the big-endian byte order is used.</p>
-
-<p>With all of the pre-requisites in place, the main hashing process can now be done. RFC 3174 gave two different methods to accomplish this; both are essentially the same, except that the second method uses an intelligent way to access data if the underlying message is stored as an array of <code class="language-plaintext highlighter-rouge">WORDs</code>. For the purpose of clarity, only the first method will be explained in this blog post. The SHA-1 algorithm does the following:</p>
-
-<ol>
-  <li>Define magic numbers <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h4</code> with values stated in RFC 3174;</li>
-  <li>Pad the message using <code class="language-plaintext highlighter-rouge">sha1_pad</code>;</li>
-  <li>Split the message into blocks of 512-bits;</li>
-  <li>Create a working buffer of 80 WORDS;</li>
-  <li>Copy the contents of the 64-byte block into the working buffer (i.e. copy 16 WORDS), using a platform-agnostic way to maintain Big Endianness;</li>
-  <li>Generate the values of the remaining words with an algorithm specified in RFC 3174;</li>
-  <li>Calculate the intermediary hash;</li>
-  <li>Copy the digest back into <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h4</code>.</li>
-  <li>When all blocks are processed, return <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h4</code> as an array of bytes, maintaining the Big Endian byte order.</li>
-</ol>
-
-<p>Normally, hashing algorithms are implemented with <em>streams</em> in mind, meaning that blocks of data are fed to the algorithm before being finalized into a hash. Given that TOTP would have all the data it needs on-demand, I figured it was not necessary to worry about streaming, instead building a single function to hash the whole message.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">method_one</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">SHA1_WORD</span> <span class="n">h0</span> <span class="o">=</span> <span class="mh">0x67452301</span><span class="p">;</span>
-  <span class="n">SHA1_WORD</span> <span class="n">h1</span> <span class="o">=</span> <span class="mh">0xefcdab89</span><span class="p">;</span>
-  <span class="n">SHA1_WORD</span> <span class="n">h2</span> <span class="o">=</span> <span class="mh">0x98badcfe</span><span class="p">;</span>
-  <span class="n">SHA1_WORD</span> <span class="n">h3</span> <span class="o">=</span> <span class="mh">0x10325476</span><span class="p">;</span>
-  <span class="n">SHA1_WORD</span> <span class="n">h4</span> <span class="o">=</span> <span class="mh">0xc3d2e1f0</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">h0</code>, <code class="language-plaintext highlighter-rouge">h1</code>, <code class="language-plaintext highlighter-rouge">h3</code>, and <code class="language-plaintext highlighter-rouge">h4</code> are magic initial numbers used by the algorithm; they will be changed later on as the hash digests the data. I am not a security expert, but I gather that these numbers <em>could be</em> anything - perhaps you can make your own variant of SHA-1 just by changing these numbers.</p>
-
-<p>Pad the message carefully.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">size_t</span> <span class="n">messageSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">message</span> <span class="o">=</span> <span class="n">sha1_pad</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">messageSize</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Processing the message block by block, we define a temporary buffer, <code class="language-plaintext highlighter-rouge">W</code>, with the size of 80 WORDS to store data that would later become a hash digest. Then, the first 64 bytes (i.e. 16 WORDS) would be copied into <code class="language-plaintext highlighter-rouge">W</code>, with the endian maintained through a platform-agnostic method.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">64</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">block</span> <span class="o">=</span> <span class="n">message</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">W</span><span class="p">[</span><span class="mi">80</span><span class="p">];</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Fill the rest of <code class="language-plaintext highlighter-rouge">W</code> with a method specified in RFC 3174. This step, is the only line that differs between <code class="language-plaintext highlighter-rouge">method_one</code> and <code class="language-plaintext highlighter-rouge">method_two</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span>  <span class="n">sha1_Sn</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">3</span><span class="p">]</span> <span class="o">^</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">^</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">14</span><span class="p">]</span> <span class="o">^</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">16</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>With all the data filled into <code class="language-plaintext highlighter-rouge">W</code>, compute the hash by digesting every WORD in <code class="language-plaintext highlighter-rouge">W</code> with the above algorithm. This part will be referred to as “the main hashing process” for the remainder of this blog post.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">SHA1_WORD</span> <span class="n">A</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">B</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">C</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">D</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">E</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-    <span class="n">SHA1_WORD</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">TEMP</span> <span class="o">=</span> <span class="n">sha1_Sn</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha1_f</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="o">+</span> <span class="n">E</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">sha1_K</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-      <span class="n">E</span> <span class="o">=</span> <span class="n">D</span><span class="p">;</span>
-      <span class="n">D</span> <span class="o">=</span> <span class="n">C</span><span class="p">;</span>
-      <span class="n">C</span> <span class="o">=</span> <span class="n">sha1_Sn</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
-      <span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="p">;</span>
-      <span class="n">A</span> <span class="o">=</span> <span class="n">TEMP</span><span class="p">;</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Add the intermediary variables back into <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h4</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">h0</span> <span class="o">+=</span> <span class="n">A</span><span class="p">;</span>
-    <span class="n">h1</span> <span class="o">+=</span> <span class="n">B</span><span class="p">;</span>
-    <span class="n">h2</span> <span class="o">+=</span> <span class="n">C</span><span class="p">;</span>
-    <span class="n">h3</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-    <span class="n">h4</span> <span class="o">+=</span> <span class="n">E</span><span class="p">;</span>
-  <span class="err">}</span>
-</code></pre></div></div>
-
-<p>SHA-1 returns a 160-bit string (i.e. 20 bytes) as a hash result. After taking care of memory management, copy the data from <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h4</code> in a platform-agnostic way to preserve Big Endianness. Return the result, and call it a day.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">retVal</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-  <span class="n">SHA1_WORD</span><span class="o">*</span> <span class="n">retValView</span> <span class="o">=</span> <span class="p">(</span><span class="n">SHA1_WORD</span><span class="o">*</span><span class="p">)</span> <span class="n">retVal</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">SHA1_WORD</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">retValView</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>The full code to compute SHA-1 can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha1.h">in my GitHub repository</a>; the file is project-independent, so you can drop it into your codebase. Do note that nothing within the repository is production-ready, since roll-your-own-crypto is a bad idea. Use libraries such as <code class="language-plaintext highlighter-rouge">openssl</code> or <code class="language-plaintext highlighter-rouge">libressl</code>.</p>
-
-<p>In theory, SHA-1 is all you need for modern TOTP, especially with the use of <a href="https://github.com/google/google-authenticator/wiki/Key-Uri-Format#algorithm">Google Authenticator</a>, since, at the time of writing, the <code class="language-plaintext highlighter-rouge">algorithm</code> parameter that specifies the hashing algorithm is ignored by Google Authenticator.</p>
-
-<h2 id="sha-256-optional"><span id="sha256">SHA-256 (Optional)</span></h2>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>SHA-256 and SHA-1 defers by the magic values used in <code class="language-plaintext highlighter-rouge">K</code>, the binary operations used for the hash, and the main hashing process. Furthermore, SHA-256 has a 256-bit output (32 bytes). The padding method is still the same as defined in SHA-1.</p>
-
-<p><code class="language-plaintext highlighter-rouge">K</code>, the magic values, is defined with an array tackling 64 WORDS in SHA-256 rather than 4 magic values over 80 WORDS in SHA-1:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">SHA2_WORD</span> <span class="n">SHA2_K</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="mh">0x428a2f98</span><span class="p">,</span> <span class="mh">0x71374491</span><span class="p">,</span> <span class="mh">0xb5c0fbcf</span><span class="p">,</span> <span class="mh">0xe9b5dba5</span><span class="p">,</span>
-  <span class="mh">0x3956c25b</span><span class="p">,</span> <span class="mh">0x59f111f1</span><span class="p">,</span> <span class="mh">0x923f82a4</span><span class="p">,</span> <span class="mh">0xab1c5ed5</span><span class="p">,</span>
-  <span class="mh">0xd807aa98</span><span class="p">,</span> <span class="mh">0x12835b01</span><span class="p">,</span> <span class="mh">0x243185be</span><span class="p">,</span> <span class="mh">0x550c7dc3</span><span class="p">,</span>
-  <span class="mh">0x72be5d74</span><span class="p">,</span> <span class="mh">0x80deb1fe</span><span class="p">,</span> <span class="mh">0x9bdc06a7</span><span class="p">,</span> <span class="mh">0xc19bf174</span><span class="p">,</span>
-  <span class="mh">0xe49b69c1</span><span class="p">,</span> <span class="mh">0xefbe4786</span><span class="p">,</span> <span class="mh">0x0fc19dc6</span><span class="p">,</span> <span class="mh">0x240ca1cc</span><span class="p">,</span>
-  <span class="mh">0x2de92c6f</span><span class="p">,</span> <span class="mh">0x4a7484aa</span><span class="p">,</span> <span class="mh">0x5cb0a9dc</span><span class="p">,</span> <span class="mh">0x76f988da</span><span class="p">,</span>
-  <span class="mh">0x983e5152</span><span class="p">,</span> <span class="mh">0xa831c66d</span><span class="p">,</span> <span class="mh">0xb00327c8</span><span class="p">,</span> <span class="mh">0xbf597fc7</span><span class="p">,</span>
-  <span class="mh">0xc6e00bf3</span><span class="p">,</span> <span class="mh">0xd5a79147</span><span class="p">,</span> <span class="mh">0x06ca6351</span><span class="p">,</span> <span class="mh">0x14292967</span><span class="p">,</span>
-  <span class="mh">0x27b70a85</span><span class="p">,</span> <span class="mh">0x2e1b2138</span><span class="p">,</span> <span class="mh">0x4d2c6dfc</span><span class="p">,</span> <span class="mh">0x53380d13</span><span class="p">,</span>
-  <span class="mh">0x650a7354</span><span class="p">,</span> <span class="mh">0x766a0abb</span><span class="p">,</span> <span class="mh">0x81c2c92e</span><span class="p">,</span> <span class="mh">0x92722c85</span><span class="p">,</span>
-  <span class="mh">0xa2bfe8a1</span><span class="p">,</span> <span class="mh">0xa81a664b</span><span class="p">,</span> <span class="mh">0xc24b8b70</span><span class="p">,</span> <span class="mh">0xc76c51a3</span><span class="p">,</span>
-  <span class="mh">0xd192e819</span><span class="p">,</span> <span class="mh">0xd6990624</span><span class="p">,</span> <span class="mh">0xf40e3585</span><span class="p">,</span> <span class="mh">0x106aa070</span><span class="p">,</span>
-  <span class="mh">0x19a4c116</span><span class="p">,</span> <span class="mh">0x1e376c08</span><span class="p">,</span> <span class="mh">0x2748774c</span><span class="p">,</span> <span class="mh">0x34b0bcb5</span><span class="p">,</span>
-  <span class="mh">0x391c0cb3</span><span class="p">,</span> <span class="mh">0x4ed8aa4a</span><span class="p">,</span> <span class="mh">0x5b9cca4f</span><span class="p">,</span> <span class="mh">0x682e6ff3</span><span class="p">,</span>
-  <span class="mh">0x748f82ee</span><span class="p">,</span> <span class="mh">0x78a5636f</span><span class="p">,</span> <span class="mh">0x84c87814</span><span class="p">,</span> <span class="mh">0x8cc70208</span><span class="p">,</span>
-  <span class="mh">0x90befffa</span><span class="p">,</span> <span class="mh">0xa4506ceb</span><span class="p">,</span> <span class="mh">0xbef9a3f7</span><span class="p">,</span> <span class="mh">0xc67178f2</span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>According to <a href="https://tools.ietf.org/html/rfc6234#page-11">RFC 6234</a>, these constants represent “the first 32 bits of the fractional parts of the cube roots of the first sixty-four prime numbers”.</p>
-
-<p>The binary operations are defined with the following code:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHA2_WORD</span> <span class="nf">sha2_ROTR</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">X</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">32</span> <span class="o">-</span> <span class="n">n</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_CH</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="n">SHA2_WORD</span> <span class="n">Y</span><span class="p">,</span> <span class="n">SHA2_WORD</span> <span class="n">Z</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Y</span><span class="p">)</span> <span class="o">^</span> <span class="p">((</span><span class="o">~</span><span class="n">X</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_MAJ</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="n">SHA2_WORD</span> <span class="n">Y</span><span class="p">,</span> <span class="n">SHA2_WORD</span> <span class="n">Z</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Y</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">Y</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_BSIG0</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">22</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_BSIG1</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">25</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_SSIG0</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA2_WORD</span> <span class="nf">sha2_SSIG1</span><span class="p">(</span><span class="n">SHA2_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha2_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="mi">10</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">ROTR</code> stands for right shift. I have no idea what the other abbreviations mean.</p>
-
-<p>Padding in SHA-256 is the same as that in SHA-1:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">sha2_pad</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">*</span> <span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">size_t</span> <span class="n">toPad</span> <span class="o">=</span> <span class="mi">64</span> <span class="o">-</span> <span class="p">(</span><span class="n">size</span> <span class="o">%</span> <span class="mi">64</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">toPad</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">toPad</span> <span class="o">+=</span> <span class="mi">64</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">newArr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">newArr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
-  <span class="n">memset</span><span class="p">(</span><span class="n">newArr</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">8</span><span class="p">);</span>
-
-  <span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">sizeInBits</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">sizeInBits</span><span class="p">;</span>
-
-  <span class="k">if</span> <span class="p">(</span><span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-    <span class="o">*</span><span class="n">newSize</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">newArr</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The pre-requisites are done. For the SHA-256, 8 WORDS (256-bits) will be returned as the final hash; hence, 8 variables will be used to represent the working variables to compute the hash:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">sha256</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h0</span> <span class="o">=</span> <span class="mh">0x6a09e667</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h1</span> <span class="o">=</span> <span class="mh">0xbb67ae85</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h2</span> <span class="o">=</span> <span class="mh">0x3c6ef372</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h3</span> <span class="o">=</span> <span class="mh">0xa54ff53a</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h4</span> <span class="o">=</span> <span class="mh">0x510e527f</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h5</span> <span class="o">=</span> <span class="mh">0x9b05688c</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h6</span> <span class="o">=</span> <span class="mh">0x1f83d9ab</span><span class="p">;</span>
-  <span class="n">SHA2_WORD</span> <span class="n">h7</span> <span class="o">=</span> <span class="mh">0x5be0cd19</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>Unlike SHA-1, these numbers aren’t as nice looking - in fact, they are “the first 32 bits of the fractional parts of the square roots of the first eight prime numbers” according to <a href="https://tools.ietf.org/html/rfc6234#page-13">the RFC</a>. Hence, to make your own variant of SHA-256, you should look for the fractional parts of some other eight prime numbers.</p>
-
-<p>Pad the message.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">size_t</span> <span class="n">messageSize</span><span class="p">;</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">message</span> <span class="o">=</span> <span class="n">sha2_pad</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">messageSize</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Copy the 64 bytes in the block into the first 16 words of the temporary buffer, <code class="language-plaintext highlighter-rouge">W</code>, using a platform-agnostic way to preserve big endianness.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">64</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">block</span> <span class="o">=</span> <span class="n">message</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">W</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Calculate the rest of the WORDS in <code class="language-plaintext highlighter-rouge">W</code> with the algorithm specified in <a href="https://tools.ietf.org/html/rfc6234#page-13">RFC 6234</a>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha2_SSIG1</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">sha2_SSIG0</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">15</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">16</span><span class="p">];</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>SHA-256 uses two temporary buffers alongside the intermediary variables A to H. The outline of the algorithm is also described in the RFC, and so the code here is just the “translated” version.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">SHA2_WORD</span> <span class="n">A</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">B</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">C</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">D</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">E</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">F</span> <span class="o">=</span> <span class="n">h5</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">G</span> <span class="o">=</span> <span class="n">h6</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">H</span> <span class="o">=</span> <span class="n">h7</span><span class="p">;</span>
-    <span class="n">SHA2_WORD</span> <span class="n">T1</span><span class="p">,</span> <span class="n">T2</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">T1</span> <span class="o">=</span> <span class="n">H</span> <span class="o">+</span> <span class="n">sha2_BSIG1</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha2_CH</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span> <span class="o">+</span> <span class="n">SHA2_K</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
-      <span class="n">T2</span> <span class="o">=</span> <span class="n">sha2_BSIG0</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha2_MAJ</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">);</span>
-      <span class="n">H</span> <span class="o">=</span> <span class="n">G</span><span class="p">;</span>
-      <span class="n">G</span> <span class="o">=</span> <span class="n">F</span><span class="p">;</span>
-      <span class="n">F</span> <span class="o">=</span> <span class="n">E</span><span class="p">;</span>
-      <span class="n">E</span> <span class="o">=</span> <span class="n">D</span> <span class="o">+</span> <span class="n">T1</span><span class="p">;</span>
-      <span class="n">D</span> <span class="o">=</span> <span class="n">C</span><span class="p">;</span>
-      <span class="n">C</span> <span class="o">=</span> <span class="n">B</span><span class="p">;</span>
-      <span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="p">;</span>
-      <span class="n">A</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">+</span> <span class="n">T2</span><span class="p">;</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>As per usual with normal digest algorithms, we add the intermediary values back to <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">h0</span> <span class="o">+=</span> <span class="n">A</span><span class="p">;</span>
-    <span class="n">h1</span> <span class="o">+=</span> <span class="n">B</span><span class="p">;</span>
-    <span class="n">h2</span> <span class="o">+=</span> <span class="n">C</span><span class="p">;</span>
-    <span class="n">h3</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-    <span class="n">h4</span> <span class="o">+=</span> <span class="n">E</span><span class="p">;</span>
-    <span class="n">h5</span> <span class="o">+=</span> <span class="n">F</span><span class="p">;</span>
-    <span class="n">h6</span> <span class="o">+=</span> <span class="n">G</span><span class="p">;</span>
-    <span class="n">h7</span> <span class="o">+=</span> <span class="n">H</span><span class="p">;</span>
-  <span class="err">}</span>
-</code></pre></div></div>
-
-<p>While a little more inefficient, I decided to use a for-loop over writing 64 lines of code to convert <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code> into a byte array. A faster implementation would be to write all 64 lines, so that the compiler doesn’t generate <code class="language-plaintext highlighter-rouge">JMP</code> instructions which is usually slower to execute.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">retVal</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
-  <span class="n">SHA2_WORD</span><span class="o">*</span> <span class="n">retValView</span> <span class="o">=</span> <span class="p">(</span><span class="n">SHA2_WORD</span><span class="o">*</span><span class="p">)</span> <span class="n">retVal</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h5</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">h6</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">h7</span><span class="p">;</span>
-
-  <span class="c1">// platform agnostic big-endian</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">SHA2_WORD</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">retValView</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span> 
-<span class="err">}</span>
-</code></pre></div></div>
-
-<p>The code is <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha256.h">available on my GitHub repository</a>.</p>
-
-<h1 id="sha-512-optional"><span id="sha512">SHA-512 (Optional)</span></h1>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>In SHA-512, the function return a 512-bit string based on 1024-bit blocks of data. SHA-512 also uses 64-bit words, which means that we have to use <code class="language-plaintext highlighter-rouge">uint64_t</code> over <code class="language-plaintext highlighter-rouge">uint32_t</code>.</p>
-
-<p>From <a href="https://tools.ietf.org/html/rfc6234#page-11">RFC 6234</a>, the magic number array, <code class="language-plaintext highlighter-rouge">K</code>, is defined as:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">SHA512_WORD</span> <span class="n">sha512_K</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="mh">0x428a2f98d728ae22</span><span class="p">,</span> <span class="mh">0x7137449123ef65cd</span><span class="p">,</span> <span class="mh">0xb5c0fbcfec4d3b2f</span><span class="p">,</span> <span class="mh">0xe9b5dba58189dbbc</span><span class="p">,</span>
-  <span class="mh">0x3956c25bf348b538</span><span class="p">,</span> <span class="mh">0x59f111f1b605d019</span><span class="p">,</span> <span class="mh">0x923f82a4af194f9b</span><span class="p">,</span> <span class="mh">0xab1c5ed5da6d8118</span><span class="p">,</span>
-  <span class="mh">0xd807aa98a3030242</span><span class="p">,</span> <span class="mh">0x12835b0145706fbe</span><span class="p">,</span> <span class="mh">0x243185be4ee4b28c</span><span class="p">,</span> <span class="mh">0x550c7dc3d5ffb4e2</span><span class="p">,</span>
-  <span class="mh">0x72be5d74f27b896f</span><span class="p">,</span> <span class="mh">0x80deb1fe3b1696b1</span><span class="p">,</span> <span class="mh">0x9bdc06a725c71235</span><span class="p">,</span> <span class="mh">0xc19bf174cf692694</span><span class="p">,</span>
-  <span class="mh">0xe49b69c19ef14ad2</span><span class="p">,</span> <span class="mh">0xefbe4786384f25e3</span><span class="p">,</span> <span class="mh">0x0fc19dc68b8cd5b5</span><span class="p">,</span> <span class="mh">0x240ca1cc77ac9c65</span><span class="p">,</span>
-  <span class="mh">0x2de92c6f592b0275</span><span class="p">,</span> <span class="mh">0x4a7484aa6ea6e483</span><span class="p">,</span> <span class="mh">0x5cb0a9dcbd41fbd4</span><span class="p">,</span> <span class="mh">0x76f988da831153b5</span><span class="p">,</span>
-  <span class="mh">0x983e5152ee66dfab</span><span class="p">,</span> <span class="mh">0xa831c66d2db43210</span><span class="p">,</span> <span class="mh">0xb00327c898fb213f</span><span class="p">,</span> <span class="mh">0xbf597fc7beef0ee4</span><span class="p">,</span>
-  <span class="mh">0xc6e00bf33da88fc2</span><span class="p">,</span> <span class="mh">0xd5a79147930aa725</span><span class="p">,</span> <span class="mh">0x06ca6351e003826f</span><span class="p">,</span> <span class="mh">0x142929670a0e6e70</span><span class="p">,</span>
-  <span class="mh">0x27b70a8546d22ffc</span><span class="p">,</span> <span class="mh">0x2e1b21385c26c926</span><span class="p">,</span> <span class="mh">0x4d2c6dfc5ac42aed</span><span class="p">,</span> <span class="mh">0x53380d139d95b3df</span><span class="p">,</span>
-  <span class="mh">0x650a73548baf63de</span><span class="p">,</span> <span class="mh">0x766a0abb3c77b2a8</span><span class="p">,</span> <span class="mh">0x81c2c92e47edaee6</span><span class="p">,</span> <span class="mh">0x92722c851482353b</span><span class="p">,</span>
-  <span class="mh">0xa2bfe8a14cf10364</span><span class="p">,</span> <span class="mh">0xa81a664bbc423001</span><span class="p">,</span> <span class="mh">0xc24b8b70d0f89791</span><span class="p">,</span> <span class="mh">0xc76c51a30654be30</span><span class="p">,</span>
-  <span class="mh">0xd192e819d6ef5218</span><span class="p">,</span> <span class="mh">0xd69906245565a910</span><span class="p">,</span> <span class="mh">0xf40e35855771202a</span><span class="p">,</span> <span class="mh">0x106aa07032bbd1b8</span><span class="p">,</span>
-  <span class="mh">0x19a4c116b8d2d0c8</span><span class="p">,</span> <span class="mh">0x1e376c085141ab53</span><span class="p">,</span> <span class="mh">0x2748774cdf8eeb99</span><span class="p">,</span> <span class="mh">0x34b0bcb5e19b48a8</span><span class="p">,</span>
-  <span class="mh">0x391c0cb3c5c95a63</span><span class="p">,</span> <span class="mh">0x4ed8aa4ae3418acb</span><span class="p">,</span> <span class="mh">0x5b9cca4f7763e373</span><span class="p">,</span> <span class="mh">0x682e6ff3d6b2b8a3</span><span class="p">,</span>
-  <span class="mh">0x748f82ee5defb2fc</span><span class="p">,</span> <span class="mh">0x78a5636f43172f60</span><span class="p">,</span> <span class="mh">0x84c87814a1f0ab72</span><span class="p">,</span> <span class="mh">0x8cc702081a6439ec</span><span class="p">,</span>
-  <span class="mh">0x90befffa23631e28</span><span class="p">,</span> <span class="mh">0xa4506cebde82bde9</span><span class="p">,</span> <span class="mh">0xbef9a3f7b2c67915</span><span class="p">,</span> <span class="mh">0xc67178f2e372532b</span><span class="p">,</span>
-  <span class="mh">0xca273eceea26619c</span><span class="p">,</span> <span class="mh">0xd186b8c721c0c207</span><span class="p">,</span> <span class="mh">0xeada7dd6cde0eb1e</span><span class="p">,</span> <span class="mh">0xf57d4f7fee6ed178</span><span class="p">,</span>
-  <span class="mh">0x06f067aa72176fba</span><span class="p">,</span> <span class="mh">0x0a637dc5a2c898a6</span><span class="p">,</span> <span class="mh">0x113f9804bef90dae</span><span class="p">,</span> <span class="mh">0x1b710b35131c471b</span><span class="p">,</span>
-  <span class="mh">0x28db77f523047d84</span><span class="p">,</span> <span class="mh">0x32caab7b40c72493</span><span class="p">,</span> <span class="mh">0x3c9ebe0a15c9bebc</span><span class="p">,</span> <span class="mh">0x431d67c49c100d4c</span><span class="p">,</span>
-  <span class="mh">0x4cc5d4becb3e42b6</span><span class="p">,</span> <span class="mh">0x597f299cfc657e2a</span><span class="p">,</span> <span class="mh">0x5fcb6fab3ad6faec</span><span class="p">,</span> <span class="mh">0x6c44198c4a475817</span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>Which are the same eighty prime numbers used in SHA-256, only with more digits representing the fractional parts of the cube roots.</p>
-
-<p>The binary functions are also quite similar to that in <code class="language-plaintext highlighter-rouge">SHA-256</code>, with a few numbers tweaked for working with SHA-512’s comparatively massive WORD and block size:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SHA512_WORD</span> <span class="nf">sha512_ROTR</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">X</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">64</span> <span class="o">-</span> <span class="n">n</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_CH</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="n">SHA512_WORD</span> <span class="n">Y</span><span class="p">,</span> <span class="n">SHA512_WORD</span> <span class="n">Z</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Y</span><span class="p">)</span> <span class="o">^</span> <span class="p">((</span><span class="o">~</span><span class="n">X</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_MAJ</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">,</span> <span class="n">SHA512_WORD</span> <span class="n">Y</span><span class="p">,</span> <span class="n">SHA512_WORD</span> <span class="n">Z</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Y</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">Y</span> <span class="o">&amp;</span> <span class="n">Z</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_BSIG0</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">39</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_BSIG1</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">41</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_SSIG0</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="n">SHA512_WORD</span> <span class="nf">sha512_SSIG1</span><span class="p">(</span><span class="n">SHA512_WORD</span> <span class="n">X</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span> <span class="o">^</span> <span class="n">sha512_ROTR</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">61</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The algorithm for padding is still the same as that in SHA-1, except that the numbers must be adjusted for SHA-512 due to the change in the block size. As a quick reference, 1024-bits is 128 bytes. This is evident below:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">sha512_pad</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">*</span> <span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">size_t</span> <span class="n">toPad</span> <span class="o">=</span> <span class="mi">128</span> <span class="o">-</span> <span class="p">(</span><span class="n">size</span> <span class="o">%</span> <span class="mi">128</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">toPad</span> <span class="o">&lt;</span> <span class="mi">17</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">toPad</span> <span class="o">+=</span> <span class="mi">128</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">newArr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">newArr</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x80</span><span class="p">;</span>
-  <span class="n">memset</span><span class="p">(</span><span class="n">newArr</span> <span class="o">+</span> <span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">16</span><span class="p">);</span>
-
-  <span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">lowerSizeInBits</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="mi">8</span><span class="p">;</span> <span class="c1">// whatever can be captured will be captured</span>
-  <span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">upperSizeInBits</span> <span class="o">=</span> <span class="n">size</span> <span class="o">&gt;&gt;</span> <span class="mi">61</span><span class="p">;</span> <span class="c1">// this is (size &gt;&gt; 64) * 8</span>
-
-  <span class="k">const</span> <span class="kt">uintptr_t</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span> <span class="o">-</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">upperSizeInBits</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">newArr</span><span class="p">[</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowerSizeInBits</span><span class="p">;</span> 
-
-  <span class="k">if</span> <span class="p">(</span><span class="n">newSize</span><span class="p">)</span> <span class="p">{</span>
-    <span class="o">*</span><span class="n">newSize</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">toPad</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">newArr</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Now with all that out of the way, let’s do the hashing process.</p>
-
-<p>Like SHA-256, these numbers are extracted from the fractional parts of the first eight prime numbers, only with more digits representing the fraction.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">sha512</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h0</span> <span class="o">=</span> <span class="mh">0x6a09e667f3bcc908</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h1</span> <span class="o">=</span> <span class="mh">0xbb67ae8584caa73b</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h2</span> <span class="o">=</span> <span class="mh">0x3c6ef372fe94f82b</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h3</span> <span class="o">=</span> <span class="mh">0xa54ff53a5f1d36f1</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h4</span> <span class="o">=</span> <span class="mh">0x510e527fade682d1</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h5</span> <span class="o">=</span> <span class="mh">0x9b05688c2b3e6c1f</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h6</span> <span class="o">=</span> <span class="mh">0x1f83d9abfb41bd6b</span><span class="p">;</span>
-  <span class="n">SHA512_WORD</span> <span class="n">h7</span> <span class="o">=</span> <span class="mh">0x5be0cd19137e2179</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>Pad the message so that we have full 1024-bit blocks to work with.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">size_t</span> <span class="n">messageSize</span><span class="p">;</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">message</span> <span class="o">=</span> <span class="n">sha512_pad</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">messageSize</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Copy the message into a temporary 80-byte buffer, <code class="language-plaintext highlighter-rouge">W</code> with a platform-agnostic way of maintaining endianness. Because WORD sizes are 64-bits in SHA-512 instead of 32-bits in SHA-256, 8 bytes can fit within one WORD, which is why this block of code is 4 lines longer than that in the implementation of SHA-256.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">128</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">block</span> <span class="o">=</span> <span class="n">message</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">W</span><span class="p">[</span><span class="mi">80</span><span class="p">];</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">56</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">48</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">40</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">;</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="p">)</span> <span class="n">block</span><span class="p">[</span><span class="n">t</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">7</span><span class="p">];</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Fill up the remaining data with the algorithm specified by the RFC, which should be almost identical to that of SHA-256.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">sha512_SSIG1</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">sha512_SSIG0</span><span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">15</span><span class="p">])</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="mi">16</span><span class="p">];</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Main computation steps, which should be identical to that of SHA-256.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">SHA512_WORD</span> <span class="n">A</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">B</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">C</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">D</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">E</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">F</span> <span class="o">=</span> <span class="n">h5</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">G</span> <span class="o">=</span> <span class="n">h6</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">H</span> <span class="o">=</span> <span class="n">h7</span><span class="p">;</span>
-    <span class="n">SHA512_WORD</span> <span class="n">T1</span><span class="p">,</span> <span class="n">T2</span><span class="p">;</span>
-
-    <span class="k">for</span> <span class="p">(</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">;</span> <span class="n">t</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">T1</span> <span class="o">=</span> <span class="n">H</span> <span class="o">+</span> <span class="n">sha512_BSIG1</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha512_CH</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha512_K</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">W</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
-      <span class="n">T2</span> <span class="o">=</span> <span class="n">sha512_BSIG0</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">+</span> <span class="n">sha512_MAJ</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">);</span> 
-      <span class="n">H</span> <span class="o">=</span> <span class="n">G</span><span class="p">;</span>
-      <span class="n">G</span> <span class="o">=</span> <span class="n">F</span><span class="p">;</span>
-      <span class="n">F</span> <span class="o">=</span> <span class="n">E</span><span class="p">;</span>
-      <span class="n">E</span> <span class="o">=</span> <span class="n">D</span> <span class="o">+</span> <span class="n">T1</span><span class="p">;</span>
-      <span class="n">D</span> <span class="o">=</span> <span class="n">C</span><span class="p">;</span>
-      <span class="n">C</span> <span class="o">=</span> <span class="n">B</span><span class="p">;</span>
-      <span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="p">;</span>
-      <span class="n">A</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">+</span> <span class="n">T2</span><span class="p">;</span>
-    <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Accumulate the intermediary variables into <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code> as usual.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">h0</span> <span class="o">+=</span> <span class="n">A</span><span class="p">;</span>
-    <span class="n">h1</span> <span class="o">+=</span> <span class="n">B</span><span class="p">;</span>
-    <span class="n">h2</span> <span class="o">+=</span> <span class="n">C</span><span class="p">;</span>
-    <span class="n">h3</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-    <span class="n">h4</span> <span class="o">+=</span> <span class="n">E</span><span class="p">;</span>
-    <span class="n">h5</span> <span class="o">+=</span> <span class="n">F</span><span class="p">;</span>
-    <span class="n">h6</span> <span class="o">+=</span> <span class="n">G</span><span class="p">;</span>
-    <span class="n">h7</span> <span class="o">+=</span> <span class="n">H</span><span class="p">;</span>
-  <span class="err">}</span>
-</code></pre></div></div>
-
-<p>Perform some memory management, and copy <code class="language-plaintext highlighter-rouge">h0</code> to <code class="language-plaintext highlighter-rouge">h7</code> in a platform-agnostic way to preserve big-endianness. The full code can be found <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/sha512.h">in my GitHub repository</a>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">retVal</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
-  <span class="n">SHA512_WORD</span><span class="o">*</span> <span class="n">retValView</span> <span class="o">=</span> <span class="p">(</span><span class="n">SHA512_WORD</span><span class="o">*</span><span class="p">)</span> <span class="n">retVal</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h0</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h1</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h2</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">h3</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">h4</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h5</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">h6</span><span class="p">;</span>
-  <span class="n">retValView</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">h7</span><span class="p">;</span>
-
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">SHA512_WORD</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">retValView</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-    <span class="n">retVal</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
-<span class="err">}</span>
-</code></pre></div></div>
-
-<h1 id="hmac">HMAC</h1>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>At this point, a possible TOTP implementation might be to simply hash the current time with a symmetric key, truncate that hash, return 6 to 8 digits and call it a day. This is quite similar to the current modern-day implementation of OTP, albeit using internet standards that already exist.</p>
-
-<p>While hashes are used to tell us about the <em>contents</em> of information in the form of a digest, Hash-based Message Authentication Codes (HMACs) are a way to check:</p>
-
-<ol>
-  <li>The authenticity (i.e. is the person sending the message who I expect it to be?) of the content;</li>
-  <li>The integrity (i.e. has it been modified?) of the content.</li>
-</ol>
-
-<p>Lets say Bob wants to send a message to Alice, with HMAC as a way to verify and authenticate the message:</p>
-
-<ol>
-  <li>Bob and Alice exchange a shared secret, perhaps through the <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">Diffie-Hellman key exchange</a>, or going retro-style and exchanging it physically with paper and pen;</li>
-  <li>Bob writes a message, uses a hash algorithm like SHA-256 and combines it with the shared secret in a manner described in <a href="https://tools.ietf.org/html/rfc2104">RFC 2104</a> to produce a HMAC;</li>
-  <li>Bob sends the resulting message and HMAC to Alice, perhaps through two independent communication channels;</li>
-  <li>Alice receives the message, uses a hash algorithm like SHA-256, combines it with the shared secret that was given to her in Step 1, and computes her own HMAC;</li>
-  <li>Alice compares her HMAC to the HMAC generated by Bob;</li>
-  <li>If the HMAC matches, she knows that the message was definitely written by Bob, <strong>and</strong> her message integrity is intact and not maliciously modified by a third party.</li>
-</ol>
-
-<p>From the above description, one can gather that HMACs have two components:</p>
-
-<ol>
-  <li>The hash function; and</li>
-  <li>The shared key.</li>
-</ol>
-
-<p>In truth, while HMAC might be surrounded in mystery and seem like a difficult algorithm, it cannot get easier to implement:</p>
-
-<p><img src="/images/20210307_1.png" style="max-width: 800px; width: 100%; margin: 0 auto; display: block;" alt="hash(key xor opad, hash(key xor ipad, text))" /></p>
-<p class="text-center text-gray lh-condensed-ultra f6">HMAC algorithm | Source: <a href="https://tools.ietf.org/html/rfc2104">RFC 2104</a></p>
-
-<p>Moreover, the padding for the key is dead-simple: append <code class="language-plaintext highlighter-rouge">0x00</code> until the key equals the block size of the hashing algorithm. RFC 2104 is a very ancient RFC, and hence only mentions MD5 and SHA-1 as possible hashing algorithms; in truth, any modern-day hashing algorithms can be used.</p>
-
-<p>Without further ado, here is the code for padding:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">hmac_pad</span><span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span> <span class="n">input</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">blockSize</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">retVal</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">blockSize</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">retVal</span><span class="p">,</span> <span class="n">input</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-  <span class="n">memset</span><span class="p">(</span><span class="n">retVal</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">blockSize</span> <span class="o">-</span> <span class="n">size</span><span class="p">);</span>
-  
-  <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>As for the HMAC code, let’s do it step by step. HMAC might not be a complicated algorithm, but it can look quite scary at first. Case in point, look at the function signature:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="nf">hmac</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">msg</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">K</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">keySize</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">H</span><span class="p">)(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">),</span> <span class="kt">size_t</span> <span class="n">blockSize</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">outputLength</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">workingKey</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">K</span><span class="p">;</span> 
-
-  <span class="k">if</span> <span class="p">(</span><span class="n">keySize</span> <span class="o">&gt;</span> <span class="n">blockSize</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">H</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">keySize</span><span class="p">);</span>
-    <span class="n">workingKey</span> <span class="o">=</span> <span class="n">hmac_pad</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">outputLength</span><span class="p">,</span> <span class="n">blockSize</span><span class="p">);</span>
-    <span class="n">free</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="n">workingKey</span> <span class="o">=</span> <span class="n">hmac_pad</span><span class="p">(</span><span class="n">workingKey</span><span class="p">,</span> <span class="n">keySize</span><span class="p">,</span> <span class="n">blockSize</span><span class="p">);</span>
-  <span class="p">}</span>
-</code></pre></div></div>
-
-<p>The function accepts a message, the message size, a key, the key size, a hash function, the hash’s block size in bytes, and the hash’s output length in bytes. So many parameters to mess up! Typically, just like the hashes, all the parameters are enclosed in a structure, such that you only need to pass a single structure to the function and call a digest function for each block of the message; however, as our goal is to generate an OTP from a fixed length key, I figured that it was not necessary.</p>
-
-<p>The above code pads the key if the key is not wide enough; otherwise, if the key is too long, it will be hashed down first before padding, as specified in the RFC.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">intermediate1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">blockSize</span><span class="p">);</span>
-  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">intermediate2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">blockSize</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">blockSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">intermediate1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">workingKey</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="mh">0x36</span><span class="p">;</span>
-    <span class="n">intermediate2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">workingKey</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="mh">0x5c</span><span class="p">;</span>
-  <span class="p">}</span>
-</code></pre></div></div>
-
-<p>I will admit, this is not my best work; creating tons of intermediate variables just to compute a HMAC is probably very resource-wasteful. However, I didn’t care to optimize the code further than I have to, in effort to prevent me from losing interest. The code above hashes what the RFC defines as <code class="language-plaintext highlighter-rouge">ipad</code>, a block of <code class="language-plaintext highlighter-rouge">0x36</code>, and <code class="language-plaintext highlighter-rouge">opad</code>, a block of <code class="language-plaintext highlighter-rouge">0x5c</code>, to the key, storing the results in intermediate variables to be used later. In short, these compute <code class="language-plaintext highlighter-rouge">K XOR opad</code> and <code class="language-plaintext highlighter-rouge">K XOR ipad</code>.</p>
-
-<p>To overcome the oversight of not having a streamable hashing function, I had to concatenate the result of <code class="language-plaintext highlighter-rouge">K XOR ipad</code> with the message before I could perform any hashing operations on it. The code computes <code class="language-plaintext highlighter-rouge">K XOR ipad, text</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">intermediate3</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">blockSize</span> <span class="o">+</span> <span class="n">size</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">intermediate3</span><span class="p">,</span> <span class="n">intermediate1</span><span class="p">,</span> <span class="n">blockSize</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">intermediate3</span> <span class="o">+</span> <span class="n">blockSize</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>This computes <code class="language-plaintext highlighter-rouge">H(K XOR ipad, text)</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">intermediate4</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">H</span><span class="p">(</span><span class="n">intermediate3</span><span class="p">,</span> <span class="n">blockSize</span> <span class="o">+</span> <span class="n">size</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Again, due to the oversight of not having a streamable hashing function, I concatenated the result of <code class="language-plaintext highlighter-rouge">H(K XOR ipad, text)</code> to <code class="language-plaintext highlighter-rouge">K XOR opad</code> to produce <code class="language-plaintext highlighter-rouge">K XOR opad, H(K XOR ipad, text)</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">intermediate5</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">blockSize</span> <span class="o">+</span> <span class="n">outputLength</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">intermediate5</span><span class="p">,</span> <span class="n">intermediate2</span><span class="p">,</span> <span class="n">blockSize</span><span class="p">);</span>
-  <span class="n">memcpy</span><span class="p">(</span><span class="n">intermediate5</span> <span class="o">+</span> <span class="n">blockSize</span><span class="p">,</span> <span class="n">intermediate4</span><span class="p">,</span> <span class="n">outputLength</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Finally, this line computes <code class="language-plaintext highlighter-rouge">H(K XOR opad, H(K XOR ipad, text))</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">H</span><span class="p">(</span><span class="n">intermediate5</span><span class="p">,</span> <span class="n">blockSize</span> <span class="o">+</span> <span class="n">outputLength</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>All that is left is to free all the intermediate variables, and return the result:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">intermediate1</span><span class="p">);</span>
-  <span class="n">free</span><span class="p">(</span><span class="n">intermediate2</span><span class="p">);</span>
-  <span class="n">free</span><span class="p">(</span><span class="n">intermediate3</span><span class="p">);</span>
-  <span class="n">free</span><span class="p">(</span><span class="n">intermediate4</span><span class="p">);</span>
-  <span class="n">Pfree</span><span class="p">(</span><span class="n">intermediate5</span><span class="p">);</span>
-  <span class="n">free</span><span class="p">(</span><span class="n">workingKey</span><span class="p">);</span>
-
-  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>And presto, we’ve implemented HMAC! I used <a href="https://www.devglan.com/online-tools/hmac-sha256-online">this online tool</a> to test the same HMAC implementation on the SHA-256 and SHA-512 algorithms. To call this function, we have to do the following:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"hmac.h"</span><span class="cp">
-</span><span class="c1">// include only one of these</span>
-<span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
-#include</span> <span class="cpf">"sha256.h"</span><span class="cp">
-#include</span> <span class="cpf">"sha512.h"</span><span class="cp">
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">char</span> <span class="n">message</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"the quick brown fox jumped over the lazy sleeping dog"</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">char</span> <span class="n">key</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"epic key"</span><span class="p">;</span>
-
-    <span class="c1">// sha1</span>
-    <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">result</span> <span class="o">=</span> <span class="n">hmac</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span> <span class="n">method_two</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
-    <span class="c1">// sha256</span>
-    <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">result</span> <span class="o">=</span> <span class="n">hmac</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span> <span class="n">sha256</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">);</span>
-    <span class="c1">// sha512</span>
-    <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">result</span> <span class="o">=</span> <span class="n">hmac</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span> <span class="n">sha512</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
-
-    <span class="c1">// do whatever with result</span>
-    <span class="n">free</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In case you were wondering what the numbers 20, 32, 64, and 128 mean, you may recall that:</p>
-
-<ul>
-  <li>SHA1 has a 512-bit block size (64 bytes) and 160-bit result (20 bytes)</li>
-  <li>SHA256 has a 512-bit block size (64 bytes) and 256-bit result (32 bytes)</li>
-  <li>SHA512 has a 1024-bit block size (128 bytes) and 512-bit result (64 bytes)</li>
-</ul>
-
-<p>The code is available <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hmac.h">on my GitHub repository</a>.</p>
-
-<h1 id="hotp">HOTP</h1>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>With HMAC implemented, we can finally implement <a href="https://tools.ietf.org/html/rfc4226">RFC 4226</a>, one step shy of our goal to get TOTPs! Being one step away from TOTPs, HOTPs are counter-based, meaning that the end-user would need to manually increment a counter to generate the next OTP used for authentication.</p>
-
-<p>You can probably already see how to generate TOTPs from HOTPs, but for the sake of completeness, let’s talk about how HOTP works. With the HMAC algorithm, we need to specific a message and the key; in the context of HOTPs, the message would be the counter value, and the key would be an actual cryptographic secret. From there, we would get a unique value from HMAC every increment of the counter. However, even though getting the user to type 20 hexadecimal numbers might be a fun way to torture them, we have to think about practicality, and instead choose to <em>truncate</em> the value produced by the HMAC algorithm.</p>
-
-<p>In other words, HOTP is defined as <code class="language-plaintext highlighter-rouge">HOTP(K,C) = Truncate(HMAC-SHA-*(K, C))</code>, where <code class="language-plaintext highlighter-rouge">K</code> is the key, <code class="language-plaintext highlighter-rouge">C</code> is the counter value, <code class="language-plaintext highlighter-rouge">HMAC-SHA-*</code> is any SHA family hashing algorithm, and <code class="language-plaintext highlighter-rouge">Truncate</code> is the truncation function that will cut our value short, and produce 6 to 8 digits of user-friendly numbers for their consumption.</p>
-
-<p>Luckily for us, <code class="language-plaintext highlighter-rouge">Truncate</code> has a simple definition. Given the hash result, <code class="language-plaintext highlighter-rouge">H</code>, in byte array form, arranged in Big Endian:</p>
-
-<ol>
-  <li>Obtain the last 4 bits in the last byte within <code class="language-plaintext highlighter-rouge">H</code>, i.e. <code class="language-plaintext highlighter-rouge">H[len(H) - 1]</code>;</li>
-  <li>Convert (if necessary) the numerical value of the 4 bits (i.e. 0101 base 2 is 5 base 10) to a number, <code class="language-plaintext highlighter-rouge">i</code>;</li>
-  <li>Define a 4-byte variable and assign it to contain the values, in native byte order, <code class="language-plaintext highlighter-rouge">H[i]</code> to <code class="language-plaintext highlighter-rouge">H[i + 3]</code>;</li>
-  <li>Mask the first bit of the 4-byte variable, and modulo it with 10^(number of digits in OTP) to obtain a 6 to 8 digit number OTP.</li>
-</ol>
-
-<p>Sounds complicated? Well, programmers like to see code, so here you go:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint32_t</span> <span class="nf">hotp_DT</span><span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">uint8_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x0f</span><span class="p">;</span>
-  <span class="kt">uint32_t</span> <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x7f</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span> 
-    <span class="o">|</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span> 
-    <span class="o">|</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
-    <span class="o">|</span> <span class="n">data</span><span class="p">[</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">3</span><span class="p">];</span>
-
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Dead-simple, I tell you. Words are meaningless constructs in the face of code, unless functional programming is involved.</p>
-
-<p>For the actual HOTP algorithm, I figured to use a structure for once:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-  <span class="kt">uint64_t</span> <span class="n">counter</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">secret</span><span class="p">;</span>
-  <span class="kt">size_t</span> <span class="n">secretSize</span><span class="p">;</span>
-
-  <span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">hashFn</span><span class="p">)(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">);</span>
-  <span class="kt">size_t</span> <span class="n">blockSize</span><span class="p">;</span>
-  <span class="kt">size_t</span> <span class="n">outputLength</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">hotp_context</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>Using <code class="language-plaintext highlighter-rouge">uint64_t</code> for the counter might seem overkill, but the size of the counter is <a href="https://tools.ietf.org/html/rfc4226#page-5">defined</a> in the RFC; it makes sense too, because later on in TOTP, we are going to need <code class="language-plaintext highlighter-rouge">uint64_t</code>, as storing time in a <code class="language-plaintext highlighter-rouge">uint32_t</code> variable will be a bad idea closer to the year 2038. Let’s work on the HOTP algorithm itself.</p>
-
-<p>Since we have a 64-bit counter of unknown byte order, we need to first break it down into a Big Endian byte array.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint32_t</span> <span class="nf">hotp</span><span class="p">(</span><span class="n">hotp_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">digits</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kt">uint8_t</span> <span class="n">counter</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">56</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">48</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">40</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="n">counter</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>We then run the counter and secret through HMAC, which computes <code class="language-plaintext highlighter-rouge">HMAC-SHA-*(K, C)</code>.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint8_t</span><span class="o">*</span> <span class="n">hs</span> <span class="o">=</span> <span class="n">hmac</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">secret</span><span class="p">,</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">secretSize</span><span class="p">,</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">hashFn</span><span class="p">,</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">blockSize</span><span class="p">,</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">outputLength</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Truncating it with the function we wrote earlier, we get our <em>close to</em> final result.</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint32_t</span> <span class="n">Snum</span> <span class="o">=</span> <span class="n">hotp_DT</span><span class="p">(</span><span class="n">hs</span><span class="p">,</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">outputLength</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>All we need to do now is to perform memory cleanup, and return the number of digits we desire from the algorithm:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">free</span><span class="p">(</span><span class="n">hs</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">Snum</span> <span class="o">%</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span> <span class="n">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">digits</span><span class="p">);</span>
-<span class="err">}</span>
-</code></pre></div></div>
-
-<p>To use the <code class="language-plaintext highlighter-rouge">hotp</code> function, the following C code can be used:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
-#include</span> <span class="cpf">"hotp.h"</span><span class="cp">
-</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">const</span> <span class="kt">char</span> <span class="n">secret</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"a very secret key!!!"</span><span class="p">;</span>
-
-  <span class="n">hotp_context</span> <span class="n">ctx</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">secret</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">secret</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">secretSize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">hashFn</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span> <span class="n">method_two</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">blockSize</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">outputLength</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
-
-  <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">hotp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">6</span><span class="p">));</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Refer to the <a href="#hmac">HMAC</a> section to change the values of <code class="language-plaintext highlighter-rouge">ctx.hashFn</code>, <code class="language-plaintext highlighter-rouge">ctx.blockSize</code> and <code class="language-plaintext highlighter-rouge">ctx.outputLength</code>. The full C code can be found in <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/hotp.h">my GitHub repository</a>.</p>
-
-<h1 id="totp">TOTP</h1>
-
-<p><a href="#table-of-contents">Back to Table Of Contents</a></p>
-
-<p>And finally, <a href="https://tools.ietf.org/html/rfc6238">RFC 6238</a>, the whole purpose of this blog post. TOTPs! HOTPs are slightly troublesome, requiring the user to increment the counter manually - this meant that receivers of HOTP needed to define an interval of OTPs that they’ll accept, through the resynchronization parameter. This is error-prone, and highly frustrating for the end-user, especially due to off-by-one errors and naughty toddlers incrementing HOTP counters.</p>
-
-<p>TOTPs solve this problem by using Real-Time clocks available on most low-powered hardware, and relatively high-powered devices like smart phones and laptops - they use time as a means to calculate the counter value in HOTP. In other words, TOTP can be said to be a simple extension of HOTPs.</p>
-
-<p>In TOTPs, two more parameters are defined:</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">T0</code>, the “beginning” time to consider, which is defaults to 0, representing UNIX Epoch;</li>
-  <li><code class="language-plaintext highlighter-rouge">X</code>, the time-step to consider, which defaults to 30 seconds.</li>
-</ul>
-
-<p>The counter value is defined as <code class="language-plaintext highlighter-rouge">(timestamp in seconds - T0) / X</code>, and the key is still an actual cryptographic key.</p>
-
-<p>As such, the implementation of TOTP is extremely trivial:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">uint32_t</span> <span class="nf">totp</span><span class="p">(</span><span class="n">hotp_context</span> <span class="o">*</span><span class="n">ctx</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">digits</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">time_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-  <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">counter</span> <span class="o">=</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span> <span class="o">/</span> <span class="n">X</span><span class="p">;</span>
-  
-  <span class="k">return</span> <span class="n">hotp</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">digits</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Bam. Done. That’s TOTP, RFC 6238. The RFC also talks about time drift and whatnot, but since we are <em>generating</em> OTPs, it shouldn’t be too much of a bother for us. You can test the <code class="language-plaintext highlighter-rouge">totp</code> implementation with:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"sha1.h"</span><span class="cp">
-#include</span> <span class="cpf">"hotp.h"</span><span class="cp">
-#include</span> <span class="cpf">"totp.h"</span><span class="cp">
-</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">const</span> <span class="kt">char</span> <span class="n">secret</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"a very secret key!!!"</span><span class="p">;</span>
-
-  <span class="n">hotp_context</span> <span class="n">ctx</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">secret</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span> <span class="n">secret</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">secretSize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">hashFn</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span> <span class="n">method_two</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">blockSize</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
-  <span class="n">ctx</span><span class="p">.</span><span class="n">outputLength</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
-
-  <span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">totp</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">6</span><span class="p">));</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The OTP generated by the code written so far matches with the <a href="https://totp.danhersam.com/">TOTP generator</a> written by <a href="https://dan.hersam.com/">Dan Hersam</a>. Do note that Dan’s site uses Base32 keys, so you’ll need a <a href="https://emn178.github.io/online-tools/base32_encode.html">Base32 encoder</a>; <strong>make sure to remove all the padding before using it as a key (i.e. delete all the <code class="language-plaintext highlighter-rouge">=</code>)</strong>.</p>
-
-<blockquote>
-  <p>Why? Dan’s implementation of TOTP relies on a library called <code class="language-plaintext highlighter-rouge">otpauth</code> on version <code class="language-plaintext highlighter-rouge">v3.1.3</code>. In <a href="https://github.com/hectorm/otpauth/blob/v3.1.3/src/utils.js#L143">line 143 of this version’s utility function</a>, where base32 is encoded into an <code class="language-plaintext highlighter-rouge">ArrayBuffer</code>, the padding characters, <code class="language-plaintext highlighter-rouge">=</code> are not handled at all, leading to an error that causes the token to be generated wrongly. This is fixed in a subsequent version of <code class="language-plaintext highlighter-rouge">otpauth</code>, but unfortunately, Dan has since stopped maintaining the TOTP generator.</p>
-</blockquote>
-
-<p>The code for <a href="https://github.com/jameshi16/Bad-TOTP/blob/master/totp.h">TOTP can be found on my GitHub repository</a>.</p>
-
-<h1 id="conclusion">Conclusion</h1>
-
-<p>Implementing TOTP from all of its components was quite a journey for me. In the modern world, we build great-scaled applications on the shoulders of giants - libraries do most of our heavy lifting. However, it is important to visit the low-level once in a while to marvel at the smaller building blocks, understand design considerations behind every line of code, and take it all in as an art-form.</p>
-
-<p>Some day, new algorithms will be developed in favour of whatever we use today; surely, they will have more extensive use-cases only imaginable by those of the future.</p>
-
-<p>Let’s see what tomorrow brings!</p>
-
-<p>Happy Coding</p>
-
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><category term="totp" /><category term="c" /><category term="rfc" /><category term="scratch" /><summary type="html"><![CDATA[“How do One-Time Passwords (OTP) work?” I asked myself, as I fiddled with my digital banking token to check my non-existent wealth online.]]></summary></entry></feed>
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="release" /><category term="android" /><category term="app" /><category term="android" /><summary type="html"><![CDATA[Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.]]></summary></entry></feed>
