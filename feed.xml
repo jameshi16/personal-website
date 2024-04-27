@@ -1,4 +1,196 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2024-01-05T15:54:27+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">I tried to make another game…</title><link href="https://codingindex.xyz/2024/01/05/passable-game/" rel="alternate" type="text/html" title="I tried to make another game…" /><published>2024-01-05T15:49:00+00:00</published><updated>2024-01-05T15:49:00+00:00</updated><id>https://codingindex.xyz/2024/01/05/passable-game</id><content type="html" xml:base="https://codingindex.xyz/2024/01/05/passable-game/"><![CDATA[<p>Happy New Year! :fireworks: How has everyone been?</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://codingindex.xyz/feed.xml" rel="self" type="application/atom+xml" /><link href="https://codingindex.xyz/" rel="alternate" type="text/html" /><updated>2024-04-27T23:34:37+00:00</updated><id>https://codingindex.xyz/feed.xml</id><title type="html">CodingIndex’s Random Shenanigans</title><subtitle>A (human) index that likes to code. Also drinks way too much coffee.</subtitle><author><name>James</name></author><entry><title type="html">Cheap man’s Linux Multi-Monitor Setup</title><link href="https://codingindex.xyz/2024/04/27/cheap-man-linux-multi-monitor/" rel="alternate" type="text/html" title="Cheap man’s Linux Multi-Monitor Setup" /><published>2024-04-27T23:33:00+00:00</published><updated>2024-04-27T23:33:00+00:00</updated><id>https://codingindex.xyz/2024/04/27/cheap-man-linux-multi-monitor</id><content type="html" xml:base="https://codingindex.xyz/2024/04/27/cheap-man-linux-multi-monitor/"><![CDATA[<p>Good morning! :coffee:</p>
+
+<p>Recently, I’ve been playing around with some ideas that’ll eventually get me 24
+monitors. Why the impractical and unholy number of monitors?</p>
+
+<p>If I’m being completely realistic, that’s way too many monitors to be
+practical. It’s just way too many monitors to even be useful, except
+for some extenuating circumstances like stocks trading.</p>
+
+<p>So, instead of coming up with a good excuse, I present you the best argument
+I’ve had since time immemorial: why not, sounds fun!</p>
+
+<p>There have been some interesting ideas to accomplish this surrounding the use
+of Virtual Reality (VR) headsets, using apps like
+<a href="https://immersed.com">Immersed</a> to achieve both a multi-monitor setup, and a
+distraction-free environment. When COVID-19 was still a prominent part of life,
+I could see this being used fairly frequently.</p>
+
+<p>On <a href="https://immersed.com/faq">Immersed’s FAQ</a>, under “What devices can run immersed?”, it is stated
+that “Currently, Linux only supports plugged-in external monitors” with “virtual displays coming
+soon!” (accurate at the time of writing).</p>
+
+<p>Borrowing a mate’s Quest 2, I was able to verify that Immersed wasn’t able to
+spawn new displays on Linux.</p>
+
+<p>So that got me wondering; what if I could implement this killer feature? Apart from Immersed, I
+could turn old devices into high-speed, low latency external displays.</p>
+
+<p>Apps like these already exist; notable examples include GNOME’s virtual displays and
+<a href="https://deskreen.com/lang-en">deskreen</a>.</p>
+
+<p>“But!” I exclaim to myself.</p>
+
+<p>“I want a potentially unlimited number of virtual displays!” I bemoaned.</p>
+
+<p>“And I want to do it by <em>myself</em>!” I lamented.</p>
+
+<p>Lo and behold, of course I’d find a way.</p>
+
+<hr />
+
+<h1 id="discovery">Discovery</h1>
+
+<p>Ideally, I want whatever solution I come up with to be GPU-agnostic; i.e. there shouldn’t be
+something that <em>only</em> works for Intel iGPUs (as in the case with <code class="language-plaintext highlighter-rouge">VirtualHeads</code> in XOrg
+configurations).</p>
+
+<p>When searching online, I came across <a href="https://unix.stackexchange.com/a/585078">this wonderful person’s
+post</a>, who suggested that we can use <code class="language-plaintext highlighter-rouge">DisplayLink</code>’s <code class="language-plaintext highlighter-rouge">evdi</code>
+kernel module, which allows us to set an initial number of devices.</p>
+
+<p>Running the right <code class="language-plaintext highlighter-rouge">xrandr</code> commands will then get us virtual monitors that we can’t
+directly observe on physical monitors, but can instead be accessed via something like VNC or an alternate method
+which I will later propose.</p>
+
+<h1 id="base-setting-up-multiple-monitors">Base: Setting up multiple monitors</h1>
+
+<p>The first step is to install the <code class="language-plaintext highlighter-rouge">evdi</code> kernel module. On Ubuntu, it is as simple as running <code class="language-plaintext highlighter-rouge">sudo
+apt install evdi-dkms</code> and then restarting the system.</p>
+
+<p>On other systems, either look for <code class="language-plaintext highlighter-rouge">evdi</code> in your package manager, or compile it from the
+<a href="https://github.com/DisplayLink/evdi">source</a>.</p>
+
+<p>Now, run <code class="language-plaintext highlighter-rouge">modprobe evdi initial_device_count=2</code> (or however many you want). 
+After which, restart your X session; this can typically be done by signing out and then logging back
+in, although I’ve only ever tested it by using the “restart X session” functionality on my i3
+config. (i.e. killing the X session and restarting it).</p>
+
+<blockquote>
+  <p>You’d have to do this every restart. If you already have a good idea on how
+many additional virtual monitors you want, you can choose to add this to
+<code class="language-plaintext highlighter-rouge">/etc/modprobe.d/local-evdi.conf</code>: <code class="language-plaintext highlighter-rouge">options evdi initial_device_count=X</code>, where <code class="language-plaintext highlighter-rouge">X</code> is the number
+of monitors you intend to boot with.</p>
+</blockquote>
+
+<p>Now, perform <code class="language-plaintext highlighter-rouge">xrandr --query</code>. You should see a bunch of disconnected monitors, which can look like
+this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DVI-I-3-2 disconnected (normal left inverted right x axis y axis)
+DVI-I-2-1 disconnected (normal left inverted right x axis y axis)
+eDP-1-1 connected primary 1920x1080+0+0 (normal left invertest right x axis y axis) ...
+</code></pre></div></div>
+
+<p>At this point, add the resolution you want your virtual monitors to be. There are plenty of guides
+online on how you can add custom resolutions, but if you’re adding well-known resolutions (such as
+“1920x1080”, “1920x1200”), you can do so by running these commands:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xrandr --addmode DVI-I-2-1 1920x1200
+xrandr --addmode DVI-I-3-2 1920x1080
+</code></pre></div></div>
+
+<blockquote>
+  <p>Note: If you have other interfaces that are free, you can use those instead. The <code class="language-plaintext highlighter-rouge">DVI-I</code> ones are
+generates by <code class="language-plaintext highlighter-rouge">EVDI</code>.</p>
+</blockquote>
+
+<p>Figure out how you want to lay your monitors. In my setup, I want <code class="language-plaintext highlighter-rouge">DVI-I-2-1</code> to be on the right of
+<code class="language-plaintext highlighter-rouge">eDP-1-1</code>, and <code class="language-plaintext highlighter-rouge">DVI-I-3-2</code> to be on the right of <code class="language-plaintext highlighter-rouge">DVI-I-2-1</code>. Here’s the <code class="language-plaintext highlighter-rouge">xrandr</code> magic to achieve
+that:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xrandr --output DVI-I-2-1 --mode 1920x1200 --right-of eDP-1-1
+xrandr --output DVI-I-3-2 --mode 1920x1080 --right-of DVI-I-2-1
+</code></pre></div></div>
+
+<p>Congratulations! You’ve managed to set up virtual desktops. Way to go :beers:</p>
+
+<p>Now, how do you see content on those monitors?</p>
+
+<hr />
+
+<h1 id="viewing">Viewing</h1>
+
+<p>Suppose you have two other devices to display the two new virtual monitors you’ve set up; then there
+are actually a fairly abundant number of ways you can go about this. The easiest way is probably
+with a VNC server and client, where there are plenty of guides for.</p>
+
+<p>One way I tried that didn’t work was with NoMachine (notoriously known to be incredibly fast); it
+wasn’t happy about the virtual monitors and drew a large black box over where they were supposed to
+positioned.</p>
+
+<p>If you have a VR workspace emulator like Immersed, the virtual monitors you’ve created should just
+work straight away (tried and tested).</p>
+
+<p>The rest of this blog post will outline a less conventional way - using
+<code class="language-plaintext highlighter-rouge">ffmpeg</code> and <code class="language-plaintext highlighter-rouge">ffplay</code>. This allows me to take advantage of a host’s NVIDIA card
+to display my virtual monitors on other devices.</p>
+
+<h2 id="method">Method</h2>
+
+<p>First, run <code class="language-plaintext highlighter-rouge">xrandr --query</code> to figure out the offsets of your outputs. For instance, here’s what
+mine looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; xrandr --query
+
+DVI-I-3-2 disconnected 1920x1200+3360+1000 (normal left inverted right x axis y axis) 0mm x 0mm
+DVI-I-2-1 disconnected 1920x1080+5280+1000 (normal left inverted right x axis y axis) 0mm x 0mm
+</code></pre></div></div>
+
+<p>This means that <code class="language-plaintext highlighter-rouge">DVI-I-3-2</code> has an x-offset of <code class="language-plaintext highlighter-rouge">3360</code>, and a y-offset of <code class="language-plaintext highlighter-rouge">1000</code>, while <code class="language-plaintext highlighter-rouge">DVI-I-2-1</code>
+has an x-offset of <code class="language-plaintext highlighter-rouge">5280</code> and a y-offset of <code class="language-plaintext highlighter-rouge">1000</code> (I have a weird setup).</p>
+
+<p>As you may have guessed, the devices I am planning to project the virtual monitors to are
+<code class="language-plaintext highlighter-rouge">1920x1200</code> and <code class="language-plaintext highlighter-rouge">1920x1080</code> in resolutions respectively.</p>
+
+<p>Hence, on the host, I run the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -video_size 3840x1200 -f x11grab -framerate 60 -i :0.0+3360,1000 \
+-c:v h264_nvenc -zerolatency 1 -profile:v main -preset llhq -maxrate 500k \
+-bufsize 1m -qp 0 -f mpegts udp://&lt;client 1 IP&gt;:&lt;some port you choose&gt; -c:v \
+h264_nvenc -zerolatency 1 -profile:v main -preset llhq -maxrate 500k -bufsize 1m \
+-qp 0 -f mpegts udp://&lt;client 2 IP&gt;:&lt;some port you choose&gt;
+</code></pre></div></div>
+
+<blockquote>
+  <p>Quick Disclaimer: I am not a <code class="language-plaintext highlighter-rouge">ffmpeg</code> pro. I’m fairly certain this can be optimized to smithereens,
+but for the purposes of this blog post (and my usage), this is more than good enough.</p>
+</blockquote>
+
+<p>The command above screen grabs the regions defined above (essentially the two virtual monitors), and
+sends the stream to both devices. The other flags are there to decrease the latency as much as
+possible. Note that this setup is <em>still</em> not sub-one latency, but is much faster than achievable
+with VNC (<code class="language-plaintext highlighter-rouge">ffmpeg</code> pros could probably get it to sub-one latency).</p>
+
+<p>Ensure that the client allows ingress into both ports on their firewall, then, on the respective
+clients, run the following <code class="language-plaintext highlighter-rouge">ffplay</code> commands:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Client 1 (the 1920x1200 one)
+ffplay -vf "crop=1920:1200:0:0,setpts=0" -fflags nobuffer -flags low_delay \
+-framedrop -strict experimental -probesize 32 -fast -an udp://127.0.0.1:&lt;port&gt;
+
+# Client 2 (the 1920x1080 one)
+ffplay -vf "crop=1920:1080:1920:0,setpts=0" -fflags nobuffer -flags low_delay \
+-framedrop -strict experimental -probesize 32 -fast -an udp://127.0.0.1:&lt;port&gt;
+</code></pre></div></div>
+
+<p>The two clients should connect, after which you can press “F” to fullscreen the window.
+Congratulations, both devices should now be displaying your virtual screens!
+You can now interact with them as if they were external monitors to your host machine.</p>
+
+<hr />
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>The solution above can be combined into a single script to suit your needs. It shows that even
+without dedicated software, it is possible to have a virtual monitor setup that (basically) supports
+unlimited monitors.</p>
+
+<p>If you have any spare devices laying around, and they can run VNC clients / <code class="language-plaintext highlighter-rouge">ffplay</code>, give this a
+shot! You may be able to give it a new lease of life as a secondary monitor.</p>
+
+<p>Happy Coding,</p>
+
+<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="linux" /><category term="linux" /><category term="multi" /><category term="monitor" /><summary type="html"><![CDATA[Good morning! :coffee:]]></summary></entry><entry><title type="html">I tried to make another game…</title><link href="https://codingindex.xyz/2024/01/05/passable-game/" rel="alternate" type="text/html" title="I tried to make another game…" /><published>2024-01-05T15:49:00+00:00</published><updated>2024-01-05T15:49:00+00:00</updated><id>https://codingindex.xyz/2024/01/05/passable-game</id><content type="html" xml:base="https://codingindex.xyz/2024/01/05/passable-game/"><![CDATA[<p>Happy New Year! :fireworks: How has everyone been?</p>
 
 <p>Ah yes, I can already hear the scorn and disdain of some of you wondering where I’ve been all this time. Short answer: I
 got lazy. Long answer: I have <em>a lot</em> to do, but I’m also procrastinating. Man, I swear, it’s probably a comedic routine
@@ -6155,94 +6347,4 @@ docker-compose config
   <li><a href="https://www.history.com/this-day-in-history/coffee-rationing-begins">https://www.history.com/this-day-in-history/coffee-rationing-begins</a></li>
   <li><a href="https://www.wearethemighty.com/articles/brief-history-coffee-field/">https://www.wearethemighty.com/articles/brief-history-coffee-field/</a></li>
   <li><a href="https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/">https://www.historic-uk.com/CultureUK/English-Coffeehouses-Penny-Universities/</a></li>
-</ol>]]></content><author><name>James</name></author><category term="coffee" /><category term="history" /><category term="coffee" /><summary type="html"><![CDATA[Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to Wikipedia, which is definitely the best source of legal advice. But seriously though, I’m doing it for educational purpose and nothing else.). However, whenever life gives you lemons, you sigh ugh and wait for a better fruit.]]></summary></entry><entry><title type="html">AutoLockdown</title><link href="https://codingindex.xyz/2021/04/25/autolockdown/" rel="alternate" type="text/html" title="AutoLockdown" /><published>2021-04-25T09:22:00+00:00</published><updated>2021-04-25T09:22:00+00:00</updated><id>https://codingindex.xyz/2021/04/25/autolockdown</id><content type="html" xml:base="https://codingindex.xyz/2021/04/25/autolockdown/"><![CDATA[<p>Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.</p>
-
-<p>It should come as no surprise to some of you that I avoid biometric authentication religiously: this is because the attack vectors are so simple, that it renders the purpose of authentication useless. Here are some reasons why:</p>
-
-<ol>
-  <li>It is easy to uncover a fingerprint from the surfaces of your phone to be used as moulding to unlock your phone;</li>
-  <li>You can be unconscious when your (physical) finger is being used to unlock your phone;</li>
-  <li>Should the manufacturer of the fingerprint sensor be untrustworthy, your fingerprint data could be stolen; you only have one fingerprint for your entire life, and it is not changeable.</li>
-</ol>
-
-<p>Therefore, I have been using a 14 character password to protect access to my phone for the past three years.</p>
-
-<h1 id="reality">Reality</h1>
-
-<p>In life, there cannot be too much of a good thing; when you are pressed for time, you need to get work done as quickly as possible. Typing a 14 character password might not sound like a time-consuming process on the surface, but one must account for accidental human errors when keying in the password.</p>
-
-<p>Furthermore, with how frequent we unlock our phones during active use, the time taken to unlock the phone accumulates to many hours of frustration, and triggers impatient superiors to no end.</p>
-
-<p>Of course, it is out of the question to simply forgo the use of a locking mechanism - what about all the precious data, banking applications and confidential company documents that you’re storing?</p>
-
-<p>Hence, in conclusion, a quick, yet secure method of authentication has a need to exist.</p>
-
-<h2 id="evaluation">Evaluation</h2>
-
-<p>Let’s evaluate the pros and cons of fingerprint authentication, alongside password authentication one more time.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center">Feature</th>
-      <th style="text-align: center">Password</th>
-      <th style="text-align: center">Fingerprint</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">Fast to unlock</td>
-      <td style="text-align: center">No</td>
-      <td style="text-align: center"><strong>Yes</strong></td>
-    </tr>
-    <tr>
-      <td style="text-align: center">Secure</td>
-      <td style="text-align: center">Following guidelines, <strong>Yes</strong></td>
-      <td style="text-align: center">No</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">Changeable</td>
-      <td style="text-align: center"><strong>Yes</strong></td>
-      <td style="text-align: center">No</td>
-    </tr>
-    <tr>
-      <td style="text-align: center">Lots of apps use it</td>
-      <td style="text-align: center">No</td>
-      <td style="text-align: center"><strong>Yes</strong></td>
-    </tr>
-  </tbody>
-</table>
-
-<p>Many banking apps, and some password managers use fingerprint authentication as a way to quickly unlock an account. As long as you are conscious while you are doing it, such a feature does not sound too bad; after all, it is comparatively safer than typing a 6 digit numerical pin (banking apps) or a 3 alphanumerical pin (KeepassXC for Android) in the public under the prying eyes of many, to quickly unlock your most precious resources.</p>
-
-<p>To solve our dilemma, why not have both fingerprint and password?</p>
-
-<h1 id="android-feature-lockdown-mode">Android Feature: Lockdown Mode</h1>
-
-<p>In Android 9 (Pie), there exist a feature known as <code class="language-plaintext highlighter-rouge">Lockdown Mode</code>. In this mode, “Smart Lock” features are disabled, biometric authentication is disabled, and notifications no longer show. Users who wish to turn on Lockdown Mode can do it through the power menu, after the feature is enabled.</p>
-
-<p>To learn what is Lockdown Mode, and how to enable it for your phone, visit <a href="https://screenrant.com/android-lockdown-mode-purpose-enable-how-explained/">this screenrant link</a>.</p>
-
-<p>Having discovered Lockdown Mode, I gave in to the temptations of the fingerprint, and registered my own biometrics. However, I found that turning on Lockdown Mode is too user-dependent, meaning that there might be times where I am too fatigued to turn on the mode to protect my phone. Hence, I tried automating the process.</p>
-
-<h1 id="automation">Automation</h1>
-
-<p>I downloaded <a href="https://play.google.com/store/apps/details?id=com.llamalab.automate">Automate</a> and <a href="https://play.google.com/store/apps/details?id=com.radefffactory.lockdown">this nifty app</a> that provides shortcuts to enable Lockdown mode, and linked it up such that whenever I turn off the screen, a 5 minute timer will go off, which will launch the second app to enable Lockdown mode.</p>
-
-<p>5 minutes is an arbitrarily decided duration - I felt that as long as I tried unlocking my phone again within 5 minutes, a fingerprint would be acceptable. While this does not guarantee the safety of my data if I were to be suddenly robbed, I felt that it would “good enough” to prevent my data from being accessed in my sleep by a sneaky adversary.</p>
-
-<p>While it worked well, the whole setup was clunky and cumbersome; furthermore, I felt like it was too overkill. Having used Tasker and Automate before, I knew that battery consumption might become an issue.</p>
-
-<h1 id="the-creation-of-autolockdown">The creation of AutoLockdown</h1>
-
-<p>Hence, to solve all of these problems in one fell swoop, I decided to make an app. The <a href="https://github.com/jameshi16/AutoLockdown">repository</a> can be found on GitHub; essentially, the phone automatically removes biometric authentication as a possible authentication method after a user-configuration period of time.</p>
-
-<p>In the future, I hope to also add scheduling; so, apart from removing biometric authentication after a set duration, it will be removed during, say, bedtime, as well.</p>
-
-<h1 id="conclusion">Conclusion</h1>
-
-<p>If you were in the same dilemma as me, I hope you find <a href="https://github.com/jameshi16/AutoLockdown">AutoLockdown</a> satisfactory; otherwise, go ahead and give me some feedback through <a target="_blank" href="mailto:me@codingindex.xyz">my email</a>!</p>
-
-<p>Happy Coding</p>
-
-<p>CodingIndex</p>]]></content><author><name>James</name></author><category term="release" /><category term="android" /><category term="app" /><category term="android" /><summary type="html"><![CDATA[Over the weekend, I got a new phone. The phone was capable of many things that I never had access to - but fingerprint sensing wasn’t one of them.]]></summary></entry></feed>
+</ol>]]></content><author><name>James</name></author><category term="coffee" /><category term="history" /><category term="coffee" /><summary type="html"><![CDATA[Initially, I planned to write about my findings after reverse-engineering some RPG Maker XP, VX, VX Ace, MV and Wolf Editor games (which is not illegal as long as I’m not creating a copy or changing the artifact in any way according to Wikipedia, which is definitely the best source of legal advice. But seriously though, I’m doing it for educational purpose and nothing else.). However, whenever life gives you lemons, you sigh ugh and wait for a better fruit.]]></summary></entry></feed>
