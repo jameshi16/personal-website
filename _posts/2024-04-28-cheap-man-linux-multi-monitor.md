@@ -6,6 +6,14 @@ categories: [linux]
 tags: [linux, multi, monitor]
 ---
 
+EDIT (13/5/2024): A quick note for the various mentions of Immersed in this post. The company has
+recently removed support for physical multi-monitor setups, _requiring_ you to turn off all external
+monitors to use Immersed. While the company reserves all rights to do whatever they want with their
+software, they have begun banning and moderating away posts that criticised this change. There are
+speculations that this is done to keep their records clean for the upcoming IPO. Hence, I cannot, in
+good faith, endorse Immersed anymore. There is currently no good alternative for a physical +
+virtual multi-monitor setup.
+
 Good morning! :coffee:
 
 Recently, I've been playing around with some ideas that'll eventually get me 24
